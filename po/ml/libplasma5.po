@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -374,7 +374,7 @@ msgstr "സൂചനകള്‍ക്കുള്ള അതാര്യപശ�
 msgid "KColorScheme configuration file"
 msgstr "കെ കളര്‍സ്കീം സജ്ജീകരണ ഫയ"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -537,7 +537,7 @@ msgstr "ക്യുഎംഎല്‍ ഫയല്‍ തുറക്കുന�
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "ആപ്‌ലെറ്റ് ലോഡ് ചെയ്യുന്നതിൽ പിശക് : പാക്കേജ് നിലവിലില്ല. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "%1 ക്രമീകരണങ്ങള്‍"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2016-04-30 12:08+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
@@ -383,7 +383,7 @@ msgstr "Dealbhan cùlaibh do-lèirsinneach airson gliocasan-sgrìn"
 msgid "KColorScheme configuration file"
 msgstr "Faidhle rèiteachadh KColorScheme"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -553,7 +553,7 @@ msgstr "Mearachd a' luchdadh faidhle QML: %1"
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Mearachd a' luchdadh aplaid: chan eil a' phacaid ann. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "Roghainnean %1"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2022-10-03 16:23+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-i18n-doc@kde.org>\n"
@@ -375,7 +375,7 @@ msgstr "풍선 도움말의 불투명한 기본 배경 그림"
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme 설정 파일"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -536,7 +536,7 @@ msgstr "QML 파일을 불러오는 중 오류 발생: %1 %2"
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "애플릿을 불러오는 중 오류 발생: 패키지가 없음. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "%1 설정"

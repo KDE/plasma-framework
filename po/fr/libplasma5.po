@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2022-07-26 15:48+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -389,7 +389,7 @@ msgstr "Image de fond opaque pour les infobulles"
 msgid "KColorScheme configuration file"
 msgstr "Fichier de configuration de KColorScheme"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -552,7 +552,7 @@ msgstr "Erreur du chargement du fichier « QML » : %1 %2"
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Erreur du chargement de l'applet : paquet inexistant. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "Paramètres %1"

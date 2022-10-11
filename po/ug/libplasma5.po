@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2013-09-08 07:05+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
@@ -374,7 +374,7 @@ msgstr "قورال ئەسكەرتىشىنىڭ سۈزۈك تەگلىك سۈرەت
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme سەپلىمە ھۆججىتى"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -536,7 +536,7 @@ msgstr ""
 msgid "Error loading Applet: package inexistent. %1"
 msgstr ""
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, fuzzy, kde-format
 #| msgctxt "%1 is the name of the applet"
 #| msgid "%1 Settings"

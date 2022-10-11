@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2022-07-27 19:21+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -381,7 +381,7 @@ msgstr "Tresna-argibideentzako atzealdeko irudi opakoa"
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme konfigurazio-fitxategia"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -542,7 +542,7 @@ msgstr "Errorea QML fitxategia zamatzean: %1 %2"
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Errorea aplikaziotxoa kargatzean: paketea ez dago. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "%1 ezarpenak"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2019-11-26 19:29+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -376,7 +376,7 @@ msgstr "Ugennemsigtigt baggrundsbillede til værktøjstips"
 msgid "KColorScheme configuration file"
 msgstr "Konfigurationsfil til KColorScheme"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -539,7 +539,7 @@ msgstr "Fejl ved indlæsning af QML-fil: %1"
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Fejl ved indlæsning af applet. Pakken eksisterer ikke. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "Indstilling af %1"

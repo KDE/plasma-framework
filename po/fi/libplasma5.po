@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2022-08-05 10:28+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -383,7 +383,7 @@ msgstr "Työkaluvihjeiden läpinäkymätön taustakuva"
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme-asetustiedosto"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -544,7 +544,7 @@ msgstr "QML-tiedoston avaaminen epäonnistui: %1 %2"
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Sovelman lataaminen epäonnistui: pakettia ei ole olemassa. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "Asetukset: %1|/|$[gen %1] asetukset"

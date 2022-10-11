@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2020-07-09 09:26-0700\n"
 "Last-Translator: Aman Alam <alam.yellow@gmail.com>\n"
 "Language-Team: Punjabi <kde-i18n-doc@kde.org>\n"
@@ -374,7 +374,7 @@ msgstr "ਟੂਲ-ਟਿੱਪ ਲਈ ਧੁੰਦਲਾ ਬੈਕਗਰਾਊ�
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme ਸੰਰਚਨਾ ਫਾਈਲ"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -536,7 +536,7 @@ msgstr ""
 msgid "Error loading Applet: package inexistent. %1"
 msgstr ""
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "%1 ਸੈਟਿੰਗਾਂ"

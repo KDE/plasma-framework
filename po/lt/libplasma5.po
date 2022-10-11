@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-11 00:41+0000\n"
 "PO-Revision-Date: 2022-09-19 12:33+0300\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -379,7 +379,7 @@ msgstr "Neskaidrus foninis paaiškinimų paveikslas"
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme konfigūracijos failas"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -540,7 +540,7 @@ msgstr "Klaida įkeliant QML failą: %1 %2"
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Klaida įkeliant programėlę: paketo nėra. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "Nuostatos: %1|/|$[get-case Kilmininkas %1] nuostatos"
