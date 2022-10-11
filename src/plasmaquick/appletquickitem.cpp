@@ -523,6 +523,11 @@ AppletQuickItem::~AppletQuickItem()
 AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
 {
     QQmlContext *context;
+    // Special case: we are asking the attached Plasmoid property of an AppletItem itself, which in this case is itself
+    if (auto *appletItem = qobject_cast<AppletQuickItem *>(object)) {
+        return appletItem;
+    }
+
     // is it using shared engine mode?
     if (!qmlEngine(object)->parent()) {
         context = qmlContext(object);
