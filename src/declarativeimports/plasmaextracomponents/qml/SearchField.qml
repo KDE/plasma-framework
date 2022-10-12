@@ -74,6 +74,8 @@ PlasmaExtras.ActionTextField {
     rightActions: QQC2.Action {
         icon.name: root.mirrored ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl"
         enabled: root.text.length > 0
-        onTriggered: root.text = ""
+        onTriggered: {
+            root.clear();
+        }
     }
 }

@@ -31,7 +31,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  *             icon.name: "edit-clear"
  *             enabled: searchField.text !== ""
  *             onTriggered: {
- *                 searchField.text = ""
+ *                 searchField.clear()
  *                 searchField.accepted()
  *             }
  *         }
