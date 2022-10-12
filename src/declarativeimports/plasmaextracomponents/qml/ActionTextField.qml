@@ -27,7 +27,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
  *     focusSequence: StandardKey.Find
  *
  *     rightActions: [
- *         QQC2..Action {
+ *         QQC2.Action {
  *             icon.name: "edit-clear"
  *             enabled: searchField.text !== ""
  *             onTriggered: {
