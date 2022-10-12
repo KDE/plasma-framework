@@ -32,12 +32,12 @@ PlasmaExtras.ActionTextField {
     property int _iconWidth: (activeFocus || root.text.length > 0 ? 0 : searchIcon.width + searchIcon.anchors.leftMargin)
 
     // padding to accommodate search icon nicely
-    leftPadding: if (root.mirrored) {
+    leftPadding: if (root.effectiveHorizontalAlignment === TextInput.AlignRight) {
         return (_rightActionsRow.visible ? _rightActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.left : 0);
     } else {
         return _iconWidth + (_leftActionsRow.visible ? _leftActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.left : 0);
     }
-    rightPadding: if (root.mirrored) {
+    rightPadding: if (root.effectiveHorizontalAlignment === TextInput.AlignRight) {
         return _iconWidth + (_leftActionsRow.visible ? _leftActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.right : 0);
     } else {
         return (_rightActionsRow.visible ? _rightActionsRow.width : 0) + (__hasBackgroundAndMargins ? background.margins.right : 0);
@@ -46,6 +46,7 @@ PlasmaExtras.ActionTextField {
     PlasmaCore.IconItem {
         id: searchIcon
         opacity: root.activeFocus || text.length > 0 ? 0 : 1
+        LayoutMirroring.enabled: root.effectiveHorizontalAlignment === TextInput.AlignRight
         anchors.left: root.left
         anchors.leftMargin: PlasmaCore.Units.smallSpacing * 2
         anchors.verticalCenter: root.verticalCenter
@@ -72,7 +73,8 @@ PlasmaExtras.ActionTextField {
     focusSequence: "Ctrl+F"
     inputMethodHints: Qt.ImhNoPredictiveText
     rightActions: QQC2.Action {
-        icon.name: root.mirrored ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl"
+        //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
+        icon.name: root.effectiveHorizontalAlignment === TextInput.AlignRight ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl"
         enabled: root.text.length > 0
         onTriggered: {
             root.clear();

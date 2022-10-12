@@ -81,12 +81,12 @@ PlasmaComponents3.TextField {
     topPadding: __hasBackgroundAndMargins ? background.margins.top : 0
     bottomPadding: __hasBackgroundAndMargins ? background.margins.bottom : 0
 
-    leftPadding: if (root.mirrored) {
+    leftPadding: if (root.effectiveHorizontalAlignment === TextInput.AlignRight) {
         return _rightActionsRow.width + (__hasBackgroundAndMargins ? background.margins.left : 0);
     } else {
         return _leftActionsRow.width + (__hasBackgroundAndMargins ? background.margins.left : 0);
     }
-    rightPadding: if (root.mirrored) {
+    rightPadding: if (root.effectiveHorizontalAlignment === TextInput.AlignRight) {
         return _leftActionsRow.width + (__hasBackgroundAndMargins ? background.margins.right : 0);
     } else {
         return _rightActionsRow.width + (__hasBackgroundAndMargins ? background.margins.right : 0);
@@ -140,6 +140,7 @@ PlasmaComponents3.TextField {
     Row {
         id: leftActionsRow
         padding: visible ? PlasmaCore.Units.smallSpacing : 0
+        LayoutMirroring.enabled: root.effectiveHorizontalAlignment === TextInput.AlignRight
         anchors.left: parent.left
         anchors.leftMargin: PlasmaCore.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
@@ -155,6 +156,7 @@ PlasmaComponents3.TextField {
         id: rightActionsRow
         padding: visible ? PlasmaCore.Units.smallSpacing : 0
         layoutDirection: Qt.RightToLeft
+        LayoutMirroring.enabled: root.effectiveHorizontalAlignment === TextInput.AlignRight
         anchors.right: parent.right
         anchors.rightMargin: PlasmaCore.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
