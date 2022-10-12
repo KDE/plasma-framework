@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-11 00:41+0000\n"
+"POT-Creation-Date: 2022-10-12 00:43+0000\n"
 "PO-Revision-Date: 2019-12-08 12:11+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -524,19 +524,19 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Nederīgs (null) serviss. Nav iespējams veikt darbības."
 
-#: plasmaquick/appletquickitem.cpp:604
+#: plasmaquick/appletquickitem.cpp:609
 #, fuzzy, kde-format
 #| msgid "Unknown"
 msgid "Unknown Applet"
 msgstr "Nezināms"
 
-#: plasmaquick/appletquickitem.cpp:619
+#: plasmaquick/appletquickitem.cpp:624
 #, fuzzy, kde-format
 #| msgid "Error loading QML file: %1"
 msgid "Error loading QML file: %1 %2"
 msgstr "Kļūda ielādējot QML datni: %1"
 
-#: plasmaquick/appletquickitem.cpp:621
+#: plasmaquick/appletquickitem.cpp:626
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Kļūda ielādējot lietotni: pakotne neeksistē. %1"

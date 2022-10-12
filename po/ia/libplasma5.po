@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-11 00:41+0000\n"
+"POT-Creation-Date: 2022-10-12 00:43+0000\n"
 "PO-Revision-Date: 2022-03-15 11:11+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -521,17 +521,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Servicio Invalide (null), il non pote exequer alcun operationes."
 
-#: plasmaquick/appletquickitem.cpp:604
+#: plasmaquick/appletquickitem.cpp:609
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Applet Incognite"
 
-#: plasmaquick/appletquickitem.cpp:619
+#: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Error quando on carga file QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:621
+#: plasmaquick/appletquickitem.cpp:626
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Error quando on carga Applet: pacchetto non existente. %1"

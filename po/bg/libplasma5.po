@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-11 00:41+0000\n"
+"POT-Creation-Date: 2022-10-12 00:43+0000\n"
 "PO-Revision-Date: 2022-08-17 10:42+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -518,17 +518,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Невалидна (нулева) услуга, не може да извършва никакви операции."
 
-#: plasmaquick/appletquickitem.cpp:604
+#: plasmaquick/appletquickitem.cpp:609
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Неизвестна приставка"
 
-#: plasmaquick/appletquickitem.cpp:619
+#: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Грешка при зареждането на QML файл: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:621
+#: plasmaquick/appletquickitem.cpp:626
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Грешка при зареждането на аплета: пакетът не съществува. %1"
