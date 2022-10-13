@@ -974,8 +974,8 @@
         <path id="path4964" d="m210.67561 91.045464.00097 1.630631-1.63462.01145.007 1.626089 1.63908.0091-.006 1.634313 1.62575-.005.007-1.631618 1.63976-.000027v-1.632877h-1.64636l.0204-1.642077z" opacity=".25"/>
         <path id="path4966" d="m211.08482 91.454555.00097 1.630633-1.63474.01145.007.807899 1.6392.0091-.006 1.634319.8077-.005.007-1.631624 1.63951-.000027v-.814687h-1.64611l.0204-1.642079z" fill="#fff"/>
     </g>
-        <rect id="thick-hint-top-margin" x="16" y="43" width="4" height="4" fill="#f0f"/>
-        <rect id="thick-hint-bottom-margin" x="2" y="51" width="4" height="4" fill="#f0f"/>
-        <rect id="thick-hint-right-margin" x="30" y="51" width="4" height="4" fill="#f0f"/>
-        <rect id="thick-hint-left-margin" x="16" y="58" width="4" height="4" fill="#f0f"/>
+        <rect id="normal-hint-top-margin" x="16" y="43" width="4" height="4" fill="#f0f"/>
+        <rect id="normal-hint-bottom-margin" x="2" y="51" width="4" height="4" fill="#f0f"/>
+        <rect id="normal-hint-right-margin" x="30" y="51" width="4" height="4" fill="#f0f"/>
+        <rect id="normal-hint-left-margin" x="16" y="58" width="4" height="4" fill="#f0f"/>
 </svg>
