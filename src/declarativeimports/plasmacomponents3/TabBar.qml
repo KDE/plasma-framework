@@ -32,13 +32,14 @@ T.TabBar {
         snapMode: ListView.SnapToItem
 
         highlightMoveDuration: PlasmaCore.Units.longDuration
+        highlightMoveVelocity: -1
         highlightRangeMode: ListView.ApplyRange
         preferredHighlightBegin: 40
         preferredHighlightEnd: width - 40
         highlightResizeDuration: 0
         highlight: PlasmaCore.FrameSvgItem {
             imagePath: "widgets/tabbar"
-            prefix: control.position == T.TabBar.Header ? "north-active-tab" : "south-active-tab"
+            prefix: control.position === T.TabBar.Header ? "north-active-tab" : "south-active-tab"
             colorGroup: PlasmaCore.ColorScope.colorGroup
         }
     }
