@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-14 00:43+0000\n"
 "PO-Revision-Date: 2022-07-26 20:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -139,12 +139,12 @@ msgstr "Fald ut"
 msgid "Password"
 msgstr "Passord"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:66
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
 #, kde-format
 msgid "Search…"
 msgstr "Søk …"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search"
 msgstr "Søk"
@@ -393,7 +393,7 @@ msgstr "Ugjennomsiktig bakgrunnsbilete for hjelpebobler"
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme-oppsettfil"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -539,22 +539,22 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Ugyldig teneste (null) kan ikkje utføra operasjonar."
 
-#: plasmaquick/appletquickitem.cpp:604
+#: plasmaquick/appletquickitem.cpp:609
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Ukjent element"
 
-#: plasmaquick/appletquickitem.cpp:619
+#: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Feil ved lasting av QML-fil: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:621
+#: plasmaquick/appletquickitem.cpp:626
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Feil ved lasting av miniprogram: pakken finst ikkje. %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "Set opp «%1»|/|Set opp $[dobbelbest %1]$[bunden %1]"

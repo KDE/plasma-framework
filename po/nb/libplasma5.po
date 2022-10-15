@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-09-21 00:42+0000\n"
+"POT-Creation-Date: 2022-10-14 00:43+0000\n"
 "PO-Revision-Date: 2018-06-23 18:51+0100\n"
 "Last-Translator: Øystein Steffensen-Alværvik <ystein@posteo.net>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -138,12 +138,12 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:66
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
 #, kde-format
 msgid "Search…"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search"
 msgstr ""
@@ -378,7 +378,7 @@ msgstr "Ugjennomsiktig bakgrunnsbilde for hjelpebobler"
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme-oppsettfil"
 
-#: plasma/pluginloader.cpp:593 plasma/pluginloader.cpp:594
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
@@ -524,22 +524,22 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Ugyldig tjeneste (null), kan ikke utføre operasjoner."
 
-#: plasmaquick/appletquickitem.cpp:604
+#: plasmaquick/appletquickitem.cpp:609
 #, kde-format
 msgid "Unknown Applet"
 msgstr ""
 
-#: plasmaquick/appletquickitem.cpp:619
+#: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr ""
 
-#: plasmaquick/appletquickitem.cpp:621
+#: plasmaquick/appletquickitem.cpp:626
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Feil ved lasting av miniprogram: pakke finnes ikke: %1"
 
-#: plasmaquick/configview.cpp:95
+#: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
 msgstr "%1-innstillinger"
