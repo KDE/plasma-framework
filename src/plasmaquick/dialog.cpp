@@ -1245,6 +1245,25 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         }
     }
 
+    // If the dialog is from opening an applet in the panel and it's close enough to the center that
+    // it would still cover the original applet in the panel if it was centered, then we manually center it.
+    if (d->type == Dialog::AppletPopup) {
+        switch (d->location) {
+        case Plasma::Types::TopEdge:
+        case Plasma::Types::BottomEdge:
+            if (qAbs(dialogPos.x() + size.width() / 2 - avail.center().x()) < size.width() / 2) {
+                dialogPos.setX(avail.center().x() - size.width() / 2);
+            }
+            break;
+        case Plasma::Types::LeftEdge:
+        case Plasma::Types::RightEdge:
+            if (qAbs(dialogPos.y() + size.height() / 2 - avail.center().y()) < size.height() / 2) {
+                dialogPos.setY(avail.center().y() - size.height() / 2);
+            }
+            break;
+        }
+    }
+
     if (dialogPos.x() < avail.left()) {
         // popup hits lhs
         if (d->location != Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
