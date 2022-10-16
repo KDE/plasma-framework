@@ -155,7 +155,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     propagateSizeHint("fillWidth");
     propagateSizeHint("fillHeight");
 
-    QObject *ownLayout = nullptr;
+    QObject *newOwnLayout = nullptr;
 
     const auto children = q->children();
     for (QObject *child : children) {
@@ -169,13 +169,13 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
             && child->property("maximumHeight").isValid()
             && child->property("fillWidth").isValid()
             && child->property("fillHeight").isValid()) { /* clang-format on */
-            ownLayout = child;
+            newOwnLayout = child;
             break;
         }
     }
 
     // this should never happen, since we ask to create it if doesn't exists
-    if (!ownLayout) {
+    if (!newOwnLayout) {
         return;
     }
 
@@ -202,7 +202,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     QObject::connect(layout, SIGNAL(fillHeightChanged()), q, SLOT(fillHeightChanged()));
 
     representationLayout = layout;
-    AppletQuickItemPrivate::ownLayout = ownLayout;
+    ownLayout = newOwnLayout;
 
     propagateSizeHint("minimumWidth");
     propagateSizeHint("minimumHeight");
