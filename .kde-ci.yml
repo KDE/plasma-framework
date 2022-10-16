@@ -47,3 +47,4 @@ Dependencies:
 
 Options:
   test-before-installing: True
+  cppcheck-ignore-files: ['templates/']
