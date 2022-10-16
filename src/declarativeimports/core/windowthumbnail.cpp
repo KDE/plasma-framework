@@ -810,9 +810,7 @@ FbConfigInfo *getConfig(xcb_visualid_t visual)
         candidates.append(FBConfig{configs[i], depth, stencil, texture_format});
     }
 
-    if (count > 0) {
-        XFree(configs);
-    }
+    XFree(configs);
 
     std::stable_sort(candidates.begin(), candidates.end(), [](const FBConfig &left, const FBConfig &right) {
         if (left.depth < right.depth) {
