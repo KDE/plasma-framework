@@ -87,7 +87,6 @@ ToolTipDialog *ToolTip::tooltipDialogInstance()
 {
     if (!s_dialog) {
         s_dialog = new ToolTipDialog;
-        s_dialogUsers = 1;
     }
 
     if (!m_usingDialog) {
