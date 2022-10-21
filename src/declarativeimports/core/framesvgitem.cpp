@@ -675,7 +675,7 @@ void FrameSvgItem::componentComplete()
     CheckMarginsChange checkInsetMargins(m_oldInsetMargins, m_insetMargins);
 
     QQuickItem::componentComplete();
-    m_frameSvg->resizeFrame(QSize(width(), height()));
+    m_frameSvg->resizeFrame(size());
     m_frameSvg->setRepaintBlocked(false);
     m_textureChanged = true;
 }
