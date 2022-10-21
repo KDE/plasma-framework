@@ -689,7 +689,7 @@ void FrameSvgItem::updateDevicePixelRatio()
     const auto newDevicePixelRation = qMax<qreal>(1.0, floor(window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
 
     if (newDevicePixelRation != m_frameSvg->devicePixelRatio()) {
-        m_frameSvg->setDevicePixelRatio(qMax<qreal>(1.0, newDevicePixelRation));
+        m_frameSvg->setDevicePixelRatio(newDevicePixelRation);
         m_textureChanged = true;
     }
 }
