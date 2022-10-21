@@ -345,7 +345,7 @@ void FrameSvgItem::setImagePath(const QString &path)
     if (isComponentComplete()) {
         applyPrefixes();
 
-        m_frameSvg->resizeFrame(QSizeF(width(), height()));
+        m_frameSvg->resizeFrame(size());
         m_textureChanged = true;
         update();
     }
