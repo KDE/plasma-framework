@@ -6,8 +6,8 @@
 #include "%{APPNAMELC}.h"
 #include <KLocalizedString>
 
-%{APPNAME}::%{APPNAME}(QObject *parent, const QVariantList &args)
-    : Plasma::Applet(parent, args),
+%{APPNAME}::%{APPNAME}(QObject *parent, const KPluginMetaData &data, const QVariantList &args)
+    : Plasma::Applet(parent, data, args),
       m_nativeText(i18n("Text coming from C++ plugin"))
 {
 }
@@ -21,6 +21,6 @@ QString %{APPNAME}::nativeText() const
     return m_nativeText;
 }
 
-K_PLUGIN_CLASS_WITH_JSON(%{APPNAME}, "metadata.json")
+K_PLUGIN_CLASS(%{APPNAME})
 
 #include "%{APPNAMELC}.moc"

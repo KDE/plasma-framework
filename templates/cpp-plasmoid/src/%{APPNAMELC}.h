@@ -15,7 +15,7 @@ class %{APPNAME} : public Plasma::Applet
     Q_PROPERTY(QString nativeText READ nativeText CONSTANT)
 
 public:
-    %{APPNAME}( QObject *parent, const QVariantList &args );
+    %{APPNAME}(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
     ~%{APPNAME}();
 
     QString nativeText() const;
