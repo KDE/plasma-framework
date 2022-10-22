@@ -6,7 +6,6 @@
 #ifndef %{APPNAMEUC}_H
 #define %{APPNAMEUC}_H
 
-
 #include <Plasma/Applet>
 
 class %{APPNAME} : public Plasma::Applet
@@ -15,7 +14,7 @@ class %{APPNAME} : public Plasma::Applet
     Q_PROPERTY(QString nativeText READ nativeText CONSTANT)
 
 public:
-    %{APPNAME}(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
+    explicit %{APPNAME}(QObject *parent, const KPluginMetaData &data, const QVariantList &args);
     ~%{APPNAME}();
 
     QString nativeText() const;

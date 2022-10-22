@@ -4,6 +4,7 @@
 */
 
 #include "%{APPNAMELC}.h"
+
 #include <KLocalizedString>
 
 %{APPNAME}::%{APPNAME}(QObject *parent, const KPluginMetaData &data, const QVariantList &args)
