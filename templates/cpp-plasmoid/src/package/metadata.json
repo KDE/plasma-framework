@@ -61,7 +61,6 @@
         "Description[vi]": "dùng vài từ để mô tả ứng dụng của bạn làm việc gì",
         "Description[x-test]": "xxwhat your app does in a few wordsxx",
         "Description[zh_CN]": "用一个短句概括您的小程序的功能",
-        "EnabledByDefault": true,
         "Icon": "applications-system",
         "Id": "org.kde.plasma.%{APPNAMELC}",
         "License": "LGPL-2.1+",
@@ -98,6 +97,5 @@
         "Website": "https://plasma.kde.org/"
     },
     "KPackageStructure": "Plasma/Applet",
-    "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-API": "declarativeappletscript"
 }
