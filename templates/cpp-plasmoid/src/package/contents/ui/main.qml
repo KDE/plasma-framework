@@ -16,7 +16,7 @@ Item {
             Layout.fillHeight: true
             Layout.fillWidth: true
             fillMode: Image.PreserveAspectFit
-            source: "../images/pairs.svgz"
+            source: "../images/pairs.svg"
         }
         PlasmaComponents3.Label {
             Layout.alignment: Qt.AlignCenter
