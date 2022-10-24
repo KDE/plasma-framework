@@ -78,8 +78,9 @@ function(PLASMA_INSTALL_DESKTOPTHEME_SVGS theme_name)
                     OUTPUT ${_gzipped_file}
                     COMMAND gzip::gzip
                     ARGS
-                        -9
-                        -c
+                        -9 # compress best
+                        -n # no original name and timestamp stored, for reproducibility
+                        -c # write to stdout
                         ${_src_file} > ${_gzipped_file}
                     DEPENDS ${_src_file}
                     COMMENT "Gzipping ${_gzipped_file_displayname}"
