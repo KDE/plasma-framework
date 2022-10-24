@@ -9,6 +9,7 @@
 #ifndef APPLETINTERFACE_H
 #define APPLETINTERFACE_H
 
+#include <QAction>
 #include <QQuickItem>
 #include <QQuickView>
 
@@ -22,7 +23,6 @@
 #include "declarativeappletscript.h"
 #include <appletquickitem.h>
 
-class QAction;
 class QActionGroup;
 class QmlAppletScript;
 class QSizeF;
@@ -279,6 +279,18 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * @since 5.96
      */
     Q_PROPERTY(bool editMode READ isEditMode NOTIFY editModeChanged)
+
+public:
+    /**
+     * Expose the QAction::Priority values which cannot be directly accessed from plasmoids
+     * @since 5.101
+     */
+    enum ActionPriority {
+        LowPriorityAction = QAction::LowPriority,
+        NormalPriorityAction = QAction::NormalPriority,
+        HighPriorityAction = QAction::HighPriority,
+    };
+    Q_ENUM(ActionPriority);
 
 public:
     AppletInterface(DeclarativeAppletScript *script, const QVariantList &args = QVariantList(), QQuickItem *parent = nullptr);
