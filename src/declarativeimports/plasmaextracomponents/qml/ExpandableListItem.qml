@@ -349,7 +349,7 @@ Item {
 
     onEnabledChanged: if (!listItem.enabled) { collapse() }
 
-    Keys.onPressed: {
+    Keys.onPressed: event => {
         if (event.key === Qt.Key_Return || event.key === Qt.Key_Enter) {
             if (defaultActionButtonAction) {
                 defaultActionButtonAction.trigger()
@@ -380,7 +380,7 @@ Item {
     KeyNavigation.tab: defaultActionButtonVisible ? defaultActionButton : expandToggleButton
     KeyNavigation.right: defaultActionButtonVisible ? defaultActionButton : expandToggleButton
     KeyNavigation.down: expandToggleButton.KeyNavigation.down
-    Keys.onDownPressed: {
+    Keys.onDownPressed: event => {
         if (!actionsListLoader.item || ListView.view.currentIndex < 0) {
             ListView.view.incrementCurrentIndex();
             ListView.view.currentItem.forceActiveFocus(Qt.TabFocusReason);
@@ -389,7 +389,7 @@ Item {
         }
         event.accepted = false; // Forward to KeyNavigation.down
     }
-    Keys.onUpPressed: {
+    Keys.onUpPressed: event => {
         if (ListView.view.currentIndex === 0) {
             event.accepted = false;
         } else {
@@ -545,7 +545,7 @@ Item {
                     KeyNavigation.tab: expandToggleButton
                     KeyNavigation.right: expandToggleButton
                     KeyNavigation.down: expandToggleButton.KeyNavigation.down
-                    Keys.onUpPressed: listItem.Keys.onUpPressed(event)
+                    Keys.onUpPressed: event => listItem.Keys.onUpPressed(event)
 
                     Accessible.description: action !== null ? action.Accessible.description : ""
                 }
@@ -559,7 +559,7 @@ Item {
                     text: expandedView.expanded ? i18ndc("libplasma5", "@action:button", "Collapse") : i18ndc("libplasma5", "@action:button", "Expand")
                     icon.name: expandedView.expanded ? "collapse" : "expand"
 
-                    Keys.onUpPressed: listItem.Keys.onUpPressed(event)
+                    Keys.onUpPressed: event => listItem.Keys.onUpPressed(event)
 
                     onClicked: listItem.toggleExpanded()
 
@@ -627,7 +627,7 @@ Item {
                                     icon.name: model.icon.name
 
                                     KeyNavigation.up: index > 0 ? actionRepeater.itemAt(index - 1) : expandToggleButton
-                                    Keys.onDownPressed: {
+                                    Keys.onDownPressed: event => {
                                         if (index === actionRepeater.count - 1) {
                                             event.accepted = true;
                                             listItem.ListView.view.incrementCurrentIndex();
