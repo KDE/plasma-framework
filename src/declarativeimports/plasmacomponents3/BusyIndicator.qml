@@ -18,15 +18,14 @@ T.BusyIndicator {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
 
-    /* PC2 BusyIndicator didn't have padding or margins and
-     * BusyIndicator doesn't need padding since it has no background.
-     * A Control containing a BusyIndicator can have padding instead
-     * (e.g., a ToolBar, a Page or maybe a widget in a Plasma panel).
-     */
+    // BusyIndicator doesn't need padding since it has no background.
+    // A Control containing a BusyIndicator can have padding instead
+    // (e.g., a ToolBar, a Page or maybe a widget in a Plasma panel).
     padding: 0
 
+    hoverEnabled: false
+
     contentItem: Item {
-        id: baseItem
         /* Binding on `visible` implicitly takes care of `control.visible`,
          * `control.running` and `opacity > 0` at once.
          * Also, don't animate at all if the user has disabled animations.
