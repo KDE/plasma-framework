@@ -8,7 +8,6 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.plasmoid 2.0
 import QtQuick.Templates 2.12 as T
 import "private" as Private
 
@@ -80,10 +79,10 @@ T.ToolBar {
 
         enabledBorders: {
             let borders = PlasmaCore.FrameSvg.LeftBorder | PlasmaCore.FrameSvg.RightBorder;
-            if (Plasmoid.position !== PlasmaCore.Types.TopEdge || position !== T.ToolBar.Header) {
+            if (position !== T.ToolBar.Header) {
                 borders |= PlasmaCore.FrameSvg.TopBorder;
             }
-            if (Plasmoid.position !== PlasmaCore.Types.BottomEdge || position !== T.ToolBar.Footer) {
+            if (position !== T.ToolBar.Footer) {
                 borders |= PlasmaCore.FrameSvg.BottomBorder;
             }
             return borders;
