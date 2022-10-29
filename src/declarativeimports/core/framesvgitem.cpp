@@ -686,7 +686,7 @@ void FrameSvgItem::updateDevicePixelRatio()
 
     // devicepixelratio is always set integer in the svg, so needs at least 192dpi to double up.
     //(it needs to be integer to have lines contained inside a svg piece to keep being pixel aligned)
-    const auto newDevicePixelRation = std::max<qreal>(1.0, floor(window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
+    const auto newDevicePixelRation = std::max<qreal>(1.0, std::ceil(window() ? window()->devicePixelRatio() : qApp->devicePixelRatio()));
 
     if (newDevicePixelRation != m_frameSvg->devicePixelRatio()) {
         m_frameSvg->setDevicePixelRatio(newDevicePixelRation);
