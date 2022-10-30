@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-14 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:43+0000\n"
 "PO-Revision-Date: 2020-07-09 09:26-0700\n"
 "Last-Translator: Aman Alam <alam.yellow@gmail.com>\n"
 "Language-Team: Punjabi <kde-i18n-doc@kde.org>\n"
@@ -147,12 +147,12 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: plasma/applet.cpp:379
+#: plasma/applet.cpp:380
 #, kde-format
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
 
-#: plasma/applet.cpp:759
+#: plasma/applet.cpp:760
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 ਵਿਦਜੈਟ ਸਰਗਰਮ ਕਰੋ"

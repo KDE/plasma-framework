@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-14 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:43+0000\n"
 "PO-Revision-Date: 2022-10-17 01:32+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@iki.fi>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -153,12 +153,12 @@ msgstr "Etsi…"
 msgid "Search"
 msgstr "Etsi"
 
-#: plasma/applet.cpp:379
+#: plasma/applet.cpp:380
 #, kde-format
 msgid "Unknown"
 msgstr "Tuntematon"
 
-#: plasma/applet.cpp:759
+#: plasma/applet.cpp:760
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktivoi sovelma %1"

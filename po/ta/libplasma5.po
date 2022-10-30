@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-14 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:43+0000\n"
 "PO-Revision-Date: 2022-07-26 21:16+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -145,12 +145,12 @@ msgstr "தேடு…"
 msgid "Search"
 msgstr "தேடு"
 
-#: plasma/applet.cpp:379
+#: plasma/applet.cpp:380
 #, kde-format
 msgid "Unknown"
 msgstr "தெரியாதது"
 
-#: plasma/applet.cpp:759
+#: plasma/applet.cpp:760
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 பிளாஸ்மாய்டை செயல்படுத்து"
