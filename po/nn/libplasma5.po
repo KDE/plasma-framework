@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-14 00:43+0000\n"
+"POT-Creation-Date: 2022-10-30 00:43+0000\n"
 "PO-Revision-Date: 2022-07-26 20:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -149,12 +149,12 @@ msgstr "Søk …"
 msgid "Search"
 msgstr "Søk"
 
-#: plasma/applet.cpp:379
+#: plasma/applet.cpp:380
 #, kde-format
 msgid "Unknown"
 msgstr "Ukjend"
 
-#: plasma/applet.cpp:759
+#: plasma/applet.cpp:760
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Start %1-elementet"
