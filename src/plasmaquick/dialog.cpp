@@ -1453,10 +1453,16 @@ void Dialog::showEvent(QShowEvent *event)
     QQuickWindow::showEvent(event);
 }
 
+static bool isRunningInKWin()
+{
+    static bool check = QGuiApplication::platformName() == QLatin1String("wayland-org.kde.kwin.qpa");
+    return check;
+}
+
 bool Dialog::event(QEvent *event)
 {
     if (event->type() == QEvent::Expose) {
-        if (!KWindowSystem::isPlatformWayland() || !isExposed()) {
+        if (!KWindowSystem::isPlatformWayland() || isRunningInKWin() || !isExposed()) {
             return QQuickWindow::event(event);
         }
 
