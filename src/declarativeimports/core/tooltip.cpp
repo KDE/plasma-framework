@@ -27,7 +27,7 @@ ToolTip::ToolTip(QQuickItem *parent)
     , m_textFormat(Qt::AutoText)
     , m_active(true)
     , m_interactive(false)
-    , m_timeout(4000)
+    , m_timeout(-1)
     , m_usingDialog(false)
 {
     setAcceptHoverEvents(true);

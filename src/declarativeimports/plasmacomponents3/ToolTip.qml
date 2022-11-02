@@ -19,8 +19,8 @@ T.ToolTip {
 
     visible: parent instanceof T.AbstractButton && (Kirigami.Settings.tabletMode ? parent.pressed : parent.hovered)
     delay: Kirigami.Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : Kirigami.Units.toolTipDelay
-    // Timeout based on text length, from QTipLabel::restartExpireTimer
-    timeout: 10000 + 40 * Math.max(0, text.length - 100)
+    // Never time out while being hovered; it's annoying
+    timeout: -1
 
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
