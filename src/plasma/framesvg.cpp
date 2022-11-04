@@ -924,13 +924,18 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->insetBottomMargin = -1;
     }
 
-    frame->composeOverBorder = (q->hasElement(createName(u"hint-compose-over-border")) && q->hasElement(QLatin1String("mask-") % createName(u"center")));
+    static const QString maskPrefix = QStringLiteral("mask-");
+    static const QString hintTileCenter = QStringLiteral("hint-tile-center");
+    static const QString hintNoBorderPadding = QStringLiteral("hint-no-border-padding");
+    static const QString hintStretchBorders = QStringLiteral("hint-stretch-borders");
+
+    frame->composeOverBorder = (q->hasElement(createName(u"hint-compose-over-border")) && q->hasElement(maskPrefix % createName(u"center")));
 
     // since it's rectangular, topWidth and bottomWidth must be the same
     // the ones that don't have a frame->prefix is for retrocompatibility
-    frame->tileCenter = (q->hasElement(QStringLiteral("hint-tile-center")) || q->hasElement(createName(u"hint-tile-center")));
-    frame->noBorderPadding = (q->hasElement(QStringLiteral("hint-no-border-padding")) || q->hasElement(createName(u"hint-no-border-padding")));
-    frame->stretchBorders = (q->hasElement(QStringLiteral("hint-stretch-borders")) || q->hasElement(createName(u"hint-stretch-borders")));
+    frame->tileCenter = (q->hasElement(hintTileCenter) || q->hasElement(createName(u"hint-tile-center")));
+    frame->noBorderPadding = (q->hasElement(hintNoBorderPadding) || q->hasElement(createName(u"hint-no-border-padding")));
+    frame->stretchBorders = (q->hasElement(hintStretchBorders) || q->hasElement(createName(u"hint-stretch-borders")));
     q->resize(s);
 }
 
