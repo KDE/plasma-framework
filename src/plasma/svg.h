@@ -264,6 +264,8 @@ public:
      **/
     Q_INVOKABLE QSize elementSize(const QString &elementId) const;
 
+    QSize elementSize(QStringView elementId) const;
+
     /**
      * The bounding rect of a given element.
      *
@@ -276,6 +278,8 @@ public:
      **/
     Q_INVOKABLE QRectF elementRect(const QString &elementId) const;
 
+    QRectF elementRect(QStringView elementId) const;
+
     /**
      * Check whether an element exists in the loaded SVG.
      *
@@ -283,6 +287,8 @@ public:
      * @return @c true if the element is defined in the SVG, otherwise @c false
      **/
     Q_INVOKABLE bool hasElement(const QString &elementId) const;
+
+    bool hasElement(QStringView elementId) const;
 
     /**
      * Check whether this object is backed by a valid SVG file.

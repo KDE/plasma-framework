@@ -59,7 +59,7 @@ public:
     ~SvgPrivate();
 
     // This function is meant for the rects cache
-    CacheId cacheId(const QString &elementId) const;
+    CacheId cacheId(QStringView elementId) const;
 
     // This function is meant for the pixmap cache
     QString cachePath(const QString &path, const QSize &size) const;
@@ -74,8 +74,8 @@ public:
     void createRenderer();
     void eraseRenderer();
 
-    QRectF elementRect(const QString &elementId);
-    QRectF findAndCacheElementRect(const QString &elementId);
+    QRectF elementRect(QStringView elementId);
+    QRectF findAndCacheElementRect(QStringView elementId);
 
     void checkColorHints();
 
@@ -128,7 +128,7 @@ public:
     void insert(uint id, const QString &filePath, const QRectF &rect, unsigned int lastModified);
     // Those 2 methods are the same, the second uses the integer id produced by hashed CacheId
     bool findElementRect(SvgPrivate::CacheId cacheId, QRectF &rect);
-    bool findElementRect(uint id, const QString &filePath, QRectF &rect);
+    bool findElementRect(uint id, QStringView filePath, QRectF &rect);
 
     bool loadImageFromCache(const QString &path, uint lastModified);
     void dropImageFromCache(const QString &path);
