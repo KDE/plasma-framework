@@ -547,7 +547,7 @@ Item {
                     KeyNavigation.down: expandToggleButton.KeyNavigation.down
                     Keys.onUpPressed: event => listItem.Keys.onUpPressed(event)
 
-                    Accessible.description: action !== null ? action.Accessible.description : ""
+                    Accessible.name: action !== null ? action.text : ""
                 }
 
                 // Expand/collapse button
