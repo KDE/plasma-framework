@@ -5,6 +5,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15 as QQC2
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.5 as Kirigami
 
 /**
  * This is advanced textfield. It is recommended to use this class when there
@@ -132,10 +133,9 @@ PlasmaComponents3.TextField {
         }
     }
 
-    PlasmaComponents3.ToolTip {
-        visible: root.focusSequence && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
-        text: root.focusSequence ? root.focusSequence : ""
-    }
+    PlasmaComponents3.ToolTip.visible: root.focusSequence && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
+    PlasmaComponents3.ToolTip.text: root.focusSequence ? root.focusSequence : ""
+    PlasmaComponents3.ToolTip.delay: Kirigami.Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : Kirigami.Units.toolTipDelay
 
     Row {
         id: leftActionsRow
