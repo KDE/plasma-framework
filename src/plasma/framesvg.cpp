@@ -841,8 +841,8 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
     // This has the same size regardless the border is enabled or not
     frame->fixedTopHeight = q->elementSize(createName(u"top")).height();
 
-    if (auto topMargin = createName(u"hint-top-margin"); q->hasElement(topMargin)) {
-        frame->fixedTopMargin = q->elementSize(topMargin).height();
+    if (auto topMargin = q->elementRect(createName(u"hint-top-margin")); topMargin.isValid()) {
+        frame->fixedTopMargin = topMargin.height();
     } else {
         frame->fixedTopMargin = frame->fixedTopHeight;
     }
@@ -855,16 +855,16 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->topMargin = frame->topHeight = 0;
     }
 
-    if (auto topInset = createName(u"hint-top-inset"); q->hasElement(topInset)) {
-        frame->insetTopMargin = q->elementSize(topInset).height();
+    if (auto topInset = q->elementRect(createName(u"hint-top-inset")); topInset.isValid()) {
+        frame->insetTopMargin = topInset.height();
     } else {
         frame->insetTopMargin = -1;
     }
 
     frame->fixedLeftWidth = q->elementSize(createName(u"left")).width();
 
-    if (auto leftMargin = createName(u"hint-left-margin"); q->hasElement(leftMargin)) {
-        frame->fixedLeftMargin = q->elementSize(leftMargin).width();
+    if (auto leftMargin = q->elementRect(createName(u"hint-left-margin")); leftMargin.isValid()) {
+        frame->fixedLeftMargin = leftMargin.width();
     } else {
         frame->fixedLeftMargin = frame->fixedLeftWidth;
     }
@@ -876,16 +876,16 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->leftMargin = frame->leftWidth = 0;
     }
 
-    if (auto leftInset = createName(u"hint-left-inset"); q->hasElement(leftInset)) {
-        frame->insetLeftMargin = q->elementSize(leftInset).width();
+    if (auto leftInset = q->elementRect(createName(u"hint-left-inset")); leftInset.isValid()) {
+        frame->insetLeftMargin = leftInset.width();
     } else {
         frame->insetLeftMargin = -1;
     }
 
     frame->fixedRightWidth = q->elementSize(createName(u"right")).width();
 
-    if (auto rightMargin = createName(u"hint-right-margin"); q->hasElement(rightMargin)) {
-        frame->fixedRightMargin = q->elementSize(rightMargin).width();
+    if (auto rightMargin = q->elementRect(createName(u"hint-right-margin")); rightMargin.isValid()) {
+        frame->fixedRightMargin = rightMargin.width();
     } else {
         frame->fixedRightMargin = frame->fixedRightWidth;
     }
@@ -897,16 +897,16 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->rightMargin = frame->rightWidth = 0;
     }
 
-    if (auto rightInset = createName(u"hint-right-inset"); q->hasElement(rightInset)) {
-        frame->insetRightMargin = q->elementSize(rightInset).width();
+    if (auto rightInset = q->elementRect(createName(u"hint-right-inset")); rightInset.isValid()) {
+        frame->insetRightMargin = rightInset.width();
     } else {
         frame->insetRightMargin = -1;
     }
 
     frame->fixedBottomHeight = q->elementSize(createName(u"bottom")).height();
 
-    if (auto bottomMargin = createName(u"hint-bottom-margin"); q->hasElement(bottomMargin)) {
-        frame->fixedBottomMargin = q->elementSize(bottomMargin).height();
+    if (auto bottomMargin = q->elementRect(createName(u"hint-bottom-margin")); bottomMargin.isValid()) {
+        frame->fixedBottomMargin = bottomMargin.height();
     } else {
         frame->fixedBottomMargin = frame->fixedBottomHeight;
     }
@@ -918,8 +918,8 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
         frame->bottomMargin = frame->bottomHeight = 0;
     }
 
-    if (auto bottomInset = createName(u"hint-bottom-inset"); q->hasElement(bottomInset)) {
-        frame->insetBottomMargin = q->elementSize(bottomInset).height();
+    if (auto bottomInset = q->elementRect(createName(u"hint-bottom-inset")); bottomInset.isValid()) {
+        frame->insetBottomMargin = bottomInset.height();
     } else {
         frame->insetBottomMargin = -1;
     }
