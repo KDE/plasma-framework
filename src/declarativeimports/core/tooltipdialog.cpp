@@ -58,9 +58,8 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
 
 void ToolTipDialog::showEvent(QShowEvent *event)
 {
-    if (m_hideTimeout > 0) {
-        m_showTimer->start(m_hideTimeout);
-    }
+    keepalive();
+
     Dialog::showEvent(event);
 }
 
@@ -107,12 +106,16 @@ void ToolTipDialog::setOwner(QObject *owner)
 
 void ToolTipDialog::dismiss()
 {
-    m_showTimer->start(m_hideTimeout / 20); // pretty short: 200ms
+    m_showTimer->start(200);
 }
 
 void ToolTipDialog::keepalive()
 {
-    m_showTimer->start(m_hideTimeout);
+    if (m_hideTimeout > 0) {
+        m_showTimer->start(m_hideTimeout);
+    } else {
+        m_showTimer->stop();
+    }
 }
 
 bool ToolTipDialog::interactive()

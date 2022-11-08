@@ -153,6 +153,10 @@ void ToolTip::showToolTip()
     dlg->setMainItem(mainItem());
     dlg->setInteractive(m_interactive);
     dlg->setVisible(true);
+    // In case the last owner triggered a dismiss but the dialog is still shown,
+    // showEvent won't be reached and the old timeout will still be effective.
+    // Call keepalive() to make it use the new timeout.
+    dlg->keepalive();
 }
 
 QString ToolTip::mainText() const
