@@ -184,6 +184,20 @@ class FrameSvgItem : public QQuickItem
      */
     Q_PROPERTY(QRegion mask READ mask NOTIFY maskChanged)
 
+    /**
+     * This will return the minimum height required to correctly paint this
+     * SVG. If the drawing size were to be smaller, then the side/corner elements
+     * would be drawn on top of each other.
+     */
+    Q_PROPERTY(int minimumDrawingHeight READ minimumDrawingHeight NOTIFY repaintNeeded)
+
+    /**
+     * This will return the minimum width required to correctly paint this
+     * SVG. If the drawing size were to be smaller, then the side/corner elements
+     * would be drawn on top of each other.
+     */
+    Q_PROPERTY(int minimumDrawingWidth READ minimumDrawingWidth NOTIFY repaintNeeded)
+
 public:
     /**
      * @return true if the svg has the necessary elements with the given prefix
@@ -227,6 +241,8 @@ public:
 
     void setStatus(Plasma::Svg::Status status);
     Plasma::Svg::Status status() const;
+    int minimumDrawingHeight() const;
+    int minimumDrawingWidth() const;
 
 #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
     void geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry) override;

@@ -415,6 +415,16 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
     painter->drawPixmap(pos, d->frame->cachedBackground);
 }
 
+int FrameSvg::minimumDrawingHeight()
+{
+    return d->frame->fixedTopHeight + d->frame->fixedBottomHeight;
+}
+
+int FrameSvg::minimumDrawingWidth()
+{
+    return d->frame->fixedRightWidth + d->frame->fixedLeftWidth;
+}
+
 //#define DEBUG_FRAMESVG_CACHE
 FrameSvgPrivate::~FrameSvgPrivate() = default;
 
