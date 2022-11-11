@@ -618,9 +618,10 @@ int AppletInterface::screen() const
 
 QRect AppletInterface::screenGeometry() const
 {
-    if (!applet() || !applet()->containment() || !applet()->containment()->corona()) {
+    if (!applet() || !applet()->containment() || !applet()->containment()->corona() || applet()->containment()->screen() < 0) {
         return QRect();
     }
+
     return applet()->containment()->corona()->screenGeometry(applet()->containment()->screen());
 }
 
@@ -767,6 +768,10 @@ QRect AppletInterface::availableScreenRect() const
     // If corona returned an invalid screenId, try to use lastScreen value if it is valid
     if (screenId == -1 && applet()->containment()->lastScreen() > -1) {
         screenId = applet()->containment()->lastScreen();
+        // Is this a screen not actually valid?
+        if (screenId >= applet()->containment()->corona()->numScreens()) {
+            screenId = -1;
+        }
     }
 
     if (screenId > -1) {
