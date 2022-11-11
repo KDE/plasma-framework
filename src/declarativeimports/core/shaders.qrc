@@ -1,8 +1,0 @@
-<!DOCTYPE RCC><RCC version="1.0">
-<qresource prefix="/plasma-framework/shaders">
-    <file>fadingmaterial.vert</file>
-    <file>fadingmaterial.frag</file>
-    <file>fadingmaterial_core.vert</file>
-    <file>fadingmaterial_core.frag</file>
-</qresource>
-</RCC>

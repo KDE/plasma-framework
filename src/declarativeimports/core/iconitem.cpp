@@ -15,13 +15,12 @@
 #include <QPalette>
 #include <QPropertyAnimation>
 #include <QQuickWindow>
-#include <QSGSimpleTextureNode>
+#include <QSGImageNode>
 
 #include <KIconEffect>
 #include <KIconLoader>
 #include <KIconTheme>
 
-#include "fadingnode_p.h"
 #include "theme.h"
 #include "units.h"
 #include <QuickAddons/ManagedTextureNode>
@@ -603,6 +602,31 @@ void IconItem::updatePolish()
     loadPixmap();
 }
 
+QSGNode *IconItem::createSubtree(qreal initialOpacity)
+{
+    auto opacityNode = new QSGOpacityNode{};
+    opacityNode->setFlag(QSGNode::OwnedByParent, true);
+    opacityNode->setOpacity(initialOpacity);
+
+    auto imageNode = window()->createImageNode();
+    imageNode->setFlag(QSGNode::OwnedByParent, true);
+    imageNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage()));
+    imageNode->setOwnsTexture(true);
+    imageNode->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
+    opacityNode->appendChildNode(imageNode);
+
+    return opacityNode;
+}
+
+void IconItem::updateSubtree(QSGNode *node, qreal opacity)
+{
+    auto opacityNode = static_cast<QSGOpacityNode *>(node);
+    opacityNode->setOpacity(opacity);
+
+    auto imageNode = static_cast<QSGImageNode *>(opacityNode->firstChild());
+    imageNode->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
+}
+
 QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *updatePaintNodeData)
 {
     Q_UNUSED(updatePaintNodeData)
@@ -612,51 +636,52 @@ QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         return nullptr;
     }
 
-    if (m_animation->state() == QAbstractAnimation::Running) {
-        FadingNode *animatingNode = dynamic_cast<FadingNode *>(oldNode);
-
-        if (!animatingNode || m_textureChanged) {
-            delete oldNode;
-
-            QSGTexture *source = window()->createTextureFromImage(m_oldIconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas);
-            source->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
-            QSGTexture *target = window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas);
-            target->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
-            animatingNode = new FadingNode(source, target);
-            m_sizeChanged = true;
-            m_textureChanged = false;
-        }
-
-        animatingNode->setProgress(m_animValue);
-
-        if (m_sizeChanged) {
-            const QSize newSize = paintedSize();
-            const QRect destRect(QPointF(boundingRect().center() - QPointF(newSize.width(), newSize.height()) / 2).toPoint(), newSize);
-            animatingNode->setRect(destRect);
-            m_sizeChanged = false;
-        }
-
-        return animatingNode;
-    } else {
-        ManagedTextureNode *textureNode = dynamic_cast<ManagedTextureNode *>(oldNode);
-
-        if (!textureNode || m_textureChanged) {
-            delete oldNode;
-            textureNode = new ManagedTextureNode;
-            textureNode->setTexture(QSharedPointer<QSGTexture>(window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas)));
-            m_sizeChanged = true;
-            m_textureChanged = false;
-        }
-        textureNode->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
-
-        if (m_sizeChanged) {
-            const QSize newSize = paintedSize();
-            const QRect destRect(QPointF(boundingRect().center() - QPointF(newSize.width(), newSize.height()) / 2).toPoint(), newSize);
-            textureNode->setRect(destRect);
-            m_sizeChanged = false;
-        }
-        return textureNode;
+    if (!oldNode) {
+        oldNode = new QSGNode{};
     }
+
+    if (m_animation->state() == QAbstractAnimation::Running) {
+        if (oldNode->childCount() < 2) {
+            oldNode->appendChildNode(createSubtree(0.0));
+        }
+
+        updateSubtree(oldNode->firstChild(), 1.0 - m_animValue);
+        updateSubtree(oldNode->lastChild(), m_animValue);
+    } else {
+        if (oldNode->childCount() == 0) {
+            oldNode->appendChildNode(createSubtree(1.0));
+        }
+
+        if (oldNode->childCount() > 1) {
+            auto toRemove = oldNode->firstChild();
+            oldNode->removeChildNode(toRemove);
+            delete toRemove;
+        }
+
+        updateSubtree(oldNode->firstChild(), 1.0);
+    }
+
+    if (m_textureChanged) {
+        auto child = oldNode->lastChild();
+        auto imageNode = static_cast<QSGImageNode *>(child->firstChild());
+        imageNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage()));
+        m_textureChanged = false;
+        m_sizeChanged = true;
+    }
+
+    if (m_sizeChanged) {
+        const QSize newSize = paintedSize();
+        const QRect destRect(QPointF(boundingRect().center() - QPointF(newSize.width(), newSize.height()) / 2).toPoint(), newSize);
+
+        for (int i = 0; i < oldNode->childCount(); ++i) {
+            auto imageNode = static_cast<QSGImageNode *>(oldNode->childAtIndex(i)->firstChild());
+            imageNode->setRect(destRect);
+        }
+
+        m_sizeChanged = false;
+    }
+
+    return oldNode;
 }
 
 void IconItem::valueChanged(const QVariant &value)

@@ -183,6 +183,9 @@ private:
     QSize paintedSize(const QSizeF &containerSize = QSizeF()) const;
     void updateImplicitSize();
 
+    QSGNode *createSubtree(qreal initialOpacity);
+    void updateSubtree(QSGNode *node, qreal opacity);
+
     // all the ways we can set an source. Only one of them will be valid
     std::unique_ptr<IconItemSource> m_iconItemSource;
     // this contains the raw variant it was passed
