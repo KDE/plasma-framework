@@ -186,16 +186,14 @@ class FrameSvgItem : public QQuickItem
 
     /**
      * This will return the minimum height required to correctly paint this
-     * SVG. If the drawing size were to be smaller, then the side/corner elements
-     * would be drawn on top of each other.
+     * SVG.
      * @since 5.101
      */
     Q_PROPERTY(int minimumDrawingHeight READ minimumDrawingHeight NOTIFY repaintNeeded)
 
     /**
      * This will return the minimum width required to correctly paint this
-     * SVG. If the drawing size were to be smaller, then the side/corner elements
-     * would be drawn on top of each other.
+     * SVG.
      * @since 5.101
      */
     Q_PROPERTY(int minimumDrawingWidth READ minimumDrawingWidth NOTIFY repaintNeeded)
