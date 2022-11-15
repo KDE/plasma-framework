@@ -166,7 +166,7 @@ void SvgItem::updateDevicePixelRatio()
         } else {
             m_svg.data()->setDevicePixelRatio(qMax<qreal>(1.0, std::ceil(qApp->devicePixelRatio())));
         }
-        m_svg.data()->setScaleFactor(qMax<qreal>(1.0, std::ceil(Units::instance().devicePixelRatio())));
+        m_svg.data()->setScaleFactor(qMax<qreal>(1.0, Units::instance().devicePixelRatio()));
     }
 }
 
