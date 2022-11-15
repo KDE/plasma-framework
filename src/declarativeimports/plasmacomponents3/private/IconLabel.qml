@@ -6,7 +6,6 @@
 */
 
 import QtQuick 2.15
-import QtQuick.Window 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.1 as PlasmaCore
@@ -101,9 +100,6 @@ Item {
             visible: text.length > 0 && root.display !== T.AbstractButton.IconOnly
             palette: root.palette
             font: root.font
-            // Work around Qt bug where NativeRendering breaks for non-integer scale factors
-            // https://bugreports.qt.io/browse/QTBUG-70481
-            renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
             color: PlasmaCore.ColorScope.textColor
             linkColor: PlasmaCore.Theme.linkColor
             elide: Text.ElideRight

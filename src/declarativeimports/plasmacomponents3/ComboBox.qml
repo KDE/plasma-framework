@@ -5,7 +5,6 @@
 */
 
 import QtQuick 2.6
-import QtQuick.Window 2.2
 import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQuick.Controls @QQC2_VERSION@ as Controls
 import QtGraphicalEffects 1.0
@@ -71,10 +70,6 @@ T.ComboBox {
         readOnly: control.down || !control.editable
         inputMethodHints: control.inputMethodHints
         validator: control.validator
-
-        // Work around Qt bug where NativeRendering breaks for non-integer scale factors
-        // https://bugreports.qt.io/browse/QTBUG-70481
-        renderType: Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
         color: PlasmaCore.ColorScope.textColor
         selectionColor: Kirigami.Theme.highlightColor
         selectedTextColor: Kirigami.Theme.highlightedTextColor

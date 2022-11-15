@@ -6,7 +6,6 @@
 
 
 import QtQuick 2.1
-import QtQuick.Window 2.2
 import QtQuick.Controls.Styles 1.1 as QtQuickControlStyle
 import QtQuick.Controls.Private 1.0 as QtQuickControlsPrivate
 import QtQuick.Controls 1.1
@@ -31,10 +30,6 @@ QtQuickControlStyle.TextAreaStyle {
     textColor: control.backgroundVisible ? PlasmaCore.Theme.viewTextColor : PlasmaCore.ColorScope.textColor
     selectionColor: control.backgroundVisible ? PlasmaCore.Theme.viewFocusColor : PlasmaCore.ColorScope.highlightColor
     selectedTextColor: control.backgroundVisible ? PlasmaCore.Theme.viewHighlightedTextColor : PlasmaCore.ColorScope.highlightedTextColor
-
-    // Work around Qt bug where NativeRendering breaks for non-integer scale factors
-    // https://bugreports.qt.io/browse/QTBUG-70481
-    renderType: QtQuickControlsPrivate.Settings.isMobile || Screen.devicePixelRatio % 1 !== 0 ? Text.QtRendering : Text.NativeRendering
 
     frame: PlasmaCore.FrameSvgItem {
         id: base
