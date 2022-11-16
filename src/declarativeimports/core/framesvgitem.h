@@ -192,6 +192,15 @@ public:
      */
     Q_INVOKABLE bool hasElementPrefix(const QString &prefix) const;
 
+    /**
+     * Check if the SVG has a certain element.
+     *
+     * This is a convenience function that forwards to Svg::hasElement.
+     *
+     * @see Svg::hasElement
+     */
+    Q_INVOKABLE bool hasElement(const QString &elementName) const;
+
     /// @cond INTERNAL_DOCS
     FrameSvgItem(QQuickItem *parent = nullptr);
     ~FrameSvgItem() override;

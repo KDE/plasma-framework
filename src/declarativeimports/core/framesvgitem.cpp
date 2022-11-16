@@ -485,6 +485,11 @@ bool FrameSvgItem::hasElementPrefix(const QString &prefix) const
     return m_frameSvg->hasElementPrefix(prefix);
 }
 
+bool FrameSvgItem::hasElement(const QString &elementName) const
+{
+    return m_frameSvg->hasElement(elementName);
+}
+
 QRegion FrameSvgItem::mask() const
 {
     return m_frameSvg->mask();
