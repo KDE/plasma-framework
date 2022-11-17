@@ -238,7 +238,7 @@ T.TextField {
             }
         }
         PlasmaCore.FrameSvgItem {
-            z: lineEditSvg.hasElement("hint-focus-over-base") ? 0 : -1
+            z: hasElement("hint-focus-over-base") ? 0 : -1
             anchors {
                 fill: parent
                 leftMargin: -margins.left
@@ -247,7 +247,7 @@ T.TextField {
                 bottomMargin: -margins.bottom
             }
             imagePath: "widgets/lineedit"
-            prefix: control.visualFocus && lineEditSvg.hasElement("focusframe-center") ? "focusframe" : "focus"
+            prefix: control.visualFocus && hasElement("focusframe-center") ? "focusframe" : "focus"
             visible: opacity > 0
             opacity: control.visualFocus || control.activeFocus
             Behavior on opacity {
@@ -259,8 +259,4 @@ T.TextField {
         }
     }
 
-    PlasmaCore.Svg {
-        id: lineEditSvg
-        imagePath: "widgets/lineedit"
-    }
 }
