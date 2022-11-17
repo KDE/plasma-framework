@@ -6,59 +6,24 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-/**Documented API
-Inherits:
-        Item
-
-Imports:
-        QtQuick 2.1
-        org.kde.plasma.core
-
-Description:
-TODO i need more info here
-
-
-Properties:
-**/
-
 import QtQuick 2.12
 import org.kde.plasma.core 2.0 as PlasmaCore
 
-Item {
-    id: root
-    property bool showShadow: true
+PlasmaCore.FrameSvgItem {
+    id: shadowEffect
 
-    property alias enabledBorders: shadowEffect.enabledBorders
+    property bool showShadow
 
-    PlasmaCore.FrameSvgItem {
-        id: shadowEffect
-        anchors {
-            fill: parent
-            leftMargin: -margins.left
-            topMargin: -margins.top
-            rightMargin: -margins.right
-            bottomMargin: -margins.bottom
-        }
-        imagePath: "widgets/button"
-        prefix: "shadow"
+    anchors {
+        fill: parent
+        leftMargin: -margins.left
+        topMargin: -margins.top
+        rightMargin: -margins.right
+        bottomMargin: -margins.bottom
     }
+    imagePath: "widgets/button"
+    prefix: "shadow"
 
-    state: showShadow ? "shown" : "hidden"
-
-    states: [
-        State {
-            name: "shown"
-            PropertyChanges {
-                target: shadowEffect
-                visible: true
-            }
-        },
-        State {
-            name: "hidden"
-            PropertyChanges {
-                target: shadowEffect
-                visible: false
-            }
-        }
-    ]
+    opacity: showShadow ? 1 : 0
+    Behavior on opacity { OpacityAnimator { duration: PlasmaCore.Units.shortDuration; easing.type: Easing.OutQuad } }
 }
