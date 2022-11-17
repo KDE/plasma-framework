@@ -171,7 +171,7 @@ ColumnLayout {
      * By default if an helpfulAction is provided this will be of type Actionable otherwise of type Informational.
      * @since 5.94
      */
-    property int type: actionButton.action && actionButton.action.enabled ? PlaceholderMessage.Type.Actionable : PlaceholderMessage.Type.Informational
+    property int type: helpfulAction && helpfulAction.enabled ? PlaceholderMessage.Type.Actionable : PlaceholderMessage.Type.Informational
 
     /**
      * text: string
@@ -220,7 +220,7 @@ ColumnLayout {
      *
      * @since 5.72
      */
-    property alias helpfulAction: actionButton.action
+    property QQC2.Action helpfulAction
 
     spacing: PlasmaCore.Units.largeSpacing
 
@@ -259,12 +259,13 @@ ColumnLayout {
         Layout.fillWidth: true
     }
 
-    PlasmaComponents3.Button {
-        id: actionButton
-
+    Loader {
+        active: root.helpfulAction && root.helpfulAction.enabled
         Layout.alignment: Qt.AlignHCenter
         Layout.topMargin: PlasmaCore.Units.gridUnit
 
-        visible: action && action.enabled
+        sourceComponent: PlasmaComponents3.Button {
+            action: root.helpfulAction
+        }
     }
 }
