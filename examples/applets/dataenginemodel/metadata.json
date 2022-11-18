@@ -53,6 +53,7 @@
         "Description[nn]": "Eksempel-applet som viser korleis bruka «Models» innebygd i «DataEngines»",
         "Description[pl]": "Przykładowy aplet pokazujący sposób używania modeli osadzonych w silnikach danych",
         "Description[pt]": "Elemento de exemplo que mostra como usar os Models incorporados nos DataEngines",
+        "Description[ru]": "Пример виджета для демонстрации использования моделей, встроенных в источники данных Plasma.",
         "Description[sl]": "Primer apleta, ki kaže kako uporabljati modele vgrajene v podatkovne stroje",
         "Description[sv]": "Miniprogramexempel som visar hur modeller används inbäddade i datagränssnitt",
         "Description[tr]": "DataEngines içinde gömülü modellerin nice kullanılacağını gösteren örnek uygulama",
