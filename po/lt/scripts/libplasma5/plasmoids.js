@@ -117,3 +117,6 @@ addDictCases("Viki kelionės", "Viki kelionių", "šias Viki keliones");
 addDictCases("Vikipedija", "Vikipedijos", "šią Vikipediją");
 addDictCases("Visuotinis meniu", "visuotinio meniu", "šį visuotinį meniu");
 addDictCases("Žodynas", "žodyno", "šį žodyną");
+addDictCases("Užrakto klavišų būsena", "užrakto klavišų būsenos", "šią užrakto klavišų būseną");
+addDictCases("Piešimo planšetė", "piešimo planšetės", "šią piešimo planšetę");
+addDictCases("Žvilgsnis į darbalaukį", "žvilgsnio į darbalaukį", "šį žvilgsnį į darbalaukį");
