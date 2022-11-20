@@ -1,22 +1,22 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# A S Alam <aalam@users.sf.net>, 2014, 2015, 2018.
+# A S Alam <aalam@users.sf.net>, 2014, 2015, 2018, 2022.
 # Aman Alam <alam.yellow@gmail.com>, 2020.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-10-30 00:43+0000\n"
-"PO-Revision-Date: 2020-07-09 09:26-0700\n"
-"Last-Translator: Aman Alam <alam.yellow@gmail.com>\n"
-"Language-Team: Punjabi <kde-i18n-doc@kde.org>\n"
+"PO-Revision-Date: 2022-11-19 05:34-0800\n"
+"Last-Translator: A S Alam <aalam@satluj.org>\n"
+"Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
 "Language: pa\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.12.2\n"
+"X-Generator: Lokalize 22.08.2\n"
 
 #: declarativeimports/calendar/eventdatadecorator.cpp:51
 #, kde-format
@@ -46,7 +46,7 @@ msgstr "ਹੋਰ"
 #, kde-format
 msgctxt "Format: month year"
 msgid "%1 %2"
-msgstr ""
+msgstr "%1 %2"
 
 #: declarativeimports/calendar/qml/MonthView.qml:255
 #, kde-format
@@ -92,18 +92,17 @@ msgstr "ਅਗਲਾ ਦਹਾਕਾ"
 #: declarativeimports/calendar/qml/MonthView.qml:306
 #, kde-format
 msgid "Days"
-msgstr ""
+msgstr "ਦਿਨ"
 
 #: declarativeimports/calendar/qml/MonthView.qml:311
-#, fuzzy, kde-format
-#| msgid "Next Month"
+#, kde-format
 msgid "Months"
-msgstr "ਅਗਲਾ ਮਹੀਨਾ"
+msgstr "ਮਹੀਨੇ"
 
 #: declarativeimports/calendar/qml/MonthView.qml:316
 #, kde-format
 msgid "Years"
-msgstr ""
+msgstr "ਸਾਲ"
 
 #: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
 #, kde-format
@@ -118,34 +117,34 @@ msgstr "ਰੱਦ ਕਰੋ"
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
 msgid "More actions"
-msgstr ""
+msgstr "ਹੋਰ ਕਾਰਵਾਈਆਂ"
 
 #: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
-msgstr ""
+msgstr "ਸਮੇਟੋ"
 
 #: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
-msgstr ""
+msgstr "ਫੈਲਾਓ"
 
 #: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
 #, kde-format
 msgid "Password"
-msgstr ""
+msgstr "ਪਾਸਵਰਡ"
 
 #: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
 #, kde-format
 msgid "Search…"
-msgstr ""
+msgstr "…ਖੋਜੋ"
 
 #: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search"
-msgstr ""
+msgstr "ਖੋਜੋ"
 
 #: plasma/applet.cpp:380
 #, kde-format
@@ -166,7 +165,7 @@ msgstr "%1 ਨੂੰ ਹਟਾਓ"
 #: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
 #, kde-format
 msgid "Enter Edit Mode"
-msgstr ""
+msgstr "ਸੋਧ ਢੰਗ ਵਿੱਚ ਜਾਓ"
 
 #: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
 #, kde-format
@@ -187,7 +186,7 @@ msgstr "ਵਿਦਜੈਟ ਅਣ-ਲਾਕ ਕਰੋ"
 #: plasma/corona.cpp:405
 #, kde-format
 msgid "Exit Edit Mode"
-msgstr ""
+msgstr "ਸੋਧ ਢੰਗ ਤੋਂ ਬਾਹਰ"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
@@ -266,7 +265,7 @@ msgstr ""
 #: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
 #, kde-format
 msgid "Configuration XML file"
-msgstr ""
+msgstr "ਸੰਰਚਨਾ XML ਫਾਈਲ"
 
 #: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
 #, kde-format
@@ -333,12 +332,12 @@ msgstr "ਗਰਾਫਿਕ ਵਾਲੇ ਵਿਦਜੈੱਟਾਂ ਲਈ ਬ�
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
 #, kde-format
 msgid "Background image for tooltips"
-msgstr ""
+msgstr "ਟੂਲ-ਟਿੱਪ ਲਈ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
 #, kde-format
 msgid "Opaque images for dialogs"
-msgstr ""
+msgstr "ਡਾਈਲਾਗਾਂ ਲਈ ਧੁੰਦਲੇ ਚਿੱਤਰ"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
@@ -521,15 +520,14 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr "ਗਲਤ (ਨਲ) ਸਰਵਿਸ, ਕੋਈ ਵੀ ਓਪਰੇਸ਼ਨ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।"
 
 #: plasmaquick/appletquickitem.cpp:609
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown Applet"
-msgstr "ਅਣਜਾਣ"
+msgstr "ਅਣਪਛਾਤਾ ਐਪਲਿਟ"
 
 #: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Error loading QML file: %1 %2"
-msgstr ""
+msgstr "QML ਫਾਈਲ ਲੋਡ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:626
 #, kde-format
