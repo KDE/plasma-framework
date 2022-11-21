@@ -640,7 +640,7 @@ QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
         oldNode = new QSGNode{};
     }
 
-    if (m_animation->state() == QAbstractAnimation::Running && oldNode->childCount() != 0) {
+    if (m_animation->state() == QAbstractAnimation::Running) {
         if (oldNode->childCount() < 2) {
             oldNode->appendChildNode(createSubtree(0.0));
             m_textureChanged = true;
