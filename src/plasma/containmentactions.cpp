@@ -127,10 +127,8 @@ QString ContainmentActions::eventToString(QEvent *event)
     }
     case QEvent::Wheel: {
         QWheelEvent *e = static_cast<QWheelEvent *>(event);
-        trigger = QStringLiteral("wheel:");
-        // ContainmentInterface::wheelEvent uses angleDelta.y()
-        // To support both, should we just remove this orientation string?
-        trigger += QStringLiteral("Vertical");
+        trigger = QStringLiteral("wheel:%1")
+                      .arg(std::abs(e->angleDelta().x()) > std::abs(e->angleDelta().y()) ? QStringLiteral("Horizontal") : QStringLiteral("Vertical"));
         modifiers = e->modifiers();
         break;
     }
