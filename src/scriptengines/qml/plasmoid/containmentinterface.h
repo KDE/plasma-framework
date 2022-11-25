@@ -16,6 +16,7 @@
 
 class WallpaperInterface;
 class DropMenu;
+class KJob;
 
 namespace KIO
 {
