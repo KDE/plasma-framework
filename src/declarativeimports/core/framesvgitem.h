@@ -185,14 +185,14 @@ class FrameSvgItem : public QQuickItem
     Q_PROPERTY(QRegion mask READ mask NOTIFY maskChanged)
 
     /**
-     * This will return the minimum height required to correctly paint this
+     * This will return the minimum height required to correctly draw this
      * SVG.
      * @since 5.101
      */
     Q_PROPERTY(int minimumDrawingHeight READ minimumDrawingHeight NOTIFY repaintNeeded)
 
     /**
-     * This will return the minimum width required to correctly paint this
+     * This will return the minimum width required to correctly draw this
      * SVG.
      * @since 5.101
      */

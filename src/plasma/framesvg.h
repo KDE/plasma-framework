@@ -316,14 +316,14 @@ public:
     void setRepaintBlocked(bool blocked);
 
     /**
-     * This will return the minimum height required to correctly paint this
+     * This will return the minimum height required to correctly draw this
      * SVG. 
      * @since 5.101
      */
     Q_INVOKABLE int minimumDrawingHeight();
 
     /**
-     * This will return the minimum width required to correctly paint this
+     * This will return the minimum width required to correctly draw this
      * SVG. 
      * @since 5.101
      */

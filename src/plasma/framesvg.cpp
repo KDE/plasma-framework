@@ -417,12 +417,19 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
 
 int FrameSvg::minimumDrawingHeight()
 {
-    return d->frame->fixedTopHeight + d->frame->fixedBottomHeight;
+    if (d->frame) {
+        return d->frame->fixedTopHeight + d->frame->fixedBottomHeight;
+    }
+    return 0;
 }
 
 int FrameSvg::minimumDrawingWidth()
 {
-    return d->frame->fixedRightWidth + d->frame->fixedLeftWidth;
+    if (d->frame) {
+        return d->frame->fixedRightWidth + d->frame->fixedLeftWidth;
+    }
+    return 0;
+    
 }
 
 //#define DEBUG_FRAMESVG_CACHE
