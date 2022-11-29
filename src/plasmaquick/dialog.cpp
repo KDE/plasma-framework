@@ -33,6 +33,7 @@
 #include <Plasma/Corona>
 
 #include <QDebug>
+#include <optional>
 
 #if HAVE_KWAYLAND
 #include "waylandintegration_p.h"
@@ -631,9 +632,9 @@ void DialogPrivate::updateInputShape()
 #if HAVE_XCB_SHAPE
     if (KWindowSystem::isPlatformX11()) {
         xcb_connection_t *c = QX11Info::connection();
-        static bool s_shapeExtensionChecked = false;
-        static bool s_shapeAvailable = false;
-        if (!s_shapeExtensionChecked) {
+        static std::optional<bool> s_shapeAvailable = std::nullopt;
+        if (!s_shapeAvailable.has_value()) {
+            s_shapeAvailable = std::optional(false);
             xcb_prefetch_extension_data(c, &xcb_shape_id);
             const xcb_query_extension_reply_t *extension = xcb_get_extension_data(c, &xcb_shape_id);
             if (extension->present) {
@@ -641,12 +642,11 @@ void DialogPrivate::updateInputShape()
                 auto cookie = xcb_shape_query_version(c);
                 QScopedPointer<xcb_shape_query_version_reply_t, QScopedPointerPodDeleter> version(xcb_shape_query_version_reply(c, cookie, nullptr));
                 if (!version.isNull()) {
-                    s_shapeAvailable = (version->major_version * 0x10 + version->minor_version) >= 0x11;
+                    s_shapeAvailable = std::optional((version->major_version * 0x10 + version->minor_version) >= 0x11);
                 }
             }
-            s_shapeExtensionChecked = true;
         }
-        if (!s_shapeAvailable) {
+        if (!s_shapeAvailable.value()) {
             return;
         }
         if (outputOnly) {
