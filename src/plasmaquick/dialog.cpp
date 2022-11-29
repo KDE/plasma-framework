@@ -1258,6 +1258,8 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
                 dialogPos.setY(avail.center().y() - size.height() / 2);
             }
             break;
+        default:
+            break;
         }
     }
 
