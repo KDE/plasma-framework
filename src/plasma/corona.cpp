@@ -18,7 +18,6 @@
 #include <QTimer>
 
 #include <KLocalizedString>
-#include <KWindowSystem>
 
 #include <cmath>
 

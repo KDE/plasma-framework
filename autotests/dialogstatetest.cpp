@@ -5,7 +5,9 @@
 */
 
 #include "dialogstatetest.h"
-#include <KWindowSystem>
+#include <KWindowInfo>
+#include <KX11Extras>
+
 #include <QSignalSpy>
 
 void DialogStateTest::initTestCase()
@@ -25,14 +27,14 @@ void DialogStateTest::cleanupTestCase()
 void DialogStateTest::windowState()
 {
     if (QGuiApplication::platformName() == "wayland") {
-        QEXPECT_FAIL("windowState", "KWindowSystem::windowAdded doesn't work on wayland", Continue);
+        QEXPECT_FAIL("windowState", "KX11Extras::windowAdded doesn't work on wayland", Continue);
         return;
     }
 
     for (int i = 0; i <= 100; ++i) {
         m_dialog->show();
 
-        QSignalSpy windowAddedSpy(KWindowSystem::self(), &KWindowSystem::windowAdded);
+        QSignalSpy windowAddedSpy(KX11Extras::self(), &KX11Extras::windowAdded);
         QVERIFY(windowAddedSpy.isValid());
         QVERIFY(windowAddedSpy.wait());
 
@@ -56,7 +58,7 @@ void DialogStateTest::windowState()
 
         m_dialog->hide();
 
-        QSignalSpy windowRemovedSpy(KWindowSystem::self(), &KWindowSystem::windowRemoved);
+        QSignalSpy windowRemovedSpy(KX11Extras::self(), &KX11Extras::windowRemoved);
         QVERIFY(windowRemovedSpy.isValid());
         QVERIFY(windowRemovedSpy.wait());
 

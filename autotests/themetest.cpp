@@ -14,6 +14,7 @@
 #include <KIconLoader>
 #include <KIconTheme>
 #include <KWindowSystem>
+#include <KX11Extras>
 
 #include <config-plasma.h>
 #if HAVE_X11
@@ -198,7 +199,7 @@ void ThemeTest::testCompositingChange()
     if (!KWindowSystem::isPlatformX11()) {
         QSKIP("Test is only for X11");
     }
-    QVERIFY(!KWindowSystem::compositingActive());
+    QVERIFY(!KX11Extras::compositingActive());
 
     // image path should give us an opaque variant
     QVERIFY(m_theme->imagePath(QStringLiteral("element")).endsWith(QLatin1String("/desktoptheme/testtheme/opaque/element.svg")));
@@ -207,7 +208,7 @@ void ThemeTest::testCompositingChange()
     QVERIFY(themeChangedSpy.isValid());
 
     // fake the compositor
-    QSignalSpy compositingChangedSpy(KWindowSystem::self(), &KWindowSystem::compositingChanged);
+    QSignalSpy compositingChangedSpy(KX11Extras::self(), &KX11Extras::compositingChanged);
     QVERIFY(compositingChangedSpy.isValid());
     std::unique_ptr<KSelectionOwner> compositorSelection(new KSelectionOwner("_NET_WM_CM_S0"));
     QSignalSpy claimedSpy(compositorSelection.get(), &KSelectionOwner::claimedOwnership);
@@ -216,7 +217,7 @@ void ThemeTest::testCompositingChange()
     QVERIFY(claimedSpy.wait());
 
     QCOMPARE(compositingChangedSpy.count(), 1);
-    QVERIFY(KWindowSystem::compositingActive());
+    QVERIFY(KX11Extras::compositingActive());
     QVERIFY(themeChangedSpy.wait());
     QCOMPARE(themeChangedSpy.count(), 1);
     QVERIFY(m_theme->imagePath(QStringLiteral("element")).endsWith(QLatin1String("/desktoptheme/testtheme/element.svg")));
@@ -225,7 +226,7 @@ void ThemeTest::testCompositingChange()
     compositorSelection.reset();
     QVERIFY(compositingChangedSpy.wait());
     QCOMPARE(compositingChangedSpy.count(), 2);
-    QVERIFY(!KWindowSystem::compositingActive());
+    QVERIFY(!KX11Extras::compositingActive());
     QVERIFY(themeChangedSpy.wait());
     QCOMPARE(themeChangedSpy.count(), 2);
     QVERIFY(m_theme->imagePath(QStringLiteral("element")).endsWith(QLatin1String("/desktoptheme/testtheme/opaque/element.svg")));

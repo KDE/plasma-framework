@@ -10,7 +10,6 @@
 #include "private/containment_p.h"
 
 #include <KLocalizedString>
-#include <KWindowSystem>
 #include <QDebug>
 
 #include "config-plasma.h"

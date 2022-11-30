@@ -5,7 +5,7 @@
 */
 #include "windowthumbnail.h"
 // KF5
-#include <KWindowSystem>
+#include <KX11Extras>
 // Qt
 #include <QGuiApplication>
 #include <QIcon>
@@ -275,7 +275,7 @@ void WindowThumbnail::setWinId(uint32_t winId)
     if (m_winId == winId) {
         return;
     }
-    if (!KWindowSystem::self()->hasWId(winId)) {
+    if (!KX11Extras::self()->hasWId(winId)) {
         // invalid Id, don't updated
         return;
     }
@@ -383,8 +383,8 @@ bool WindowThumbnail::nativeEventFilter(const QByteArray &eventType, void *messa
 void WindowThumbnail::iconToTexture(WindowTextureProvider *textureProvider)
 {
     QIcon icon;
-    if (KWindowSystem::self()->hasWId(m_winId)) {
-        icon = KWindowSystem::self()->icon(m_winId, boundingRect().width(), boundingRect().height());
+    if (KX11Extras::self()->hasWId(m_winId)) {
+        icon = KX11Extras::self()->icon(m_winId, boundingRect().width(), boundingRect().height());
     } else {
         // fallback to plasma icon
         icon = QIcon::fromTheme(QStringLiteral("plasma"));

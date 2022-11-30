@@ -25,6 +25,7 @@
 
 #include <KWindowSystem/KWindowInfo>
 #include <KWindowSystem>
+#include <KX11Extras>
 
 #include <kquickaddons/quickviewsharedengine.h>
 
@@ -266,7 +267,7 @@ void DialogPrivate::updateTheme()
                                                  theme.backgroundSaturation(),
                                                  mask);
 
-        if (KWindowSystem::compositingActive()) {
+        if (KX11Extras::compositingActive()) {
             if (hasMask) {
                 hasMask = false;
                 q->setMask(QRegion());
@@ -906,9 +907,9 @@ void DialogPrivate::applyType()
     }
 
     if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay || type == Dialog::CriticalNotification) {
-        KWindowSystem::setOnAllDesktops(q->winId(), true);
+        KX11Extras::setOnAllDesktops(q->winId(), true);
     } else {
-        KWindowSystem::setOnAllDesktops(q->winId(), false);
+        KX11Extras::setOnAllDesktops(q->winId(), false);
     }
 
 #if HAVE_KWAYLAND

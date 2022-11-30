@@ -16,7 +16,6 @@
 #include <KImageCache>
 #include <KPluginMetaData>
 #include <KSharedDataCache>
-#include <KWindowSystem>
 #include <QDebug>
 #include <QTimer>
 

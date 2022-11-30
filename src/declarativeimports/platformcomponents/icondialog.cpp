@@ -12,7 +12,7 @@
 #include <QVariant>
 
 #include <KIconDialog>
-#include <KWindowSystem>
+#include <KX11Extras>
 
 #include "utils/sharedsingleton.h"
 
@@ -37,10 +37,11 @@ QString IconDialog::openDialog()
     dialog->setup(KIconLoader::Desktop);
     dialog->setProperty("DoNotCloseController", true);
 
-    KWindowSystem::setOnAllDesktops(dialog->winId(), true);
+    KX11Extras::setOnAllDesktops(dialog->winId(), true);
 
     dialog->showDialog();
-    KWindowSystem::forceActiveWindow(dialog->winId());
+
+    KX11Extras::forceActiveWindow(dialog->winId());
 
     return dialog->openDialog();
 }

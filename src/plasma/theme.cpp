@@ -25,7 +25,6 @@
 #include <KDirWatch>
 #include <KImageCache>
 #include <KWindowEffects>
-#include <KWindowSystem>
 #include <QDebug>
 #include <QStandardPaths>
 

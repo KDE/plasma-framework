@@ -22,6 +22,7 @@
 #include <KIconTheme>
 #include <KSharedConfig>
 #include <KWindowEffects>
+#include <KX11Extras>
 #include <kpluginmetadata.h>
 
 namespace Plasma
@@ -92,7 +93,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
     , pixmapCache(nullptr)
     , cacheSize(0)
     , cachesToDiscard(NoCache)
-    , compositingActive(KWindowSystem::self()->compositingActive())
+    , compositingActive(KX11Extras::self()->compositingActive())
     , backgroundContrastActive(KWindowEffects::isEffectAvailable(KWindowEffects::BackgroundContrast))
     , isDefault(true)
     , useGlobal(true)
@@ -150,7 +151,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     });
 
-    connect(KWindowSystem::self(), &KWindowSystem::compositingChanged, this, &ThemePrivate::compositingChanged);
+    connect(KX11Extras::self(), &KX11Extras::compositingChanged, this, &ThemePrivate::compositingChanged);
 }
 
 ThemePrivate::~ThemePrivate()

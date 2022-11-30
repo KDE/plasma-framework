@@ -28,7 +28,6 @@
 #include <KLocalizedString>
 #include <KPackage/Package>
 #include <KService>
-#include <KWindowSystem>
 
 #include "containment.h"
 #include "corona.h"
