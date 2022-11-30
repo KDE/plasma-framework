@@ -80,4 +80,13 @@ PlasmaExtras.ActionTextField {
             root.clear();
         }
     }
+
+    Keys.onEscapePressed: {
+        if (root.text.length === 0) {
+            event.accepted = false;
+            return;
+        }
+        root.clear();
+        event.accepted = true;
+    }
 }
