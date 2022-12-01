@@ -30,11 +30,11 @@ T.TextArea {
     opacity: control.enabled ? 1 : 0.6
     wrapMode: Text.WordWrap
     verticalAlignment: TextEdit.AlignTop
-    hoverEnabled: !Kirigami.Settings.tabletMode
+    hoverEnabled: !Kirigami.Settings.tabletMode || !Kirigami.Settings.hasTransientTouchInput
 
-    selectByMouse: !Kirigami.Settings.tabletMode
+    selectByMouse: hoverEnabled
 
-    cursorDelegate: Kirigami.Settings.tabletMode ? mobileCursor : null
+    cursorDelegate: !hoverEnabled ? mobileCursor : null
     Component {
         id: mobileCursor
         MobileTextSelection.MobileCursor {
@@ -46,7 +46,7 @@ T.TextArea {
     onPressed: MobileTextSelection.MobileTextActionsToolBar.shouldBeVisible = true;
 
     onPressAndHold: {
-        if (!Kirigami.Settings.tabletMode) {
+        if (hoverEnabled) {
             return;
         }
         forceActiveFocus();
