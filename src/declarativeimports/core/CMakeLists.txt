@@ -23,6 +23,7 @@ target_sources(corebindingsplugin PRIVATE
     iconitem.cpp
     units.cpp
     windowthumbnail.cpp
+    managedtexturenode.cpp
 )
 
 target_link_libraries(corebindingsplugin

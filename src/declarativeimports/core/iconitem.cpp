@@ -23,7 +23,6 @@
 
 #include "theme.h"
 #include "units.h"
-#include <QuickAddons/ManagedTextureNode>
 
 class IconItemSource
 {

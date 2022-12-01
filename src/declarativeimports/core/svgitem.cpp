@@ -14,7 +14,7 @@
 
 #include "plasma/svg.h"
 
-#include <QuickAddons/ManagedTextureNode>
+#include "managedtexturenode.h"
 
 #include <cmath> //floor()
 

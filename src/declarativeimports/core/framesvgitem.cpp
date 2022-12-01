@@ -7,6 +7,8 @@
 
 #include "framesvgitem.h"
 
+#include "managedtexturenode.h"
+
 #include <QQuickWindow>
 #include <QSGGeometry>
 #include <QSGTexture>
@@ -18,7 +20,6 @@
 #include <plasma/private/framesvg_p.h>
 
 #include <QuickAddons/ImageTexturesCache>
-#include <QuickAddons/ManagedTextureNode>
 
 #include <cmath> //floor()
 
