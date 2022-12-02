@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:43+0000\n"
+"POT-Creation-Date: 2022-12-02 00:42+0000\n"
 "PO-Revision-Date: 2022-07-25 03:46+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -145,12 +145,12 @@ msgstr "Buscar..."
 msgid "Search"
 msgstr "Buscar"
 
-#: plasma/applet.cpp:380
+#: plasma/applet.cpp:379
 #, kde-format
 msgid "Unknown"
 msgstr "Desconocido"
 
-#: plasma/applet.cpp:760
+#: plasma/applet.cpp:759
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Activar el elemento gráfico %1"
@@ -161,7 +161,7 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Eliminar %1"
 
-#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Entrar en el modo de edición"
@@ -172,17 +172,17 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Configurar %1..."
 
-#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#: plasma/corona.cpp:355 plasma/corona.cpp:482
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Bloquear elementos gráficos"
 
-#: plasma/corona.cpp:356
+#: plasma/corona.cpp:355
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Desbloquear elementos gráficos"
 
-#: plasma/corona.cpp:405
+#: plasma/corona.cpp:404
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Salir del modo de edición"
@@ -471,27 +471,27 @@ msgstr "La inicialización del script ha fallado"
 msgid "Open with %1"
 msgstr "Abrir con %1"
 
-#: plasma/private/containment_p.cpp:58
+#: plasma/private/containment_p.cpp:57
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Eliminar este panel"
 
-#: plasma/private/containment_p.cpp:60
+#: plasma/private/containment_p.cpp:59
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Eliminar esta actividad"
 
-#: plasma/private/containment_p.cpp:66
+#: plasma/private/containment_p.cpp:65
 #, kde-format
 msgid "Activity Settings"
 msgstr "Preferencias de la actividad"
 
-#: plasma/private/containment_p.cpp:72
+#: plasma/private/containment_p.cpp:71
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Añadir elementos gráficos..."
 
-#: plasma/private/containment_p.cpp:188
+#: plasma/private/containment_p.cpp:187
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "No se ha podido encontrar el componente solicitado: %1"

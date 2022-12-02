@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:43+0000\n"
+"POT-Creation-Date: 2022-12-02 00:42+0000\n"
 "PO-Revision-Date: 2022-09-15 10:27+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -146,12 +146,12 @@ msgstr "ძებნა…"
 msgid "Search"
 msgstr "ძებნა"
 
-#: plasma/applet.cpp:380
+#: plasma/applet.cpp:379
 #, kde-format
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: plasma/applet.cpp:760
+#: plasma/applet.cpp:759
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "ვიჯეტის აქტივაცია: %1"
@@ -162,7 +162,7 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1-ის წაშლა"
 
-#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "რედაქტირების რეჟიმში გადასვლა"
@@ -173,17 +173,17 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1-ის მორგება..."
 
-#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#: plasma/corona.cpp:355 plasma/corona.cpp:482
 #, kde-format
 msgid "Lock Widgets"
 msgstr "ვიჯეტების დაბლოკვა"
 
-#: plasma/corona.cpp:356
+#: plasma/corona.cpp:355
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "ვიჯეტების განბლოკვა"
 
-#: plasma/corona.cpp:405
+#: plasma/corona.cpp:404
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "რედაქტირების რეჟიმიდან გასვლა"
@@ -466,27 +466,27 @@ msgstr "სკრიპტის ინიციალიზაციის შ�
 msgid "Open with %1"
 msgstr "%1-ით გახსნა"
 
-#: plasma/private/containment_p.cpp:58
+#: plasma/private/containment_p.cpp:57
 #, kde-format
 msgid "Remove this Panel"
 msgstr "პანელის წაშლა"
 
-#: plasma/private/containment_p.cpp:60
+#: plasma/private/containment_p.cpp:59
 #, kde-format
 msgid "Remove this Activity"
 msgstr "აქტივობის წაშლა"
 
-#: plasma/private/containment_p.cpp:66
+#: plasma/private/containment_p.cpp:65
 #, kde-format
 msgid "Activity Settings"
 msgstr "აქტივობის მორგება"
 
-#: plasma/private/containment_p.cpp:72
+#: plasma/private/containment_p.cpp:71
 #, kde-format
 msgid "Add Widgets..."
 msgstr "ვიჯეტების დამატება..."
 
-#: plasma/private/containment_p.cpp:188
+#: plasma/private/containment_p.cpp:187
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr ""

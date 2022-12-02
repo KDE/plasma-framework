@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-10-30 00:43+0000\n"
+"POT-Creation-Date: 2022-12-02 00:42+0000\n"
 "PO-Revision-Date: 2022-08-07 11:02+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English <kde-l10n-en_gb@kde.org>\n"
@@ -148,12 +148,12 @@ msgstr "Search…"
 msgid "Search"
 msgstr "Search"
 
-#: plasma/applet.cpp:380
+#: plasma/applet.cpp:379
 #, kde-format
 msgid "Unknown"
 msgstr "Unknown"
 
-#: plasma/applet.cpp:760
+#: plasma/applet.cpp:759
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Activate %1 Widget"
@@ -164,7 +164,7 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Remove %1"
 
-#: plasma/containment.cpp:121 plasma/corona.cpp:407 plasma/corona.cpp:497
+#: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Enter Edit Mode"
@@ -175,17 +175,17 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Configure %1..."
 
-#: plasma/corona.cpp:356 plasma/corona.cpp:483
+#: plasma/corona.cpp:355 plasma/corona.cpp:482
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Lock Widgets"
 
-#: plasma/corona.cpp:356
+#: plasma/corona.cpp:355
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Unlock Widgets"
 
-#: plasma/corona.cpp:405
+#: plasma/corona.cpp:404
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Exit Edit Mode"
@@ -471,27 +471,27 @@ msgstr "Script initialisation failed"
 msgid "Open with %1"
 msgstr "Open with %1"
 
-#: plasma/private/containment_p.cpp:58
+#: plasma/private/containment_p.cpp:57
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Remove this Panel"
 
-#: plasma/private/containment_p.cpp:60
+#: plasma/private/containment_p.cpp:59
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Remove this Activity"
 
-#: plasma/private/containment_p.cpp:66
+#: plasma/private/containment_p.cpp:65
 #, kde-format
 msgid "Activity Settings"
 msgstr "Activity Settings"
 
-#: plasma/private/containment_p.cpp:72
+#: plasma/private/containment_p.cpp:71
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Add Widgets..."
 
-#: plasma/private/containment_p.cpp:188
+#: plasma/private/containment_p.cpp:187
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Could not find requested component: %1"
