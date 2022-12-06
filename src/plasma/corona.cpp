@@ -655,6 +655,9 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
 
         if (containmentConfig.entryMap().isEmpty()) {
             continue;
+        } else if (containmentConfig.readEntry(QStringLiteral("transient"), false)) {
+            containmentConfig.deleteGroup();
+            continue;
         }
 
         uint cid = group.toUInt();

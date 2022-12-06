@@ -229,6 +229,11 @@ void AppletPrivate::cleanUpAndDelete()
 void AppletPrivate::setDestroyed(bool destroyed)
 {
     transient = destroyed;
+    if (destroyed) {
+        mainConfig->writeEntry(QStringLiteral("transient"), true);
+    } else {
+        mainConfig->deleteEntry(QStringLiteral("transient"));
+    }
     Q_EMIT q->destroyedChanged(destroyed);
     // when an applet gets transient, it's "systemimmutable"
     Q_EMIT q->immutabilityChanged(q->immutability());
@@ -240,6 +245,7 @@ void AppletPrivate::setDestroyed(bool destroyed)
             a->d->setDestroyed(destroyed);
         }
     }
+    Q_EMIT q->configNeedsSaving();
 }
 
 void AppletPrivate::askDestroy()

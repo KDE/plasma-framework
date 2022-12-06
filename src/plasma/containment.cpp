@@ -274,6 +274,10 @@ void Containment::restoreContents(KConfigGroup &group)
     QMutableListIterator<KConfigGroup> it(appletConfigs);
     while (it.hasNext()) {
         KConfigGroup &appletConfig = it.next();
+        if (appletConfig.readEntry(QStringLiteral("transient"), false)) {
+            appletConfig.deleteGroup();
+            continue;
+        }
         int appId = appletConfig.name().toUInt();
         QString plugin = appletConfig.readEntry("plugin", QString());
 
