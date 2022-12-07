@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-02 00:42+0000\n"
+"POT-Creation-Date: 2022-12-07 00:43+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -403,52 +403,52 @@ msgstr "%2 വിഡ്ജറ്റിനു വേണ്ട %1 സ്ക്ര�
 msgid "Show Alternatives..."
 msgstr "മറ്റു മാര്‍ഗങ്ങള്‍ കാണിക്കുക..."
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:274
 #, kde-format
 msgid "Widget Removed"
 msgstr "വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:269
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "%1 വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:273
+#: plasma/private/applet_p.cpp:279
 #, kde-format
 msgid "Panel Removed"
 msgstr "പാളി നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:280
 #, kde-format
 msgid "A panel has been removed."
 msgstr "ഒരു പാളി നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:277
+#: plasma/private/applet_p.cpp:283
 #, kde-format
 msgid "Desktop Removed"
 msgstr "പണിയിടം നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:278
+#: plasma/private/applet_p.cpp:284
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "ഒരു പണിയിടം നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:281
+#: plasma/private/applet_p.cpp:287
 #, kde-format
 msgid "Undo"
 msgstr "തിരിച്ചെടുക്കുക"
 
-#: plasma/private/applet_p.cpp:369
+#: plasma/private/applet_p.cpp:375
 #, kde-format
 msgid "Widget Settings"
 msgstr "വിഡ്ജറ്റ് ക്രമീകരണങ്ങള്‍"
 
-#: plasma/private/applet_p.cpp:376
+#: plasma/private/applet_p.cpp:382
 #, kde-format
 msgid "Remove this Widget"
 msgstr "ഈ വിഡ്ജറ്റ് നീക്കംചെയ്യുക"
 
-#: plasma/private/applet_p.cpp:383
+#: plasma/private/applet_p.cpp:389
 #: plasma/private/associatedapplicationmanager.cpp:65
 #: plasma/private/associatedapplicationmanager.cpp:124
 #: plasma/private/associatedapplicationmanager.cpp:166
@@ -456,7 +456,7 @@ msgstr "ഈ വിഡ്ജറ്റ് നീക്കംചെയ്യുക"
 msgid "Run the Associated Application"
 msgstr "ബന്ധപ്പെട്ട ആപ്ലിക്കേഷന്‍ പ്രവര്‍ത്തിപ്പിക്കുക"
 
-#: plasma/private/applet_p.cpp:474
+#: plasma/private/applet_p.cpp:480
 #, kde-format
 msgid "Script initialization failed"
 msgstr "സ്ക്രിപ്റ്റ് ആരംഭിക്കല്‍ പരാജയപ്പെട്ടു"
