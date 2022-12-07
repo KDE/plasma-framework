@@ -70,7 +70,7 @@ PlasmaExtras.ActionTextField {
     Accessible.name: i18nd("libplasma5", "Search")
     Accessible.searchEdit: true
 
-    focusSequence: "Ctrl+F"
+    focusSequence: StandardKey.Find
     inputMethodHints: Qt.ImhNoPredictiveText
     rightActions: QQC2.Action {
         //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
