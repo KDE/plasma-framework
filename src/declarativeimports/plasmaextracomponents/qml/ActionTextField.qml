@@ -131,8 +131,8 @@ PlasmaComponents3.TextField {
         }
     }
 
-    PlasmaComponents3.ToolTip.visible: root.focusSequence && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
-    PlasmaComponents3.ToolTip.text: root.focusSequence ? root.focusSequence : ""
+    PlasmaComponents3.ToolTip.visible: focusShortcut.nativeText.length > 0 && root.text.length === 0 && !rightActionsRow.hovered && !leftActionsRow.hovered && hovered
+    PlasmaComponents3.ToolTip.text: focusShortcut.nativeText
     PlasmaComponents3.ToolTip.delay: Kirigami.Settings.tabletMode ? Qt.styleHints.mousePressAndHoldInterval : Kirigami.Units.toolTipDelay
 
     Row {
