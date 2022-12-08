@@ -52,6 +52,7 @@ PlasmaComponents3.TextField {
     /**
      * This property holds a shortcut sequence that will focus the text field.
      *
+     * @property QtQuick.Shortcut.sequence focusSequence
      * @since 5.93
      */
     property alias focusSequence: focusShortcut.sequence
