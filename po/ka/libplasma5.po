@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2022-12-07 00:43+0000\n"
-"PO-Revision-Date: 2022-09-15 10:27+0200\n"
+"PO-Revision-Date: 2022-12-12 08:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.1.1\n"
+"X-Generator: Poedit 3.2.2\n"
 
 #: declarativeimports/calendar/eventdatadecorator.cpp:51
 #, kde-format
@@ -123,13 +123,13 @@ msgstr "დამატებითი მოქმედებები"
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
-msgstr ""
+msgstr "აკეცვა"
 
 #: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
-msgstr ""
+msgstr "გაფართოება"
 
 #: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
 #, kde-format
@@ -192,7 +192,7 @@ msgstr "რედაქტირების რეჟიმიდან გა�
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
 #, kde-format
 msgid "Whether or not to create an on-disk cache for the theme."
-msgstr ""
+msgstr "თემისთვის დისკზე მდებარე ქეშის შეიქმნება, თუ არა."
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
@@ -202,6 +202,9 @@ msgid ""
 "files are sparse files, so the maximum size may not be used. Setting a "
 "larger size is therefore often quite safe."
 msgstr ""
+"დისკზე მდებარე თემის ქეშის მაქსიმალური ზომა, კილობაიტებში. დაიმახსოვრეთ, რომ "
+"ეს ფაილები დამატებითი ფაილებია, ასე რომ მაქსიმალურ ზომას ვერ მიუთითეთ. ასე "
+"რომ, უფრო მეტი ზომის მითითება ჩვეულებრივ საკმაოდ უსაფრთხოა."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -222,12 +225,12 @@ msgstr "გამოსახულებები"
 #: plasma/packagestructure/packages.cpp:70
 #, kde-format
 msgid "Themed Images"
-msgstr ""
+msgstr "თემატური გამოსახულებები"
 
 #: plasma/packagestructure/packages.cpp:76
 #, kde-format
 msgid "Configuration Definitions"
-msgstr ""
+msgstr "კონფიგურაციის აღწერები"
 
 #: plasma/packagestructure/packages.cpp:81
 #, kde-format
@@ -260,17 +263,17 @@ msgstr "თარგმანები"
 #: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
 #, kde-format
 msgid "Configuration UI pages model"
-msgstr ""
+msgstr "კონფიგურაციის UI-ის გვერდების მოდელი"
 
 #: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
 #, kde-format
 msgid "Configuration XML file"
-msgstr ""
+msgstr "კონფიგურაციის XML ფაილი"
 
 #: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
 #, kde-format
 msgid "Custom expander for compact applets"
-msgstr ""
+msgstr "პატარა აპლეტების გამდიდებელი"
 
 #: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
 #, kde-format
@@ -280,19 +283,19 @@ msgstr "სერვისების აღწერებ"
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
 #, kde-format
 msgid "Images for dialogs"
-msgstr ""
+msgstr "ფანჯრის სურათები"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
 #, kde-format
 msgid "Generic dialog background"
-msgstr ""
+msgstr "ჩვეულებრივი ფანჯრის ფონი"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
 #, kde-format
 msgid "Theme for the logout dialog"
-msgstr ""
+msgstr "გასვლის ფანჯრის თემა"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
 #, kde-format
@@ -308,7 +311,7 @@ msgstr "გამოსახულებები ვიჯეტების�
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
 #, kde-format
 msgid "Background image for widgets"
-msgstr ""
+msgstr "ფონის სურათი ვიჯეტებისთვის"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
@@ -320,58 +323,58 @@ msgstr "ანალოგური საათის სახე"
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
 #, kde-format
 msgid "Background image for panels"
-msgstr ""
+msgstr "ფონის სურათი პანელებისთვის"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
 #, kde-format
 msgid "Background for graphing widgets"
-msgstr ""
+msgstr "ფონის სურათი ვიჯეტების დასახატად"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
 #, kde-format
 msgid "Background image for tooltips"
-msgstr ""
+msgstr "მინიშნებების ფონის სურათი"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
 #, kde-format
 msgid "Opaque images for dialogs"
-msgstr ""
+msgstr "გაუმჭვირვალე სურათი ფანჯრებისთვის"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
 #, kde-format
 msgid "Opaque generic dialog background"
-msgstr ""
+msgstr "გაუმჭვირვალე ჩვეულებრივი ფანჯრის ფონი"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
 #, kde-format
 msgid "Opaque theme for the logout dialog"
-msgstr ""
+msgstr "გაუმჭვირვალე თემა გასვლის ფანჯრისთვის"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
 #, kde-format
 msgid "Opaque images for widgets"
-msgstr ""
+msgstr "გაუმჭვირვალე სურათი ვიჯეტებისთვის"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
 #, kde-format
 msgid "Opaque background image for panels"
-msgstr ""
+msgstr "გაუმჭვირვალე ფონის სურათი პანელებისთვის"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
 #, kde-format
 msgid "Opaque background image for tooltips"
-msgstr ""
+msgstr "გაუმჭვირვალე ფონის სურათი მინიშნებებისთვის"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
 #, kde-format
 msgid "KColorScheme configuration file"
-msgstr ""
+msgstr "KColorScheme -ის კონფიგურაციის ფაილი"
 
 #: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
 #, kde-format
@@ -382,20 +385,20 @@ msgstr "სხვადასხვა"
 #: plasma/private/applet_p.cpp:126
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr ""
+msgstr "%1 ვიჯეტში ScriptEngine მითითებული არაა."
 
 #: plasma/private/applet_p.cpp:145
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
-msgstr ""
+msgstr "%2 ვიჯეტისთვის საჭირო %1 პაკეტის გახნა შეუძლებელია."
 
 #: plasma/private/applet_p.cpp:166
 #, kde-format
 msgctxt ""
 "API or programming language the widget was written in, name of the widget"
 msgid "Could not create a %1 ScriptEngine for the %2 widget."
-msgstr ""
+msgstr "%2 ვიჯეტისთვის %1 ScriptEngine-ის შექმნა შეუძლებელია."
 
 #: plasma/private/applet_p.cpp:172
 #, kde-format
@@ -410,7 +413,7 @@ msgstr "ვიჯეტი წაშლილია"
 #: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "The widget \"%1\" has been removed."
-msgstr ""
+msgstr "ვიჯეტი \"%1\" წაიშალა."
 
 #: plasma/private/applet_p.cpp:279
 #, kde-format
@@ -489,7 +492,7 @@ msgstr "ვიჯეტების დამატება..."
 #: plasma/private/containment_p.cpp:187
 #, kde-format
 msgid "Could not find requested component: %1"
-msgstr ""
+msgstr "მოთხოვნილი კომპონენტის პოვნა ვერ მოხერხდა: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasma/private/publish.ui:17
@@ -498,49 +501,51 @@ msgid ""
 "Sharing a widget on the network allows you to access this widget from "
 "another computer as a remote control."
 msgstr ""
+"ვიჯეტის ქსელში გაზიარება საშუალებას გაძლევთ, ეს ვიჯეტი სხვა კომპიუტერიდან "
+"პულტის როლში დაიმატოთ."
 
 #. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
 #: plasma/private/publish.ui:27
 #, kde-format
 msgid "Share this widget on the network"
-msgstr ""
+msgstr "ვიჯეტის ქსელში გაზიარება"
 
 #. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
 #: plasma/private/publish.ui:37
 #, kde-format
 msgid "Allow everybody to freely access this widget"
-msgstr ""
+msgstr "ვიჯეტთან წვდომის ყველასთვის მიცემა"
 
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
-msgstr ""
+msgstr "არასწორ (ცარიელ) სერვისს ოპერაციების შესრულება არ შეუძლია."
 
 #: plasmaquick/appletquickitem.cpp:609
 #, kde-format
 msgid "Unknown Applet"
-msgstr ""
+msgstr "უცნობი აპლეტი"
 
 #: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Error loading QML file: %1 %2"
-msgstr ""
+msgstr "QML ფაილის ჩატვირთვის შეცდომა: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:626
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
-msgstr ""
+msgstr "აპლეტის ჩატვირთვის შეცდომა: პაკეტი არ არსებობს: %1"
 
 #: plasmaquick/configview.cpp:92
 #, kde-format
 msgid "%1 Settings"
-msgstr ""
+msgstr "%1-ის მორგება"
 
 #: scriptengines/qml/plasmoid/containmentinterface.cpp:593
 #, kde-format
 msgid "Plasma Package"
-msgstr ""
+msgstr "Plasma-ის პაკეტი"
 
 #: scriptengines/qml/plasmoid/containmentinterface.cpp:597
 #, kde-format
@@ -550,12 +555,12 @@ msgstr "დაყენება"
 #: scriptengines/qml/plasmoid/containmentinterface.cpp:610
 #, kde-format
 msgid "Package Installation Failed"
-msgstr ""
+msgstr "პაკეტის დაყენების შეცდომა"
 
 #: scriptengines/qml/plasmoid/containmentinterface.cpp:633
 #, kde-format
 msgid "The package you just dropped is invalid."
-msgstr ""
+msgstr "მითითებული პაკეტი არასწორია."
 
 #: scriptengines/qml/plasmoid/containmentinterface.cpp:642
 #: scriptengines/qml/plasmoid/containmentinterface.cpp:711
