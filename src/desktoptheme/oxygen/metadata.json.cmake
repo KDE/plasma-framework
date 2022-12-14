@@ -49,6 +49,7 @@
         "Description[ia]": "Thema facite in le stilo de Oxygen",
         "Description[id]": "Tema dilakukan dalam gaya Oksigen",
         "Description[it]": "Tema realizzato nello stile di Oxygen",
+        "Description[ka]": "Oxygen-ის სტილში შესრულებული თემა",
         "Description[ko]": "Oxygen 스타일의 기본 테마",
         "Description[nl]": "Thema in Oxygen-stijl",
         "Description[nn]": "Tema laga i Oxygen-stilen",

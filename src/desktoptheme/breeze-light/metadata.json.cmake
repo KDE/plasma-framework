@@ -49,6 +49,7 @@
         "Description[ia]": "Brisa Ligier per KDE VDG",
         "Description[id]": "Breeze Terang oleh KDE VDG",
         "Description[it]": "Brezza chiaro a cura del VDG di KDE",
+        "Description[ka]": "Breeze-ის ღია ვარიანტი, KDE VDG-სგან",
         "Description[ko]": "KDE 시각 디자인 그룹에서 제작한 밝은 Breeze",
         "Description[nl]": "Breeze Light door de KDE VDG",
         "Description[nn]": "Breeze skumring frå KDE VDG",
