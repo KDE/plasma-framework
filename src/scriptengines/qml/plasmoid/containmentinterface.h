@@ -67,6 +67,13 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(QList<QObject *> actions READ actions NOTIFY actionsChanged)
 
     /**
+     * Actions from context menu plugins associated to this containment
+     * @since 5.102
+     */
+    Q_PROPERTY(
+        QList<QObject *> contextualActions READ contextualActions WRITE setContextualActions NOTIFY contextualActionsChanged RESET resetContextualActions)
+
+    /**
      * True when the Plasma Shell is in an edit mode that allows to move
      * things around: it's different from userConfiguring as it's about
      * editing plasmoids inside the containment, rather than the containment
@@ -104,6 +111,9 @@ public:
     QString activityName() const;
 
     QList<QObject *> actions() const;
+    QList<QObject *> contextualActions();
+    void setContextualActions(const QList<QObject *> &);
+    void resetContextualActions();
 
     void setContainmentDisplayHints(Plasma::Types::ContainmentDisplayHints hints);
 
@@ -167,7 +177,7 @@ protected:
     void keyPressEvent(QKeyEvent *event) override;
 
     void addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event);
-    void addContainmentActions(QMenu *desktopMenu, QEvent *event);
+    void addContainmentActions(QMenu *desktopMenu, QEvent *event) const;
 
     virtual bool isLoading() const override;
     void itemChange(ItemChange change, const ItemChangeData &value) override;
@@ -198,6 +208,12 @@ Q_SIGNALS:
     void editModeChanged();
     void wallpaperInterfaceChanged();
 
+    /**
+     * Emitted when the containment actions (actions from plugins) changed
+     * @see Plasma::Containment::containmentActionsChanged
+     */
+    void contextualActionsChanged();
+
 protected Q_SLOTS:
     void appletAddedForward(Plasma::Applet *applet);
     void appletRemovedForward(Plasma::Applet *applet);
@@ -221,6 +237,9 @@ private:
     QPointer<QMenu> m_contextMenu;
     QPointer<DropMenu> m_dropMenu;
     int m_wheelDelta;
+    std::vector<QMenu *> m_contextualActionsSubMenus;
+    std::unique_ptr<QAction> m_backToParentMenuAction;
+    std::vector<std::unique_ptr<QAction>> m_contextualActionsSubMenuActions;
     friend class AppletInterface;
 };
 

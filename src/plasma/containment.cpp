@@ -559,6 +559,7 @@ void Containment::setContainmentActions(const QString &trigger, const QString &p
         }
     }
 
+    Q_EMIT containmentActionsChanged();
     Q_EMIT configNeedsSaving();
 }
 

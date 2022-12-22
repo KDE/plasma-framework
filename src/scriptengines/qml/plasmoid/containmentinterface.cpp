@@ -56,6 +56,7 @@ ContainmentInterface::ContainmentInterface(DeclarativeAppletScript *parent, cons
 
     connect(m_containment.data(), &Plasma::Containment::appletRemoved, this, &ContainmentInterface::appletRemovedForward);
     connect(m_containment.data(), &Plasma::Containment::appletAdded, this, &ContainmentInterface::appletAddedForward);
+    connect(m_containment.data(), &Plasma::Containment::containmentActionsChanged, this, &ContainmentInterface::contextualActionsChanged);
 
     connect(m_containment->corona(), &Plasma::Corona::editModeChanged, this, &ContainmentInterface::editModeChanged);
 
@@ -872,12 +873,93 @@ QList<QObject *> ContainmentInterface::actions() const
     for (const QString &name : std::as_const(actionOrder)) {
         QAction *a = orderedActions.value(name);
         if (a && !a->menu()) {
+            a->setIconText(a->icon().name()); // Used in desktop toolbox
             actionList << a;
         }
         ++i;
     }
 
     return actionList;
+}
+
+QList<QObject *> ContainmentInterface::contextualActions()
+{
+    auto createSubMenuAction = [this](QAction *action) {
+        if (!action->isEnabled() || !action->isVisible()) {
+            action->setIconText(action->icon().name());
+            return action;
+        }
+        // Don't set parent for QAction as the parent may become invalid
+        QAction *goToSubMenu = m_contextualActionsSubMenuActions.emplace_back(std::make_unique<QAction>()).get();
+        goToSubMenu->setText(action->text());
+        goToSubMenu->setIconText(action->icon().name()); // Used in desktop toolbox
+        connect(goToSubMenu, &QAction::triggered, this, [this, action] {
+            m_contextualActionsSubMenus.push_back(action->menu());
+            Q_EMIT contextualActionsChanged();
+        });
+        return goToSubMenu;
+    };
+
+    QList<QObject *> actionList;
+
+    // Open submenu
+    if (!m_contextualActionsSubMenus.empty()) {
+        QMenu *lastSubMenu = m_contextualActionsSubMenus.back();
+        lastSubMenu->aboutToShow(); // Populate items that are loaded on demand
+
+        for (QAction *action : lastSubMenu->actions()) {
+            if (action->menu()) {
+                actionList.append(static_cast<QObject *>(createSubMenuAction(action)));
+            } else {
+                action->setIconText(action->icon().name()); // Used in desktop toolbox
+                actionList.append(static_cast<QObject *>(action));
+            }
+        }
+
+        if (!m_backToParentMenuAction) {
+            m_backToParentMenuAction.reset(new QAction(this));
+            m_backToParentMenuAction->setText(i18ndc("libplasma5", "@action:button", "Go Back"));
+            m_backToParentMenuAction->setIconText(QStringLiteral("draw-arrow-back"));
+            connect(m_backToParentMenuAction.get(), &QAction::triggered, this, [this] {
+                m_contextualActionsSubMenus.pop_back();
+                Q_EMIT contextualActionsChanged();
+            });
+        }
+
+        actionList.append(static_cast<QObject *>(m_backToParentMenuAction.get()));
+
+        return actionList;
+    }
+
+    QMouseEvent event(QEvent::MouseButtonRelease, QPoint(), Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    QMenu desktopMenu;
+    addContainmentActions(&desktopMenu, &event);
+
+    const QList<QAction *> menuActions = desktopMenu.actions();
+
+    m_contextualActionsSubMenuActions.clear();
+
+    for (QAction *action : menuActions) {
+        if (action->menu()) {
+            actionList.append(static_cast<QObject *>(createSubMenuAction(action)));
+        } else {
+            action->setIconText(action->icon().name()); // Used in desktop toolbox
+            actionList.append(static_cast<QObject *>(action));
+        }
+    }
+
+    return actionList;
+}
+
+void ContainmentInterface::setContextualActions(const QList<QObject *> &)
+{
+    // To make the property resetable
+}
+
+void ContainmentInterface::resetContextualActions()
+{
+    m_contextualActionsSubMenus.clear();
+    Q_EMIT contextualActionsChanged();
 }
 
 void ContainmentInterface::setContainmentDisplayHints(Plasma::Types::ContainmentDisplayHints hints)
@@ -1113,7 +1195,7 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 }
 
-void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *event)
+void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *event) const
 {
     if (m_containment->corona()->immutability() != Plasma::Types::Mutable //
         && !KAuthorized::authorizeAction(QStringLiteral("plasma/containment_actions"))) {

@@ -287,6 +287,11 @@ Q_SIGNALS:
      */
     void containmentTypeChanged();
 
+    /**
+     * Emitted when the containment actions (actions from plugins) changed
+     */
+    void containmentActionsChanged();
+
 public Q_SLOTS:
     /**
      * Informs the Corona as to what position it is in. This is informational
