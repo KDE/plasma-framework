@@ -111,7 +111,7 @@ PlasmaComponents3.TextField {
     Shortcut {
         id: focusShortcut
         onActivated: {
-            root.forceActiveFocus()
+            root.forceActiveFocus(Qt.ShortcutFocusReason)
             root.selectAll()
         }
 
