@@ -78,7 +78,7 @@ public:
         , resizableEdges({})
         , overridingCursor(false)
         , appletInterface(nullptr)
-        , componentComplete(dialog->parent() == nullptr)
+        , componentComplete(dialog->parent() != nullptr /* Not used in QML */)
         , backgroundHints(Dialog::StandardBackground)
     {
     }
@@ -1157,22 +1157,20 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
 {
     if (!item) {
         // If no item was specified try to align at the center of the parent view
-        QQuickItem *parentItem = qobject_cast<QQuickItem *>(parent());
-        if (parentItem) {
-            QScreen *screen = parentItem->window()->screen();
-
+        QScreen *dialogScreen = parent() ? parent()->screen() : screen();
+        if (dialogScreen) {
             switch (d->location) {
             case Plasma::Types::TopEdge:
-                return QPoint(screen->availableGeometry().center().x() - size.width() / 2, screen->availableGeometry().y());
+                return QPoint(dialogScreen->availableGeometry().center().x() - size.width() / 2, dialogScreen->availableGeometry().y());
             case Plasma::Types::LeftEdge:
-                return QPoint(screen->availableGeometry().x(), screen->availableGeometry().center().y() - size.height() / 2);
+                return QPoint(dialogScreen->availableGeometry().x(), dialogScreen->availableGeometry().center().y() - size.height() / 2);
             case Plasma::Types::RightEdge:
-                return QPoint(screen->availableGeometry().right() - size.width(), screen->availableGeometry().center().y() - size.height() / 2);
+                return QPoint(dialogScreen->availableGeometry().right() - size.width(), dialogScreen->availableGeometry().center().y() - size.height() / 2);
             case Plasma::Types::BottomEdge:
-                return QPoint(screen->availableGeometry().center().x() - size.width() / 2, screen->availableGeometry().bottom() - size.height());
+                return QPoint(dialogScreen->availableGeometry().center().x() - size.width() / 2, dialogScreen->availableGeometry().bottom() - size.height());
             // Default center in the screen
             default:
-                return screen->geometry().center() - QPoint(size.width() / 2, size.height() / 2);
+                return dialogScreen->geometry().center() - QPoint(size.width() / 2, size.height() / 2);
             }
         } else {
             return QPoint();
