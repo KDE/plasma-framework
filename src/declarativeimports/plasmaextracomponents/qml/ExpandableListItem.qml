@@ -667,7 +667,8 @@ Item {
 
                     Layout.fillWidth: true
 
-                    active: customExpandedViewContent != undefined
+                    active: customExpandedViewContent != undefined && expandedView.expanded
+                    asynchronous: true
                     sourceComponent: customExpandedViewContent
 
                 }
