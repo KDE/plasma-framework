@@ -116,19 +116,21 @@ PlasmaComponents3.TextField {
         }
 
         // here to make it private
-        component ActionIcon: PlasmaCore.IconItem {
-            implicitWidth: PlasmaCore.Units.iconSizes.small
-            implicitHeight: PlasmaCore.Units.iconSizes.small
+        component ActionIcon: PlasmaComponents3.ToolButton {
+            id: iconItem
 
             anchors.verticalCenter: parent.verticalCenter
-
-            source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
+            width: PlasmaCore.Units.iconSizes.small
+            height: PlasmaCore.Units.iconSizes.small
             visible: modelData.enabled
-            MouseArea {
-                onClicked: modelData.trigger()
-                cursorShape: Qt.ArrowCursor
-                anchors.fill: parent
-            }
+
+            background: null
+            display: PlasmaComponents3.AbstractButton.IconOnly
+            hoverEnabled: true
+            icon: modelData.icon
+            text: modelData.text
+
+            onClicked: modelData.trigger();
         }
     }
 
