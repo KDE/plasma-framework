@@ -383,6 +383,16 @@ QAction *ContainmentInterface::globalAction(QString name) const
     return m_containment->corona()->actions()->action(name);
 }
 
+void ContainmentInterface::openContextMenu(const QPointF &globalPos)
+{
+    if (globalPos.isNull()) {
+        return;
+    }
+
+    QMouseEvent me(QEvent::MouseButtonRelease, QPointF(), globalPos, Qt::RightButton, Qt::RightButton, Qt::NoModifier);
+    mousePressEvent(&me);
+}
+
 bool ContainmentInterface::isEditMode() const
 {
     return m_containment->corona()->isEditMode();
