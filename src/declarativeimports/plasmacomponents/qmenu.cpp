@@ -17,7 +17,6 @@
 #include <KAcceleratorManager>
 #include <QQuickRenderControl>
 
-#include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent)
     , m_menu(nullptr)
