@@ -15,6 +15,7 @@
 #include <QVersionNumber>
 
 #include <KAcceleratorManager>
+#include <QQuickRenderControl>
 
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
@@ -299,6 +300,24 @@ void QMenuProxy::rebuildMenu()
     m_menu->adjustSize();
 }
 
+// Map to global coordinate space, accounting for embedded offscreen windows, e.g. QQuickWidget.
+static void mapToGlobalUsingRenderWindowOfItem(QPointF &pos, const QQuickItem *parentItem)
+{
+    QQuickWindow *quickWindow = parentItem->window();
+    if (!quickWindow) {
+        return;
+    }
+
+    QPoint offset;
+    QWindow *window = QQuickRenderControl::renderWindowFor(quickWindow, &offset);
+    if (!window) {
+        window = quickWindow;
+    }
+
+    pos += offset;
+    pos = window->mapToGlobal(pos.toPoint());
+}
+
 void QMenuProxy::open(int x, int y)
 {
     QQuickItem *parentItem = nullptr;
@@ -317,9 +336,7 @@ void QMenuProxy::open(int x, int y)
 
     QPointF pos = parentItem->mapToScene(QPointF(x, y));
 
-    if (parentItem->window() && parentItem->window()->screen()) {
-        pos = parentItem->window()->mapToGlobal(pos.toPoint());
-    }
+    mapToGlobalUsingRenderWindowOfItem(pos, parentItem);
 
     openInternal(pos.toPoint());
 }
@@ -353,7 +370,8 @@ void QMenuProxy::openRelative()
             return;
         }
         QRect geo = screen->geometry();
-        pos = parentItem->window()->mapToGlobal(pos.toPoint());
+
+        mapToGlobalUsingRenderWindowOfItem(pos, parentItem);
 
         if (pos.x() < geo.x()) {
             pos.setX(pos.x() + hDelta);
