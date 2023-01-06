@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-07 00:43+0000\n"
+"POT-Creation-Date: 2023-01-06 00:44+0000\n"
 "PO-Revision-Date: 2014-01-31 21:06+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -571,55 +571,55 @@ msgstr ""
 msgid "%1 Settings"
 msgstr "%1 Postavke"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
 #, fuzzy, kde-format
 #| msgid "Plasma Package Manager"
 msgid "Plasma Package"
 msgstr "Plasmin menadžer paketa"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
 #, kde-format
 msgid "Install"
 msgstr ""
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
 #, fuzzy, kde-format
 #| msgid "Script initialization failed"
 msgid "Package Installation Failed"
 msgstr "Neuspjelo pripremanje skripte"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr ""
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:652
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:721
 #, fuzzy, kde-format
 #| msgid "Lock Widgets"
 msgid "Widgets"
 msgstr "Zaključaj grafičku kontrolu"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr ""
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:671
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr ""
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
 #, fuzzy, kde-format
 #| msgid "Wallpaper packages"
 msgid "Wallpaper"
 msgstr "Paketi pozadinskih slika"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

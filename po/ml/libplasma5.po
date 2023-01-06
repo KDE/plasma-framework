@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-07 00:43+0000\n"
+"POT-Creation-Date: 2023-01-06 00:44+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -542,51 +542,51 @@ msgstr "ആപ്‌ലെറ്റ് ലോഡ് ചെയ്യുന്ന�
 msgid "%1 Settings"
 msgstr "%1 ക്രമീകരണങ്ങള്‍"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
 #, kde-format
 msgid "Plasma Package"
 msgstr "പ്ലാസ്മ പാക്കേജ്"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
 #, kde-format
 msgid "Install"
 msgstr "ഇന്‍സ്റ്റാള്‍"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "പാക്കേജ് ഇന്‍സ്റ്റാളേഷന്‍ പരാജയപ്പെട്ടു"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "നിങ്ങളിപ്പോള്‍ നല്‍കിയ പാക്കേജ് സ്വീകാര്യമല്ല."
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:652
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:721
 #, kde-format
 msgid "Widgets"
 msgstr "വിഡ്ജറ്റുകള്‍"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1 ചേര്‍ക്കുക [വിഡ്ജറ്റ് ചേര്‍ക്കുക]"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:671
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "സൂചനാചിത്രങ്ങള്‍ ചേര്‍ക്കുക"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
 #, kde-format
 msgid "Wallpaper"
 msgstr "പശ്ചാത്തലചിത്രം"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

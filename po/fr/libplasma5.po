@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2022-12-07 00:43+0000\n"
+"POT-Creation-Date: 2023-01-06 00:44+0000\n"
 "PO-Revision-Date: 2022-07-26 15:48+0200\n"
 "Last-Translator: Xavier Besnard <xavier.besnard@neuf.fr>\n"
 "Language-Team: French <kde-francophone@kde.org>\n"
@@ -557,51 +557,51 @@ msgstr "Erreur du chargement de l'applet : paquet inexistant. %1"
 msgid "%1 Settings"
 msgstr "Paramètres %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:593
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
 #, kde-format
 msgid "Plasma Package"
 msgstr "Paquet Plasma"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:597
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
 #, kde-format
 msgid "Install"
 msgstr "Installer"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:610
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Échec de l'installation du paquet"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:633
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Le paquet que vous venez de déposer n'est pas valable."
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:642
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:711
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:652
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:721
 #, kde-format
 msgid "Widgets"
 msgstr "Composants graphiques"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Ajouter %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:715
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:671
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Ajouter une icône"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:673
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
 #, kde-format
 msgid "Wallpaper"
 msgstr "Fond d'écran"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
