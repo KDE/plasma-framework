@@ -15,6 +15,7 @@
 #include <QVersionNumber>
 
 #include <KAcceleratorManager>
+#include <QQuickRenderControl>
 
 #include "plasmacomponentsplugin.h"
 QMenuProxy::QMenuProxy(QObject *parent)
@@ -299,6 +300,23 @@ void QMenuProxy::rebuildMenu()
     m_menu->adjustSize();
 }
 
+// Map to global coordinate space, accounting for embedded offscreen windows, e.g. QQuickWidget.
+static QPoint mapToGlobalUsingRenderWindowOfItem(const QQuickItem *parentItem, QPointF posF)
+{
+    QPoint pos = posF.toPoint(); // XXX: Drop rounding if mapToGlobal ever supports floating points
+    if (QQuickWindow *quickWindow = parentItem->window()) {
+        QPoint offset;
+        if (auto renderWindow = QQuickRenderControl::renderWindowFor(quickWindow, &offset)) {
+            QPoint relativePos = pos + offset;
+            return renderWindow->mapToGlobal(relativePos);
+        } else {
+            return quickWindow->mapToGlobal(pos);
+        }
+    } else {
+        return pos;
+    }
+}
+
 void QMenuProxy::open(int x, int y)
 {
     QQuickItem *parentItem = nullptr;
@@ -315,13 +333,11 @@ void QMenuProxy::open(int x, int y)
 
     rebuildMenu();
 
-    QPointF pos = parentItem->mapToScene(QPointF(x, y));
+    QPointF posLocal = parentItem->mapToScene(QPointF(x, y));
 
-    if (parentItem->window() && parentItem->window()->screen()) {
-        pos = parentItem->window()->mapToGlobal(pos.toPoint());
-    }
+    QPoint posGlobal = mapToGlobalUsingRenderWindowOfItem(parentItem, posLocal);
 
-    openInternal(pos.toPoint());
+    openInternal(posGlobal);
 }
 
 void QMenuProxy::openRelative()
@@ -340,72 +356,73 @@ void QMenuProxy::openRelative()
 
     rebuildMenu();
 
-    QPointF pos;
+    QPointF posLocal;
+    QPoint posGlobal;
 
-    using namespace Plasma;
+    auto boundaryCorrection = [this, &posLocal, &posGlobal, parentItem](int hDelta, int vDelta) {
+        if (auto window = parentItem->window(); //
+            QScreen *screen = window->screen()) {
+            QRect geo = screen->geometry();
 
-    auto boundaryCorrection = [&pos, this, parentItem](int hDelta, int vDelta) {
-        if (!parentItem->window()) {
-            return;
-        }
-        QScreen *screen = parentItem->window()->screen();
-        if (!screen) {
-            return;
-        }
-        QRect geo = screen->geometry();
-        pos = parentItem->window()->mapToGlobal(pos.toPoint());
+            QPoint pos = mapToGlobalUsingRenderWindowOfItem(parentItem, posLocal);
 
-        if (pos.x() < geo.x()) {
-            pos.setX(pos.x() + hDelta);
-        }
-        if (pos.y() < geo.y()) {
-            pos.setY(pos.y() + vDelta);
-        }
+            if (pos.x() < geo.x()) {
+                pos.setX(pos.x() + hDelta);
+            }
+            if (pos.y() < geo.y()) {
+                pos.setY(pos.y() + vDelta);
+            }
 
-        if (geo.x() + geo.width() < pos.x() + this->m_menu->width()) {
-            pos.setX(pos.x() + hDelta);
-        }
-        if (geo.y() + geo.height() < pos.y() + this->m_menu->height()) {
-            pos.setY(pos.y() + vDelta);
+            if (geo.x() + geo.width() < pos.x() + this->m_menu->width()) {
+                pos.setX(pos.x() + hDelta);
+            }
+            if (geo.y() + geo.height() < pos.y() + this->m_menu->height()) {
+                pos.setY(pos.y() + vDelta);
+            }
+            posGlobal = pos;
+        } else {
+            posGlobal = posLocal.toPoint();
         }
     };
 
+    using namespace Plasma;
+
     switch (m_placement) {
     case Types::TopPosedLeftAlignedPopup: {
-        pos = parentItem->mapToScene(QPointF(0, -m_menu->height()));
+        posLocal = parentItem->mapToScene(QPointF(0, -m_menu->height()));
         boundaryCorrection(-m_menu->width() + parentItem->width(), m_menu->height() + parentItem->height());
         break;
     }
     case Types::LeftPosedTopAlignedPopup: {
-        pos = parentItem->mapToScene(QPointF(-m_menu->width(), 0));
+        posLocal = parentItem->mapToScene(QPointF(-m_menu->width(), 0));
         boundaryCorrection(m_menu->width() + parentItem->width(), -m_menu->height() + parentItem->height());
         break;
     }
     case Types::TopPosedRightAlignedPopup:
-        pos = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), -m_menu->height()));
+        posLocal = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), -m_menu->height()));
         boundaryCorrection(m_menu->width() - parentItem->width(), m_menu->height() + parentItem->height());
         break;
     case Types::RightPosedTopAlignedPopup: {
-        pos = parentItem->mapToScene(QPointF(parentItem->width(), 0));
+        posLocal = parentItem->mapToScene(QPointF(parentItem->width(), 0));
         boundaryCorrection(-m_menu->width() - parentItem->width(), -m_menu->height() + parentItem->height());
         break;
     }
     case Types::LeftPosedBottomAlignedPopup:
-        pos = parentItem->mapToScene(QPointF(-m_menu->width(), -m_menu->height() + parentItem->height()));
+        posLocal = parentItem->mapToScene(QPointF(-m_menu->width(), -m_menu->height() + parentItem->height()));
         boundaryCorrection(m_menu->width() + parentItem->width(), m_menu->height() - parentItem->height());
         break;
     case Types::BottomPosedLeftAlignedPopup: {
-        pos = parentItem->mapToScene(QPointF(0, parentItem->height()));
+        posLocal = parentItem->mapToScene(QPointF(0, parentItem->height()));
         boundaryCorrection(-m_menu->width() + parentItem->width(), -m_menu->height() - parentItem->height());
         break;
     }
     case Types::BottomPosedRightAlignedPopup: {
-        pos = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), parentItem->height()));
+        posLocal = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), parentItem->height()));
         boundaryCorrection(m_menu->width() - parentItem->width(), -m_menu->height() - parentItem->height());
         break;
     }
     case Types::RightPosedBottomAlignedPopup: {
-        pos = parentItem->mapToScene(QPointF(parentItem->width(), -m_menu->height() + parentItem->height()));
+        posLocal = parentItem->mapToScene(QPointF(parentItem->width(), -m_menu->height() + parentItem->height()));
         boundaryCorrection(-m_menu->width() - parentItem->width(), m_menu->height() - parentItem->height());
         break;
     }
@@ -414,7 +431,7 @@ void QMenuProxy::openRelative()
         return;
     }
 
-    openInternal(pos.toPoint());
+    openInternal(posGlobal);
 }
 
 void QMenuProxy::openInternal(QPoint pos)
