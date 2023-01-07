@@ -319,14 +319,7 @@ static void mapToGlobalUsingRenderWindowOfItem(QPointF &pos, const QQuickItem *p
 
 void QMenuProxy::open(int x, int y)
 {
-    QQuickItem *parentItem = nullptr;
-
-    if (m_visualParent) {
-        parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
-    } else {
-        parentItem = qobject_cast<QQuickItem *>(parent());
-    }
-
+    const QQuickItem *parentItem = this->parentItem();
     if (!parentItem) {
         return;
     }
@@ -342,14 +335,7 @@ void QMenuProxy::open(int x, int y)
 
 void QMenuProxy::openRelative()
 {
-    QQuickItem *parentItem = nullptr;
-
-    if (m_visualParent) {
-        parentItem = qobject_cast<QQuickItem *>(m_visualParent.data());
-    } else {
-        parentItem = qobject_cast<QQuickItem *>(parent());
-    }
-
+    const QQuickItem *parentItem = this->parentItem();
     if (!parentItem) {
         return;
     }
@@ -470,9 +456,9 @@ QQuickItem *QMenuProxy::parentItem() const
 {
     if (m_visualParent) {
         return qobject_cast<QQuickItem *>(m_visualParent.data());
+    } else {
+        return qobject_cast<QQuickItem *>(parent());
     }
-
-    return qobject_cast<QQuickItem *>(parent());
 }
 
 void QMenuProxy::close()
