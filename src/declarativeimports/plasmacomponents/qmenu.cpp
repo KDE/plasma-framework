@@ -76,14 +76,12 @@ void QMenuProxy::setVisualParent(QObject *parent)
     }
 
     // if the old parent was a QAction, disconnect the menu from it
-    QAction *action = qobject_cast<QAction *>(m_visualParent.data());
-    if (action) {
+    if (auto action = qobject_cast<QAction *>(m_visualParent.data())) {
         action->setMenu(nullptr);
         m_menu->clear();
     }
     // if parent is a QAction, become a submenu
-    action = qobject_cast<QAction *>(parent);
-    if (action) {
+    if (auto action = qobject_cast<QAction *>(parent)) {
         action->setMenu(m_menu);
         m_menu->clear();
         for (QMenuItem *item : std::as_const(m_items)) {
@@ -106,10 +104,12 @@ void QMenuProxy::setVisualParent(QObject *parent)
 
 QWindow *QMenuProxy::transientParent()
 {
-    if (!m_menu || !m_menu->windowHandle()) {
-        return nullptr;
+    if (const auto menu = m_menu) {
+        if (const auto window = menu->windowHandle()) {
+            return window->transientParent();
+        }
     }
-    return m_menu->windowHandle()->transientParent();
+    return nullptr;
 }
 
 void QMenuProxy::setTransientParent(QWindow *parent)
@@ -347,29 +347,26 @@ void QMenuProxy::openRelative()
     using namespace Plasma;
 
     auto boundaryCorrection = [&pos, this, parentItem](int hDelta, int vDelta) {
-        if (!parentItem->window()) {
-            return;
-        }
-        QScreen *screen = parentItem->window()->screen();
-        if (!screen) {
-            return;
-        }
-        QRect geo = screen->geometry();
+        if (const auto window = parentItem->window()) {
+            if (const auto screen = window->screen()) {
+                const QRect geo = screen->geometry();
 
-        mapToGlobalUsingRenderWindowOfItem(pos, parentItem);
+                mapToGlobalUsingRenderWindowOfItem(pos, parentItem);
 
-        if (pos.x() < geo.x()) {
-            pos.setX(pos.x() + hDelta);
-        }
-        if (pos.y() < geo.y()) {
-            pos.setY(pos.y() + vDelta);
-        }
+                if (pos.x() < geo.x()) {
+                    pos.setX(pos.x() + hDelta);
+                }
+                if (pos.y() < geo.y()) {
+                    pos.setY(pos.y() + vDelta);
+                }
 
-        if (geo.x() + geo.width() < pos.x() + this->m_menu->width()) {
-            pos.setX(pos.x() + hDelta);
-        }
-        if (geo.y() + geo.height() < pos.y() + this->m_menu->height()) {
-            pos.setY(pos.y() + vDelta);
+                if (geo.x() + geo.width() < pos.x() + this->m_menu->width()) {
+                    pos.setX(pos.x() + hDelta);
+                }
+                if (geo.y() + geo.height() < pos.y() + this->m_menu->height()) {
+                    pos.setY(pos.y() + vDelta);
+                }
+            }
         }
     };
 
@@ -422,18 +419,17 @@ void QMenuProxy::openRelative()
 
 void QMenuProxy::openInternal(QPoint pos)
 {
-    QQuickItem *parentItem = this->parentItem();
-
-    if (parentItem && parentItem->window()) {
+    if (const auto window = parentItemWindow()) {
         // create the QWindow
         m_menu->winId();
-        m_menu->windowHandle()->setTransientParent(parentItem->window());
+        m_menu->windowHandle()->setTransientParent(window);
 
         // Workaround for QTBUG-59044
         auto ungrabMouseHack = [this]() {
-            QQuickItem *parentItem = this->parentItem();
-            if (parentItem && parentItem->window() && parentItem->window()->mouseGrabberItem()) {
-                parentItem->window()->mouseGrabberItem()->ungrabMouse();
+            if (const auto window = parentItemWindow()) {
+                if (const auto grabber = window->mouseGrabberItem()) {
+                    grabber->ungrabMouse();
+                }
             }
         };
         // post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
@@ -452,6 +448,15 @@ QQuickItem *QMenuProxy::parentItem() const
         return qobject_cast<QQuickItem *>(m_visualParent.data());
     } else {
         return qobject_cast<QQuickItem *>(parent());
+    }
+}
+
+QQuickWindow *QMenuProxy::parentItemWindow() const
+{
+    if (const auto parentItem = this->parentItem()) {
+        return parentItem->window();
+    } else {
+        return nullptr;
     }
 }
 

@@ -177,6 +177,7 @@ private:
     void rebuildMenu();
     void openInternal(QPoint pos);
     QQuickItem *parentItem() const;
+    QQuickWindow *parentItemWindow() const;
 
     QList<QMenuItem *> m_items;
     QMenu *m_menu;
