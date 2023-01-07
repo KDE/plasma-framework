@@ -436,14 +436,8 @@ void QMenuProxy::openInternal(QPoint pos)
                 parentItem->window()->mouseGrabberItem()->ungrabMouse();
             }
         };
-
-        // pre 5.8.0 QQuickWindow code is "item->grabMouse(); sendEvent(item, mouseEvent)"
         // post 5.8.0 QQuickWindow code is sendEvent(item, mouseEvent); item->grabMouse()
-        if (QVersionNumber::fromString(QString::fromLatin1(qVersion())) > QVersionNumber(5, 8, 0)) {
-            QTimer::singleShot(0, this, ungrabMouseHack);
-        } else {
-            ungrabMouseHack();
-        }
+        QTimer::singleShot(0, this, ungrabMouseHack);
         // end workaround
     }
 
