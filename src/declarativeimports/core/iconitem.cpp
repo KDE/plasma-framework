@@ -283,7 +283,7 @@ IconItem::IconItem(QQuickItem *parent)
     connect(m_animation, &QPropertyAnimation::valueChanged, this, &IconItem::valueChanged);
     connect(m_animation, &QPropertyAnimation::finished, this, &IconItem::animationFinished);
     m_animation->setTargetObject(this);
-    m_animation->setEasingCurve(QEasingCurve::InOutQuad);
+    m_animation->setEasingCurve(QEasingCurve::InOutCubic);
     m_animation->setDuration(Units::instance().longDuration());
     connect(&Units::instance(), &Units::durationChanged, m_animation, [=]() {
         m_animation->setDuration(Units::instance().longDuration());
