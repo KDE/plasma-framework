@@ -645,8 +645,12 @@ QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
             m_textureChanged = true;
         }
 
-        updateSubtree(oldNode->firstChild(), 1.0 - m_animValue);
-        updateSubtree(oldNode->lastChild(), m_animValue);
+        // Rather than doing a perfect crossfade, first fade in the new texture
+        // then fade out the old texture. This is done to avoid the underlying
+        // color bleeding through when both textures are at ~0.5 opacity, which
+        // causes flickering if the two textures are very similar.
+        updateSubtree(oldNode->firstChild(), 2.0 - m_animValue * 2.0);
+        updateSubtree(oldNode->lastChild(), m_animValue * 2.0);
     } else {
         if (oldNode->childCount() == 0) {
             oldNode->appendChildNode(createSubtree(1.0));
