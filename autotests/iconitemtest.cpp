@@ -114,6 +114,32 @@ QImage IconItemTest::grabImage(QQuickItem *item)
     return grab->image();
 }
 
+QImage IconItemTest::waitAndGrabImage(QQuickItem *item, int delay)
+{
+    auto window = item->window();
+
+    // Ensure the window is exposed, as otherwise rendering does not happen.
+    Q_ASSERT(QTest::qWaitForWindowExposed(window));
+
+    // Wait for the provided time. This ensures we can delay so animations have
+    // time to run.
+    QTest::qWait(delay);
+
+    // Ensure the item is rendered at least once before continuing. Otherwise
+    // we run the risk of nothing having changed when calling this in quick
+    // succession.
+    QSignalSpy frameSwappedSpy(window, &QQuickWindow::frameSwapped);
+    frameSwappedSpy.wait(100);
+
+    auto result = grabImage(item);
+
+    // In rare cases, we can trigger a use-after free if we don't explicitly
+    // disconnect from QQuickWindow::frameSwapped.
+    frameSwappedSpy.disconnect(window);
+
+    return result;
+}
+
 Plasma::Svg *IconItemTest::findPlasmaSvg(QQuickItem *item)
 {
     return item->findChild<Plasma::Svg *>();
@@ -214,7 +240,7 @@ void IconItemTest::animation()
     grabImage(item1);
     item1->setProperty("source", "user-away");
     // animation from user-busy -> user-away
-    QVERIFY(userAwayImg != grabImage(item1));
+    QVERIFY(userAwayImg != waitAndGrabImage(item1));
 
     // animated = false
     QQuickItem *item2 = createIconItem();
@@ -248,7 +274,7 @@ void IconItemTest::animationAfterHide()
     QCOMPARE(userAwayImg, grabImage(item1));
 
     item1->setProperty("source", "user-busy");
-    QVERIFY(userBusyImg != grabImage(item1));
+    QVERIFY(userBusyImg != waitAndGrabImage(item1));
 }
 
 void IconItemTest::bug_359388()

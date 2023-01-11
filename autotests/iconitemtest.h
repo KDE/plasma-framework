@@ -49,6 +49,7 @@ private Q_SLOTS:
 private:
     QQuickItem *createIconItem();
     QImage grabImage(QQuickItem *item);
+    QImage waitAndGrabImage(QQuickItem *item, int delay = 50);
     Plasma::Svg *findPlasmaSvg(QQuickItem *item);
     void changeTheme(Plasma::Theme *theme, const QString &themeName);
 
