@@ -43,7 +43,7 @@ QString cacheIdHash(const Plasma::SvgPrivate::CacheId &id)
 void ThemeTest::initTestCase()
 {
     // make our theme in search path
-    qputenv("XDG_DATA_DIRS", qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
+    qputenv("XDG_DATA_DIRS", QByteArray(qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit()));
 
     // set default icon theme to test-theme
     QStandardPaths::setTestModeEnabled(true);

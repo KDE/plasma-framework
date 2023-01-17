@@ -41,7 +41,7 @@ void IconItemTest::initTestCase()
     Plasma::TestUtils::installPlasmaTheme("breeze-light");
     Plasma::TestUtils::installPlasmaTheme("breeze-dark");
 
-    qputenv("XDG_DATA_DIRS", qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit());
+    qputenv("XDG_DATA_DIRS", QByteArray(qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit()));
 
     QString configPath = QStandardPaths::writableLocation(QStandardPaths::GenericConfigLocation);
 
