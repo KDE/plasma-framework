@@ -45,7 +45,7 @@ void IconItemHiDPITest::initTestCase()
     Plasma::TestUtils::installPlasmaTheme("breeze-light");
     Plasma::TestUtils::installPlasmaTheme("breeze-dark");
 
-    QVERIFY(qputenv("XDG_DATA_DIRS", qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit()));
+    QVERIFY(qputenv("XDG_DATA_DIRS", QByteArray(qgetenv("XDG_DATA_DIRS") + ":" + QFINDTESTDATA("data").toLocal8Bit())));
 
     QIcon::setThemeSearchPaths({QFINDTESTDATA("data/icons")});
     QIcon::setThemeName("test-theme");
