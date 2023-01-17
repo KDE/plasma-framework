@@ -448,7 +448,7 @@ msgstr "Desfés"
 #: plasma/private/applet_p.cpp:375
 #, kde-format
 msgid "Widget Settings"
-msgstr "Configuració del giny"
+msgstr "Configureu el giny"
 
 #: plasma/private/applet_p.cpp:382
 #, kde-format
@@ -487,7 +487,7 @@ msgstr "Elimina esta activitat"
 #: plasma/private/containment_p.cpp:65
 #, kde-format
 msgid "Activity Settings"
-msgstr "Configuració de l'activitat"
+msgstr "Configureu l'activitat"
 
 #: plasma/private/containment_p.cpp:71
 #, kde-format
