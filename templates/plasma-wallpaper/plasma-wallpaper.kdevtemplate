@@ -3,6 +3,7 @@
 Name=Simple Plasma Wallpaper
 Name[ar]=خلفيّة بلازما بسيطة
 Name[az]=Sadə Plasma Divar kağızı
+Name[be]=Простыя шпалеры Plasma
 Name[bg]=Прост тапет на Plasma
 Name[ca]=Fons de pantalla senzill del Plasma
 Name[ca@valencia]=Fons de pantalla senzill de Plasma
@@ -48,6 +49,7 @@ Name[zh_CN]=Plasma 简易壁纸
 Name[zh_TW]=簡易 Plasma 桌布
 Comment=Simple Plasma Wallpaper template: a Plasma wallpaper template displaying a text
 Comment[az]=Sadə Plasma Divar kağızı nümunəsi: Plasma divar kağızı nümunəsi timsalında mətn görünür
+Comment[be]=Шаблон простых шпалер Plasma: шаблон шпалер Plasma, які паказвае тэкст
 Comment[bg]=Прост шаблон за тапет на Plasma: показване на текст
 Comment[ca]=Plantilla de fons de pantalla senzill del Plasma: una plantilla de fons de pantalla del Plasma que mostra un text
 Comment[ca@valencia]=Plantilla de fons de pantalla senzill de Plasma: una plantilla de fons de pantalla de Plasma que mostra un text

@@ -2,6 +2,7 @@
 Name=Test
 Name[ar]=اختبار
 Name[az]=Test
+Name[be]=Тэставанне
 Name[bg]=Тест
 Name[bs]=Test
 Name[ca]=Prova
@@ -54,6 +55,7 @@ Name[zh_TW]=測試
 Comment=A dummy plugin for testing
 Comment[ar]=ملحقة دمية اختباريّة
 Comment[az]=Test modulu
+Comment[be]=Фіктыўная ўбудова для тэставання
 Comment[bg]=Тестов плъгин
 Comment[bs]=Lažni priključak za probe
 Comment[ca]=Un connector fals per a proves

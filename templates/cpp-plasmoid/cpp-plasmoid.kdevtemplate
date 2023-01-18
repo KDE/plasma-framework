@@ -3,6 +3,7 @@
 Name=Plasma QML/C++ Applet
 Name[ar]=بريمج بلازما ب‍QML/سي++
 Name[az]=Plasma QML/C++ əlavəsi
+Name[be]=Аплет QML/C++ для Plasma
 Name[bg]=QML/C++ приставка за Plasma
 Name[ca]=Miniaplicació QML/C++ del Plasma
 Name[ca@valencia]=Miniaplicació QML/C++ de Plasma
@@ -46,6 +47,7 @@ Name[zh_CN]=Plasma QML/C++ 小程序
 Name[zh_TW]=Plasma QML/C++ 小程式
 Comment=A Plasma Applet template written in an hybrid mix of QML and C++: a Plasma applet template displaying a SVG picture and a text
 Comment[az]=QML və C ++ bir hibrid qarışıqda yazılmış Plazma Əlavəsi şablonu: SVG şəkli və mətni əks etdirən plazma əlavəsi şablonu
+Comment[be]=Шаблон аплета Plasma, напісаны на QML і C++: шаблон аплета Plasma, які паказвае выяву SVG і тэкст
 Comment[bg]=Шаблон за приставка на Plasma, написан на хибридна комбинация от QML и C++: шаблон на приставка на Plasma , показващ SVG изображение и текст
 Comment[ca]=Una plantilla de miniaplicació del Plasma escrita en una barreja híbrida de QML i C++: una plantilla de miniaplicació del Plasma que mostra una imatge SVG i un text
 Comment[ca@valencia]=Una plantilla de miniaplicació de Plasma escrita en una barreja híbrida de QML i C++: una plantilla de miniaplicació de Plasma que mostra una imatge SVG i un text
