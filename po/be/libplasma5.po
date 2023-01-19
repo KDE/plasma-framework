@@ -1,0 +1,602 @@
+# Zmicier <zmicerturok@gmail.com>, 2023.
+msgid ""
+msgstr ""
+"Project-Id-Version: 86ff119b1606fcaa910d6b44fc14b611\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2023-01-06 00:44+0000\n"
+"PO-Revision-Date: 2023-01-17 07:01\n"
+"Last-Translator: Zmicier <zmicerturok@gmail.com>\n"
+"Language-Team: Belarusian\n"
+"Language: be\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || n%10>=5 && n%10<=9 || n"
+"%100>=11 && n%100<=14 ? 2 : 3);\n"
+"X-Generator: Lokalize 22.12.1\n"
+"X-Crowdin-Project: 86ff119b1606fcaa910d6b44fc14b611\n"
+"X-Crowdin-Project-ID: 127\n"
+"X-Crowdin-Language: be\n"
+"X-Crowdin-File: /main/be/plasma-framework/libplasma5.po\n"
+"X-Crowdin-File-ID: 9080\n"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:51
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Holidays"
+msgstr "Святы"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:53
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Events"
+msgstr "Падзеі"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:55
+#, kde-format
+msgctxt "Agenda listview section title"
+msgid "Todo"
+msgstr "Спіс задач"
+
+#: declarativeimports/calendar/eventdatadecorator.cpp:57
+#, kde-format
+msgctxt "Means 'Other calendar items'"
+msgid "Other"
+msgstr "Іншае"
+
+#: declarativeimports/calendar/qml/MonthView.qml:244
+#, kde-format
+msgctxt "Format: month year"
+msgid "%1 %2"
+msgstr "%1%2"
+
+#: declarativeimports/calendar/qml/MonthView.qml:255
+#, kde-format
+msgid "Previous Month"
+msgstr "Папярэдні месяц"
+
+#: declarativeimports/calendar/qml/MonthView.qml:257
+#, kde-format
+msgid "Previous Year"
+msgstr "Папярэдні год"
+
+#: declarativeimports/calendar/qml/MonthView.qml:259
+#, kde-format
+msgid "Previous Decade"
+msgstr "Папярэдняя дзесяцігоддзе"
+
+#: declarativeimports/calendar/qml/MonthView.qml:272
+#, kde-format
+msgctxt "Reset calendar to today"
+msgid "Today"
+msgstr "Сёння"
+
+#: declarativeimports/calendar/qml/MonthView.qml:273
+#, kde-format
+msgid "Reset calendar to today"
+msgstr "Вярнуцца да сённяшняга дня"
+
+#: declarativeimports/calendar/qml/MonthView.qml:282
+#, kde-format
+msgid "Next Month"
+msgstr "Наступны месяц"
+
+#: declarativeimports/calendar/qml/MonthView.qml:284
+#, kde-format
+msgid "Next Year"
+msgstr "Наступны год"
+
+#: declarativeimports/calendar/qml/MonthView.qml:286
+#, kde-format
+msgid "Next Decade"
+msgstr "Наступнае дзесяцігоддзе"
+
+#: declarativeimports/calendar/qml/MonthView.qml:306
+#, kde-format
+msgid "Days"
+msgstr "Дні"
+
+#: declarativeimports/calendar/qml/MonthView.qml:311
+#, kde-format
+msgid "Months"
+msgstr "Месяцы"
+
+#: declarativeimports/calendar/qml/MonthView.qml:316
+#, kde-format
+msgid "Years"
+msgstr "Гады"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
+#, kde-format
+msgid "OK"
+msgstr "Добра"
+
+#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
+#, kde-format
+msgid "Cancel"
+msgstr "Скасаваць"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#, kde-format
+msgid "More actions"
+msgstr "Яшчэ дзеянні"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr "Згарнуць"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr "Разгарнуць"
+
+#: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
+#, kde-format
+msgid "Password"
+msgstr "Пароль"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#, kde-format
+msgid "Search…"
+msgstr "Пошук…"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#, kde-format
+msgid "Search"
+msgstr "Пошук"
+
+#: plasma/applet.cpp:379
+#, kde-format
+msgid "Unknown"
+msgstr "Невядома"
+
+#: plasma/applet.cpp:759
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Актываваць віджэт \"%1\""
+
+#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Выдаліць \"%1\""
+
+#: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Увайсці ў рэжым рэдагавання"
+
+#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Наладжванне \"%1\"..."
+
+#: plasma/corona.cpp:355 plasma/corona.cpp:482
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Заблакаваць віджэты"
+
+#: plasma/corona.cpp:355
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Разблакаваць віджэты"
+
+#: plasma/corona.cpp:404
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Выйсці з рэжыму рэдагавання"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Ці ствараць кэш на дыску для тэмы."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Максімальны памер кэшу тэмы на дыску ў кілабайтах. Звярніце ўвагу на тое, "
+"што гэтыя файлы разрэджаныя, таму максімальны памер можа не выкарыстоўвацца. "
+"Таму вызначэнне большага памеру не стварае небяспекі."
+
+#: plasma/packagestructure/packages.cpp:28
+#: plasma/packagestructure/packages.cpp:47
+#, kde-format
+msgid "Main Script File"
+msgstr "Файл галоўнага скрыпта"
+
+#: plasma/packagestructure/packages.cpp:29
+#, kde-format
+msgid "Tests"
+msgstr "Тэсты"
+
+#: plasma/packagestructure/packages.cpp:69
+#, kde-format
+msgid "Images"
+msgstr "Выявы"
+
+#: plasma/packagestructure/packages.cpp:70
+#, kde-format
+msgid "Themed Images"
+msgstr "Тэматычныя выявы"
+
+#: plasma/packagestructure/packages.cpp:76
+#, kde-format
+msgid "Configuration Definitions"
+msgstr "Вызначэнні канфігурацыі"
+
+#: plasma/packagestructure/packages.cpp:81
+#, kde-format
+msgid "User Interface"
+msgstr "Інтэрфейс карыстальніка"
+
+#: plasma/packagestructure/packages.cpp:83
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
+#, kde-format
+msgid "Data Files"
+msgstr "Файлы даных"
+
+#: plasma/packagestructure/packages.cpp:85
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
+#, kde-format
+msgid "Executable Scripts"
+msgstr "Выканальныя скрыпты"
+
+#: plasma/packagestructure/packages.cpp:89
+#, kde-format
+msgid "Screenshot"
+msgstr "Здымак экрана"
+
+#: plasma/packagestructure/packages.cpp:91
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
+#, kde-format
+msgid "Translations"
+msgstr "Пераклады"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
+#, kde-format
+msgid "Configuration UI pages model"
+msgstr "Мадэль старонак карыстальніцкага інтэрфейсу канфігурацыі"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
+#, kde-format
+msgid "Configuration XML file"
+msgstr "XML-файл канфігурацыі"
+
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#, kde-format
+msgid "Custom expander for compact applets"
+msgstr "Адвольны пашыральнік для кампактнага аплета"
+
+#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
+#, kde-format
+msgid "Service Descriptions"
+msgstr "Апісанні службаў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
+#, kde-format
+msgid "Images for dialogs"
+msgstr "Выявы для дыялогавых акон"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
+#, kde-format
+msgid "Generic dialog background"
+msgstr "Фон агульных дыялогавых акон"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
+#, kde-format
+msgid "Theme for the logout dialog"
+msgstr "Тэма для дыялогавага акна выхаду з сістэмы"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
+#, kde-format
+msgid "Wallpaper packages"
+msgstr "Пакункі шпалераў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
+#, kde-format
+msgid "Images for widgets"
+msgstr "Выявы для віджэтаў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
+#, kde-format
+msgid "Background image for widgets"
+msgstr "Фонавая выява для віджэтаў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
+#, kde-format
+msgid "Analog clock face"
+msgstr "Выгляд аналагавага гадзінніка"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
+#, kde-format
+msgid "Background image for panels"
+msgstr "Фонавая выява для панэляў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
+#, kde-format
+msgid "Background for graphing widgets"
+msgstr "Фон для графічных віджэтаў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
+#, kde-format
+msgid "Background image for tooltips"
+msgstr "Фонавая выява для падказак"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
+#, kde-format
+msgid "Opaque images for dialogs"
+msgstr "Непразрыстасць выяў для дыялогавых акон"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
+#, kde-format
+msgid "Opaque generic dialog background"
+msgstr "Непразрыстасць фону агульных дыялогавых акон"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
+#, kde-format
+msgid "Opaque theme for the logout dialog"
+msgstr "Непразрыстасць тэмы для дыялоговага акна выхаду з сістэмы"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
+#, kde-format
+msgid "Opaque images for widgets"
+msgstr "Непразрыстасць выяў для віджэтаў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
+#, kde-format
+msgid "Opaque background image for panels"
+msgstr "Непразрыстасць фонавай выявы для панэляў"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
+#, kde-format
+msgid "Opaque background image for tooltips"
+msgstr "Непразрыстасць фонавай выявы для падказак"
+
+#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
+#, kde-format
+msgid "KColorScheme configuration file"
+msgstr "Файл канфігурацыі KColorScheme"
+
+#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Рознае"
+
+#: plasma/private/applet_p.cpp:126
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "Віджэт %1 не вызначыў, які ScriptEngine выкарыстоўваць."
+
+#: plasma/private/applet_p.cpp:145
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Не ўдалося адкрыць пакунак %1, неабходны для віджэта %2."
+
+#: plasma/private/applet_p.cpp:166
+#, kde-format
+msgctxt ""
+"API or programming language the widget was written in, name of the widget"
+msgid "Could not create a %1 ScriptEngine for the %2 widget."
+msgstr "Не ўдалося стварыць ScriptEngine %1 для віджэта %2."
+
+#: plasma/private/applet_p.cpp:172
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Паказаць альтэрнатыўныя варыянты..."
+
+#: plasma/private/applet_p.cpp:274
+#, kde-format
+msgid "Widget Removed"
+msgstr "Віджэт выдалены"
+
+#: plasma/private/applet_p.cpp:275
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "Віджэт \"%1\" быў выдалены."
+
+#: plasma/private/applet_p.cpp:279
+#, kde-format
+msgid "Panel Removed"
+msgstr "Панэль выдаленая"
+
+#: plasma/private/applet_p.cpp:280
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Панэль была выдаленая."
+
+#: plasma/private/applet_p.cpp:283
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Працоўны стол выдалены"
+
+#: plasma/private/applet_p.cpp:284
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Працоўны стол быў выдалены."
+
+#: plasma/private/applet_p.cpp:287
+#, kde-format
+msgid "Undo"
+msgstr "Адрабіць"
+
+#: plasma/private/applet_p.cpp:375
+#, kde-format
+msgid "Widget Settings"
+msgstr "Налады віджэтаў"
+
+#: plasma/private/applet_p.cpp:382
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Выдаліць гэты віджэт"
+
+#: plasma/private/applet_p.cpp:389
+#: plasma/private/associatedapplicationmanager.cpp:65
+#: plasma/private/associatedapplicationmanager.cpp:124
+#: plasma/private/associatedapplicationmanager.cpp:166
+#, kde-format
+msgid "Run the Associated Application"
+msgstr "Запусціць асацыяваную праграму"
+
+#: plasma/private/applet_p.cpp:480
+#, kde-format
+msgid "Script initialization failed"
+msgstr "Не ўдалося ініцыялізаваць скрыпт"
+
+#: plasma/private/associatedapplicationmanager.cpp:62
+#: plasma/private/associatedapplicationmanager.cpp:163
+#, kde-format
+msgid "Open with %1"
+msgstr "Адкрыць у %1"
+
+#: plasma/private/containment_p.cpp:57
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Выдаліць гэтую панэль"
+
+#: plasma/private/containment_p.cpp:59
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Выдаліць гэты пакой"
+
+#: plasma/private/containment_p.cpp:65
+#, kde-format
+msgid "Activity Settings"
+msgstr "Налады пакояў"
+
+#: plasma/private/containment_p.cpp:71
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Дадаць віджэты..."
+
+#: plasma/private/containment_p.cpp:187
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Не ўдалося знайсці патрэбны кампанент: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Абагульванне віджэта ў сетцы дае магчымасць атрымаць доступ да гэтага "
+"віджэта з іншага камп'ютара, які можна выкарыстоўваць як пульт дыстанцыйнага "
+"кіравання."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Абагуліць гэты віджэт у сетцы"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Дазволіць усім свабодны доступ да гэтага віджэта"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Хібная (нулявая) служба, не можа выконваць ніякіх аперацый."
+
+#: plasmaquick/appletquickitem.cpp:609
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Невядомы аплет"
+
+#: plasmaquick/appletquickitem.cpp:624
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Не ўдалося загрузіць файл QML: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:626
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Не ўдалося загрузіць аплет: пакунак не існуе. %1"
+
+#: plasmaquick/configview.cpp:92
+#, kde-format
+msgid "%1 Settings"
+msgstr "%1 Налады"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
+#, kde-format
+msgid "Plasma Package"
+msgstr "Пакунак Plasma"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+#, kde-format
+msgid "Install"
+msgstr "Усталяваць"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Не ўдалося ўсталяваць пакунак"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "Пакунак, які вы толькі што перацягнулі, хібны."
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:652
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:721
+#, kde-format
+msgid "Widgets"
+msgstr "Віджэты"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Дадаць %1"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:671
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Дадаць значок"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#, kde-format
+msgid "Wallpaper"
+msgstr "Шпалеры"
+
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Вызначыць %1"
+
+#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Змесціва перацягнута"
