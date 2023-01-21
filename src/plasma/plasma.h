@@ -329,6 +329,16 @@ PLASMA_EXPORT Types::Direction locationToDirection(Types::Location location);
  **/
 PLASMA_EXPORT Types::Direction locationToInverseDirection(Types::Location location);
 
+/**
+ * Mirrors popup placement horizontally in Right-To-Left environments.
+ *
+ * Mirroring behavior can be explicitly overridden by passing a specific
+ * direction with layoutDirection parameter, or left at default value of
+ * Qt::LayoutDirectionAuto, in which case it will be deduced from shared
+ * QGuiApplication instance.
+ **/
+PLASMA_EXPORT Types::PopupPlacement visualPopupPlacement(Types::PopupPlacement placement, Qt::LayoutDirection layoutDirection = Qt::LayoutDirectionAuto);
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ContainmentDisplayHints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ConstraintFlags)

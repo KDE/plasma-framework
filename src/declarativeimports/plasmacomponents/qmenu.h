@@ -77,6 +77,8 @@ class QMenuProxy : public QObject
 
     /**
      * The default placement for the menu.
+     *
+     * (since 5.103) Will be automatically flipped horizontally in Right-to-left User Interfaces.
      */
     Q_PROPERTY(Plasma::Types::PopupPlacement placement READ placement WRITE setPlacement NOTIFY placementChanged)
 
