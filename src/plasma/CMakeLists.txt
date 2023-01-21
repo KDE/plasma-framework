@@ -6,16 +6,16 @@ endif()
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
-add_library(KF5Plasma)
-add_library(KF5::Plasma ALIAS KF5Plasma)
+add_library(KF6Plasma)
+add_library(KF6::Plasma ALIAS KF6Plasma)
 
-set_target_properties(KF5Plasma PROPERTIES
+set_target_properties(KF6Plasma PROPERTIES
     VERSION     ${PLASMA_VERSION}
     SOVERSION   ${PLASMA_SOVERSION}
     EXPORT_NAME Plasma
 )
 
-target_sources(KF5Plasma PRIVATE
+target_sources(KF6Plasma PRIVATE
 #global
     plasma.cpp
     pluginloader.cpp
@@ -57,17 +57,17 @@ target_sources(KF5Plasma PRIVATE
 if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
    EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.83.0)
     #packages
-    target_sources(KF5Plasma PRIVATE package.cpp packagestructure.cpp)
+    target_sources(KF6Plasma PRIVATE package.cpp packagestructure.cpp)
 endif()
 
 
 if(HAVE_X11)
-    target_sources(KF5Plasma PRIVATE private/effectwatcher.cpp)
+    target_sources(KF6Plasma PRIVATE private/effectwatcher.cpp)
 endif()
 
-kconfig_add_kcfg_files(KF5Plasma data/kconfigxt/libplasma-theme-global.kcfgc)
+kconfig_add_kcfg_files(KF6Plasma data/kconfigxt/libplasma-theme-global.kcfgc)
 
-ecm_qt_declare_logging_category(KF5Plasma
+ecm_qt_declare_logging_category(KF6Plasma
     HEADER debug_p.h
     IDENTIFIER LOG_PLASMA
     CATEGORY_NAME kf.plasma.core
@@ -76,7 +76,7 @@ ecm_qt_declare_logging_category(KF5Plasma
     EXPORT PLASMA
 )
 
-ecm_generate_export_header(KF5Plasma
+ecm_generate_export_header(KF6Plasma
     EXPORT_FILE_NAME plasma/plasma_export.h
     BASE_NAME Plasma
     GROUP_BASE_NAME KF
@@ -95,38 +95,38 @@ if(HAVE_X11)
     endif()
 endif()
 
-target_link_libraries(KF5Plasma
+target_link_libraries(KF6Plasma
 PUBLIC
     Qt${QT_MAJOR_VERSION}::Gui
-    KF5::ConfigCore
-    KF5::CoreAddons
+    KF6::ConfigCore
+    KF6::CoreAddons
 PRIVATE
     Qt${QT_MAJOR_VERSION}::Sql
     Qt${QT_MAJOR_VERSION}::Svg
     Qt${QT_MAJOR_VERSION}::DBus
-    KF5::Archive
-    KF5::GuiAddons #kimagecache
-    KF5::I18n
-    KF5::KIOCore    #ServiceJob
-    KF5::KIOWidgets  #KIO::JobUiDelegate
-    KF5::WindowSystem #compositingActive
-    KF5::Declarative #runtimePlatform
-    KF5::XmlGui   #KActionCollection
-    KF5::GlobalAccel #Applet::setGlobalShortcut
-    KF5::Notifications
-    KF5::IconThemes
+    KF6::Archive
+    KF6::GuiAddons #kimagecache
+    KF6::I18n
+    KF6::KIOCore    #ServiceJob
+    KF6::KIOWidgets  #KIO::JobUiDelegate
+    KF6::WindowSystem #compositingActive
+    KF6::Declarative #runtimePlatform
+    KF6::XmlGui   #KActionCollection
+    KF6::GlobalAccel #Applet::setGlobalShortcut
+    KF6::Notifications
+    KF6::IconThemes
     ${PLASMA_EXTRA_LIBS}
 )
 
 if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
    EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.94.0)
-    target_link_libraries(KF5Plasma PUBLIC KF5::Service) # For kplugininfo.h and kservice.h
+    target_link_libraries(KF6Plasma PUBLIC KF6::Service) # For kplugininfo.h and kservice.h
 endif()
 if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
    EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.100.0)
-    target_link_libraries(KF5Plasma PUBLIC KF5::Package)
+    target_link_libraries(KF6Plasma PUBLIC KF6::Package)
 else()
-    target_link_libraries(KF5Plasma PRIVATE KF5::Package)
+    target_link_libraries(KF6Plasma PRIVATE KF6::Package)
 endif()
 
 set(Plasma_BUILD_INCLUDE_DIRS
@@ -134,10 +134,10 @@ set(Plasma_BUILD_INCLUDE_DIRS
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/Plasma
 )
-target_include_directories(KF5Plasma PUBLIC
+target_include_directories(KF6Plasma PUBLIC
   "$<BUILD_INTERFACE:${Plasma_BUILD_INCLUDE_DIRS}>"
 )
-target_include_directories(KF5Plasma INTERFACE
+target_include_directories(KF6Plasma INTERFACE
   "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF};${KDE_INSTALL_INCLUDEDIR_KF}/Plasma>"
 )
 
@@ -205,13 +205,13 @@ install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 
-install(TARGETS KF5Plasma EXPORT KF5PlasmaTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF6Plasma EXPORT KF6PlasmaTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(BUILD_QCH)
     ecm_add_qch(
-        KF5Plasma_QCH
+        KF6Plasma_QCH
         NAME Plasma
-        BASE_NAME KF5Plasma
+        BASE_NAME KF6Plasma
         VERSION ${KF_VERSION}
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API
@@ -221,8 +221,8 @@ if(BUILD_QCH)
         MD_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md"
         LINK_QCHS
             Qt5Gui_QCH
-            KF5Service_QCH
-            KF5Package_QCH
+            KF6Service_QCH
+            KF6Package_QCH
         INCLUDE_DIRS
             ${Plasma_BUILD_INCLUDE_DIRS}
         BLANK_MACROS

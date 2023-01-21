@@ -1,4 +1,4 @@
-#find_package(KF5Declarative REQUIRED NO_MODULE)
+#find_package(KF6Declarative REQUIRED NO_MODULE)
 
 add_library(plasmacomponentsplugin SHARED)
 
@@ -17,11 +17,11 @@ target_link_libraries(plasmacomponentsplugin
         Qt${QT_MAJOR_VERSION}::Quick
         Qt${QT_MAJOR_VERSION}::Qml
         Qt${QT_MAJOR_VERSION}::Gui
-        KF5::WidgetsAddons # for KAcceleratorManager
-        KF5::Declarative
-        KF5::Plasma
-        KF5::IconThemes
-        KF5::Service #for kplugininfo.h
+        KF6::WidgetsAddons # for KAcceleratorManager
+        KF6::Declarative
+        KF6::Plasma
+        KF6::IconThemes
+        KF6::Service #for kplugininfo.h
 )
 
 

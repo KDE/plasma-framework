@@ -5,8 +5,8 @@ add_library(org.kde.plasma.%{APPNAMELC} MODULE %{APPNAMELC}.cpp)
 
 target_link_libraries(org.kde.plasma.%{APPNAMELC}
                       Qt5::Gui
-                      KF5::Plasma
-                      KF5::I18n)
+                      KF6::Plasma
+                      KF6::I18n)
 
 
 install(TARGETS org.kde.plasma.%{APPNAMELC} DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/applets)

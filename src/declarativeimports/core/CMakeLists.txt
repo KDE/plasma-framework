@@ -29,15 +29,15 @@ target_sources(corebindingsplugin PRIVATE
 target_link_libraries(corebindingsplugin
         Qt${QT_MAJOR_VERSION}::Quick
         Qt${QT_MAJOR_VERSION}::Qml
-        KF5::Declarative
-        KF5::IconThemes
-        KF5::I18n
+        KF6::Declarative
+        KF6::IconThemes
+        KF6::I18n
         Qt${QT_MAJOR_VERSION}::Svg
-        KF5::Service #for kplugininfo.h
-        KF5::WindowSystem
-        KF5::Plasma
-        KF5::PlasmaQuick
-        KF5::QuickAddons
+        KF6::Service #for kplugininfo.h
+        KF6::WindowSystem
+        KF6::Plasma
+        KF6::PlasmaQuick
+        KF6::QuickAddons
 )
 
 if(HAVE_X11)

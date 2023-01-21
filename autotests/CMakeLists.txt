@@ -7,8 +7,8 @@ remove_definitions(-DQT_NO_CAST_FROM_ASCII -DQT_STRICT_ITERATORS -DQT_NO_CAST_FR
 include(ECMMarkAsTest)
 include(ECMAddTests)
 
-find_package(KF5CoreAddons REQUIRED)
-find_package(KF5XmlGui REQUIRED)
+find_package(KF6CoreAddons REQUIRED)
+find_package(KF6XmlGui REQUIRED)
 find_package(Qt${QT_MAJOR_VERSION}Widgets REQUIRED)
 
 # add_definitions( -DKDESRCDIR=${CMAKE_CURRENT_SOURCE_DIR} )
@@ -19,17 +19,17 @@ endif()
 
 MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
-               set(libs Qt${QT_MAJOR_VERSION}::Qml Qt${QT_MAJOR_VERSION}::Test KF5::Plasma KF5::PlasmaQuick
-                        KF5::Archive KF5::CoreAddons KF5::ConfigGui KF5::I18n
-                        KF5::Service KF5::IconThemes
-                        KF5::Declarative)
+               set(libs Qt${QT_MAJOR_VERSION}::Qml Qt${QT_MAJOR_VERSION}::Test KF6::Plasma KF6::PlasmaQuick
+                        KF6::Archive KF6::CoreAddons KF6::ConfigGui KF6::I18n
+                        KF6::Service KF6::IconThemes
+                        KF6::Declarative)
                if(QT_QTOPENGL_FOUND)
                    list(APPEND libs Qt${QT_MAJOR_VERSION}::OpenGL)
                endif()
                ecm_add_test(${_testname}.cpp
                             LINK_LIBRARIES ${libs}
                             NAME_PREFIX "plasma-")
-               target_include_directories(${_testname} PRIVATE "$<BUILD_INTERFACE:$<TARGET_PROPERTY:KF5PlasmaQuick,INCLUDE_DIRECTORIES>>;")
+               target_include_directories(${_testname} PRIVATE "$<BUILD_INTERFACE:$<TARGET_PROPERTY:KF6PlasmaQuick,INCLUDE_DIRECTORIES>>;")
        ENDFOREACH(_testname)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
@@ -51,12 +51,12 @@ if(HAVE_X11)
     ecm_add_test(
         dialognativetest.cpp
         TEST_NAME dialognativetest
-        LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Qml Qt${QT_MAJOR_VERSION}::Quick KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick
+        LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Test Qt${QT_MAJOR_VERSION}::Qml Qt${QT_MAJOR_VERSION}::Quick KF6::WindowSystem KF6::Plasma KF6::PlasmaQuick
     )
     ecm_add_test(
         iconitemhidpitest.cpp
         TEST_NAME iconitemhidpitest
-        LINK_LIBRARIES Qt::Gui Qt::Test Qt::Qml Qt::Quick KF5::IconThemes KF5::WindowSystem KF5::Plasma KF5::PlasmaQuick
+        LINK_LIBRARIES Qt::Gui Qt::Test Qt::Qml Qt::Quick KF6::IconThemes KF6::WindowSystem KF6::Plasma KF6::PlasmaQuick
     )
     set_tests_properties(iconitemhidpitest PROPERTIES ENVIRONMENT "QT_SCALE_FACTOR=1.25")
 endif()
@@ -65,7 +65,7 @@ ecm_add_test(
     coronatest.cpp
     coronatestresources.qrc
     TEST_NAME coronatest
-    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Widgets Qt${QT_MAJOR_VERSION}::Test KF5::Plasma KF5::CoreAddons KF5::XmlGui
+    LINK_LIBRARIES Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Widgets Qt${QT_MAJOR_VERSION}::Test KF6::Plasma KF6::CoreAddons KF6::XmlGui
 )
 
 ecm_add_test(
@@ -73,7 +73,7 @@ ecm_add_test(
     ../src/declarativeimports/core/datamodel.cpp
     ../src/declarativeimports/core/datasource.cpp
     TEST_NAME plasma-sortfiltermodeltest
-    LINK_LIBRARIES KF5::Plasma Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Test KF5::I18n KF5::Service Qt${QT_MAJOR_VERSION}::Qml
+    LINK_LIBRARIES KF6::Plasma Qt${QT_MAJOR_VERSION}::Gui Qt${QT_MAJOR_VERSION}::Test KF6::I18n KF6::Service Qt${QT_MAJOR_VERSION}::Qml
 )
 
 

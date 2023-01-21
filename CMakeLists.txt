@@ -35,8 +35,8 @@ add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt 
 ecm_setup_version(PROJECT
                   VARIABLE_PREFIX PLASMA
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
-                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
-                  SOVERSION 5)
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfigVersion.cmake"
+                  SOVERSION 6)
 
 ################# now find all used packages #################
 
@@ -47,7 +47,7 @@ if (QT_MAJOR_VERSION EQUAL "6")
     find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS ShaderTools)
 endif()
 
-find_package(KF5 ${KF_DEP_VERSION} REQUIRED
+find_package(KF6 ${KF_DEP_VERSION} REQUIRED
     COMPONENTS
         Activities
         Archive
@@ -72,17 +72,17 @@ find_package(KF5 ${KF_DEP_VERSION} REQUIRED
 )
 if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
    EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.94.0)
-    find_package(KF5 ${KF_DEP_VERSION} REQUIRED COMPONENTS Service)
+    find_package(KF6 ${KF_DEP_VERSION} REQUIRED COMPONENTS Service)
 endif()
 
-set_package_properties(KF5Wayland PROPERTIES DESCRIPTION "Integration with the Wayland compositor"
+set_package_properties(KF6Wayland PROPERTIES DESCRIPTION "Integration with the Wayland compositor"
                        TYPE OPTIONAL
                       )
-if(KF5Wayland_FOUND)
+if(KF6Wayland_FOUND)
   set(HAVE_KWAYLAND 1)
 endif()
 
-set_package_properties(KF5DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"
+set_package_properties(KF6DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"
                        TYPE OPTIONAL
                       )
 
@@ -181,7 +181,7 @@ ecm_set_disabled_deprecation_versions(
 
 #add_definitions(-Wno-deprecated)
 
-include(KF5PlasmaMacros.cmake)
+include(KF6PlasmaMacros.cmake)
 
 #########################################################################
 
@@ -198,12 +198,12 @@ endif()
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 ################# list the subdirectories #################
-if (KF5DocTools_FOUND)
+if (KF6DocTools_FOUND)
     add_subdirectory(docs)
 endif()
 add_definitions(-DTRANSLATION_DOMAIN=\"libplasma5\")
 ki18n_install(po)
-if (KF5DocTools_FOUND)
+if (KF6DocTools_FOUND)
     kdoctools_install(po)
 endif()
 add_subdirectory(src)
@@ -222,37 +222,37 @@ add_subdirectory(templates)
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
 
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5Plasma")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF6Plasma")
 
 if (BUILD_QCH)
     ecm_install_qch_export(
-        TARGETS KF5Plasma_QCH
-        FILE KF5PlasmaQchTargets.cmake
+        TARGETS KF6Plasma_QCH
+        FILE KF6PlasmaQchTargets.cmake
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel
     )
-    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaQchTargets.cmake\")")
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KF6PlasmaQchTargets.cmake\")")
 endif()
 
 configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfig.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF6PlasmaConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfig.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
   PATH_VARS  CMAKE_INSTALL_PREFIX
 )
 
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfig.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaConfigVersion.cmake"
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaMacros.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfigVersion.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/KF6PlasmaMacros.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
 
-install(EXPORT KF5PlasmaTargets
+install(EXPORT KF6PlasmaTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE KF5PlasmaTargets.cmake
-        NAMESPACE KF5::
+        FILE KF6PlasmaTargets.cmake
+        NAMESPACE KF6::
         COMPONENT Devel)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h

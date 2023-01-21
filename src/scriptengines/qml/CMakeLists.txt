@@ -21,20 +21,20 @@ set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 target_link_libraries(plasma_appletscript_declarative
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::Qml
-    KF5::Activities
-    KF5::ConfigQml
-    KF5::KIOCore
-    KF5::KIOWidgets
-    KF5::Declarative
-    KF5::I18n
-    KF5::XmlGui # KActionCollection
-    KF5::Plasma
-    KF5::PlasmaQuick
-    KF5::Package
-    KF5::Notifications
+    KF6::Activities
+    KF6::ConfigQml
+    KF6::KIOCore
+    KF6::KIOWidgets
+    KF6::Declarative
+    KF6::I18n
+    KF6::XmlGui # KActionCollection
+    KF6::Plasma
+    KF6::PlasmaQuick
+    KF6::Package
+    KF6::Notifications
 )
 if (QT_MAJOR_VERSION EQUAL "6")
-    target_link_libraries(plasma_appletscript_declarative KF5::ConfigQml)
+    target_link_libraries(plasma_appletscript_declarative KF6::ConfigQml)
 endif()
 
 

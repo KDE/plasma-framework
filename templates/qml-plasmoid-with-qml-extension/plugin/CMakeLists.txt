@@ -3,7 +3,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"plasma_applet_org.kde.plasma.%{APPNAMELC}
 add_library(%{APPNAMELC}plugin SHARED %{APPNAMELC}plugin.cpp)
 
 target_link_libraries(%{APPNAMELC}plugin
-    KF5::I18n
+    KF6::I18n
     Qt5::Gui
     Qt5::Qml
 )

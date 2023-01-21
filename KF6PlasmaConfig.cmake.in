@@ -2,12 +2,12 @@
 
 # Any changes in this ".cmake" file will be overwritten by CMake, the source is the ".cmake.in" file.
 
-include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/KF6PlasmaTargets.cmake")
 @PACKAGE_INCLUDE_QCHTARGETS@
 
 set(Plasma_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
 
-set(Plasma_LIBRARIES KF5::Plasma)
+set(Plasma_LIBRARIES KF6::Plasma)
 
 set(PLASMA_DATAENGINES_PLUGINDIR ${KDE_INSTALL_PLUGINDIR}/plasma/dataengine)
 set(PLASMA_PLASMOIDS_PLUGINDIR ${KDE_INSTALL_PLUGINDIR}/plasma/applets)
@@ -16,10 +16,10 @@ set(PLASMA_CONTAINMENTACTIONS_PLUGINDIR ${KDE_INSTALL_PLUGINDIR}/plasma/containm
 
 include(CMakeFindDependencyMacro)
 find_dependency(Qt@QT_MAJOR_VERSION@Gui "@REQUIRED_QT_VERSION@")
-find_dependency(KF5Package "@KF_DEP_VERSION@")
-find_dependency(KF5Service "@KF_DEP_VERSION@")
-find_dependency(KF5WindowSystem "@KF_DEP_VERSION@")
+find_dependency(KF6Package "@KF_DEP_VERSION@")
+find_dependency(KF6Service "@KF_DEP_VERSION@")
+find_dependency(KF6WindowSystem "@KF_DEP_VERSION@")
 
 @PACKAGE_SETUP_AUTOMOC_VARIABLES@
 
-include("${CMAKE_CURRENT_LIST_DIR}/KF5PlasmaMacros.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/KF6PlasmaMacros.cmake")

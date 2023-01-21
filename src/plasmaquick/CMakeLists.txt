@@ -1,13 +1,13 @@
-add_library(KF5PlasmaQuick SHARED)
-add_library(KF5::PlasmaQuick ALIAS KF5PlasmaQuick)
+add_library(KF6PlasmaQuick SHARED)
+add_library(KF6::PlasmaQuick ALIAS KF6PlasmaQuick)
 
-set_target_properties(KF5PlasmaQuick PROPERTIES
+set_target_properties(KF6PlasmaQuick PROPERTIES
     VERSION     ${PLASMA_VERSION}
     SOVERSION   ${PLASMA_SOVERSION}
     EXPORT_NAME PlasmaQuick
 )
 
-target_sources(KF5PlasmaQuick PRIVATE
+target_sources(KF6PlasmaQuick PRIVATE
     appletquickitem.cpp
     debug_p.cpp
     dialog.cpp
@@ -25,10 +25,10 @@ target_sources(KF5PlasmaQuick PRIVATE
 )
 
 if(HAVE_KWAYLAND)
-    target_sources(KF5PlasmaQuick PRIVATE waylandintegration.cpp)
+    target_sources(KF6PlasmaQuick PRIVATE waylandintegration.cpp)
 endif()
 
-ecm_qt_declare_logging_category(KF5PlasmaQuick
+ecm_qt_declare_logging_category(KF6PlasmaQuick
     HEADER debug_p.h
     IDENTIFIER LOG_PLASMAQUICK
     CATEGORY_NAME kf.plasma.quick
@@ -37,53 +37,53 @@ ecm_qt_declare_logging_category(KF5PlasmaQuick
     EXPORT PLASMA
 )
 
-target_include_directories(KF5PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/..>")
+target_include_directories(KF6PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR};${CMAKE_CURRENT_BINARY_DIR}/..>")
 
-target_link_libraries(KF5PlasmaQuick
+target_link_libraries(KF6PlasmaQuick
     PUBLIC
         Qt${QT_MAJOR_VERSION}::Gui
         Qt${QT_MAJOR_VERSION}::Quick
         Qt${QT_MAJOR_VERSION}::Qml
-        KF5::Plasma
-        KF5::WindowSystem
+        KF6::Plasma
+        KF6::WindowSystem
     PRIVATE
         Qt${QT_MAJOR_VERSION}::Svg
-        KF5::I18n
-        KF5::IconThemes
-        KF5::Service
-        KF5::CoreAddons
-        KF5::XmlGui
-        KF5::Declarative
-        KF5::QuickAddons
+        KF6::I18n
+        KF6::IconThemes
+        KF6::Service
+        KF6::CoreAddons
+        KF6::XmlGui
+        KF6::Declarative
+        KF6::QuickAddons
 )
 
 if(HAVE_KWAYLAND)
-    target_link_libraries(KF5PlasmaQuick
+    target_link_libraries(KF6PlasmaQuick
         PRIVATE
-        KF5::WaylandClient
+        KF6::WaylandClient
     )
 endif()
 
 if(HAVE_X11)
-    target_link_libraries(KF5PlasmaQuick
+    target_link_libraries(KF6PlasmaQuick
         PRIVATE
             ${X11_LIBRARIES}
             XCB::XCB
     )
     if (TARGET Qt5::X11Extras)
-        target_link_libraries(KF5PlasmaQuick PRIVATE Qt5::X11Extras)
+        target_link_libraries(KF6PlasmaQuick PRIVATE Qt5::X11Extras)
     elseif(TARGET Qt6::Gui)
-        target_link_libraries(KF5PlasmaQuick PRIVATE Qt6::GuiPrivate)
+        target_link_libraries(KF6PlasmaQuick PRIVATE Qt6::GuiPrivate)
     endif()
 
     if(HAVE_XCB_SHAPE)
-        target_link_libraries(KF5PlasmaQuick PRIVATE XCB::SHAPE)
+        target_link_libraries(KF6PlasmaQuick PRIVATE XCB::SHAPE)
     endif()
 endif()
 
-install(TARGETS KF5PlasmaQuick EXPORT KF5PlasmaQuickTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF6PlasmaQuick EXPORT KF6PlasmaQuickTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
-ecm_generate_export_header(KF5PlasmaQuick
+ecm_generate_export_header(KF6PlasmaQuick
     BASE_NAME PlasmaQuick
     GROUP_BASE_NAME KF
     VERSION ${KF_VERSION}
@@ -114,23 +114,23 @@ install(FILES ${plasmaquick_LIB_INCLUDES}
 install(FILES ${PlasmaQuick_CamelCase_HEADERS}
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/PlasmaQuick COMPONENT Devel)
 
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5PlasmaQuick")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF6PlasmaQuick")
 
 configure_package_config_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/KF5PlasmaQuickConfig.cmake.in"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
+    "${CMAKE_CURRENT_SOURCE_DIR}/KF6PlasmaQuickConfig.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaQuickConfig.cmake"
     INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
     PATH_VARS  KDE_INSTALL_INCLUDEDIR_KF CMAKE_INSTALL_PREFIX
 )
 
 ecm_setup_version(${KF_VERSION}
                   VARIABLE_PREFIX PLASMAQUICK
-                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfigVersion.cmake" )
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaQuickConfigVersion.cmake" )
 
 install(FILES
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfig.cmake"
-    "${CMAKE_CURRENT_BINARY_DIR}/KF5PlasmaQuickConfigVersion.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaQuickConfig.cmake"
+    "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaQuickConfigVersion.cmake"
     DESTINATION "${CMAKECONFIG_INSTALL_DIR}" COMPONENT Devel
 )
 
-install(EXPORT KF5PlasmaQuickTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF5PlasmaQuickTargets.cmake NAMESPACE KF5:: )
+install(EXPORT KF6PlasmaQuickTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" FILE KF6PlasmaQuickTargets.cmake NAMESPACE KF6:: )

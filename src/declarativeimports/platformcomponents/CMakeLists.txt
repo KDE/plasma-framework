@@ -13,8 +13,8 @@ target_link_libraries(platformcomponentsplugin
     Qt${QT_MAJOR_VERSION}::Core
     Qt${QT_MAJOR_VERSION}::DBus
     Qt${QT_MAJOR_VERSION}::Qml
-    KF5::WindowSystem
-    KF5::IconThemes
+    KF6::WindowSystem
+    KF6::IconThemes
 )
 
 install(TARGETS platformcomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/platformcomponents)

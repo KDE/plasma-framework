@@ -9,13 +9,13 @@ target_link_libraries(exampleplasmashell
     Qt${QT_MAJOR_VERSION}::Widgets
     Qt${QT_MAJOR_VERSION}::Quick
     Qt${QT_MAJOR_VERSION}::Qml
-    KF5::I18n
-    KF5::XmlGui
-    KF5::PlasmaQuick
-    KF5::Plasma
-    KF5::DBusAddons
-    KF5::Notifications
-    KF5::QuickAddons
-    KF5::Package
+    KF6::I18n
+    KF6::XmlGui
+    KF6::PlasmaQuick
+    KF6::Plasma
+    KF6::DBusAddons
+    KF6::Notifications
+    KF6::QuickAddons
+    KF6::Package
 )
 

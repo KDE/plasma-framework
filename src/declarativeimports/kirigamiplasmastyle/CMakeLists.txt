@@ -9,13 +9,13 @@ target_sources(KirigamiPlasmaStyle PRIVATE
 target_link_libraries(KirigamiPlasmaStyle
     PUBLIC
         Qt${QT_MAJOR_VERSION}::Core
-        KF5::Kirigami2
+        KF6::Kirigami2
     PRIVATE
         Qt${QT_MAJOR_VERSION}::DBus
         Qt${QT_MAJOR_VERSION}::Qml
         Qt${QT_MAJOR_VERSION}::Quick
-        KF5::ConfigWidgets
-        KF5::IconThemes
+        KF6::ConfigWidgets
+        KF6::IconThemes
 )
 
 install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kirigami)

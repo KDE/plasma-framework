@@ -10,7 +10,7 @@ include(KDECMakeSettings)
 include(KDECompilerSettings NO_POLICY_SCOPE)
 include(FeatureSummary)
 
-find_package(KF5 REQUIRED COMPONENTS
+find_package(KF6 REQUIRED COMPONENTS
     Plasma
     I18n
 )
