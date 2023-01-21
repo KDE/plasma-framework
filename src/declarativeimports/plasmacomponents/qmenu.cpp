@@ -8,16 +8,18 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QQmlProperty>
 #include <QQuickItem>
+#include <QQuickRenderControl>
 #include <QQuickWindow>
 #include <QScreen>
 #include <QTimer>
 #include <QVersionNumber>
 
 #include <KAcceleratorManager>
-#include <QQuickRenderControl>
 
-#include "plasmacomponentsplugin.h"
+#include "plasma.h"
+
 QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent)
     , m_menu(nullptr)
@@ -385,9 +387,13 @@ void QMenuProxy::openRelative()
         }
     };
 
+    const QQmlProperty enabledProp(parentItem, QStringLiteral("LayoutMirroring.enabled"), qmlContext(parentItem));
+    const bool mirrored(enabledProp.read().toBool());
+    const auto placement = visualPopupPlacement(m_placement, mirrored ? Qt::RightToLeft : Qt::LeftToRight);
+
     using namespace Plasma;
 
-    switch (m_placement) {
+    switch (placement) {
     case Types::TopPosedLeftAlignedPopup: {
         posLocal = parentItem->mapToScene(QPointF(0, -m_menu->height()));
         boundaryCorrection(-m_menu->width() + parentItem->width(), m_menu->height() + parentItem->height());
