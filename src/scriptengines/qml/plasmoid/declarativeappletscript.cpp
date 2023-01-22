@@ -19,7 +19,6 @@
 
 #include <Plasma/Applet>
 #include <Plasma/Corona>
-#include <Plasma/Package>
 #include <Plasma/PluginLoader>
 #include <Plasma/Service>
 
@@ -29,12 +28,8 @@
 #include "plasmoid/containmentinterface.h"
 #include "plasmoid/wallpaperinterface.h"
 
-#include <kdeclarative/kdeclarative_export.h>
-#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
-#include <kdeclarative/configpropertymap.h>
-#else
 #include <KConfigPropertyMap>
-#endif
+#include <kdeclarative/kdeclarative_export.h>
 
 #include <kdeclarative/qmlobject.h>
 
@@ -53,11 +48,7 @@ DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariant
 
     qmlRegisterUncreatableType<WallpaperInterface>(uri, 2, 0, "Wallpaper", QStringLiteral("Do not create objects of type Wallpaper"));
 
-#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
-    qmlRegisterAnonymousType<KDeclarative::ConfigPropertyMap>(uri, 1);
-#else
     qmlRegisterAnonymousType<KConfigPropertyMap>(uri, 1);
-#endif
 }
 
 DeclarativeAppletScript::~DeclarativeAppletScript()

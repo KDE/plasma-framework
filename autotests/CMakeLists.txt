@@ -42,11 +42,6 @@ PLASMA_UNIT_TESTS(
     themetest
 )
 
-if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
-   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.83.0)
-    PLASMA_UNIT_TESTS(configmodeltest)
-endif()
-
 if(HAVE_X11)
     ecm_add_test(
         dialognativetest.cpp

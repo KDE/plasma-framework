@@ -31,7 +31,6 @@
 
 #include "containment.h"
 #include "corona.h"
-#include "package.h"
 #include "plasma.h"
 #include "pluginloader.h"
 #include "scripting/appletscript.h"
@@ -39,91 +38,12 @@
 #include "debug_p.h"
 #include "private/associatedapplicationmanager_p.h"
 #include "private/containment_p.h"
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-#include "private/package_p.h"
-#endif
 
 #include <cmath>
 #include <limits>
 
 namespace Plasma
 {
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-static KPluginMetaData appletMetadataForDirectory(const QString &path)
-{
-    return QFile::exists(path + QLatin1String("/metadata.json"))
-        ? KPluginMetaData(path + QLatin1String("/metadata.json"))
-        : KPluginMetaData::fromDesktopFile(path + QLatin1String("/metadata.desktop"), {QStringLiteral("plasma-applet.desktop")});
-}
-
-Applet::Applet(const KPluginMetaData &info, QObject *parent, uint appletId)
-    : QObject(parent)
-    , d(new AppletPrivate(info, appletId, this))
-{
-    qCDebug(LOG_PLASMA) << " From KPluginMetaData, valid? " << info.isValid();
-    // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-    d->init();
-    d->setupPackage();
-}
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 28)
-Applet::Applet(const KPluginInfo &info, QObject *parent, uint appletId)
-    : Applet(info.toMetaData(), parent, appletId)
-{
-}
-#endif
-
-Applet::Applet(QObject *parent, const QString &serviceID, uint appletId)
-    : QObject(parent)
-    , d(new AppletPrivate(KPluginMetaData(serviceID), appletId, this))
-{
-    // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-    d->init();
-    d->setupPackage();
-}
-
-Applet::Applet(QObject *parentObject, const QVariantList &args)
-    : QObject(nullptr)
-    , d(new AppletPrivate(KPluginMetaData(), args.count() > 2 ? args[2].toInt() : 0, this))
-{
-    setParent(parentObject);
-    if (!args.isEmpty()) {
-        const QVariant first = args.first();
-        if (first.canConvert<KPackage::Package>()) {
-            d->package = first.value<KPackage::Package>();
-        }
-    }
-    if (args.count() > 1) {
-        const QVariant second = args[1];
-        if (second.canConvert<QString>()) {
-            d->appletDescription = KPluginMetaData(second.toString());
-        } else if (second.canConvert<QVariantMap>()) {
-            auto metadata = second.toMap().value(QStringLiteral("MetaData")).toMap();
-            d->appletDescription = KPluginMetaData(QJsonObject::fromVariantMap(metadata), {});
-        }
-    }
-    d->icon = d->appletDescription.iconName();
-
-    if (args.contains(QVariant::fromValue(QStringLiteral("org.kde.plasma:force-create")))) {
-        setProperty("org.kde.plasma:force-create", true);
-    }
-
-    // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-    d->init(QString(), args.mid(3));
-    d->setupPackage();
-}
-
-Applet::Applet(const QString &packagePath, uint appletId)
-    : QObject(nullptr)
-    , d(new AppletPrivate(appletMetadataForDirectory(packagePath), appletId, this))
-{
-    d->init(packagePath);
-    d->setupPackage();
-}
-#endif
 
 Applet::Applet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
     : QObject(nullptr)
@@ -333,15 +253,6 @@ KConfigLoader *Applet::configScheme() const
     return d->configLoader;
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 6)
-Package Applet::package() const
-{
-    Package p;
-    p.d->internalPackage = new KPackage::Package(d->package);
-    return p;
-}
-#endif
-
 KPackage::Package Applet::kPackage() const
 {
     return d->package;
@@ -474,13 +385,6 @@ void Applet::setUserBackgroundHints(Plasma::Types::BackgroundHints hint)
         Q_EMIT effectiveBackgroundHintsChanged();
     }
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 28)
-KPluginInfo Applet::pluginInfo() const
-{
-    return KPluginInfo(d->appletDescription);
-}
-#endif
 
 KPluginMetaData Applet::pluginMetaData() const
 {
@@ -871,24 +775,6 @@ bool Applet::hasValidAssociatedApplication() const
 {
     return AssociatedApplicationManager::self()->appletHasValidAssociatedApplication(this);
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 19)
-Applet *Applet::loadPlasmoid(const QString &path, uint appletId)
-{
-    const KPluginMetaData md = appletMetadataForDirectory(path);
-    if (md.isValid()) {
-        QStringList types = md.serviceTypes();
-
-        if (types.contains(QLatin1String("Plasma/Containment")) || md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))) {
-            return new Containment(md, appletId);
-        } else {
-            return new Applet(md, nullptr, appletId);
-        }
-    }
-
-    return nullptr;
-}
-#endif
 
 QString Applet::filePath(const QByteArray &key, const QString &filename) const
 {

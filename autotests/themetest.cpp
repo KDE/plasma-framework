@@ -128,9 +128,6 @@ void ThemeTest::testThemeConfig_data()
     QTest::addColumn<QString>("themeName");
 
     QTest::addRow("new metadata style theme") << QStringLiteral("testtheme");
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-    QTest::addRow("old metadata format theme") << QStringLiteral("test_old_metadata_format_theme");
-#endif
 }
 
 void ThemeTest::testThemeConfig()

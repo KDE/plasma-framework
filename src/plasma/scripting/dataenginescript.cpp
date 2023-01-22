@@ -6,9 +6,6 @@
 
 #include "dataenginescript.h"
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-#include "package.h"
-#endif
 #include "private/dataengine_p.h"
 #include "private/service_p.h"
 
@@ -63,25 +60,6 @@ Service *DataEngineScript::serviceForSource(const QString &source)
     Q_ASSERT(d->dataEngine);
     return new NullService(source, d->dataEngine);
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-QString DataEngineScript::mainScript() const
-{
-    Q_ASSERT(d->dataEngine);
-    return d->dataEngine->package().filePath("mainscript");
-}
-
-Package DataEngineScript::package() const
-{
-    Q_ASSERT(d->dataEngine);
-    return d->dataEngine->package();
-}
-
-KPluginInfo DataEngineScript::description() const
-{
-    return KPluginInfo(metadata());
-}
-#endif
 
 KPluginMetaData DataEngineScript::metadata() const
 {

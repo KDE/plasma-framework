@@ -12,10 +12,8 @@ target_sources(KF6PlasmaQuick PRIVATE
     debug_p.cpp
     dialog.cpp
     dialogshadows.cpp
-    view.cpp
     containmentview.cpp
     configmodel.cpp
-    shellpluginloader.cpp
     configview.cpp
     packageurlinterceptor.cpp
     private/configcategory_p.cpp
@@ -89,7 +87,7 @@ ecm_generate_export_header(KF6PlasmaQuick
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
-    DEPRECATION_VERSIONS 5.12 5.25 5.36
+    DEPRECATION_VERSIONS
 )
 
 set(plasmaquick_LIB_INCLUDES

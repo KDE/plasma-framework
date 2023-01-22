@@ -22,18 +22,13 @@
 
 #include <Plasma/ContainmentActions>
 #include <Plasma/Corona>
-#include <Plasma/Package>
 #include <Plasma/Plasma>
 #include <Plasma/PluginLoader>
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"
 
-#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
-#include <kdeclarative/configpropertymap.h>
-#else
 #include <KConfigPropertyMap>
-#endif
 #include <kdeclarative/qmlobject.h>
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
@@ -142,11 +137,7 @@ void AppletInterface::init()
         return;
     }
 
-#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
-    m_configuration = new KDeclarative::ConfigPropertyMap(applet()->configScheme(), this);
-#else
     m_configuration = new KConfigPropertyMap(applet()->configScheme(), this);
-#endif
 
     AppletQuickItem::init();
 
@@ -686,12 +677,6 @@ QString AppletInterface::configurationRequiredReason() const
 void AppletInterface::setConfigurationRequiredReason(const QString &reason)
 {
     appletScript()->setConfigurationRequired(applet()->configurationRequired(), reason);
-}
-
-QString AppletInterface::downloadPath(const QString &file)
-{
-    Q_UNUSED(file);
-    return downloadPath();
 }
 
 QString AppletInterface::downloadPath() const

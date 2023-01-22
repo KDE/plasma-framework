@@ -19,7 +19,6 @@ target_sources(KF6Plasma PRIVATE
 #global
     plasma.cpp
     pluginloader.cpp
-    version.cpp
 
 #applets,containments,corona
     applet.cpp
@@ -54,13 +53,6 @@ target_sources(KF6Plasma PRIVATE
     scripting/scriptengine.cpp
 )
 
-if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
-   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.83.0)
-    #packages
-    target_sources(KF6Plasma PRIVATE package.cpp packagestructure.cpp)
-endif()
-
-
 if(HAVE_X11)
     target_sources(KF6Plasma PRIVATE private/effectwatcher.cpp)
 endif()
@@ -83,7 +75,7 @@ ecm_generate_export_header(KF6Plasma
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
-    DEPRECATION_VERSIONS 5.6 5.19 5.28 5.30 5.36 5.46 5.67 5.77 5.78 5.81 5.83 5.85 5.86 5.88 5.94
+    DEPRECATION_VERSIONS
 )
 
 if(HAVE_X11)
@@ -119,10 +111,6 @@ PRIVATE
 )
 
 if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
-   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.94.0)
-    target_link_libraries(KF6Plasma PUBLIC KF6::Service) # For kplugininfo.h and kservice.h
-endif()
-if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
    EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.100.0)
     target_link_libraries(KF6Plasma PUBLIC KF6::Package)
 else()
@@ -153,8 +141,6 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
         DataEngineConsumer
         PluginLoader
         FrameSvg
-        Package
-        PackageStructure
         Service
         ServiceJob
         Svg
@@ -162,11 +148,6 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
         Plasma
     REQUIRED_HEADERS Plasma_HEADERS
     PREFIX Plasma
-)
-
-set(Plasma_HEADERS
-    ${Plasma_HEADERS}
-    version.h
 )
 
 set(PlasmaScripting_HEADERS

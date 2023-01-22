@@ -62,16 +62,7 @@ KPluginMetaData metaDataForTheme(const QString &theme)
     }
     if (QFileInfo::exists(packageBasePath + QLatin1String("/metadata.json"))) {
         return KPluginMetaData::fromJsonFile(packageBasePath + QLatin1String("/metadata.json"));
-    }
-#if KCOREADDONS_BUILD_DEPRECATED_SINCE(5, 92)
-    else if (QFileInfo::exists(packageBasePath + QLatin1String("/metadata.desktop"))) {
-        QT_WARNING_PUSH
-        QT_WARNING_DISABLE_DEPRECATED
-        return KPluginMetaData::fromDesktopFile(packageBasePath + QLatin1String("/metadata.desktop"));
-        QT_WARNING_POP
-    }
-#endif
-    else {
+    } else {
         qCWarning(LOG_PLASMA) << "Could not locate metadata for theme" << theme;
         return {};
     }

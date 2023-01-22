@@ -8,9 +8,6 @@
 #define PLASMA_DATAENGINESCRIPT_H
 
 #include <plasma/plasma_export.h>
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <KPluginInfo>
-#endif
 
 #include <plasma/dataengine.h>
 #include <plasma/scripting/scriptengine.h>
@@ -86,31 +83,6 @@ public:
     virtual Service *serviceForSource(const QString &source);
 
 protected:
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-    /**
-     * @return absolute path to the main script file for this plasmoid
-     */
-    QString mainScript() const override;
-
-    /**
-     * @return the Package associated with this plasmoid which can
-     *         be used to request resources, such as images and
-     *         interface files.
-     */
-    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
-    Package package() const override;
-#endif
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
-    /**
-     * @return the KPluginInfo associated with this dataengine
-     *
-     * @deprecated since 5.67 use metadata()
-     */
-    PLASMA_DEPRECATED_VERSION(5, 67, "Use KPluginMetaData metadata()")
-    KPluginInfo description() const;
-#endif
-
     /**
      * @return the KPluginMetaData associated with this dataengine
      *
@@ -145,14 +117,6 @@ private:
     DataEngineScriptPrivate *const d;
 };
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
-/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
-#define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE(libname, classname) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
-
-/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
-#define K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON(libname, classname, jsonFile)                                                                         \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
-#endif
 } // Plasma namespace
 
 #endif

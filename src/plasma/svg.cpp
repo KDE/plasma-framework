@@ -32,7 +32,6 @@
 
 #include "applet.h"
 #include "debug_p.h"
-#include "package.h"
 #include "theme.h"
 
 uint qHash(const Plasma::SvgPrivate::CacheId &id, uint seed)

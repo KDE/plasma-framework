@@ -15,9 +15,6 @@
 
 #include <KConfigGroup>
 #include <plasma/plasma_export.h>
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <KPluginInfo>
-#endif
 
 #include <plasma/framesvg.h>
 #include <plasma/plasma.h>
@@ -109,46 +106,6 @@ public:
      * @Since 5.86
      */
     Applet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args);
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
-    /**
-     * @param parent the QObject this applet is parented to
-     * @param serviceId the name of the .desktop file containing the
-     *      information about the widget
-     * @param appletId a unique id used to differentiate between multiple
-     *      instances of the same Applet type
-     * @deprecated Since 5.86, use Applet(QObject *, KPluginMetaData, QVariantList) instead
-     */
-    PLASMA_DEPRECATED_VERSION(5, 86, "use Applet(QObject *, KPluginMetaData, QVariantList) instead")
-    explicit Applet(QObject *parent = nullptr, const QString &serviceId = QString(), uint appletId = 0);
-#endif
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
-    /**
-     * @param parent the QObject this applet is parented to
-     * @param info the plugin information object for this Applet
-     * @param appletId a unique id used to differentiate between multiple
-     *      instances of the same Applet type
-     * @since 4.6
-     *
-     * @deprecated Since 5.28, prefer using KPluginMetaData
-     */
-    PLASMA_DEPRECATED_VERSION(5, 28, "Use Applet(const KPluginMetaData &, QObject *, uint")
-    explicit Applet(const KPluginInfo &info, QObject *parent = nullptr, uint appletId = 0);
-#endif
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
-    /**
-     * @param parent the QObject this applet is parented to
-     * @param metadata the plugin information object for this Applet
-     * @param appletId a unique id used to differentiate between multiple
-     *      instances of the same Applet type
-     * @since 5.27
-     * @deprecated Since 5.86, use Applet(QObject *, KPluginMetaData, QVariantList) instead
-     */
-    PLASMA_DEPRECATED_VERSION(5, 86, "use Applet(QObject *, KPluginMetaData, QVariantList) instead")
-    explicit Applet(const KPluginMetaData &metadata, QObject *parent = nullptr, uint appletId = 0);
-#endif
 
     ~Applet() override;
 
@@ -298,18 +255,6 @@ public:
     void setUserConfiguring(bool configuring);
 
 // UTILS
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
-    /**
-     * Accessor for the associated Package object if any.
-     * Generally, only Plasmoids come in a Package.
-     *
-     * @return the Package object, or an invalid one if none
-     * @deprecated Since 5.6, use kPackage() instead
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 6, "Use Applet::kPackage()")
-    Package package() const;
-#endif
-
 #if PLASMA_ENABLE_DEPRECATED_SINCE(5, 100)
     /**
      * Accessor for the associated Package object if any.
@@ -331,17 +276,7 @@ public:
      */
     void updateConstraints(Plasma::Types::Constraints constraints = Plasma::Types::AllConstraints);
 
-// METADATA
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 28)
-    /**
-     * @return metadata information about this plugin
-     * @see KPluginInfo, pluginMetaData
-     * @since 5.0
-     * @deprecated Since 5.28, use pluginMetaData instead
-     */
-    PLASMA_DEPRECATED_VERSION(5, 28, "Use Applet::pluginMetaData()")
-    KPluginInfo pluginInfo() const;
-#endif
+    // METADATA
 
     /**
      * @return metadata information about this plugin
@@ -367,29 +302,6 @@ public:
      * @param title the user-visible title for the applet.
      */
     void setTitle(const QString &title);
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 19)
-    /**
-     * Attempts to load an applet from a package
-     *
-     * Returns a pointer to the applet if successful.
-     * The caller takes responsibility for the applet, including
-     * deleting it when no longer needed.
-     * If you instance a plasmoid with this deprecated API, the
-     * automated default setup scripts won't be executed for that plasmoid
-     *
-     * @param path the path to the package
-     * @param appletId unique ID to assign the applet, or zero to have one
-     *        assigned automatically.
-     * @return a pointer to the loaded applet, or 0 on load failure
-     * @since 4.3
-     *
-     * @deprecated Since 5.19, use Containment::createApplet() instead, you are not
-     * supposed to have applets without containments
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 19, "Use Containment::createApplet(...)")
-    static Applet *loadPlasmoid(const QString &path, uint appletId = 0);
-#endif
 
     /**
      * @returns The icon name related to this applet
@@ -715,22 +627,6 @@ public Q_SLOTS:
     void runAssociatedApplication();
 
 protected:
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 86)
-    /**
-     * This constructor is to be used with the plugin loading systems
-     * found in KPluginInfo and KService. The argument list is expected
-     * to have two elements: the KService service ID for the desktop entry
-     * and an applet ID which must be a base 10 number.
-     *
-     * @param parent a QObject parent; you probably want to pass in 0
-     * @param args a list of strings containing two entries: the service id
-     *      and the applet id
-     * @deprecated Since 5.86, use Applet(QObject *, KPluginMetaData, QVariantList) instead
-     */
-    PLASMA_DEPRECATED_VERSION(5, 86, "use Applet(QObject *, KPluginMetaData, QVariantList) instead")
-    Applet(QObject *parent, const QVariantList &args);
-#endif
-
     // CONFIGURATION
     /**
      * When called, the Applet should write any information needed as part
@@ -838,21 +734,5 @@ private:
 };
 
 } // Plasma namespace
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
-
-/**
- * Register an applet when it is contained in a loadable module
- * @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
- */
-/* clang-format off */
-#define K_EXPORT_PLASMA_APPLET(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
-
-/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
-#define K_EXPORT_PLASMA_APPLET_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
-/* clang-format on */
-#endif
 
 #endif // multiple inclusion guard

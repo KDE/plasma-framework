@@ -13,9 +13,6 @@
 #include <QTimer>
 
 #include <plasmaquick/plasmaquick_export.h>
-#if PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <Plasma/Package>
-#endif
 
 //
 //  W A R N I N G
@@ -87,18 +84,6 @@ public:
 
     // Make the constructor lighter and delay the actual instantiation of the qml in the applet
     virtual void init();
-
-#if PLASMAQUICK_ENABLE_DEPRECATED_SINCE(5, 36)
-    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
-    Plasma::Package appletPackage() const;
-    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
-    void setAppletPackage(const Plasma::Package &package);
-
-    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
-    Plasma::Package coronaPackage() const;
-    PLASMAQUICK_DEPRECATED_VERSION(5, 36, "No longer use")
-    void setCoronaPackage(const Plasma::Package &package);
-#endif
 
     QQuickItem *compactRepresentationItem();
     QQuickItem *fullRepresentationItem();

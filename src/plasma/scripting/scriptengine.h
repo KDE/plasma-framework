@@ -9,9 +9,6 @@
 
 #include <plasma/plasma.h>
 #include <plasma/plasma_export.h>
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <plasma/package.h>
-#endif
 
 #include <QObject>
 #include <QRect>
@@ -53,17 +50,6 @@ protected:
      * @return absolute path to the main script file for this plasmoid
      */
     virtual QString mainScript() const;
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-    /**
-     * @return the Package associated with this plasmoid which can
-     *         be used to request resources, such as images and
-     *         interface files.
-     * @deprecated Since 5.83 Use kpackage API instead
-     */
-    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
-    virtual Package package() const;
-#endif
 
 private:
     ScriptEnginePrivate *const d;

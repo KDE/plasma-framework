@@ -6,13 +6,13 @@
 
 #include "pluginloader.h"
 
+#include <QPluginLoader>
 #include <QPointer>
 #include <QStandardPaths>
 
 #include <KLazyLocalizedString>
 #include <KRuntimePlatform>
 #include <KService>
-#include <KServiceTypeTrader>
 #include <QDebug>
 #include <QRegularExpression>
 #include <kcoreaddons_export.h>
@@ -25,12 +25,7 @@
 #include "containmentactions.h"
 #include "dataengine.h"
 #include "debug_p.h"
-#include "package.h"
 #include "private/applet_p.h"
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-#include "private/package_p.h"
-#include "private/packagestructure_p.h"
-#endif
 #include "private/service_p.h" // for NullService
 #include "private/storage_p.h"
 
@@ -38,11 +33,7 @@ namespace Plasma
 {
 inline bool isContainmentMetaData(const KPluginMetaData &md)
 {
-    return md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))
-#if KCOREADDONS_BUILD_DEPRECATED_SINCE(5, 89)
-        || md.serviceTypes().contains(QLatin1String("Plasma/Containment"))
-#endif
-        ;
+    return md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"));
 }
 static PluginLoader *s_pluginLoader = nullptr;
 
@@ -55,9 +46,6 @@ public:
     }
 
     static QSet<QString> s_customCategories;
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-    QHash<QString, QPointer<PackageStructure>> structures;
-#endif
     bool isDefaultLoader;
 
     static QString s_dataEnginePluginDir;
@@ -101,22 +89,8 @@ PluginLoader::PluginLoader()
 
 PluginLoader::~PluginLoader()
 {
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-    for (const auto &wp : std::as_const(d->structures)) {
-        delete wp;
-    }
-#endif
     delete d;
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-void PluginLoader::setPluginLoader(PluginLoader *loader)
-{
-    if (!s_pluginLoader) {
-        s_pluginLoader = loader;
-    }
-}
-#endif
 
 PluginLoader *PluginLoader::self()
 {
@@ -137,14 +111,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return nullptr;
     }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-    Applet *applet = d->isDefaultLoader ? nullptr : internalLoadApplet(name, appletId, args);
-    if (applet) {
-        return applet;
-    }
-#else
     Applet *applet = nullptr;
-#endif
 
     if (appletId == 0) {
         appletId = ++AppletPrivate::s_maxAppletId;
@@ -192,112 +159,9 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     return applet;
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
-DataEngine *PluginLoader::loadDataEngine(const QString &name)
-{
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-    DataEngine *engine = d->isDefaultLoader ? nullptr : internalLoadDataEngine(name);
-    if (engine) {
-        return engine;
-    }
-#else
-    DataEngine *engine = nullptr;
-#endif
-
-    // Look for C++ plugins first
-    KPluginMetaData plugin = d->dataengineCache.findPluginById(name, PluginLoaderPrivate::s_dataEnginePluginDir);
-    if (plugin.isValid()) {
-        const QVariantList args{QVariant::fromValue(plugin)};
-        engine = KPluginFactory::instantiatePlugin<Plasma::DataEngine>(plugin, nullptr, args).plugin;
-    }
-    if (engine) {
-        return engine;
-    }
-
-    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), name);
-    if (!p.isValid()) {
-        return nullptr;
-    }
-
-    return new DataEngine(p.metadata(), nullptr);
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
-QStringList PluginLoader::listAllEngines(const QString &parentApp)
-{
-    QStringList engines;
-    // Look for C++ plugins first
-    auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
-        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp;
-    };
-    QVector<KPluginMetaData> plugins;
-    if (parentApp.isEmpty()) {
-        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
-    } else {
-        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
-    }
-
-    for (auto &plugin : std::as_const(plugins)) {
-        engines << plugin.pluginId();
-    }
-
-    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages(QStringLiteral("Plasma/DataEngine"));
-    for (const auto &plugin : packagePlugins) {
-        engines << plugin.pluginId();
-    }
-
-    return engines;
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
-KPluginInfo::List PluginLoader::listEngineInfo(const QString &parentApp)
-{
-    return PluginLoader::self()->listDataEngineInfo(parentApp);
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 81)
-KPluginInfo::List PluginLoader::listEngineInfoByCategory(const QString &category, const QString &parentApp)
-{
-    KPluginInfo::List list;
-
-    // Look for C++ plugins first
-    auto filterNormal = [&category](const KPluginMetaData &md) -> bool {
-        return md.value(QStringLiteral("X-KDE-PluginInfo-Category")) == category;
-    };
-    auto filterParentApp = [&category, &parentApp](const KPluginMetaData &md) -> bool {
-        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp //
-            && md.value(QStringLiteral("X-KDE-PluginInfo-Category")) == category;
-    };
-    QVector<KPluginMetaData> plugins;
-    if (parentApp.isEmpty()) {
-        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterNormal);
-    } else {
-        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filterParentApp);
-    }
-
-    list = KPluginInfo::fromMetaData(plugins);
-
-    // TODO FIXME: PackageLoader needs to have a function to inject packageStructures
-    const QList<KPluginMetaData> packagePlugins = KPackage::PackageLoader::self()->listPackages(QStringLiteral("Plasma/DataEngine"));
-    list << KPluginInfo::fromMetaData(packagePlugins.toVector());
-
-    return list;
-}
-#endif
-
 Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
 {
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-    Service *service = d->isDefaultLoader ? nullptr : internalLoadService(name, args, parent);
-    if (service) {
-        return service;
-    }
-#else
     Service *service = nullptr;
-#endif
 
     // TODO: scripting API support
     if (name.isEmpty()) {
@@ -327,12 +191,6 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     if (name.isEmpty()) {
         return nullptr;
     }
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-    ContainmentActions *actions = d->isDefaultLoader ? nullptr : internalLoadContainmentActions(parent, name, args);
-    if (actions) {
-        return actions;
-    }
-#endif
 
     KPluginMetaData plugin = d->containmentactionCache.findPluginById(name, PluginLoaderPrivate::s_containmentActionsPluginDir);
 
@@ -342,86 +200,9 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
         }
     }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 88)
-    QString constraint = QStringLiteral("[X-KDE-PluginInfo-Name] == '%1'").arg(name);
-    KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
-
-    if (offers.isEmpty()) {
-#ifndef NDEBUG
-        qCDebug(LOG_PLASMA) << "offers is empty for " << name;
-#endif
-        return nullptr;
-    }
-
-    KService::Ptr offer = offers.first();
-    qCWarning(LOG_PLASMA) << "Plugin" << name << "was loaded using deprecated KServiceTypeTrader."
-                          << "Use embedded json metadata and install the plugin in plasma/containmentactions namespace instead";
-
-    KPluginMetaData data(offer->library());
-    QVariantList allArgs;
-    allArgs << offer->storageId() << args;
-
-    return KPluginFactory::instantiatePlugin<Plasma::ContainmentActions>(data, nullptr, allArgs).plugin;
-#else
     return nullptr;
-#endif
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-Package PluginLoader::loadPackage(const QString &packageFormat, const QString &specialization)
-{
-    if (!d->isDefaultLoader) {
-        Package p = internalLoadPackage(packageFormat, specialization);
-        if (p.hasValidStructure()) {
-            return p;
-        }
-    }
-
-    if (packageFormat.isEmpty()) {
-        return Package();
-    }
-
-    const QString hashkey = packageFormat + QLatin1Char('%') + specialization;
-    PackageStructure *structure = d->structures.value(hashkey).data();
-
-    if (structure) {
-        return Package(structure);
-    }
-
-    KPackage::PackageStructure *internalStructure = KPackage::PackageLoader::self()->loadPackageStructure(packageFormat);
-
-    if (internalStructure) {
-        structure = new PackageStructure();
-        structure->d->internalStructure = internalStructure;
-        // fallback to old structures
-    } else {
-        auto filter = [packageFormat](const KPluginMetaData &md) -> bool {
-            return md.value(QStringLiteral("X-KDE-PluginInfo-Name")) == packageFormat;
-        };
-
-        const QVector<KPluginMetaData> plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_packageStructurePluginDir, filter);
-
-        if (!plugins.isEmpty()) {
-            if (auto res = KPluginFactory::instantiatePlugin<Plasma::PackageStructure>(plugins.first())) {
-                structure = res.plugin;
-            } else {
-                qWarning() << "Error loading plugin:" << res.errorString;
-            }
-
-            if (structure) {
-                structure->d->internalStructure = new PackageStructureWrapper(structure);
-            }
-        }
-    }
-
-    if (structure) {
-        d->structures.insert(hashkey, structure);
-        return Package(structure);
-    }
-
-    return Package();
-}
-#endif
 QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const QString &parentApp)
 {
     auto platforms = KRuntimePlatform::runtimePlatform();
@@ -489,41 +270,6 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category)
     return listAppletMetaDataInternal(category, QString());
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 88)
-QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category, const QString &parentApp)
-{
-    return listAppletMetaDataInternal(category, parentApp);
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 28)
-KPluginInfo::List PluginLoader::listAppletInfo(const QString &category, const QString &parentApp)
-{
-    const auto plugins = listAppletMetaData(category, parentApp);
-
-#if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)
-    KPluginInfo::List list;
-    // NOTE: it still produces kplugininfos from KServices because some user code expects
-    // info.service() to be valid and would crash otherwise
-    for (const auto &md : plugins) {
-        QT_WARNING_PUSH
-        QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
-        QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
-        auto pi = md.metaDataFileName().endsWith(QLatin1String(".json")) ? KPluginInfo(md) : KPluginInfo(KService::serviceByStorageId(md.metaDataFileName()));
-        QT_WARNING_POP
-        if (!pi.isValid()) {
-            qCWarning(LOG_PLASMA) << "Could not load plugin info for plugin :" << md.pluginId() << "skipping plugin";
-            continue;
-        }
-        list << pi;
-    }
-    return list;
-#else
-    return KPluginInfo::fromMetaData(plugins.toVector());
-#endif
-}
-#endif
-
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString &mimeType)
 {
     auto filter = [&mimeType](const KPluginMetaData &md) -> bool {
@@ -531,12 +277,6 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString
     };
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 }
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-KPluginInfo::List PluginLoader::listAppletInfoForMimeType(const QString &mimeType)
-{
-    return KPluginInfo::fromMetaData(listAppletMetaDataForMimeType(mimeType).toVector());
-}
-#endif
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
 {
@@ -566,13 +306,6 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
 
     return filtered;
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 36)
-KPluginInfo::List PluginLoader::listAppletInfoForUrl(const QUrl &url)
-{
-    return KPluginInfo::fromMetaData(listAppletMetaDataForUrl(url).toVector());
-}
-#endif
 
 QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool visibleOnly)
 {
@@ -624,13 +357,6 @@ QString PluginLoader::appletCategory(const QString &appletName)
     return p.metadata().category();
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-KPluginInfo::List PluginLoader::listContainments(const QString &category, const QString &parentApp)
-{
-    return listContainmentsOfType(QString(), category, parentApp);
-}
-#endif
-
 QList<KPluginMetaData> PluginLoader::listContainmentsMetaData(std::function<bool(const KPluginMetaData &)> filter)
 {
     auto ownFilter = [filter](const KPluginMetaData &md) -> bool {
@@ -649,67 +375,6 @@ QList<KPluginMetaData> PluginLoader::listContainmentsMetaDataOfType(const QStrin
     return listContainmentsMetaData(filter);
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-KPluginInfo::List PluginLoader::listContainmentsOfType(const QString &type, const QString &category, const QString &parentApp)
-{
-    auto filter = [&type, &category, &parentApp](const KPluginMetaData &md) -> bool {
-        if (isContainmentMetaData(md)) {
-            return false;
-        }
-        if (!parentApp.isEmpty() && md.value(QStringLiteral("X-KDE-ParentApp")) != parentApp) {
-            return false;
-        }
-
-        if (!type.isEmpty() && md.value(QStringLiteral("X-Plasma-ContainmentType")) != type) {
-            return false;
-        }
-
-        if (!category.isEmpty() && md.value(QStringLiteral("X-KDE-PluginInfo-Category")) != category) {
-            return false;
-        }
-
-        return true;
-    };
-
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-KPluginInfo::List PluginLoader::listContainmentsForMimeType(const QString &mimeType)
-{
-    auto filter = [&mimeType](const KPluginMetaData &md) -> bool {
-        return isContainmentMetaData(md) && md.value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimeType);
-    };
-
-    return KPluginInfo::fromMetaData(KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter).toVector());
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-QStringList PluginLoader::listContainmentTypes()
-{
-    const KPluginInfo::List containmentInfos = listContainments();
-    QSet<QString> types;
-
-    for (const KPluginInfo &containmentInfo : containmentInfos) {
-        const QStringList theseTypes = containmentInfo.property(QStringLiteral("X-Plasma-ContainmentType")).toStringList();
-        for (const QString &type : theseTypes) {
-            types.insert(type);
-        }
-    }
-
-    return types.values();
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
-KPluginInfo::List PluginLoader::listDataEngineInfo(const QString &parentApp)
-{
-    return KPluginInfo::fromMetaData(listDataEngineMetaData(parentApp));
-}
-#endif
-
 QVector<KPluginMetaData> PluginLoader::listDataEngineMetaData(const QString &parentApp)
 {
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
@@ -726,13 +391,6 @@ QVector<KPluginMetaData> PluginLoader::listDataEngineMetaData(const QString &par
     return plugins;
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 77)
-KPluginInfo::List PluginLoader::listContainmentActionsInfo(const QString &parentApp)
-{
-    return KPluginInfo::fromMetaData(listContainmentActionsMetaData(parentApp));
-}
-#endif
-
 QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QString &parentApp)
 {
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
@@ -746,130 +404,8 @@ QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QStr
         plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir, filter);
     }
 
-#if KSERVICE_BUILD_DEPRECATED_SINCE(5, 0)
-    QSet<QString> knownPlugins;
-    for (const KPluginMetaData &p : std::as_const(plugins)) {
-        knownPlugins.insert(p.pluginId());
-    }
-    QString constraint;
-    if (!parentApp.isEmpty()) {
-        constraint = QLatin1String("[X-KDE-ParentApp] == '") + parentApp + QLatin1Char('\'');
-    }
-    const KService::List offers = KServiceTypeTrader::self()->query(QStringLiteral("Plasma/ContainmentActions"), constraint);
-    for (KService::Ptr s : offers) {
-        if (!knownPlugins.contains(s->pluginKeyword())) {
-            QT_WARNING_PUSH
-            QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
-            QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
-            plugins.append(KPluginInfo(s).toMetaData());
-            QT_WARNING_POP
-        }
-    }
-#endif
-
     return plugins;
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-Applet *PluginLoader::internalLoadApplet(const QString &name, uint appletId, const QVariantList &args)
-{
-    Q_UNUSED(name)
-    Q_UNUSED(appletId)
-    Q_UNUSED(args)
-    return nullptr;
-}
-
-DataEngine *PluginLoader::internalLoadDataEngine(const QString &name)
-{
-    Q_UNUSED(name)
-    return nullptr;
-}
-
-ContainmentActions *PluginLoader::internalLoadContainmentActions(Containment *containment, const QString &name, const QVariantList &args)
-{
-    Q_UNUSED(containment)
-    Q_UNUSED(name)
-    Q_UNUSED(args)
-    return nullptr;
-}
-
-Service *PluginLoader::internalLoadService(const QString &name, const QVariantList &args, QObject *parent)
-{
-    Q_UNUSED(name)
-    Q_UNUSED(args)
-    Q_UNUSED(parent)
-    return nullptr;
-}
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-Package PluginLoader::internalLoadPackage(const QString &name, const QString &specialization)
-{
-    Q_UNUSED(name);
-    Q_UNUSED(specialization);
-    return Package();
-}
-#endif
-
-KPluginInfo::List PluginLoader::internalAppletInfo(const QString &category) const
-{
-    Q_UNUSED(category)
-    return KPluginInfo::List();
-}
-
-KPluginInfo::List PluginLoader::internalDataEngineInfo() const
-{
-    return KPluginInfo::List();
-}
-
-KPluginInfo::List PluginLoader::internalServiceInfo() const
-{
-    return KPluginInfo::List();
-}
-
-KPluginInfo::List PluginLoader::internalContainmentActionsInfo() const
-{
-    return KPluginInfo::List();
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 88)
-static KPluginInfo::List standardInternalInfo(const QString &type, const QString &category = QString())
-{
-    QStringList files = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation,
-                                                  QLatin1String(PLASMA_RELATIVE_DATA_INSTALL_DIR "/internal/") + type + QLatin1String("/*.desktop"),
-                                                  QStandardPaths::LocateFile);
-
-    const KPluginInfo::List allInfo = KPluginInfo::fromFiles(files);
-
-    if (category.isEmpty() || allInfo.isEmpty()) {
-        return allInfo;
-    }
-
-    KPluginInfo::List matchingInfo;
-    for (const KPluginInfo &info : allInfo) {
-        if (info.category().compare(category, Qt::CaseInsensitive) == 0) {
-            matchingInfo << info;
-        }
-    }
-
-    return matchingInfo;
-}
-
-KPluginInfo::List PluginLoader::standardInternalAppletInfo(const QString &category) const
-{
-    return standardInternalInfo(QStringLiteral("applets"), category);
-}
-
-KPluginInfo::List PluginLoader::standardInternalDataEngineInfo() const
-{
-    return standardInternalInfo(QStringLiteral("dataengines"));
-}
-
-KPluginInfo::List PluginLoader::standardInternalServiceInfo() const
-{
-    return standardInternalInfo(QStringLiteral("services"));
-}
-#endif
 
 KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, const QString &pluginNamespace)
 {

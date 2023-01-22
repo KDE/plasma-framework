@@ -29,39 +29,11 @@ class PLASMA_EXPORT Corona : public QObject
     Q_OBJECT
     Q_PROPERTY(bool isStartupCompleted READ isStartupCompleted NOTIFY startupCompleted)
     Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
-    Q_PROPERTY(Package package READ package NOTIFY packageChanged)
-#endif
     Q_PROPERTY(KPackage::Package kPackage READ kPackage NOTIFY kPackageChanged)
 
 public:
     explicit Corona(QObject *parent = nullptr);
     ~Corona() override;
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
-    /**
-     * Accessor for the associated Package object if any.
-     * A Corona package defines how Containments are laid out in a View,
-     * ToolBoxes, default layout, error messages
-     * and in general all the furniture specific of a particular
-     * device form factor.
-     *
-     * @return the Package object, or an invalid one if none
-     * @since 5.0
-     * @deprecated Since 5.6, use kPackage instead
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 6, "Use Corona::kPackage()")
-    Plasma::Package package() const;
-#endif
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
-    /**
-     * Setting the package name
-     * @deprecated Since 5.6, use setKPackage instead
-     */
-    PLASMA_DEPRECATED_VERSION(5, 6, "Use Corona::setKPackage(const KPackage::Package &)")
-    void setPackage(const Plasma::Package &package);
-#endif
 
     /**
      * Accessor for the associated Package object if any.
@@ -128,33 +100,6 @@ public:
      */
     Containment *
     containmentForScreen(int screen, const QString &activity, const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs = QVariantList());
-
-    // TODO KF6: add activity here, can't be done now as the overload would get confused
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 46)
-    /**
-     * Returns the Containment, if any, for a given physical screen
-     *
-     * @param screen number of the physical screen to locate
-     * @deprecated Since 5.46, use containmentForScreen(int, const QString &, const QString &, const QVariantList &)
-     */
-    PLASMA_DEPRECATED_VERSION(5, 46, "Use Corona::containmentForScreen(int, const QString &, const QString &, const QVariantList &)")
-    Containment *containmentForScreen(int screen) const;
-#endif
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 46)
-    /**
-     * Returns the Containment for a given physical screen and desktop, creating one
-     * if none exists
-     *
-     * @param screen number of the physical screen to locate
-     * @param defaultPluginIfNonExistent the plugin to load by default; "null" is an empty
-     * Containment and "default" creates the default plugin
-     * @param defaultArgs optional arguments to pass in when creating a Containment if needed
-     * @deprecated Since 5.46, use containmentForScreen(int, const QString &, const QString &, const QVariantList &)
-     */
-    PLASMA_DEPRECATED_VERSION(5, 46, "Use Corona::containmentForScreen(int, const QString &, const QString &, const QVariantList &)")
-    Containment *containmentForScreen(int screen, const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs = QVariantList());
-#endif
 
     /**
      * Returns all containments which match a particular activity, for any screen
@@ -376,18 +321,6 @@ Q_SIGNALS:
      * @since 5.63
      */
     void editModeChanged(bool edit);
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 6)
-    /**
-     * Emitted when the package for this corona has been changed.
-     * Shells must support changing the shell package on the fly (for instance due to device form factor changing)
-     *
-     * @param package the new package that defines the Corona furniture and behavior
-     * @deprecated Since 5.6, use kPackageChanged instead
-     */
-    PLASMA_DEPRECATED_VERSION(5, 6, "Use Corona::kPackageChanged(const KPackage::Package &)")
-    void packageChanged(const Plasma::Package &package);
-#endif
 
     /**
      * Emitted when the package for this corona has been changed.

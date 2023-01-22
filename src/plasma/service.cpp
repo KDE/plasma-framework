@@ -22,7 +22,6 @@
 
 #include "debug_p.h"
 #include "pluginloader.h"
-#include "version.h"
 
 namespace Plasma
 {

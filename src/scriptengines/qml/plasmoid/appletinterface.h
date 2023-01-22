@@ -30,9 +30,6 @@ class KConfigPropertyMap;
 
 namespace KDeclarative
 {
-#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
-class ConfigPropertyMap;
-#endif
 class QmlObject;
 }
 
@@ -368,13 +365,6 @@ public:
     Q_INVOKABLE QString downloadPath() const;
 
     /**
-     * @returns A path where it is safe to write on disk downloaded files.
-     * @param file that name of the file to download (unused).
-     * @deprecated Since 5,23, use downloadPath() instead.
-     */
-    Q_INVOKABLE PLASMA_DEPRECATED QString downloadPath(const QString &file);
-
-    /**
      * @returns The list of files that have been downloaded
      */
     Q_INVOKABLE QStringList downloadedFiles() const;
@@ -553,11 +543,7 @@ private:
     QStringList m_actions;
     QHash<QString, QActionGroup *> m_actionGroups;
 
-#if KDECLARATIVE_BUILD_DEPRECATED_SINCE(5, 89)
-    KDeclarative::ConfigPropertyMap *m_configuration;
-#else
     KConfigPropertyMap *m_configuration;
-#endif
     DeclarativeAppletScript *m_appletScriptEngine;
 
     // UI-specific members ------------------

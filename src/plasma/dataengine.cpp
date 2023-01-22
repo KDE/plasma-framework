@@ -21,7 +21,6 @@
 #include <KLocalizedString>
 
 #include "datacontainer.h"
-#include "package.h"
 #include "pluginloader.h"
 #include "scripting/dataenginescript.h"
 #include "service.h"
@@ -32,13 +31,6 @@
 
 namespace Plasma
 {
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 67)
-DataEngine::DataEngine(const KPluginInfo &plugin, QObject *parent)
-    : DataEngine(plugin.toMetaData(), parent)
-{
-}
-#endif
-
 DataEngine::DataEngine(const KPluginMetaData &plugin, QObject *parent)
     : QObject(parent)
     , d(new DataEnginePrivate(this, plugin))
@@ -92,13 +84,6 @@ Service *DataEngine::serviceForSource(const QString &source)
 
     return new NullService(source, this);
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 67)
-KPluginInfo DataEngine::pluginInfo() const
-{
-    return KPluginInfo(d->dataEngineDescription);
-}
-#endif
 
 KPluginMetaData DataEngine::metadata() const
 {
@@ -390,12 +375,6 @@ void DataEngine::forceImmediateUpdateOfAllVisualizations()
         }
     }
 }
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-Package DataEngine::package() const
-{
-    return d->package ? *d->package : Package();
-}
-#endif
 
 void DataEngine::setStorageEnabled(const QString &source, bool store)
 {
@@ -422,40 +401,12 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
         valid = true;
         e->setObjectName(dataEngineDescription.name());
     }
-
-    if (dataEngineDescription.isValid()) {
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-
-        QString api = dataEngineDescription.value(QStringLiteral("X-Plasma-API"));
-
-        if (!api.isEmpty()) {
-            const QString path = QStandardPaths::locate(QStandardPaths::GenericDataLocation,
-                                                        QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/dataengines/") + dataEngineDescription.pluginId(),
-                                                        QStandardPaths::LocateDirectory);
-            package = new Package(PluginLoader::self()->loadPackage(QStringLiteral("Plasma/DataEngine"), api));
-            package->setPath(path);
-
-            if (package->isValid()) {
-                script = Plasma::loadScriptEngine(api, q, args);
-            }
-
-            if (!script) {
-                delete package;
-                package = nullptr;
-            }
-        }
-#endif
-    }
 }
 
 DataEnginePrivate::~DataEnginePrivate()
 {
     delete script;
     script = nullptr;
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-    delete package;
-    package = nullptr;
-#endif
 }
 
 void DataEnginePrivate::internalUpdateSource(DataContainer *source)

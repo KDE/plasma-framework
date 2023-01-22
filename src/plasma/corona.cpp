@@ -28,11 +28,6 @@
 #include "private/containment_p.h"
 #include "private/timetracker.h"
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-#include "packagestructure.h"
-#include "private/package_p.h"
-#endif
-
 using namespace Plasma;
 
 namespace Plasma
@@ -57,19 +52,6 @@ Corona::~Corona()
 
     delete d;
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 6)
-Plasma::Package Corona::package() const
-{
-    return Package(d->package);
-}
-
-void Corona::setPackage(const Plasma::Package &package)
-{
-    setKPackage(*package.d->internalPackage);
-    Q_EMIT packageChanged(package);
-}
-#endif
 
 KPackage::Package Corona::kPackage() const
 {
@@ -177,26 +159,6 @@ QList<Plasma::Containment *> Corona::importLayout(const KConfigGroup &conf)
 {
     return d->importLayout(conf, true);
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 46)
-Containment *Corona::containmentForScreen(int screen) const
-{
-    for (Containment *containment : std::as_const(d->containments)) {
-        if (containment->screen() == screen //
-            && (containment->containmentType() == Plasma::Types::DesktopContainment //
-                || containment->containmentType() == Plasma::Types::CustomContainment)) {
-            return containment;
-        }
-    }
-
-    return nullptr;
-}
-
-Containment *Corona::containmentForScreen(int screen, const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
-{
-    return containmentForScreen(screen, QString(), defaultPluginIfNonExistent, defaultArgs);
-}
-#endif
 
 Containment *Corona::containmentForScreen(int screen, const QString &activity, const QString &defaultPluginIfNonExistent, const QVariantList &defaultArgs)
 {

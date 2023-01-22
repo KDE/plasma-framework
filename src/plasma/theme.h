@@ -12,11 +12,8 @@
 #include <QGuiApplication>
 #include <QObject>
 
-#include <plasma/plasma_export.h>
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <KPluginInfo>
-#endif
 #include <KSharedConfig>
+#include <plasma/plasma_export.h>
 
 class KPluginMetaData;
 
@@ -269,72 +266,6 @@ public:
      *  temporarily (for a few seconds) grow bigger than the limit.
      **/
     void setCacheLimit(int kbytes);
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 78)
-    /**
-     * Tries to load the rect of a sub element from a disk cache
-     *
-     * @param image path of the image we want to check
-     * @param element sub element we want to retrieve
-     * @param rect output parameter of the element rect found in cache
-     *           if not found or if we are sure it doesn't exist it will be QRect()
-     * @return true if the element was found in cache or if we are sure the element doesn't exist
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 78, "Rects Cache public API is deprecated")
-    bool findInRectsCache(const QString &image, const QString &element, QRectF &rect) const;
-
-    /**
-     * Returns a list of all keys of cached rects for the given image.
-     *
-     * @param image path of the image for which the keys should be returned
-     *
-     * @return a QStringList whose elements are the entry keys in the rects cache
-     *
-     * @since 4.6
-     */
-    PLASMA_DEPRECATED_VERSION(5, 78, "Rects Cache public API is deprecated")
-    QStringList listCachedRectKeys(const QString &image) const;
-
-    /**
-     * Inserts a rectangle of a sub element of an image into a disk cache
-     *
-     * @param image path of the image we want to insert information
-     * @param element sub element we want insert the rect
-     * @param rect element rectangle
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 78, "Rects Cache public API is deprecated")
-    void insertIntoRectsCache(const QString &image, const QString &element, const QRectF &rect);
-
-    /**
-     * Discards all the information about a given image from the rectangle disk cache
-     *
-     * @param image the path to the image the cache is associated with
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 78, "Rects Cache public API is deprecated")
-    void invalidateRectsCache(const QString &image);
-
-    /**
-     * Frees up memory used by cached information for a given image without removing
-     * the permanent record of it on disk.
-     * @see invalidateRectsCache
-     *
-     * @param image the path to the image the cache is associated with
-     */
-    PLASMA_DEPRECATED_VERSION(5, 78, "Rects Cache public API is deprecated")
-    void releaseRectsCache(const QString &image);
-#endif
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
-    /**
-     * @return plugin info for this theme, with information such as
-     * name, description, author, website etc
-     * @since 5.0
-     *
-     * @deprecated since 5.67, use KPluginMetaData
-     */
-    PLASMA_DEPRECATED_VERSION(5, 67, "Use KPluginMetaData metadata()")
-    KPluginInfo pluginInfo() const;
-#endif
 
     /**
      * @return plugin metadata for this theme, with information such as

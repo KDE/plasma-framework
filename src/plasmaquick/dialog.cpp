@@ -8,13 +8,12 @@
 */
 
 #include "dialog.h"
+#include "../declarativeimports/core/config-x11.h"
 #include "../declarativeimports/core/framesvgitem.h"
 #include "appletquickitem.h"
 #include "config-plasma.h"
-#include "../declarativeimports/core/config-x11.h"
 #include "configview.h"
 #include "dialogshadows_p.h"
-#include "view.h"
 
 #include <QLayout>
 #include <QMenu>
@@ -1424,11 +1423,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         const QWindow *focusWindow = QGuiApplication::focusWindow();
         bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || (focusWindow->type() & Qt::Popup) == Qt::Popup);
 
-        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow)
-#if PLASMAQUICK_BUILD_DEPRECATED_SINCE(5, 83)
-            || qobject_cast<const View *>(focusWindow)
-#endif
-            || qobject_cast<const ConfigView *>(focusWindow);
+        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const ConfigView *>(focusWindow);
 
         if (viewClicked || (!parentHasFocus && !childHasFocus)) {
             setVisible(false);

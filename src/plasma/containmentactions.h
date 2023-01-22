@@ -10,9 +10,6 @@
 #include <QList>
 
 #include <plasma/plasma_export.h>
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <KPluginInfo>
-#endif
 
 #include <plasma/plasma.h>
 
@@ -52,18 +49,6 @@ public:
     explicit ContainmentActions(QObject *parent = nullptr);
 
     ~ContainmentActions() override;
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
-    /**
-     * @return the plugin info for this ContainmentActions instance,
-     *         including name, pluginName and icon
-     * @since 5.0
-     *
-     * @deprecated since 5.67, use metadata
-     */
-    PLASMA_DEPRECATED_VERSION(5, 67, "use metadata()")
-    KPluginInfo pluginInfo() const;
-#endif
 
     /**
      * @return metadata for this ContainmentActions instance
@@ -152,16 +137,5 @@ private:
 };
 
 } // Plasma namespace
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
-/**
- * Register a containmentactions when it is contained in a loadable module
- * @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
- */
-/* clang-format off */
-#define K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
-/* clang-format on */
-#endif
 
 #endif // PLASMA_CONTAINMENTACTIONS_H

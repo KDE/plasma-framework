@@ -12,10 +12,6 @@
 #include <QStringList>
 
 #include <plasma/plasma_export.h>
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <KPluginInfo>
-#include <KService>
-#endif
 
 #include <KPluginFactory>
 #include <KPluginMetaData>
@@ -57,19 +53,6 @@ public:
     typedef QMapIterator<QString, QVariant> DataIterator;
     typedef QHash<QString, DataContainer *> SourceDict;
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
-    /**
-     * Constructor.
-     *
-     * @param parent The parent object.
-     * @param plugin plugin info that describes the engine
-     *
-     * @deprecated since 5.67
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 67, "Use KPluginMetaData")
-    explicit DataEngine(const KPluginInfo &plugin, QObject *parent = nullptr);
-#endif
-
     /**
      * Constructor.
      *
@@ -99,16 +82,6 @@ public:
      *         caller when finished with it
      */
     Q_INVOKABLE virtual Service *serviceForSource(const QString &source);
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 67)
-    /**
-     * @return description of the plugin that implements this DataEngine
-     *
-     * @deprecated since 5.67, use metadata
-     */
-    PLASMA_DEPRECATED_VERSION(5, 67, "Use metadata()")
-    KPluginInfo pluginInfo() const;
-#endif
 
     /**
      * @return description of the plugin that implements this DataEngine
@@ -215,16 +188,6 @@ public:
      * @return true if the engine has no sources currently
      */
     bool isEmpty() const;
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 83)
-    /**
-     * Accessor for the associated Package object if any.
-     *
-     * @return the Package object, or 0 if none
-     **/
-    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
-    Package package() const;
-#endif
 
 Q_SIGNALS:
     /**
@@ -456,20 +419,5 @@ private:
 };
 
 } // Plasma namespace
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
-/**
- * Register a data engine when it is contained in a loadable module
- * @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
- */
-/* clang-format off */
-#define K_EXPORT_PLASMA_DATAENGINE(libname, classname) \
-    K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
-
-/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
-#define K_EXPORT_PLASMA_DATAENGINE_WITH_JSON(libname, classname, jsonFile) \
-    K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
-/* clang-format on */
-#endif
 
 #endif // multiple inclusion guard

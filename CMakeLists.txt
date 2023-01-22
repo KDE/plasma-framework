@@ -70,10 +70,6 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         Wayland
         DocTools
 )
-if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
-   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.94.0)
-    find_package(KF6 ${KF_DEP_VERSION} REQUIRED COMPONENTS Service)
-endif()
 
 set_package_properties(KF6Wayland PROPERTIES DESCRIPTION "Integration with the Wayland compositor"
                        TYPE OPTIONAL

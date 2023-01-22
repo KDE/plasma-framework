@@ -46,36 +46,6 @@ Containment::Containment(QObject *parentObject, const KPluginMetaData &data, con
     setHasConfigurationInterface(true);
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 86)
-Containment::Containment(QObject *parent, const QString &serviceId, uint containmentId)
-    : Applet(parent, serviceId, containmentId)
-    , d(new ContainmentPrivate(this))
-{
-    // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-    setContainmentType(Types::CustomContainment);
-    setHasConfigurationInterface(true);
-}
-
-Containment::Containment(QObject *parent, const QVariantList &args)
-    : Applet(parent, args)
-    , d(new ContainmentPrivate(this))
-{
-    // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-    setHasConfigurationInterface(true);
-}
-
-Containment::Containment(const KPluginMetaData &md, uint appletId)
-    : Applet(md, nullptr, appletId)
-    , d(new ContainmentPrivate(this))
-{
-    // WARNING: do not access config() OR globalConfig() in this method!
-    //          that requires a scene, which is not available at this point
-    setHasConfigurationInterface(true);
-}
-#endif
-
 Containment::~Containment()
 {
     qDeleteAll(d->localActionPlugins);

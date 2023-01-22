@@ -322,72 +322,12 @@ void Theme::insertIntoCache(const QString &key, const QPixmap &pix, const QStrin
     }
 }
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 78)
-bool Theme::findInRectsCache(const QString &image, const QString &element, QRectF &rect) const
-{
-    if (!d->useCache()) {
-        return false;
-    }
-
-    bool ok = false;
-    uint id = element.toLong(&ok);
-    if (!ok) {
-        return false;
-    }
-
-    return SvgRectsCache::instance()->findElementRect(id, image, rect);
-}
-
-QStringList Theme::listCachedRectKeys(const QString &image) const
-{
-    if (!d->useCache()) {
-        return QStringList();
-    }
-
-    return SvgRectsCache::instance()->cachedKeysForPath(image);
-}
-
-void Theme::insertIntoRectsCache(const QString &image, const QString &element, const QRectF &rect)
-{
-    if (!d->useCache()) {
-        return;
-    }
-
-    bool ok = false;
-    uint id = element.toLong(&ok);
-    if (!ok) {
-        return;
-    }
-
-    uint secs = QDateTime::currentSecsSinceEpoch();
-    SvgRectsCache::instance()->insert(id, image, rect, secs);
-}
-
-void Theme::invalidateRectsCache(const QString &image)
-{
-    SvgRectsCache::instance()->dropImageFromCache(image);
-}
-
-void Theme::releaseRectsCache(const QString &image)
-{
-    Q_UNUSED(image);
-    // No op: the internal svg cache always writes the invalid elements in the proper place
-}
-#endif
-
 void Theme::setCacheLimit(int kbytes)
 {
     d->cacheSize = kbytes;
     delete d->pixmapCache;
     d->pixmapCache = nullptr;
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 67)
-KPluginInfo Theme::pluginInfo() const
-{
-    return KPluginInfo(d->pluginMetaData);
-}
-#endif
 
 KPluginMetaData Theme::metadata() const
 {

@@ -23,6 +23,7 @@
 #include <QFileInfo>
 #include <QJsonObject>
 #include <QMap>
+#include <QPluginLoader>
 #include <QStandardPaths>
 #include <QStringList>
 #include <QTimer>
@@ -61,10 +62,6 @@ void PluginTest::runMain()
     //     //loadKQPlugin();
     qDebug() << "::: loadKPlugin() == " << loadKPlugin();
     //
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
-    qDebug() << " - - - -- - - - - ------------------------------------\n";
-    qDebug() << "::: loadFromPlasma() == " << loadFromPlasma();
-#endif
     exit(0);
     return;
 }
@@ -104,26 +101,6 @@ bool PluginTest::loadKPlugin()
     // KQPluginFactory* factory = new KQPluginFactory(KPluginInfo(), this);
     return ok;
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 94)
-bool PluginTest::loadFromPlasma()
-{
-    bool ok = false;
-    const QStringList allEngines = Plasma::PluginLoader::self()->listAllEngines();
-    qDebug() << "All engines: " << allEngines;
-    for (const QString &e : allEngines) {
-        Plasma::DataEngine *engine = Plasma::PluginLoader::self()->loadDataEngine(e);
-        if (engine) {
-            engine->connectSource(QStringLiteral("Europe/Amsterdam"), this);
-            engine->connectSource(QStringLiteral("Battery"), this);
-            engine->connectAllSources(this);
-            qDebug() << "SOURCE: " << engine->sources();
-            ok = true;
-        }
-    }
-    return ok;
-}
-#endif
 
 void PluginTest::loadKQPlugin()
 {

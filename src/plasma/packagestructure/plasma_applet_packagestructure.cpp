@@ -39,11 +39,7 @@ public:
         if (!md.isValid()) {
             return;
         }
-        if (md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))
-#if KCOREADDONS_BUILD_DEPRECATED_SINCE(5, 89)
-            || md.serviceTypes().contains(QLatin1String("Plasma/Containment"))
-#endif
-        ) {
+        if (md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))) {
             package->addFileDefinition("compactapplet", QStringLiteral("applet/CompactApplet.qml"), i18n("Custom expander for compact applets"));
         } else {
             package->removeDefinition("compactapplet");

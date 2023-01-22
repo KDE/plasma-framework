@@ -13,7 +13,6 @@
 #include <QQmlEngine>
 #include <QStandardPaths>
 
-#include <Plasma/Package>
 #include <Plasma/PluginLoader>
 
 #include <kdeclarative/kdeclarative.h>

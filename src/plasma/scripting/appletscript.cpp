@@ -9,9 +9,6 @@
 #include "kconfig.h"
 
 #include "applet.h"
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-#include "package.h"
-#endif
 #include "private/applet_p.h"
 
 namespace Plasma
@@ -92,22 +89,6 @@ QString AppletScript::mainScript() const
     Q_ASSERT(d->applet);
     return d->applet->filePath("mainscript");
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-Package AppletScript::package() const
-{
-    Q_ASSERT(d->applet);
-    return d->applet->package();
-}
-#endif
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 81)
-KPluginInfo AppletScript::description() const
-{
-    Q_ASSERT(d->applet);
-    return d->applet->pluginInfo();
-}
-#endif
 
 Plasma::Types::ContainmentType AppletScript::containmentType() const
 {

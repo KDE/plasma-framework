@@ -12,7 +12,6 @@
 #include "applet.h"
 #include "dataengine.h"
 #include "debug_p.h"
-#include "package.h"
 #include "scripting/appletscript.h"
 #include "scripting/dataenginescript.h"
 
@@ -51,13 +50,6 @@ bool ScriptEngine::init()
 {
     return true;
 }
-
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-Package ScriptEngine::package() const
-{
-    return Package();
-}
-#endif
 
 QString ScriptEngine::mainScript() const
 {

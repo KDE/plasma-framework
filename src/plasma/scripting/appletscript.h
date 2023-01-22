@@ -12,9 +12,6 @@
 #include <QSizeF>
 
 #include <plasma/plasma_export.h>
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 94)
-#include <KPluginInfo>
-#endif
 
 #include <plasma/containment.h>
 #include <plasma/scripting/scriptengine.h>
@@ -137,39 +134,12 @@ protected:
      */
     QString mainScript() const override;
 
-#if PLASMA_BUILD_DEPRECATED_SINCE(5, 83)
-
-    /**
-     * @return the Package associated with this plasmoid which can
-     *         be used to request resources, such as images and
-     *         interface files.
-     */
-    PLASMA_DEPRECATED_VERSION(5, 83, "Use kpackage API instead")
-    Package package() const override;
-#endif
-
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 81)
-    /**
-     * @return the KPluginInfo associated with this plasmoid
-     * @deprecated since 5.81, use applet()->pluginMetaData() instead.
-     */
-    PLASMA_DEPRECATED_VERSION(5, 81, "Use applet()->pluginMetaData() instead.")
-    KPluginInfo description() const;
-#endif
-
 private:
     friend class Applet;
 
     AppletScriptPrivate *const d;
 };
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 88)
-/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
-#define K_EXPORT_PLASMA_APPLETSCRIPTENGINE(libname, classname) K_PLUGIN_FACTORY(factory, registerPlugin<classname>();)
-
-/// @deprecated Since 5.88, use K_PLUGIN_CLASS_WITH_JSON instead
-#define K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON(libname, classname, jsonFile) K_PLUGIN_FACTORY_WITH_JSON(factory, jsonFile, registerPlugin<classname>();)
-#endif
 } // Plasma namespace
 
 #endif
