@@ -201,7 +201,7 @@ if(BUILD_QCH)
             Mainpage.dox
         MD_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md"
         LINK_QCHS
-            Qt5Gui_QCH
+            Qt6Gui_QCH
             KF6Service_QCH
             KF6Package_QCH
         INCLUDE_DIRS
