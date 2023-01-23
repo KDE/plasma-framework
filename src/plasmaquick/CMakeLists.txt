@@ -53,6 +53,7 @@ target_link_libraries(KF6PlasmaQuick
         KF6::XmlGui
         KF6::Declarative
         KF6::QuickAddons
+        KF6::Package
 )
 
 if(HAVE_KWAYLAND)
