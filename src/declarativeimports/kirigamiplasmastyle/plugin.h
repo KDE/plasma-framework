@@ -11,7 +11,7 @@
 #include <Kirigami/KirigamiPluginFactory>
 #include <QObject>
 
-class Plugin : public Kirigami::KirigamiPluginFactoryV2
+class Plugin : public Kirigami::KirigamiPluginFactory
 {
     Q_OBJECT
 

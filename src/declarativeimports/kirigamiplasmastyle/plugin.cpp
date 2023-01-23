@@ -9,7 +9,7 @@
 #include "units.h"
 
 Plugin::Plugin(QObject *parent)
-    : Kirigami::KirigamiPluginFactoryV2(parent)
+    : Kirigami::KirigamiPluginFactory(parent)
 {
 }
 
