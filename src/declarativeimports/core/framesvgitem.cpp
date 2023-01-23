@@ -19,7 +19,7 @@
 #include <plasma/private/framesvg_helpers.h>
 #include <plasma/private/framesvg_p.h>
 
-#include <QuickAddons/ImageTexturesCache>
+#include <KQuickAddons/ImageTexturesCache>
 
 #include <cmath> //floor()
 

@@ -15,8 +15,6 @@
 
 #include <Plasma/PluginLoader>
 
-#include <kdeclarative/kdeclarative.h>
-
 namespace PlasmaQuick
 {
 class PackageUrlInterceptorPrivate

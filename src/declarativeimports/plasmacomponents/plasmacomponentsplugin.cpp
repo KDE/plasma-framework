@@ -15,8 +15,6 @@
 #include <KSharedConfig>
 #include <QDebug>
 
-#include <kdeclarative/kdeclarative.h>
-
 #include "enums.h"
 #include "qmenu.h"
 #include "qmenuitem.h"

@@ -14,8 +14,6 @@
 #include <QScreen>
 #include <QTimer>
 
-#include "plasma/pluginloader.h"
-#include <kdeclarative/kdeclarative.h>
 #include <packageurlinterceptor.h>
 
 namespace PlasmaQuick

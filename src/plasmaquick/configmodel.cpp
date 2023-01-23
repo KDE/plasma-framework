@@ -22,7 +22,6 @@
 #include <KLocalizedString>
 #include <KPackage/Package>
 #include <KQuickAddons/ConfigModule>
-#include <kdeclarative/kdeclarative.h>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
