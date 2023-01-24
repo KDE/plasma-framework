@@ -110,12 +110,7 @@ PRIVATE
     ${PLASMA_EXTRA_LIBS}
 )
 
-if(NOT EXCLUDE_DEPRECATED_BEFORE_AND_AT STREQUAL "CURRENT" AND
-   EXCLUDE_DEPRECATED_BEFORE_AND_AT VERSION_LESS 5.100.0)
-    target_link_libraries(KF6Plasma PUBLIC KF6::Package)
-else()
-    target_link_libraries(KF6Plasma PRIVATE KF6::Package)
-endif()
+target_link_libraries(KF6Plasma PRIVATE KF6::Package)
 
 set(Plasma_BUILD_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/..

@@ -19,14 +19,10 @@
 #include <plasma/framesvg.h>
 #include <plasma/plasma.h>
 
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 100)
-#include <KPackage/Package>
-#else
 namespace KPackage
 {
 class Package;
 }
-#endif
 namespace PlasmaQuick
 {
 class AppletQuickItem;
@@ -254,19 +250,7 @@ public:
      */
     void setUserConfiguring(bool configuring);
 
-// UTILS
-#if PLASMA_ENABLE_DEPRECATED_SINCE(5, 100)
-    /**
-     * Accessor for the associated Package object if any.
-     * Generally, only Plasmoids come in a Package.
-     *
-     * @return the Package object, or an invalid one if none
-     * @since 5.6
-     * @deprecated Since 5.100, accessing an applets KPackage is deprecated. For using the metadata, use @p pluginMetaData instead.
-     **/
-    KPackage::Package kPackage() const;
-#endif
-
+    // UTILS
     /**
      * Called when any of the geometry constraints have been updated.
      * This method calls constraintsEvent, which may be reimplemented,
@@ -692,9 +676,7 @@ protected:
 
 private:
     QString filePath(const QByteArray &key, const QString &filename = QString()) const;
-#if !PLASMA_ENABLE_DEPRECATED_SINCE(5, 100)
     KPackage::Package kPackage() const;
-#endif
     /**
      * @internal This constructor is to be used with the Package loading system.
      *
