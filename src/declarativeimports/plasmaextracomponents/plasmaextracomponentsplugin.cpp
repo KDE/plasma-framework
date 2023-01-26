@@ -15,6 +15,9 @@
 // #include <KSharedConfig>
 // #include <KConfigGroup>
 
+#include "qmenu.h"
+#include "qmenuitem.h"
+
 void PlasmaExtraComponentsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
     Q_ASSERT(uri == QByteArray("org.kde.plasma.extras"));
@@ -25,4 +28,7 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
 {
     Q_ASSERT(uri == QByteArray("org.kde.plasma.extras"));
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
+    qmlRegisterType<QMenuProxy>(uri, 2, 0, "Menu");
+    qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
+    qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", {});
 }
