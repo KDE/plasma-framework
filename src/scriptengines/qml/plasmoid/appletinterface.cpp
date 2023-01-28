@@ -873,7 +873,7 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
                 }
 
                 QAction *action = plugin->contextualActions().at(0);
-                action->setData(e->globalPos());
+                action->setData(e->globalPosition().toPoint());
                 action->trigger();
                 return true;
             }
@@ -887,7 +887,7 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
 
             if (!desktopMenu->isEmpty()) {
                 desktopMenu->setAttribute(Qt::WA_DeleteOnClose);
-                desktopMenu->popup(e->globalPos());
+                desktopMenu->popup(e->globalPosition().toPoint());
                 return true;
             }
 

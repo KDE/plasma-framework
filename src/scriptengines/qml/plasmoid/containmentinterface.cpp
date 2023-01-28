@@ -935,7 +935,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     Plasma::Applet *applet = nullptr;
     for (QObject *appletObject : std::as_const(m_appletInterfaces)) {
         if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
-            if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->localPos()))) {
+            if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->position()))) {
                 applet = ai->applet();
                 break;
             } else {
@@ -991,7 +991,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     }
     // end workaround
 
-    QPoint pos = event->globalPos();
+    QPoint pos = event->globalPosition().toPoint();
     if (window() && m_containment->containmentType() == Plasma::Types::PanelContainment) {
         desktopMenu->adjustSize();
 
@@ -1065,7 +1065,7 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
 void ContainmentInterface::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Menu) {
-        QMouseEvent me(QEvent::MouseButtonRelease, QPoint(), Qt::RightButton, Qt::RightButton, event->modifiers());
+        QMouseEvent me(QEvent::MouseButtonRelease, QPoint(), QPoint(), Qt::RightButton, Qt::RightButton, event->modifiers());
         mousePressEvent(&me);
         event->accept();
     }

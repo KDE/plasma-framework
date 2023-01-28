@@ -1516,11 +1516,11 @@ bool Dialog::event(QEvent *event)
         case QEvent::MouseButtonRelease: {
             QMouseEvent *me = static_cast<QMouseEvent *>(event);
             if (d->resizableEdges) {
-                if (event->type() == QEvent::MouseMove && d->updateMouseCursor(me->globalPos())) {
+                if (event->type() == QEvent::MouseMove && d->updateMouseCursor(me->globalPosition())) {
                     return QQuickWindow::event(event);
                 }
                 if (event->type() == QEvent::MouseButtonPress) {
-                    const QPointF globalMousePos = me->globalPos();
+                    const QPointF globalMousePos = me->globalPosition();
                     const Qt::Edges sides = d->hitTest(globalMousePos) & d->resizableEdges;
                     if (sides) {
                         startSystemResize(sides);
@@ -1531,11 +1531,11 @@ bool Dialog::event(QEvent *event)
 
             // don't mess with position if the cursor is actually outside the view:
             // somebody is doing a click and drag that must not break when the cursor is outside
-            if (geometry().contains(me->screenPos().toPoint()) && !d->mainItemContainsPosition(me->windowPos())) {
+            if (geometry().contains(me->globalPosition().toPoint()) && !d->mainItemContainsPosition(me->scenePosition())) {
                 QMouseEvent me2(me->type(),
-                                d->positionAdjustedForMainItem(me->windowPos()),
-                                d->positionAdjustedForMainItem(me->windowPos()),
-                                d->positionAdjustedForMainItem(me->windowPos()) + position(),
+                                d->positionAdjustedForMainItem(me->scenePosition()),
+                                d->positionAdjustedForMainItem(me->scenePosition()),
+                                d->positionAdjustedForMainItem(me->scenePosition()) + position(),
                                 me->button(),
                                 me->buttons(),
                                 me->modifiers());
@@ -1573,12 +1573,12 @@ bool Dialog::event(QEvent *event)
 
         case QEvent::DragEnter: {
             QDragEnterEvent *de = static_cast<QDragEnterEvent *>(event);
-            if (!d->mainItemContainsPosition(de->pos())) {
-                QDragEnterEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+            if (!d->mainItemContainsPosition(de->position())) {
+                QDragEnterEvent de2(d->positionAdjustedForMainItem(de->position()).toPoint(),
                                     de->possibleActions(),
                                     de->mimeData(),
-                                    de->mouseButtons(),
-                                    de->keyboardModifiers());
+                                    de->buttons(),
+                                    de->modifiers());
 
                 if (isVisible()) {
                     QCoreApplication::sendEvent(this, &de2);
@@ -1592,12 +1592,12 @@ bool Dialog::event(QEvent *event)
             break;
         case QEvent::DragMove: {
             QDragMoveEvent *de = static_cast<QDragMoveEvent *>(event);
-            if (!d->mainItemContainsPosition(de->pos())) {
-                QDragMoveEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
+            if (!d->mainItemContainsPosition(de->position())) {
+                QDragMoveEvent de2(d->positionAdjustedForMainItem(de->position()).toPoint(),
                                    de->possibleActions(),
                                    de->mimeData(),
-                                   de->mouseButtons(),
-                                   de->keyboardModifiers());
+                                   de->buttons(),
+                                   de->modifiers());
 
                 if (isVisible()) {
                     QCoreApplication::sendEvent(this, &de2);
@@ -1608,12 +1608,8 @@ bool Dialog::event(QEvent *event)
         }
         case QEvent::Drop: {
             QDropEvent *de = static_cast<QDropEvent *>(event);
-            if (!d->mainItemContainsPosition(de->pos())) {
-                QDropEvent de2(d->positionAdjustedForMainItem(de->pos()).toPoint(),
-                               de->possibleActions(),
-                               de->mimeData(),
-                               de->mouseButtons(),
-                               de->keyboardModifiers());
+            if (!d->mainItemContainsPosition(de->position())) {
+                QDropEvent de2(d->positionAdjustedForMainItem(de->position()).toPoint(), de->possibleActions(), de->mimeData(), de->buttons(), de->modifiers());
 
                 if (isVisible()) {
                     QCoreApplication::sendEvent(this, &de2);
