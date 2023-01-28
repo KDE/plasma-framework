@@ -74,7 +74,7 @@ void AppletQuickItemPrivate::init()
 #endif
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), KPackage::Package());
         interceptor->setForcePlasmaStyle(true);
-        qmlObject->engine()->setUrlInterceptor(interceptor);
+        qmlObject->engine()->addUrlInterceptor(interceptor);
     }
 }
 
@@ -574,7 +574,7 @@ void AppletQuickItem::init()
     if (d->applet->kPackage().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->kPackage());
         interceptor->addAllowedPath(d->coronaPackage.path());
-        engine->setUrlInterceptor(interceptor);
+        engine->addUrlInterceptor(interceptor);
     }
 
     // Force QtQuickControls to use the "Plasma" style for this engine.

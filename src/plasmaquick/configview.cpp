@@ -111,7 +111,7 @@ void ConfigViewPrivate::init()
     if (pkg.isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), pkg);
         interceptor->addAllowedPath(applet.data()->kPackage().path());
-        q->engine()->setUrlInterceptor(interceptor);
+        q->engine()->addUrlInterceptor(interceptor);
         new QQmlFileSelector(q->engine(), q->engine());
     }
 

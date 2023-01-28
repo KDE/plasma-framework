@@ -95,9 +95,13 @@ void ContainmentInterface::init()
                 pkg.setPath(QStringLiteral("org.kde.desktoptoolbox"));
             }
 
-            PlasmaQuick::PackageUrlInterceptor *interceptor = dynamic_cast<PlasmaQuick::PackageUrlInterceptor *>(qmlObject()->engine()->urlInterceptor());
-            if (interceptor) {
-                interceptor->addAllowedPath(pkg.path());
+            const auto interceptors = qmlObject()->engine()->urlInterceptors();
+            for (auto i : interceptors) {
+                PlasmaQuick::PackageUrlInterceptor *interceptor = dynamic_cast<PlasmaQuick::PackageUrlInterceptor *>(i);
+                if (interceptor) {
+                    interceptor->addAllowedPath(pkg.path());
+                    break;
+                }
             }
 
             if (pkg.metadata().isValid() && !pkg.metadata().isHidden()) {

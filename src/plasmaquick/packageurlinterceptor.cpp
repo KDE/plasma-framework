@@ -30,7 +30,6 @@ public:
 
     ~PackageUrlInterceptorPrivate()
     {
-        engine->setUrlInterceptor(nullptr);
         delete selector;
     }
 
@@ -51,6 +50,7 @@ PackageUrlInterceptor::PackageUrlInterceptor(QQmlEngine *engine, const KPackage:
 
 PackageUrlInterceptor::~PackageUrlInterceptor()
 {
+    d->engine->removeUrlInterceptor(this);
     delete d;
 }
 
