@@ -85,7 +85,7 @@ void StorageJob::start()
 void StorageJob::resultSlot(StorageJob *job, const QVariant &result)
 {
     if (job == this) {
-        if (result.type() == QVariant::Map) {
+        if (result.userType() == QMetaType::QVariantMap) {
             m_data = result.toMap();
         }
         setResult(result);

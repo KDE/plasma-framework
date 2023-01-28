@@ -110,7 +110,7 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
     QString ids;
     while (it.hasNext()) {
         it.next();
-        QSqlField field(QStringLiteral(":id"), QVariant::String);
+        QSqlField field(QStringLiteral(":id"), QMetaType(QMetaType::QString));
         field.setValue(it.key());
         if (!ids.isEmpty()) {
             ids.append(QStringLiteral(", "));
@@ -151,17 +151,17 @@ void StorageThread::save(QPointer<StorageJob> wcaller, const QVariantMap &params
 
         QString field;
         bool binary = false;
-        switch (it.value().type()) {
-        case QVariant::String:
+        switch (it.value().userType()) {
+        case QMetaType::QString:
             field = QStringLiteral(":txt");
             break;
-        case QVariant::Int:
+        case QMetaType::Int:
             field = QStringLiteral(":int");
             break;
-        case QVariant::Double:
+        case QMetaType::Double:
             field = QStringLiteral(":float");
             break;
-        case QVariant::ByteArray:
+        case QMetaType::QByteArray:
             binary = true;
             field = QStringLiteral(":binary");
             break;
