@@ -55,6 +55,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
     /**
      * Version of the QML2 script engine
+     * TODO KF6 Remove
      */
     Q_PROPERTY(int apiVersion READ apiVersion CONSTANT)
 
@@ -71,12 +72,14 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     /**
      * Main title for the plasmoid tooltip or other means of quick information:
      * it's the same as the title property by default, but it can be personalized
+     * TODO KF6 move in Applet: grouped proeprty or an independent attached property?
      */
     Q_PROPERTY(QString toolTipMainText READ toolTipMainText WRITE setToolTipMainText NOTIFY toolTipMainTextChanged)
 
     /**
      * Description for the plasmoid tooltip or other means of quick information:
      * it comes from the pluginifo comment by default, but it can be personalized
+     * TODO KF6 move in Applet
      */
     Q_PROPERTY(QString toolTipSubText READ toolTipSubText WRITE setToolTipSubText NOTIFY toolTipSubTextChanged)
 
@@ -87,6 +90,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * * Text.StyledText
      * * Text.RichText
      * Note: in the default implementation the main text is always plain text
+     * TODO KF6 move in Applet
      */
     Q_PROPERTY(int toolTipTextFormat READ toolTipTextFormat WRITE setToolTipTextFormat NOTIFY toolTipTextFormatChanged)
 
@@ -95,6 +99,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * It will ignore all texts set by setToolTipMainText or setToolTipSubText
      *
      * @since 5.19
+     * TODO KF6 where should this go?
      */
     Q_PROPERTY(QQuickItem *toolTipItem READ toolTipItem WRITE setToolTipItem NOTIFY toolTipItemChanged)
 
@@ -126,11 +131,13 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
 
     /**
      * Current activity name the plasmoid is in
+     * TODO KF6 in Applet but just as "activity"
      */
     Q_PROPERTY(QString currentActivity READ currentActivity NOTIFY contextChanged)
 
     /**
      * Configuration object: each config key will be a writable property of this object. property bindings work.
+     * TODO KF6 in Applet?
      */
     Q_PROPERTY(QObject *configuration READ configuration CONSTANT)
 
@@ -158,6 +165,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * Whether the Corona is immutable. The plasmoid implementation should avoid allowing "dangerous" modifications from the user when in an immutable mode
      *
      * This is true when immutability is not Mutable
+     * TODO KF6: port all usages to immutability property
      */
     Q_PROPERTY(bool immutable READ immutable NOTIFY immutabilityChanged)
 
@@ -207,6 +215,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * Whether the dialog should be hidden when the dialog loses focus.
      *
      * The default value is @c false.
+     * TODO KF6: move to Applet
      **/
     Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
 
@@ -246,11 +255,13 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(QVariantList availableScreenRegion READ availableScreenRegion NOTIFY availableScreenRegionChanged)
 
+    // TODO KF6 move somewhere gui-only?
     Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
     /**
      * The hints that the applet gives to its constraint,
      * such as asking to fill all the available space ignoring margins.
+     * TODO KF6 move to Applet
      */
     Q_PROPERTY(Plasma::Types::ConstraintHints constraintHints READ constraintHints WRITE setConstraintHints NOTIFY constraintHintsChanged)
 
@@ -274,6 +285,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      * things around.
      * This is global to the Corona, all containments will have the same value for editMode
      * @since 5.96
+     * TODO KF6 move to Applet
      */
     Q_PROPERTY(bool editMode READ isEditMode NOTIFY editModeChanged)
 

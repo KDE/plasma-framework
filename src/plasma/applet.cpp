@@ -678,6 +678,8 @@ void Applet::setGlobalShortcut(const QKeySequence &shortcut)
     QList<QKeySequence> seqs{shortcut};
     KGlobalAccel::self()->setShortcut(d->activationAction, seqs, KGlobalAccel::NoAutoloading);
     d->globalShortcutChanged();
+
+    Q_EMIT globalShortcutChanged(shortcut);
 }
 
 QKeySequence Applet::globalShortcut() const
@@ -734,6 +736,7 @@ void Applet::configChanged()
 
 void Applet::setAssociatedApplication(const QString &string)
 {
+    // TODO KF6: remove AssociatedApplicationManager, make it a simple property
     AssociatedApplicationManager::self()->setApplication(this, string);
 
     QAction *runAssociatedApplication = d->actions->action(QStringLiteral("run associated application"));
@@ -742,6 +745,8 @@ void Applet::setAssociatedApplication(const QString &string)
         runAssociatedApplication->setVisible(valid);
         runAssociatedApplication->setEnabled(valid);
     }
+
+    Q_EMIT associatedApplicationChanged(string);
 }
 
 void Applet::setAssociatedApplicationUrls(const QList<QUrl> &urls)
@@ -754,6 +759,8 @@ void Applet::setAssociatedApplicationUrls(const QList<QUrl> &urls)
         runAssociatedApplication->setVisible(valid);
         runAssociatedApplication->setEnabled(valid);
     }
+
+    Q_EMIT associatedApplicationUrlsChanged(urls);
 }
 
 QString Applet::associatedApplication() const

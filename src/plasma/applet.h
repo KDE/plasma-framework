@@ -64,14 +64,63 @@ class Package;
 class PLASMA_EXPORT Applet : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
-    Q_PROPERTY(Plasma::Types::ImmutabilityType immutability READ immutability WRITE setImmutability NOTIFY immutabilityChanged)
-    Q_PROPERTY(Plasma::Types::FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
-    Q_PROPERTY(Plasma::Types::Location location READ location NOTIFY locationChanged)
-    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints NOTIFY containmentDisplayHintsChanged)
+    /**
+     * Applet id: is unique in the whole Plasma session and will never change across restarts
+     */
+    Q_PROPERTY(uint id READ id CONSTANT FINAL)
+
+    /**
+     * User friendly title for the plasmoid: it's the localized applet name by default
+     */
     Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged FINAL)
+
+    /**
+     * Icon to represent the plasmoid
+     */
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged FINAL)
+
+    // TODO KF6 toolTipMainText toolTipSubText toolTipTextFormat toolTipItem: need to either be here or some other kind of attached property
+
+    /**
+     * The current form factor the applet is being displayed in.
+     *
+     * @see Plasma::FormFactor
+     */
+    Q_PROPERTY(Plasma::Types::FormFactor formFactor READ formFactor NOTIFY formFactorChanged)
+
+    /**
+     * The location of the scene which is displaying applet.
+     *
+     * @see Plasma::Types::Location
+     */
+    Q_PROPERTY(Plasma::Types::Location location READ location NOTIFY locationChanged)
+
+    /**
+     * Status of the plasmoid: useful to instruct the shell if this plasmoid is requesting attention, if is accepting input, or if is in an idle, inactive state
+     */
+    Q_PROPERTY(Plasma::Types::ItemStatus status READ status WRITE setStatus NOTIFY statusChanged)
+
+    /**
+     * The immutability of the Corona.
+     * Tells the applet whether it should allow for any modification by the user.
+     */
+    Q_PROPERTY(Plasma::Types::ImmutabilityType immutability READ immutability WRITE setImmutability NOTIFY immutabilityChanged)
+
+    /**
+     * Display hints that come from the containment that suggest the applet how to look and behave.
+     */
+    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints NOTIFY containmentDisplayHintsChanged)
+
+    /**
+     * True if the applet should show a busy status, for instance doing
+     * some network operation
+     */
     Q_PROPERTY(bool busy READ isBusy WRITE setBusy NOTIFY busyChanged FINAL)
+
+    /**
+     * True when the user is configuring, for instance when the configuration dialog is open.
+     */
+    Q_PROPERTY(bool userConfiguring READ isUserConfiguring NOTIFY userConfiguringChanged)
 
     /**
      * How the applet wants its background to be drawn. The containment may chose to ignore this hint.
@@ -87,6 +136,48 @@ class PLASMA_EXPORT Applet : public QObject
      * The effective background hints the applet has, internally decided how to mix with userBackgroundHints
      */
     Q_PROPERTY(Plasma::Types::BackgroundHints effectiveBackgroundHints READ effectiveBackgroundHints NOTIFY effectiveBackgroundHintsChanged FINAL)
+
+    /**
+     * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
+     */
+    Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication NOTIFY associatedApplicationChanged)
+
+    /**
+     * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
+     */
+    Q_PROPERTY(QList<QUrl> associatedApplicationUrls WRITE setAssociatedApplicationUrls READ associatedApplicationUrls NOTIFY associatedApplicationUrlsChanged)
+
+    // TODO KF6: activity, screen, screenGeometry, availableScreenRect, availableScreenRegion: should we instead make the containment accessible from qml
+    // plasmoids and ask from there?
+
+    // TODO KF6: configuration object
+
+    // TODO KF6: hideOnWindowDeactivate
+
+    /**
+     * The global shortcut to activate the plasmoid
+     *
+     * This is typically only used by the default configuration module
+     *
+     */
+    Q_PROPERTY(QKeySequence globalShortcut READ globalShortcut WRITE setGlobalShortcut RESET setGlobalShortcut NOTIFY globalShortcutChanged)
+
+    /**
+     * If true the applet requires manual configuration from the user
+     * TODO KF6: having just a reson property and required would be string not empty? Uglier from c++ pov but more straight forward from qml pov
+     */
+    Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired NOTIFY configurationRequiredChanged)
+
+    // TODO KF6: constraintHints
+
+    /**
+     * The metadata of the applet.
+     */
+    Q_PROPERTY(KPluginMetaData metaData READ pluginMetaData CONSTANT)
+
+    // TODO KF6: contextualActions along with AppletInterface::setAction etc, alsongside a declarative way?
+
+    // TODO KF6: editMode
 
 public:
     // CONSTRUCTORS
@@ -369,7 +460,7 @@ public:
     /**
      * Sets the global shortcut to associate with this widget.
      */
-    void setGlobalShortcut(const QKeySequence &shortcut);
+    void setGlobalShortcut(const QKeySequence &shortcut = QKeySequence());
 
     /**
      * @return the global shortcut associated with this widget, or
@@ -481,6 +572,21 @@ Q_SIGNALS:
      */
     void effectiveBackgroundHintsChanged();
 
+    /**
+     * Emitted when the associated application changes
+     */
+    void associatedApplicationChanged(const QString &application);
+
+    /**
+     * Emitted when the associated application urls changes
+     */
+    void associatedApplicationUrlsChanged(const QList<QUrl> &urls);
+
+    /**
+     * Emitted when the global shortcut to activate this applet has chanaged
+     */
+    void globalShortcutChanged(const QKeySequence &sequence);
+
     // CONFIGURATION
     /**
      * Emitted when an applet has changed values in its configuration
@@ -536,6 +642,7 @@ Q_SIGNALS:
      */
     void configurationRequiredChanged(bool needsConfig, const QString &reason);
 
+    // TODO KF6 keep as Q_SLOT only stuff that needsto be manually invokable from qml
 public Q_SLOTS:
     // BOOKKEEPING
     /**
@@ -687,6 +794,7 @@ private:
      */
     Applet(const QString &packagePath, uint appletId);
 
+    // TODO KF6: drop Q_PRIVATE_SLOT
     Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
     Q_PRIVATE_SLOT(d, void askDestroy())
     Q_PRIVATE_SLOT(d, void updateShortcuts())

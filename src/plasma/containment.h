@@ -107,6 +107,7 @@ public:
     /**
      * @return the screen number this containment is serving as the desktop for
      *         or -1 if none
+     * TODO KF6 virtual? this shouldbe available to applet as well
      */
     int screen() const;
 
@@ -150,6 +151,7 @@ public:
 
     /**
      * @return the current activity id associated with this containment
+     * TODO KF6: this should be available to Appelt as well as a property... virtual?
      */
     QString activity() const;
 
