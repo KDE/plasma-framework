@@ -381,7 +381,7 @@ void WindowThumbnail::iconToTexture(WindowTextureProvider *textureProvider)
         // fallback to plasma icon
         icon = QIcon::fromTheme(QStringLiteral("plasma"));
     }
-    QImage image = icon.pixmap(window(), boundingRect().size().toSize()).toImage();
+    QImage image = icon.pixmap(boundingRect().size().toSize(), window()->devicePixelRatio()).toImage();
     textureProvider->setTexture(window()->createTextureFromImage(image, QQuickWindow::TextureCanUseAtlas));
 }
 

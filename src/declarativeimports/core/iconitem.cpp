@@ -95,7 +95,7 @@ public:
     QPixmap pixmap(const QSize &size) override
     {
         KIconLoader::global()->setCustomPalette(Plasma::Theme::globalPalette());
-        QPixmap result = m_icon.pixmap(window(), m_icon.actualSize(size));
+        QPixmap result = m_icon.pixmap(m_icon.actualSize(size), window()->devicePixelRatio());
         KIconLoader::global()->resetPalette();
         return result;
     }
