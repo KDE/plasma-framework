@@ -1249,13 +1249,13 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         switch (d->location) {
         case Plasma::Types::TopEdge:
         case Plasma::Types::BottomEdge:
-            if (qAbs(parentRect.center().x() - avail.center().x() ) < size.width() / 2 - parentRect.width() / 3) {
+            if (qAbs(dialogPos.x() + size.width() / 2 - avail.center().x() ) < size.width() / 2 - parentRect.width() / 3) {
                 dialogPos.setX(avail.center().x() - size.width() / 2);
             }
             break;
         case Plasma::Types::LeftEdge:
         case Plasma::Types::RightEdge:
-            if (qAbs(parentRect.center().y() - avail.center().y() ) < size.height() / 2 - parentRect.height() / 3) {
+            if (qAbs(dialogPos.y() + size.height() / 2 - avail.center().y() ) < size.height() / 2 - parentRect.height() / 3) {
                 dialogPos.setY(avail.center().y() - size.height() / 2);
             }
             break;
