@@ -10,7 +10,7 @@ import QtQuick.Controls 2.15 as Controls
 import QtQuick.Layouts 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.components 3.0 as PC3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 ColumnLayout
@@ -19,9 +19,9 @@ ColumnLayout
         text: "Press the button and make sure the popup is on the correct place"
         wrapMode: Text.WordWrap
     }
-    PlasmaComponents.Button {
+    PC3.Button {
         id: settingsButton
-        iconSource: "configure"
+        icon.name: "configure"
         text: "Press Me"
         Layout.alignment: Qt.AlignHCenter
 
@@ -49,10 +49,10 @@ ColumnLayout
                 text: "Panel Alignment"
             }
 
-            PlasmaComponents.ButtonColumn {
-                spacing: 0
+            Column {
+                spacing: 5
                 Layout.fillWidth: true
-                PlasmaComponents.ToolButton {
+                PC3.ToolButton {
                     anchors {
                         left: parent.left
                         right: parent.right
@@ -61,7 +61,7 @@ ColumnLayout
                     checkable: true
                     flat: false
                 }
-                PlasmaComponents.ToolButton {
+                PC3.ToolButton {
                     anchors {
                         left: parent.left
                         right: parent.right
