@@ -7,7 +7,7 @@
 import QtQuick 2.1
 import QtQuick.Layouts 1.2
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.components 3.0 as PC3
 
 ColumnLayout {
     width: 600
@@ -42,7 +42,7 @@ ColumnLayout {
                         colorGroup: PlasmaCore.ColorScope.colorGroup
                         source: "audio-volume-medium"
                     }
-                    PlasmaComponents.Label {
+                    PC3.Label {
                         text: "Some text"
                     }
                 }
@@ -66,7 +66,7 @@ ColumnLayout {
              color: PlasmaCore.ColorScope.backgroundColor
          }
     }
-    PlasmaComponents.Button {
+    PC3.Button {
         y: 300
         text: "switch"
         onClicked: widgetsParent.parent == rect2 ? widgetsParent.parent = rect1 : widgetsParent.parent = rect2
