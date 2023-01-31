@@ -346,6 +346,16 @@ Item {
     width: parent ? parent.width : undefined // Assume that we will be used as a delegate, not placed in a layout
     height: mainLayout.height
 
+    Behavior on height {
+        SmoothedAnimation { // to match the highlight
+            id: heightAnimation
+            duration: listItem.ListView.view.highlightResizeDuration || -1
+            velocity: listItem.ListView.view.highlightResizeVelocity
+            easing.type: Easing.InOutCubic
+        }
+    }
+    clip: heightAnimation.running || expandedItemOpacityFade.running
+
     onEnabledChanged: if (!listItem.enabled) { collapse() }
 
     Keys.onPressed: event => {
@@ -570,106 +580,112 @@ Item {
 
 
             // Expanded view with actions and/or custom content in it
-            ColumnLayout {
+            Item {
                 id: expandedView
-
                 property bool expanded: false
 
-                visible: expanded
-
+                Layout.preferredHeight: expanded ?
+                    expandedViewLayout.implicitHeight + expandedViewLayout.anchors.topMargin + expandedViewLayout.anchors.bottomMargin : 0
                 Layout.fillWidth: true
-                Layout.margins: PlasmaCore.Units.smallSpacing
 
-                spacing: PlasmaCore.Units.smallSpacing
                 opacity: expanded ? 1 : 0
                 Behavior on opacity {
-                    NumberAnimation {
-                        duration: PlasmaCore.Units.veryLongDuration
+                    SmoothedAnimation { // to match the highlight
+                        id: expandedItemOpacityFade
+                        duration: listItem.ListView.view.highlightResizeDuration || -1
+                        // velocity is divided by the default speed, as we're in the range 0-1
+                        velocity: listItem.ListView.view.highlightResizeVelocity / 200
                         easing.type: Easing.InOutCubic
                     }
                 }
+                visible: opacity > 0
 
-                // Actions list
-                Loader {
-                    id: actionsListLoader
+                ColumnLayout {
+                    id: expandedViewLayout
+                    anchors.fill: parent
+                    anchors.margins: PlasmaCore.Units.smallSpacing
 
-                    visible: status === Loader.Ready
+                    spacing: PlasmaCore.Units.smallSpacing
 
-                    active: expandedView.expanded && listItem.enabledActions
+                    // Actions list
+                    Loader {
+                        id: actionsListLoader
 
-                    Layout.fillWidth: true
+                        visible: status === Loader.Ready
+                        active: expandedView.visible && listItem.enabledActions
 
-                    sourceComponent: Item {
-                        height: childrenRect.height
-                        width: actionsListLoader.width // basically, parent.width but null-proof
+                        Layout.fillWidth: true
 
-                        ColumnLayout {
-                            anchors.top: parent.top
-                            anchors.left: parent.left
-                            anchors.right: parent.right
-                            anchors.leftMargin: PlasmaCore.Units.gridUnit
-                            anchors.rightMargin: PlasmaCore.Units.gridUnit
+                        sourceComponent: Item {
+                            height: childrenRect.height
+                            width: actionsListLoader.width // basically, parent.width but null-proof
 
-                            spacing: 0
+                            ColumnLayout {
+                                anchors.top: parent.top
+                                anchors.left: parent.left
+                                anchors.right: parent.right
+                                anchors.leftMargin: PlasmaCore.Units.gridUnit
+                                anchors.rightMargin: PlasmaCore.Units.gridUnit
 
-                            Repeater {
-                                id: actionRepeater
+                                spacing: 0
 
-                                model: listItem.contextualActionsModel
+                                Repeater {
+                                    id: actionRepeater
 
-                                delegate: PlasmaComponents3.ToolButton {
-                                    Layout.fillWidth: true
+                                    model: listItem.contextualActionsModel
 
-                                    visible: model.enabled
+                                    delegate: PlasmaComponents3.ToolButton {
+                                        Layout.fillWidth: true
 
-                                    text: model.text
-                                    icon.name: model.icon.name
+                                        visible: model.enabled
 
-                                    KeyNavigation.up: index > 0 ? actionRepeater.itemAt(index - 1) : expandToggleButton
-                                    Keys.onDownPressed: event => {
-                                        if (index === actionRepeater.count - 1) {
-                                            event.accepted = true;
-                                            listItem.ListView.view.incrementCurrentIndex();
-                                            listItem.ListView.view.currentItem.forceActiveFocus(Qt.TabFocusReason);
-                                        } else {
-                                            event.accepted = false; // Forward to KeyNavigation.down
+                                        text: model.text
+                                        icon.name: model.icon.name
+
+                                        KeyNavigation.up: index > 0 ? actionRepeater.itemAt(index - 1) : expandToggleButton
+                                        Keys.onDownPressed: event => {
+                                            if (index === actionRepeater.count - 1) {
+                                                event.accepted = true;
+                                                listItem.ListView.view.incrementCurrentIndex();
+                                                listItem.ListView.view.currentItem.forceActiveFocus(Qt.TabFocusReason);
+                                            } else {
+                                                event.accepted = false; // Forward to KeyNavigation.down
+                                            }
                                         }
-                                    }
 
-                                    onClicked: {
-                                        modelData.trigger()
-                                        collapse()
+                                        onClicked: {
+                                            modelData.trigger()
+                                            collapse()
+                                        }
                                     }
                                 }
                             }
                         }
                     }
-                }
 
-                // Separator between the two items when both are shown
-                PlasmaCore.SvgItem {
-                    visible: actionsListLoader.active && customContentLoader.active
+                    // Separator between the two items when both are shown
+                    PlasmaCore.SvgItem {
+                        visible: actionsListLoader.active && customContentLoader.active
 
-                    Layout.fillWidth: true
+                        Layout.fillWidth: true
 
-                    elementId: "horizontal-line"
-                    svg: PlasmaCore.Svg {
-                        imagePath: "widgets/line"
+                        elementId: "horizontal-line"
+                        svg: PlasmaCore.Svg {
+                            imagePath: "widgets/line"
+                        }
                     }
-                }
 
-                // Custom content item, if any
-                Loader {
-                    id: customContentLoader
+                    // Custom content item, if any
+                    Loader {
+                        id: customContentLoader
+                        visible: status === Loader.Ready
 
-                    visible: status === Loader.Ready
+                        Layout.fillWidth: true
 
-                    Layout.fillWidth: true
-
-                    active: customExpandedViewContent != undefined && expandedView.expanded
-                    asynchronous: true
-                    sourceComponent: customExpandedViewContent
-
+                        active: expandedView.visible && customExpandedViewContent != undefined
+                        asynchronous: true
+                        sourceComponent: customExpandedViewContent
+                    }
                 }
             }
         }
