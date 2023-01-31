@@ -7,96 +7,97 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.components 3.0 as PC3
 
 ComponentBase {
     id: root
-    title: "Plasma Components 2 ComboBox"
+    title: "Plasma Extras Menu"
     contentItem: ColumnLayout {
         spacing: PlasmaCore.Units.largeSpacing
 
-        PlasmaComponents.Button {
+        PC3.Button {
             text: "Simple menu"
             onClicked: simpleMenu.open(0, height)
 
-            PlasmaComponents.Menu {
+            PlasmaExtras.Menu {
                 id: simpleMenu
 
-                PlasmaComponents.MenuItem { text: "Hello" }
-                PlasmaComponents.MenuItem { text: "This is just a simple" }
-                PlasmaComponents.MenuItem { text: "Menu" }
-                PlasmaComponents.MenuItem { text: "without separators" }
-                PlasmaComponents.MenuItem { text: "and other stuff" }
+                PlasmaExtras.MenuItem { text: "Hello" }
+                PlasmaExtras.MenuItem { text: "This is just a simple" }
+                PlasmaExtras.MenuItem { text: "Menu" }
+                PlasmaExtras.MenuItem { text: "without separators" }
+                PlasmaExtras.MenuItem { text: "and other stuff" }
             }
         }
 
-        PlasmaComponents.Button {
+        PC3.Button {
             text: "Checkable menu items"
             onClicked: checkableMenu.open(0, height)
 
-            PlasmaComponents.Menu {
+            PlasmaExtras.Menu {
                 id: checkableMenu
 
-                PlasmaComponents.MenuItem { text: "Apple"; checkable: true }
-                PlasmaComponents.MenuItem { text: "Banana"; checkable: true }
-                PlasmaComponents.MenuItem { text: "Orange"; checkable: true }
+                PlasmaExtras.MenuItem { text: "Apple"; checkable: true }
+                PlasmaExtras.MenuItem { text: "Banana"; checkable: true }
+                PlasmaExtras.MenuItem { text: "Orange"; checkable: true }
             }
         }
 
 
-        PlasmaComponents.Button {
+        PC3.Button {
             text: "Icons"
             onClicked: iconsMenu.open(0, height)
 
-            PlasmaComponents.Menu {
+            PlasmaExtras.Menu {
                 id: iconsMenu
 
-                PlasmaComponents.MenuItem { text: "Error"; icon: "dialog-error" }
-                PlasmaComponents.MenuItem { text: "Warning"; icon: "dialog-warning" }
-                PlasmaComponents.MenuItem { text: "Information"; icon: "dialog-information" }
+                PlasmaExtras.MenuItem { text: "Error"; icon: "dialog-error" }
+                PlasmaExtras.MenuItem { text: "Warning"; icon: "dialog-warning" }
+                PlasmaExtras.MenuItem { text: "Information"; icon: "dialog-information" }
             }
         }
 
-        PlasmaComponents.Button {
+        PC3.Button {
             text: "Separators and sections"
             onClicked: sectionsMenu.open(0, height)
 
-            PlasmaComponents.Menu {
+            PlasmaExtras.Menu {
                 id: sectionsMenu
 
-                PlasmaComponents.MenuItem { text: "A menu"; section: true }
-                PlasmaComponents.MenuItem { text: "One entry" }
-                PlasmaComponents.MenuItem { text: "Another entry" }
-                PlasmaComponents.MenuItem { separator: true }
-                PlasmaComponents.MenuItem { text: "One item" }
-                PlasmaComponents.MenuItem { text: "Another item" }
+                PlasmaExtras.MenuItem { text: "A menu"; section: true }
+                PlasmaExtras.MenuItem { text: "One entry" }
+                PlasmaExtras.MenuItem { text: "Another entry" }
+                PlasmaExtras.MenuItem { separator: true }
+                PlasmaExtras.MenuItem { text: "One item" }
+                PlasmaExtras.MenuItem { text: "Another item" }
             }
         }
 
         RowLayout {
             spacing: PlasmaCore.Units.smallSpacing
 
-            PlasmaComponents.Button {
+            PC3.Button {
                 id: minMaxButton
                 text: "Fixed minimum and maximum width"
                 onClicked: minMaxMenu.open(0, height)
 
-                PlasmaComponents.Menu {
+                PlasmaExtras.Menu {
                     id: minMaxMenu
 
                     minimumWidth: minMaxButton.width
                     maximumWidth: limitMenuMaxWidth.checked ? minMaxButton.width : undefined // has a RESET property
 
-                    PlasmaComponents.MenuItem { text: "Hello" }
-                    PlasmaComponents.MenuItem { text: "This is just a simple" }
-                    PlasmaComponents.MenuItem { text: "Menu" }
-                    PlasmaComponents.MenuItem { text: "with some very very long text in one item that will "
+                    PlasmaExtras.MenuItem { text: "Hello" }
+                    PlasmaExtras.MenuItem { text: "This is just a simple" }
+                    PlasmaExtras.MenuItem { text: "Menu" }
+                    PlasmaExtras.MenuItem { text: "with some very very long text in one item that will "
                                                     + "make the menu super huge if you don't do anything about it" }
-                    PlasmaComponents.MenuItem { text: "and other stuff" }
+                    PlasmaExtras.MenuItem { text: "and other stuff" }
                 }
             }
 
-            PlasmaComponents.CheckBox {
+            PC3.CheckBox {
                 id: limitMenuMaxWidth
                 anchors.verticalCenter: parent.verticalCenter
                 text: "Limit maximum width"
@@ -104,17 +105,17 @@ ComponentBase {
             }
         }
 
-        PlasmaComponents.Button {
+        PC3.Button {
             text: "Don't crash on null MenuItem action"
             onClicked: noActionCrashMenu.open(0, height)
 
-            PlasmaComponents.Menu {
+            PlasmaExtras.Menu {
                 id: noActionCrashMenu
 
-                PlasmaComponents.MenuItem { text: "This is an item" }
-                PlasmaComponents.MenuItem { text: "Below me should NOT be an empty item"}
-                PlasmaComponents.MenuItem { action: null }
-                PlasmaComponents.MenuItem { text: "I am not empty" }
+                PlasmaExtras.MenuItem { text: "This is an item" }
+                PlasmaExtras.MenuItem { text: "Below me should NOT be an empty item"}
+                PlasmaExtras.MenuItem { action: null }
+                PlasmaExtras.MenuItem { text: "I am not empty" }
             }
         }
     }
