@@ -7,7 +7,6 @@
 import QtQuick 2.14
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents2 // For Menu
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
@@ -209,23 +208,23 @@ Item {
     property list<QtObject> contextualActionsModel
 
     /*
-     * menu: PlasmaComponents.Menu
+     * menu: PlasmaExtras.Menu
      * The context menu to show when the user right-clicks on this list item.
      * For example:
      *
      * @code
-     * contextMenu: PlasmaComponents.Menu {
-     *     PlasmaComponents.MenuItem {
+     * contextMenu: PlasmaExtras.Menu {
+     *     PlasmaExtras.MenuItem {
      *         text: "Do something"
      *         icon: "document-edit"
      *         onClicked: doSomething()
      *     }
-     *     PlasmaComponents.MenuItem {
+     *     PlasmaExtras.MenuItem {
      *         text: "Do something else"
      *         icon: "draw-polygon"
      *         onClicked: doSomethingElse()
      *     }
-     *     PlasmaComponents.MenuItem {
+     *     PlasmaExtras.MenuItem {
      *         text: "Do something completely different"
      *         icon: "games-highscores"
      *         onClicked: doSomethingCompletelyDifferent()
@@ -367,7 +366,7 @@ Item {
             toggleExpanded();
             event.accepted = true;
         } else if (event.key === Qt.Key_Menu) {
-            if (contextMenu instanceof PlasmaComponents2.Menu) {
+            if (contextMenu instanceof PlasmaExtras.Menu) {
                 contextMenu.visualParent = listItem;
                 contextMenu.prepare();
                 contextMenu.openRelative();
@@ -430,7 +429,7 @@ Item {
 
         // Handle right-click, if so defined
         onClicked: {
-            if (contextMenu instanceof PlasmaComponents2.Menu) {
+            if (contextMenu instanceof PlasmaExtras.Menu) {
                 contextMenu.visualParent = parent
                 contextMenu.prepare();
                 contextMenu.open(mouse.x, mouse.y)

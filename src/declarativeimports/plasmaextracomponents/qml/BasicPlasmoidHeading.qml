@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.12
 
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PC2
+import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.components 3.0 as PlasmaComponents
 
  /**
@@ -48,7 +48,7 @@ PlasmoidHeading {
         PlasmaComponents.ToolButton {
             id: actionsButton
             visible: visibleActions > 0 && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
-            checked: configMenu.status !== PC2.DialogStatus.Closed
+            checked: configMenu.status !== PlasmaExtras.DialogStatus.Closed
             property int visibleActions: menuItemFactory.count
             property QtObject singleAction: visibleActions === 1 ? menuItemFactory.object.action : null
             icon.name: "open-menu-symbolic"
@@ -79,7 +79,7 @@ PlasmoidHeading {
             PlasmaComponents.ToolTip {
                 text: actionsButton.singleAction ? actionsButton.singleAction.text : i18nd("libplasma5", "More actions")
             }
-            PC2.Menu {
+            PlasmaExtras.Menu {
                 id: configMenu
                 visualParent: actionsButton
                 placement: PlasmaCore.Types.BottomPosedLeftAlignedPopup
@@ -98,7 +98,7 @@ PlasmoidHeading {
                     }
                     return actions;
                 }
-                delegate: PC2.MenuItem {
+                delegate: PlasmaExtras.MenuItem {
                     id: menuItem
                     action: modelData
                 }
