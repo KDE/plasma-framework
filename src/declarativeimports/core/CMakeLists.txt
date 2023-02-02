@@ -6,7 +6,7 @@ endif()
 
 configure_file(config-x11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x11.h)
 
-add_library(corebindingsplugin SHARED)
+ecm_add_qml_module(corebindingsplugin URI "org.kde.plasma.core")
 
 target_sources(corebindingsplugin PRIVATE
     corebindingsplugin.cpp
@@ -70,21 +70,6 @@ if(QtGui_Enabled_Features MATCHES "opengles2")
     target_link_libraries(corebindingsplugin Qt${QT_MAJOR_VERSION}::Gui_GLESv2)
 endif()
 
-install(TARGETS corebindingsplugin DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
-install(FILES qmldir DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
-
 install(FILES private/DefaultToolTip.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core/private)
 
-ecm_generate_qmltypes(org.kde.plasma.core 2.0 DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core)
-
-#also "install" to $BUILD_DIR/bin for unit tests
-add_custom_command(TARGET corebindingsplugin POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E
-                        copy ${CMAKE_CURRENT_SOURCE_DIR}/qmldir ${CMAKE_BINARY_DIR}/bin/org/kde/plasma/core/qmldir)
-add_custom_command(TARGET corebindingsplugin POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E
-                    copy $<TARGET_FILE:corebindingsplugin> ${CMAKE_BINARY_DIR}/bin/org/kde/plasma/core/)
-add_custom_command(TARGET corebindingsplugin POST_BUILD
-                    COMMAND ${CMAKE_COMMAND} -E
-                        copy ${CMAKE_CURRENT_SOURCE_DIR}/private/DefaultToolTip.qml ${CMAKE_BINARY_DIR}/bin/org/kde/plasma/core/private/DefaultToolTip.qml)
-
+ecm_finalize_qml_module(corebindingsplugin DESTINATION ${KDE_INSTALL_QMLDIR})
