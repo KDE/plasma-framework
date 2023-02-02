@@ -84,7 +84,7 @@
         "Name[ia]": "Brisa",
         "Name[id]": "Breeze",
         "Name[it]": "Brezza",
-        "Name[ka]": "ნაივი",
+        "Name[ka]": "ნიავი",
         "Name[ko]": "Breeze",
         "Name[nl]": "Breeze",
         "Name[nn]": "Breeze",

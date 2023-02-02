@@ -83,7 +83,7 @@
         "Name[ia]": "Air",
         "Name[id]": "Air",
         "Name[it]": "Aria",
-        "Name[ka]": "ჰეაერი",
+        "Name[ka]": "ჰაერი",
         "Name[ko]": "공기",
         "Name[nl]": "Air",
         "Name[nn]": "Luft",
