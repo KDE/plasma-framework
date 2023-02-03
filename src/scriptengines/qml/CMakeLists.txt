@@ -1,10 +1,3 @@
-# APPLET
-
-if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
-    set(PLASMA_NO_KDEWEBKIT TRUE)
-    set(PLASMA_NO_SOLID TRUE)
-endif()
-
 #DECLARATIVE APPLET
 add_library(plasma_appletscript_declarative MODULE)
 
