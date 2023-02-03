@@ -42,12 +42,6 @@ Label {
      */
     property int level: 1
 
-    /**
-     * Adjust the point size in between a level and another. (default: 0)
-     * @deprecated
-     */
-    property int step: 0
-
     enum Type {
         Normal,
         Primary,
@@ -74,12 +68,6 @@ Label {
     opacity: type === Heading.Type.Secondary ? 0.7 : 1
 
     Accessible.role: Accessible.Heading
-
-    // TODO KF6: Remove this public method
-    function headerPointSize(l) {
-        console.warn("org.kde.plasma.extras/Heading::headerPointSize() is deprecated. Use font.pointSize directly instead");
-        return __headerPointSize(l);
-    }
 
     //
     //  W A R N I N G

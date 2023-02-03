@@ -216,38 +216,6 @@ Item {
     readonly property list<QtObject> __enabledContextualActions: contextualActionsModel.filter(action => action?.enabled ?? false)
 
     /*
-     * menu: PlasmaExtras.Menu
-     * The context menu to show when the user right-clicks on this list item.
-     * For example:
-     *
-     * @code
-     * contextMenu: PlasmaExtras.Menu {
-     *     PlasmaExtras.MenuItem {
-     *         text: "Do something"
-     *         icon: "document-edit"
-     *         onClicked: doSomething()
-     *     }
-     *     PlasmaExtras.MenuItem {
-     *         text: "Do something else"
-     *         icon: "draw-polygon"
-     *         onClicked: doSomethingElse()
-     *     }
-     *     PlasmaExtras.MenuItem {
-     *         text: "Do something completely different"
-     *         icon: "games-highscores"
-     *         onClicked: doSomethingCompletelyDifferent()
-     *     }
-     * }
-     * @endcode
-     *
-     * Optional; if not defined, no context menu will be displayed when the user
-     * right-clicks on the list item.
-     *
-     * @deprecated since 5.94; put actions in contextualActionsModel instead
-     */
-    property var contextMenu
-
-    /*
      * A custom view to display when the user expands the list item.
      *
      * This component must define width: and height: values. Width: should be
@@ -274,14 +242,6 @@ Item {
      * Optional; defaults to false.
      */
     property bool isBusy: false
-
-    /*
-     * isEnabled: bool
-     * Just an alias for Item::enabled property.
-     *
-     * @deprecated Use `enabled` directly.
-     */
-    property alias isEnabled: listItem.enabled
 
     /*
      * isDefault: bool

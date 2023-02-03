@@ -21,31 +21,6 @@ import org.kde.kirigami 2 as Kirigami
  */
 T.ToolBar {
     id: control
-    /**
-     * Possible positions of the heading element
-     *
-     * @deprecated since 5.85, use position from QtQuick.Templates.ToolBar and
-     *  its ToolBar.Header & ToolBar.Footer enum values instead
-     */
-    enum Location {
-        /**
-         * Indicates that it's used as a header of the plasmoid, touching the top border
-         */
-        Header,
-        /**
-         * Indicates that it's used as a footer of the plasmoid, touching the bottom border
-         */
-        Footer
-    }
-
-    /**
-     * location: int
-     *
-     * Indicates the position of the heading. The default is PlasmoidHeading.Location.Header.
-     *
-     * @deprecated since 5.85, use position from QtQuick.Templates.ToolBar instead
-     */
-    property alias location: control.position
 
     Layout.fillWidth: true
     bottomPadding: position === T.ToolBar.Footer ? 0 : -backgroundMetrics.getMargin("bottom")
