@@ -22,9 +22,6 @@ FOREACH(infileName ${inFiles})
     )
 ENDFOREACH(infileName)
 
-#install the components as a QQC2 Style, as style for applications (mainly for Plasma Mobile)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2/Plasma)
-
 #install some of the components as a separate import, to be used in plasmoids (some of them like ApplicationWindow are of no use for plasmoids)
 install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
