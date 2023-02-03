@@ -8,7 +8,6 @@ import QtQuick 2.15
 import QtQuick.Layouts 1.15
 
 import org.kde.plasma.components 3.0 as PlasmaComponents
-import "private" as Private
 
 /**
  * Item to be used as root item for representations (full and compact) of plasmoids.
@@ -47,7 +46,7 @@ PlasmaComponents.Page {
     topPadding: header && header.visible ? 0 : backgroundMetrics.getMargin("top")
     bottomPadding: footer && footer.visible ? 0 : backgroundMetrics.getMargin("bottom")
 
-    Private.BackgroundMetrics {
+    BackgroundMetrics {
         id: backgroundMetrics
         function getMargin(margin) {
             if (!hasInset) {

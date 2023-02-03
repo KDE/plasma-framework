@@ -12,7 +12,6 @@ import org.kde.ksvg 1.0 as KSvg
 import org.kde.plasma.plasmoid 2.0
 import QtQuick.Templates 2.12 as T
 import org.kde.kirigami 2 as Kirigami
-import "private" as Private
 
 /**
  * Item to be used as a header or footer in plasmoids
@@ -87,7 +86,7 @@ T.ToolBar {
             }
             return borders;
         }
-        Private.BackgroundMetrics {
+        BackgroundMetrics {
             id: backgroundMetrics
             function getMargin(margin) {
                 if (!hasInset) {
