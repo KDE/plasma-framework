@@ -7,9 +7,7 @@
 add_library(plasmaextracomponentsplugin SHARED)
 
 target_sources(plasmaextracomponentsplugin PRIVATE
-    appbackgroundprovider.cpp
     plasmaextracomponentsplugin.cpp
-    fallbackcomponent.cpp
     enums.cpp
     qmenu.cpp
     qmenuitem.cpp
