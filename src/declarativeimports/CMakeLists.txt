@@ -2,12 +2,7 @@ add_subdirectory(core)
 add_subdirectory(plasmaextracomponents)
 add_subdirectory(kirigamiplasmastyle)
 
-if (QT_MAJOR_VERSION EQUAL "5")
-    set(QQC2_VERSION "2.${Qt5QuickControls2_VERSION_MINOR}")
-else ()
-    set(QQC2_VERSION "6.${Qt6Quick_VERSION_MINOR}")
-endif()
-
+set(QQC2_VERSION "6.${Qt6Quick_VERSION_MINOR}")
 
 # Find all the source qml files
 FILE(GLOB_RECURSE inFiles RELATIVE "${CMAKE_CURRENT_SOURCE_DIR}"
