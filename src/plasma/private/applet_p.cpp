@@ -378,14 +378,6 @@ KActionCollection *AppletPrivate::defaultActions(QObject *parent)
     closeApplet->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
     closeApplet->setShortcut(QKeySequence(QStringLiteral("alt+d, r")));
 
-    QAction *runAssociatedApplication = actions->add<QAction>(QStringLiteral("run associated application"));
-    runAssociatedApplication->setAutoRepeat(false);
-    runAssociatedApplication->setText(i18n("Run the Associated Application"));
-    runAssociatedApplication->setIcon(QIcon::fromTheme(QStringLiteral("system-run")));
-    runAssociatedApplication->setShortcut(QKeySequence(QStringLiteral("alt+d, t")));
-    runAssociatedApplication->setVisible(false);
-    runAssociatedApplication->setEnabled(false);
-
     return actions;
 }
 

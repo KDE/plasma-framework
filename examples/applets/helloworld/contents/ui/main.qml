@@ -18,6 +18,4 @@ Item {
     PC3.Label {
         text: i18n("Hello world")
     }
-
-    Plasmoid.associatedApplicationUrls: "file:///home"
 }

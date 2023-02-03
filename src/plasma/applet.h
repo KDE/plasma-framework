@@ -137,16 +137,6 @@ class PLASMA_EXPORT Applet : public QObject
      */
     Q_PROPERTY(Plasma::Types::BackgroundHints effectiveBackgroundHints READ effectiveBackgroundHints NOTIFY effectiveBackgroundHintsChanged FINAL)
 
-    /**
-     * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
-     */
-    Q_PROPERTY(QString associatedApplication WRITE setAssociatedApplication READ associatedApplication NOTIFY associatedApplicationChanged)
-
-    /**
-     * Sets the associated application of this plasmoid, if the plasmoid is representing the "compact" view for some application or for some document type.
-     */
-    Q_PROPERTY(QList<QUrl> associatedApplicationUrls WRITE setAssociatedApplicationUrls READ associatedApplicationUrls NOTIFY associatedApplicationUrlsChanged)
-
     // TODO KF6: activity, screen, screenGeometry, availableScreenRect, availableScreenRegion: should we instead make the containment accessible from qml
     // plasmoids and ask from there?
 
@@ -468,47 +458,6 @@ public:
      */
     QKeySequence globalShortcut() const;
 
-    // ASSOCIATED APPLICATION
-    /**
-     * Sets an application associated to this applet, that will be
-     * regarded as a full view of what is represented in the applet
-     *
-     * @param string the name of the application. it can be
-     *      \li a name understood by KService::serviceByDesktopName
-     *        (e.g. "konqueror")
-     *      \li a command in $PATH
-     *      \li or an absolute path to an executable
-     * @since 4.4
-     */
-    void setAssociatedApplication(const QString &string);
-
-    /**
-     * Sets a list of urls associated to this application,
-     * they will be used as parameters for the associated application
-     * @see setAssociatedApplication()
-     *
-     * @param urls
-     */
-    void setAssociatedApplicationUrls(const QList<QUrl> &urls);
-
-    /**
-     * @return the application associated to this applet
-     * @since 4.4
-     */
-    QString associatedApplication() const;
-
-    /**
-     * @return the urls associated to this applet
-     * @since 4.4
-     */
-    QList<QUrl> associatedApplicationUrls() const;
-
-    /**
-     * @return true if the applet has a valid associated application or urls
-     * @since 4.4
-     */
-    bool hasValidAssociatedApplication() const;
-
     // Completely UI-specific, remove or move to scriptengine
     /**
      * @return true if this plasmoid provides a GUI configuration
@@ -571,16 +520,6 @@ Q_SIGNALS:
      * @since 5.65
      */
     void effectiveBackgroundHintsChanged();
-
-    /**
-     * Emitted when the associated application changes
-     */
-    void associatedApplicationChanged(const QString &application);
-
-    /**
-     * Emitted when the associated application urls changes
-     */
-    void associatedApplicationUrlsChanged(const QList<QUrl> &urls);
 
     /**
      * Emitted when the global shortcut to activate this applet has chanaged
@@ -706,17 +645,6 @@ public Q_SLOTS:
      **/
     virtual void init();
 
-    // ASSOCIATED APPLICATION
-    /**
-     * Open the application associated to this applet, if it's not set
-     * but some urls are, open those urls with the proper application
-     * for their mimetype
-     * @see setAssociatedApplication()
-     * @see setAssociatedApplicationUrls()
-     * @since 4.4
-     */
-    void runAssociatedApplication();
-
 protected:
     // CONFIGURATION
     /**
@@ -814,7 +742,6 @@ private:
     friend class AccessAppletJobPrivate;
     friend class GraphicsViewAppletPrivate;
     friend class PluginLoader;
-    friend class AssociatedApplicationManager;
     friend class SvgPrivate;
     friend class PlasmaQuick::AppletQuickItem;
     friend class PlasmaQuick::ConfigModel;

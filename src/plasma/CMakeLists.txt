@@ -26,7 +26,6 @@ target_sources(KF6Plasma PRIVATE
     containmentactions.cpp
     corona.cpp
     private/applet_p.cpp
-    private/associatedapplicationmanager.cpp
     private/containment_p.cpp
     private/timetracker.cpp
 
@@ -102,7 +101,6 @@ PRIVATE
     KF6::GlobalAccel #Applet::setGlobalShortcut
     KF6::Notifications
     KF6::IconThemes
-    KF6::Service
     ${PLASMA_EXTRA_LIBS}
 )
 

@@ -844,7 +844,7 @@ QList<QObject *> ContainmentInterface::actions() const
 
     QStringList actionOrder;
     actionOrder << QStringLiteral("add widgets") << QStringLiteral("manage activities") << QStringLiteral("remove") << QStringLiteral("lock widgets")
-                << QStringLiteral("run associated application") << QStringLiteral("configure");
+                << QStringLiteral("configure");
     QHash<QString, QAction *> orderedActions;
     // use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
@@ -1087,11 +1087,6 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 
     if (!applet->failedToLaunch()) {
-        QAction *runAssociatedApplication = applet->actions()->action(QStringLiteral("run associated application"));
-        if (runAssociatedApplication && runAssociatedApplication->isEnabled()) {
-            desktopMenu->addAction(runAssociatedApplication);
-        }
-
         QAction *configureApplet = applet->actions()->action(QStringLiteral("configure"));
         if (configureApplet && configureApplet->isEnabled()) {
             desktopMenu->addAction(configureApplet);

@@ -554,36 +554,6 @@ int AppletInterface::apiVersion() const
     return plugins.first().value(QStringLiteral("X-KDE-PluginInfo-Version")).toInt();
 }
 
-void AppletInterface::setAssociatedApplication(const QString &string)
-{
-    if (applet()->associatedApplication() == string) {
-        return;
-    }
-
-    applet()->setAssociatedApplication(string);
-    Q_EMIT associatedApplicationChanged();
-}
-
-QString AppletInterface::associatedApplication() const
-{
-    return applet()->associatedApplication();
-}
-
-void AppletInterface::setAssociatedApplicationUrls(const QList<QUrl> &urls)
-{
-    if (applet()->associatedApplicationUrls() == urls) {
-        return;
-    }
-
-    applet()->setAssociatedApplicationUrls(urls);
-    Q_EMIT associatedApplicationUrlsChanged();
-}
-
-QList<QUrl> AppletInterface::associatedApplicationUrls() const
-{
-    return applet()->associatedApplicationUrls();
-}
-
 void AppletInterface::setStatus(const Plasma::Types::ItemStatus &status)
 {
     applet()->setStatus(status);
