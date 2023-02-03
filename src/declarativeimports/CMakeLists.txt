@@ -17,12 +17,9 @@ FOREACH(infileName ${inFiles})
     )
 ENDFOREACH(infileName)
 
-#install the components as a QQC2 Style, as style for applications (mainly for Plasma Mobile)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/ DESTINATION ${KDE_INSTALL_QMLDIR}/QtQuick/Controls.2/Plasma)
-
-#install some of the components as a separate import, to be used in plasmoids (some of them like ApplicationWindow are of no use for plasmoids)
-install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/
-    DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/components.3)
-
-
-
+ecm_add_qml_module(org_kde_plasmacomponents3 URI "org.kde.plasma.components" VERSION 3.0 NO_PLUGIN)
+file(GLOB _public_qml "${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/*.qml")
+ecm_target_qml_sources(org_kde_plasmacomponents3 VERSION 3.0 SOURCES ${_public_qml})
+file(GLOB _private_qml "${CMAKE_CURRENT_BINARY_DIR}/plasmacomponents3/private/*.qml")
+ecm_target_qml_sources(org_kde_plasmacomponents3 VERSION 3.0 PATH private SOURCES ${_private_qml})
+ecm_finalize_qml_module(org_kde_plasmacomponents3 DESTINATION ${KDE_INSTALL_QMLDIR})
