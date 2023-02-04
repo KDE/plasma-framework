@@ -164,19 +164,6 @@ install(FILES ${Plasma_CamelCase_HEADERS}
 install(FILES ${PlasmaScripting_HEADERS}
     DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/plasma/scripting COMPONENT Devel)
 
-install(FILES
-   data/servicetypes/plasma-applet.desktop
-   data/servicetypes/plasma-containment.desktop
-   data/servicetypes/plasma-containmentactions.desktop
-   data/servicetypes/plasma-dataengine.desktop
-   data/servicetypes/plasma-generic.desktop
-   data/servicetypes/plasma-packagestructure.desktop
-   data/servicetypes/plasma-scriptengine.desktop
-   data/servicetypes/plasma-service.desktop
-   data/servicetypes/plasma-shell.desktop
-   data/servicetypes/plasma-lookandfeel.desktop
-   DESTINATION ${KDE_INSTALL_KSERVICETYPESDIR})
-
 install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
