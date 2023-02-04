@@ -10,6 +10,7 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.plasma.components 3.0 as PC3
 
 Item {
     Layout.minimumWidth: 200
@@ -42,8 +43,14 @@ Item {
         PlasmaExtras.Heading {
             level: 3
             text: i18n("So you found something wrong in Plasma...")
+            width: parent.width
+            wrapMode: Text.Wrap
         }
-        PlasmaExtras.Paragraph {
+        PC3.Label {
+
+            width: parent.width
+            wrapMode: Text.Wrap
+
             text: i18n("You are running a development version of Plasma. This software is not fit for production use. We do, however encourage testing and reporting the results. A few easy steps to report a bug: <br />\
             <ul>\
             <li>Check <a href=\"\">here if the bug already exists</li>\

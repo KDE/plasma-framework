@@ -5,11 +5,9 @@
 */
 
 import QtQuick 2.0
-import QtQuick.Controls 1.0 as QtControls
+import QtQuick.Controls 2.15 as QQC2
 
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
-
 
 Item {
     id: iconsPage
@@ -26,18 +24,18 @@ Item {
         anchors.fill: parent
         spacing: 4
         Row {
-            QtControls.Label {
+            QQC2.Label {
                 text: "Text Config value"
             }
-            QtControls.TextField {
+            QQC2.TextField {
                 id: testConfigField
             }
         }
         Row {
-            QtControls.Label {
+            QQC2.Label {
                 text: "Bool Config value"
             }
-            QtControls.CheckBox {
+            QQC2.CheckBox {
                 id: testBoolConfigField
             }
         }

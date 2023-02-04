@@ -8,7 +8,7 @@ import QtQuick 2.1
 import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.components 3.0 as PC3
 
 PlasmaCore.SvgItem {
     Layout.minimumWidth: 150
@@ -25,7 +25,7 @@ PlasmaCore.SvgItem {
         }
     }
 
-    PlasmaComponents.TextArea {
+    PC3.TextArea {
         id: noteText
         anchors.fill: parent
         anchors.margins: 20

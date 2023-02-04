@@ -9,13 +9,13 @@ import QtQuick 2.0
 import org.kde.plasma.plasmoid 2.0
 import QtQuick.Layouts 1.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.components 3.0 as PC3
 
 Item {
     Layout.minimumWidth: 200
     Layout.minimumHeight: 300
 
-    PlasmaComponents.Label {
+    PC3.Label {
         text: i18n("Hello world")
     }
 

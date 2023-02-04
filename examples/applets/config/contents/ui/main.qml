@@ -9,7 +9,7 @@ import QtQuick.Layouts 1.0
 
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import org.kde.plasma.components 3.0 as PC3
 
 Item {
     id: root
@@ -22,41 +22,41 @@ Item {
     ColumnLayout {
         id: column
         anchors.centerIn: parent
-        PlasmaComponents.Label {
+        PC3.Label {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n("String test")
         }
-        PlasmaComponents.TextField {
+        PC3.TextField {
             text: Plasmoid.configuration.Test
             onTextChanged: Plasmoid.configuration.Test = text
         }
-        PlasmaComponents.CheckBox {
+        PC3.CheckBox {
             enabled: true
             checked: Plasmoid.configuration.BoolTest
             text: i18n("Bool from config")
             onCheckedChanged: Plasmoid.configuration.BoolTest = checked
         }
-        PlasmaComponents.Label {
+        PC3.Label {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n("String from another group")
         }
-        PlasmaComponents.TextField {
+        PC3.TextField {
             text: Plasmoid.configuration.OtherTest
             onTextChanged: Plasmoid.configuration.OtherTest = text
         }
-        PlasmaComponents.Label {
+        PC3.Label {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n("Enum: displayed as int,\n written as string")
         }
-        PlasmaComponents.TextField {
+        PC3.TextField {
             text: Plasmoid.configuration.EnumTest
             onTextChanged: Plasmoid.configuration.EnumTest = text
         }
-        PlasmaComponents.Label {
+        PC3.Label {
             anchors.horizontalCenter: parent.horizontalCenter
             text: i18n("Integer: minimum -1,\n maximum 100")
         }
-        PlasmaComponents.TextField {
+        PC3.TextField {
             text: Plasmoid.configuration.IntTest
             onTextChanged: Plasmoid.configuration.IntTest = text
         }
