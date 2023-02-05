@@ -69,7 +69,6 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         Kirigami2
     OPTIONAL_COMPONENTS
         Wayland
-        DocTools
 )
 
 set_package_properties(KF6Wayland PROPERTIES DESCRIPTION "Integration with the Wayland compositor"
@@ -78,10 +77,6 @@ set_package_properties(KF6Wayland PROPERTIES DESCRIPTION "Integration with the W
 if(KF6Wayland_FOUND)
   set(HAVE_KWAYLAND 1)
 endif()
-
-set_package_properties(KF6DocTools PROPERTIES DESCRIPTION "Tools to generate documentation"
-                       TYPE OPTIONAL
-                      )
 
 option(WITHOUT_X11 "Build without X11 support (skips finding X11)." OFF)
 if(NOT WITHOUT_X11)
@@ -195,14 +190,8 @@ endif()
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 ################# list the subdirectories #################
-if (KF6DocTools_FOUND)
-    add_subdirectory(docs)
-endif()
 add_definitions(-DTRANSLATION_DOMAIN=\"libplasma5\")
 ki18n_install(po)
-if (KF6DocTools_FOUND)
-    kdoctools_install(po)
-endif()
 add_subdirectory(src)
 
 if (BUILD_EXAMPLES)
