@@ -99,11 +99,7 @@ QString ContainmentActions::eventToString(QEvent *event)
     QString trigger;
     Qt::KeyboardModifiers modifiers;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    const auto &mo = QObject::staticQtMetaObject;
-#else
     const auto &mo = Qt::staticMetaObject;
-#endif
 
     switch (event->type()) {
     case QEvent::MouseButtonPress:

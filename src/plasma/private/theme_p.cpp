@@ -919,11 +919,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
         apiMinor = 0;
         apiRevision = 0;
         if (!apiVersion.isEmpty()) {
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
             const QVector<QStringView> parts = QStringView(apiVersion).split(QLatin1Char('.'));
-#else
-            const QVector<QStringRef> parts = apiVersion.splitRef(QLatin1Char('.'));
-#endif
             if (!parts.isEmpty()) {
                 apiMajor = parts.value(0).toInt();
             }

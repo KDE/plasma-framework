@@ -105,13 +105,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     // qmlRegisterInterface<Plasma::T>(uri, 1);
     // as this will incompatibly register with the fully namespaced name "Plasma::T",
     // not just the now explicitly passed alias name "T"
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    qmlRegisterInterface<Plasma::Service>("Service");
-    qmlRegisterInterface<Plasma::ServiceJob>("ServiceJob");
-#else
     qRegisterMetaType<Plasma::Service>();
     qRegisterMetaType<Plasma::ServiceJob>();
-#endif
     QT_WARNING_POP
 
     qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");

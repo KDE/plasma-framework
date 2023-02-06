@@ -67,11 +67,7 @@ void AppletQuickItemPrivate::init()
     }
 
     qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    if (!qmlObject->engine()->urlInterceptor()) {
-#else
     if (qmlObject->engine()->urlInterceptors().isEmpty()) {
-#endif
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), KPackage::Package());
         interceptor->setForcePlasmaStyle(true);
         qmlObject->engine()->addUrlInterceptor(interceptor);
@@ -898,15 +894,9 @@ void AppletQuickItem::childEvent(QChildEvent *event)
     QQuickItem::childEvent(event);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void AppletQuickItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
-{
-    QQuickItem::geometryChanged(newGeometry, oldGeometry);
-#else
 void AppletQuickItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
 {
     QQuickItem::geometryChange(newGeometry, oldGeometry);
-#endif
     d->compactRepresentationCheck();
 }
 

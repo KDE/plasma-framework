@@ -188,21 +188,13 @@ void SvgItem::updatePolish()
     }
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-void SvgItem::geometryChanged(const QRectF &newGeometry, const QRectF &oldGeometry)
-#else
 void SvgItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)
-#endif
 {
     if (newGeometry.size() != oldGeometry.size() && newGeometry.isValid()) {
         scheduleImageUpdate();
     }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    QQuickItem::geometryChanged(newGeometry, oldGeometry);
-#else
     QQuickItem::geometryChange(newGeometry, oldGeometry);
-#endif
 }
 
 } // Plasma namespace

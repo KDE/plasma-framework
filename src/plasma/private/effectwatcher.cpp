@@ -8,11 +8,7 @@
 
 #include <QCoreApplication>
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 #include <private/qtx11extras_p.h>
-#else
-#include <QtX11Extras/QX11Info>
-#endif
 
 namespace Plasma
 {
@@ -49,11 +45,7 @@ void EffectWatcher::init(const QString &property)
     }
 }
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
 bool EffectWatcher::nativeEventFilter(const QByteArray &eventType, void *message, qintptr *result)
-#else
-bool EffectWatcher::nativeEventFilter(const QByteArray &eventType, void *message, long *result)
-#endif
 {
     Q_UNUSED(result);
     // A faster comparison than eventType != "xcb_generic_event_t"

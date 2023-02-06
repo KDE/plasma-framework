@@ -47,13 +47,8 @@ public:
     void clear();
     QVariant get(int row) const;
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-    static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, int index);
-    static int categories_count(QQmlListProperty<ConfigCategory> *prop);
-#else
     static ConfigCategory *categories_at(QQmlListProperty<ConfigCategory> *prop, qsizetype index);
     static qsizetype categories_count(QQmlListProperty<ConfigCategory> *prop);
-#endif
     static void categories_append(QQmlListProperty<ConfigCategory> *prop, ConfigCategory *o);
     static void categories_clear(QQmlListProperty<ConfigCategory> *prop);
 };
@@ -67,11 +62,7 @@ ConfigModelPrivate::~ConfigModelPrivate()
 {
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-ConfigCategory *ConfigModelPrivate::categories_at(QQmlListProperty<ConfigCategory> *prop, int index)
-#else
 ConfigCategory *ConfigModelPrivate::categories_at(QQmlListProperty<ConfigCategory> *prop, qsizetype index)
-#endif
 {
     ConfigModel *model = qobject_cast<ConfigModel *>(prop->object);
     if (!model || index >= model->d->categories.count() || index < 0) {
@@ -96,11 +87,7 @@ void ConfigModelPrivate::categories_append(QQmlListProperty<ConfigCategory> *pro
     model->d->appendCategory(o);
 }
 
-#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
-int ConfigModelPrivate::categories_count(QQmlListProperty<ConfigCategory> *prop)
-#else
 qsizetype ConfigModelPrivate::categories_count(QQmlListProperty<ConfigCategory> *prop)
-#endif
 {
     ConfigModel *model = qobject_cast<ConfigModel *>(prop->object);
     if (model) {
