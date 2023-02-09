@@ -18,7 +18,7 @@ target_link_libraries(KirigamiPlasmaStyle
         KF6::IconThemes
 )
 
-install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf5/kirigami)
+install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/kirigami)
 
 install(FILES
     AbstractApplicationHeader.qml
