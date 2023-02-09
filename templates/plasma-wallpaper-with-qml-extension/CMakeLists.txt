@@ -15,7 +15,7 @@ find_package(KF6 REQUIRED COMPONENTS
     I18n
 )
 
-find_package(Qt5 CONFIG REQUIRED COMPONENTS
+find_package(Qt6 CONFIG REQUIRED COMPONENTS
     Qml
     Gui
     Core

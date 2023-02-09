@@ -79,23 +79,18 @@ ecm_generate_export_header(KF6Plasma
 )
 
 if(HAVE_X11)
-    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} XCB::XCB)
-    if (TARGET Qt5::X11Extras)
-        list(APPEND PLASMA_EXTRA_LIBS Qt5::X11Extras)
-    elseif(TARGET Qt6::Gui)
-        list(APPEND PLASMA_EXTRA_LIBS Qt6::GuiPrivate)
-    endif()
+    set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} XCB::XCB Qt6::GuiPrivate)
 endif()
 
 target_link_libraries(KF6Plasma
 PUBLIC
-    Qt${QT_MAJOR_VERSION}::Gui
+    Qt6::Gui
     KF6::ConfigCore
     KF6::CoreAddons
 PRIVATE
-    Qt${QT_MAJOR_VERSION}::Sql
-    Qt${QT_MAJOR_VERSION}::Svg
-    Qt${QT_MAJOR_VERSION}::DBus
+    Qt6::Sql
+    Qt6::Svg
+    Qt6::DBus
     KF6::Archive
     KF6::GuiAddons #kimagecache
     KF6::I18n

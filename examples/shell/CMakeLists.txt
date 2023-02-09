@@ -6,9 +6,9 @@ target_sources(exampleplasmashell PRIVATE
 )
 
 target_link_libraries(exampleplasmashell
-    Qt${QT_MAJOR_VERSION}::Widgets
-    Qt${QT_MAJOR_VERSION}::Quick
-    Qt${QT_MAJOR_VERSION}::Qml
+    Qt6::Widgets
+    Qt6::Quick
+    Qt6::Qml
     KF6::I18n
     KF6::XmlGui
     KF6::PlasmaQuick

@@ -1,7 +1,7 @@
 add_library(plasma_dataengine_example_sourcesOnRequest MODULE sourcesOnRequest.cpp)
 
 target_link_libraries(plasma_dataengine_example_sourcesOnRequest
-  Qt${QT_MAJOR_VERSION}::Gui
+  Qt6::Gui
   KF6::Plasma
   KF6::Service
 )

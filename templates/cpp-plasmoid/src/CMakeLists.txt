@@ -4,7 +4,7 @@ add_definitions(-DTRANSLATION_DOMAIN=\"plasma_applet_org.kde.plasma.%{APPNAMELC}
 add_library(org.kde.plasma.%{APPNAMELC} MODULE %{APPNAMELC}.cpp)
 
 target_link_libraries(org.kde.plasma.%{APPNAMELC}
-                      Qt5::Gui
+                      Qt6::Gui
                       KF6::Plasma
                       KF6::I18n)
 

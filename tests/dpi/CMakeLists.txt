@@ -3,5 +3,5 @@ add_executable(dpitest
     dpitest.cpp
 )
 
-target_link_libraries(dpitest KF6::Plasma KF6::I18n Qt${QT_MAJOR_VERSION}::Gui)
+target_link_libraries(dpitest KF6::Plasma KF6::I18n Qt6::Gui)
 

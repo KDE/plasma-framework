@@ -27,12 +27,12 @@ target_sources(corebindingsplugin PRIVATE
 )
 
 target_link_libraries(corebindingsplugin
-        Qt${QT_MAJOR_VERSION}::Quick
-        Qt${QT_MAJOR_VERSION}::Qml
+        Qt6::Quick
+        Qt6::Qml
         KF6::Declarative
         KF6::IconThemes
         KF6::I18n
-        Qt${QT_MAJOR_VERSION}::Svg
+        Qt6::Svg
         KF6::Service #for kplugininfo.h
         KF6::WindowSystem
         KF6::Plasma
@@ -41,12 +41,7 @@ target_link_libraries(corebindingsplugin
 )
 
 if(HAVE_X11)
-  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} XCB::XCB )
-  if (TARGET Qt5::X11Extras)
-      target_link_libraries(corebindingsplugin Qt5::X11Extras)
-  elseif(TARGET Qt6::Gui)
-      target_link_libraries(corebindingsplugin Qt6::GuiPrivate)
-  endif()
+  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} XCB::XCB Qt6::GuiPrivate)
 
   if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
     target_link_libraries(corebindingsplugin
@@ -67,7 +62,7 @@ else()
 endif()
 
 if(QtGui_Enabled_Features MATCHES "opengles2")
-    target_link_libraries(corebindingsplugin Qt${QT_MAJOR_VERSION}::Gui_GLESv2)
+    target_link_libraries(corebindingsplugin Qt6::Gui_GLESv2)
 endif()
 
 install(FILES private/DefaultToolTip.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core/private)

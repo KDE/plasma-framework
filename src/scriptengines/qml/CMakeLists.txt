@@ -12,8 +12,8 @@ target_sources(plasma_appletscript_declarative PRIVATE
 set_target_properties(plasma_appletscript_declarative PROPERTIES PREFIX "")
 
 target_link_libraries(plasma_appletscript_declarative
-    Qt${QT_MAJOR_VERSION}::Quick
-    Qt${QT_MAJOR_VERSION}::Qml
+    Qt6::Quick
+    Qt6::Qml
     KF6::Activities
     KF6::ConfigQml
     KF6::KIOCore
@@ -26,9 +26,5 @@ target_link_libraries(plasma_appletscript_declarative
     KF6::Package
     KF6::Notifications
 )
-if (QT_MAJOR_VERSION EQUAL "6")
-    target_link_libraries(plasma_appletscript_declarative KF6::ConfigQml)
-endif()
-
 
 install(TARGETS plasma_appletscript_declarative DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/scriptengines)

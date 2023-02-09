@@ -43,10 +43,7 @@ ecm_setup_version(PROJECT
 
 set (REQUIRED_QT_VERSION 6.4.0)
 
-find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
-if (QT_MAJOR_VERSION EQUAL "6")
-    find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS ShaderTools)
-endif()
+find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
 
 find_package(KF6 ${KF_DEP_VERSION} REQUIRED
     COMPONENTS
@@ -93,11 +90,6 @@ if(NOT WITHOUT_X11)
                         )
     if(X11_FOUND AND XCB_XCB_FOUND)
         set(HAVE_X11 1)
-        if (QT_MAJOR_VERSION STREQUAL "5")
-            find_package(Qt5X11Extras ${REQUIRED_QT_VERSION} NO_MODULE)
-        elseif (QT_MAJOR_VERSION STREQUAL "6")
-            find_package(Qt${QT_MAJOR_VERSION} ${REQUIRED_QT_VERSION} CONFIG REQUIRED Gui) # qtx11extras_p.h
-        endif()
         #X11_Xrender discovery is done by FindX11
         #add_feature_info("X Rendering Extension (libXrender)" X11_Xrender_FOUND "Support for compositing, rendering operations, and alpha-blending. STRONGLY RECOMMENDED")
         set(HAVE_XCB_SHAPE ${XCB_SHAPE_FOUND})
@@ -119,7 +111,7 @@ set_package_properties(EGL PROPERTIES
                        TYPE OPTIONAL
                       )
 
-get_target_property(QtGui_Enabled_Features Qt${QT_MAJOR_VERSION}::Gui QT_ENABLED_PUBLIC_FEATURES)
+get_target_property(QtGui_Enabled_Features Qt6::Gui QT_ENABLED_PUBLIC_FEATURES)
 if(OpenGL_GLX_FOUND AND HAVE_X11 AND (QtGui_Enabled_Features MATCHES "opengl"))
     add_feature_info(GLX OpenGL_GLX_FOUND "OpenGL GLX libraries.")
     set(HAVE_GLX 1)

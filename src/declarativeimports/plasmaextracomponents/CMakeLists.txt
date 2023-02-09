@@ -14,9 +14,9 @@ target_sources(plasmaextracomponentsplugin PRIVATE
 )
 
 target_link_libraries(plasmaextracomponentsplugin
-        Qt${QT_MAJOR_VERSION}::Quick
-        Qt${QT_MAJOR_VERSION}::Qml
-        Qt${QT_MAJOR_VERSION}::Widgets
+        Qt6::Quick
+        Qt6::Qml
+        Qt6::Widgets
         ${KACTIVITIES_LIBRARY}
         KF6::Service
         KF6::ConfigWidgets

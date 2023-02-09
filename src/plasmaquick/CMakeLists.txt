@@ -39,13 +39,13 @@ target_include_directories(KF6PlasmaQuick PUBLIC "$<BUILD_INTERFACE:${CMAKE_CURR
 
 target_link_libraries(KF6PlasmaQuick
     PUBLIC
-        Qt${QT_MAJOR_VERSION}::Gui
-        Qt${QT_MAJOR_VERSION}::Quick
-        Qt${QT_MAJOR_VERSION}::Qml
+        Qt6::Gui
+        Qt6::Quick
+        Qt6::Qml
         KF6::Plasma
         KF6::WindowSystem
     PRIVATE
-        Qt${QT_MAJOR_VERSION}::Svg
+        Qt6::Svg
         KF6::I18n
         KF6::IconThemes
         KF6::Service
@@ -68,12 +68,8 @@ if(HAVE_X11)
         PRIVATE
             ${X11_LIBRARIES}
             XCB::XCB
+            Qt6::GuiPrivate
     )
-    if (TARGET Qt5::X11Extras)
-        target_link_libraries(KF6PlasmaQuick PRIVATE Qt5::X11Extras)
-    elseif(TARGET Qt6::Gui)
-        target_link_libraries(KF6PlasmaQuick PRIVATE Qt6::GuiPrivate)
-    endif()
 
     if(HAVE_XCB_SHAPE)
         target_link_libraries(KF6PlasmaQuick PRIVATE XCB::SHAPE)
