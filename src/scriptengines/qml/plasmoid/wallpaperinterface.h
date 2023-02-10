@@ -24,11 +24,11 @@ class QmlObject;
 }
 
 /**
- * @class WallpaperInterface
+ * @class Plasma::WallpaperInterface
  *
  * @brief This class is exposed to wallpapers as the attached property "wallpaper"
  *
- *
+ * @since org.kde.plasma.plasmoid 2.0
  */
 class WallpaperInterface : public QQuickItem
 {

@@ -21,7 +21,10 @@ class QmlObject;
 }
 
 /**
+ * @cond HIDDEN_SYMBOLS
+ * @class ToolTipDialog
  * Internally used by Tooltip
+ * @endcond
  */
 class ToolTipDialog : public PlasmaQuick::Dialog
 {

@@ -32,8 +32,9 @@ protected:
 };
 
 /**
- * @class Units
+ * @class Plasma::Units
  * @short Expose sizes to QML
+ * @since org.kde.plasma.core 2.0
  */
 class Units : public QObject
 {

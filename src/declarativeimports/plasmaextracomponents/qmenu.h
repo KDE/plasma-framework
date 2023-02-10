@@ -19,7 +19,7 @@
 class QDeclarativeItem;
 
 /**
- * @class Menu
+ * @class Plasma::Menu
  *
  * An Item provides a menu for use in context specific situations.
  * You can specify the position for the menu to open by setting its visualParent.
@@ -52,6 +52,7 @@ class QDeclarativeItem;
  * [...]
  * @endcode
  *
+ * @since org.kde.plasma.components 2.0
  */
 
 class QMenuProxy : public QObject

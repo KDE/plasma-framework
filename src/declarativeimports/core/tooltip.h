@@ -18,7 +18,7 @@ class QQuickItem;
 class ToolTipDialog;
 
 /**
- * @class ToolTip
+ * @class Plasma::ToolTipArea
  *
  * An Item managing a Plasma-themed tooltip. It is rendered in its own window.
  * You can either specify icon, mainText and subText, or a custom Component
@@ -44,6 +44,7 @@ class ToolTipDialog;
  * }
  * @endcode
  *
+ * @since org.kde.plasma.core 2.0
  */
 class ToolTip : public QQuickItem
 {
