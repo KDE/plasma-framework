@@ -666,7 +666,7 @@ void SvgPrivate::createRenderer()
     }
 
     QString styleSheet = cacheAndColorsTheme()->d->svgStyleSheet(colorGroup, status);
-    styleCrc = qChecksum(styleSheet.toUtf8().constData(), styleSheet.size());
+    styleCrc = qChecksum(QByteArrayView(styleSheet.toUtf8().constData(), styleSheet.size()));
 
     QHash<QString, SharedSvgRenderer::Ptr>::const_iterator it = s_renderers.constFind(styleCrc + path);
 

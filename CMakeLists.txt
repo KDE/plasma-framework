@@ -156,11 +156,8 @@ ecm_setup_qtplugin_macro_names(
 )
 
 ecm_set_disabled_deprecation_versions(
-    QT 5.14 # needed for qmlRegisterInterface
-    KF 5.95
-    KCOREADDONS 5.88 # KPluginMetaData::serviceTypes
-    KSERVICE 5.86 # KService::pluginKeyword
-    KDECLARATIVE 5.88 # KDeclarative::ConfigPropertyMap
+    QT 6.4
+    KF 5.102
 )
 
 #add_definitions(-Wno-deprecated)
