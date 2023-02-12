@@ -14,7 +14,6 @@
 #include <QQuickView>
 
 #include <KPluginMetaData>
-#include <kdeclarative/kdeclarative_export.h>
 
 #include <Plasma/Applet>
 #include <Plasma/Containment>
@@ -27,11 +26,6 @@ class QActionGroup;
 class QmlAppletScript;
 class QSizeF;
 class KConfigPropertyMap;
-
-namespace KDeclarative
-{
-class QmlObject;
-}
 
 namespace Plasma
 {

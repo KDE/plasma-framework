@@ -18,9 +18,9 @@ class KConfigPropertyMap;
 
 class ContainmentInterface;
 
-namespace KDeclarative
+namespace Plasma
 {
-class QmlObject;
+class SharedQmlEngine;
 }
 
 /**
@@ -88,7 +88,7 @@ private Q_SLOTS:
 private:
     QString m_wallpaperPlugin;
     ContainmentInterface *m_containmentInterface;
-    KDeclarative::QmlObject *m_qmlObject;
+    Plasma::SharedQmlEngine *m_qmlObject;
     KPackage::Package m_pkg;
     KConfigPropertyMap *m_configuration;
     KConfigLoader *m_configLoader;

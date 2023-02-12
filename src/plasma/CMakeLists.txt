@@ -98,7 +98,6 @@ PRIVATE
     KF6::KIOCore    #ServiceJob
     KF6::KIOWidgets  #KIO::JobUiDelegate
     KF6::WindowSystem #compositingActive
-    KF6::Declarative #runtimePlatform
     KF6::XmlGui   #KActionCollection
     KF6::GlobalAccel #Applet::setGlobalShortcut
     KF6::Notifications
@@ -137,6 +136,7 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
         Svg
         Theme
         Plasma
+        SharedQmlEngine
     REQUIRED_HEADERS Plasma_HEADERS
     PREFIX Plasma
 )

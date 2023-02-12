@@ -23,12 +23,12 @@
 #include <Plasma/Corona>
 #include <Plasma/Plasma>
 #include <Plasma/PluginLoader>
+#include <Plasma/SharedQmlEngine>
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"
 
 #include <KConfigPropertyMap>
-#include <kdeclarative/qmlobject.h>
 
 AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
     : AppletQuickItem(script->applet(), parent)

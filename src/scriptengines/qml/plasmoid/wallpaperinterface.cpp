@@ -9,8 +9,6 @@
 #include "containmentinterface.h"
 
 #include <KConfigPropertyMap>
-#include <kdeclarative/qmlobjectsharedengine.h>
-
 #include <KActionCollection>
 #include <KConfigLoader>
 #include <KDesktopFile>
@@ -23,6 +21,7 @@
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
+#include <Plasma/SharedQmlEngine>
 #include <kpackage/packageloader.h>
 
 QHash<QObject *, WallpaperInterface *> WallpaperInterface::s_rootObjects = QHash<QObject *, WallpaperInterface *>();
@@ -54,7 +53,7 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
 WallpaperInterface::~WallpaperInterface()
 {
     if (m_qmlObject) {
-        s_rootObjects.remove(m_qmlObject->engine());
+        s_rootObjects.remove(m_qmlObject->engine().get());
     }
 }
 
@@ -115,10 +114,10 @@ void WallpaperInterface::syncWallpaperPackage()
     m_wallpaperPlugin = m_containmentInterface->containment()->wallpaper();
 
     if (!m_qmlObject) {
-        m_qmlObject = new KDeclarative::QmlObjectSharedEngine(this);
-        s_rootObjects[m_qmlObject->engine()] = this;
+        m_qmlObject = new Plasma::SharedQmlEngine(this);
+        s_rootObjects[m_qmlObject->engine().get()] = this;
         m_qmlObject->setInitializationDelayed(true);
-        connect(m_qmlObject, &KDeclarative::QmlObject::finished, this, &WallpaperInterface::loadFinished);
+        connect(m_qmlObject, &Plasma::SharedQmlEngine::finished, this, &WallpaperInterface::loadFinished);
     }
 
     m_actions->clear();
@@ -182,7 +181,7 @@ void WallpaperInterface::loadFinished()
 
     } else if (m_qmlObject->mainComponent()) {
         qWarning() << "Error loading the wallpaper" << m_qmlObject->mainComponent()->errors();
-        s_rootObjects.remove(m_qmlObject->engine());
+        s_rootObjects.remove(m_qmlObject->engine().get());
         m_qmlObject->deleteLater();
         m_qmlObject = nullptr;
 

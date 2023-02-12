@@ -18,7 +18,6 @@ target_link_libraries(plasma_appletscript_declarative
     KF6::ConfigQml
     KF6::KIOCore
     KF6::KIOWidgets
-    KF6::Declarative
     KF6::I18n
     KF6::XmlGui # KActionCollection
     KF6::Plasma

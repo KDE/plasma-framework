@@ -89,7 +89,7 @@ public:
     QmlObjectIncubator incubator;
     QQmlComponent *component;
     QTimer *executionEndTimer;
-    QObject *context{nullptr};
+    KLocalizedContext *context{nullptr};
     QQmlContext *rootContext;
     bool delay;
     std::shared_ptr<QQmlEngine> m_engine;
@@ -168,12 +168,12 @@ SharedQmlEngine::~SharedQmlEngine() = default;
 
 void SharedQmlEngine::setTranslationDomain(const QString &translationDomain)
 {
-    d->context->setProperty("translationDomain", translationDomain);
+    d->context->setTranslationDomain(translationDomain);
 }
 
 QString SharedQmlEngine::translationDomain() const
 {
-    return d->context->property("translationDomain").toString();
+    return d->context->translationDomain();
 }
 
 void SharedQmlEngine::setSource(const QUrl &source)

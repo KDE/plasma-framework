@@ -22,7 +22,7 @@
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
-#include <kdeclarative/qmlobjectsharedengine.h>
+#include <Plasma/SharedQmlEngine>
 
 #include <packageurlinterceptor.h>
 #include <qloggingcategory.h>
@@ -60,15 +60,9 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
 
 void AppletQuickItemPrivate::init()
 {
-    if (!applet->pluginMetaData().isValid()) {
-        // This `qmlObject` is used in other parts of the code
-        qmlObject = new KDeclarative::QmlObject(q);
-        return;
-    }
-
-    qmlObject = new KDeclarative::QmlObjectSharedEngine(q);
+    qmlObject = new Plasma::SharedQmlEngine(q);
     if (qmlObject->engine()->urlInterceptors().isEmpty()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine(), KPackage::Package());
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine().get(), KPackage::Package());
         interceptor->setForcePlasmaStyle(true);
         qmlObject->engine()->addUrlInterceptor(interceptor);
     }
@@ -562,12 +556,12 @@ void AppletQuickItem::init()
     Q_ASSERT(d->applet);
 
     // Initialize the main QML file
-    QQmlEngine *engine = d->qmlObject->engine();
+    QQmlEngine *engine = d->qmlObject->engine().get();
 
     // if the engine of the qmlObject is different from the static one, then we
     // are using an old version of the api in which every applet had one engine
     // so initialize a private url interceptor
-    if (d->applet->kPackage().isValid() && !qobject_cast<KDeclarative::QmlObjectSharedEngine *>(d->qmlObject)) {
+    if (d->applet->kPackage().isValid()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->kPackage());
         interceptor->addAllowedPath(d->coronaPackage.path());
         engine->addUrlInterceptor(interceptor);
@@ -859,7 +853,7 @@ void AppletQuickItem::setActivationTogglesExpanded(bool activationTogglesExpande
 
 ////////////Internals
 
-KDeclarative::QmlObject *AppletQuickItem::qmlObject()
+Plasma::SharedQmlEngine *AppletQuickItem::qmlObject()
 {
     return d->qmlObject;
 }

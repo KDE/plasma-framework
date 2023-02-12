@@ -28,11 +28,7 @@
 namespace Plasma
 {
 class Applet;
-}
-
-namespace KDeclarative
-{
-class QmlObject;
+class SharedQmlEngine;
 }
 
 namespace PlasmaQuick
@@ -131,7 +127,7 @@ Q_SIGNALS:
     void fullRepresentationItemChanged(QObject *fullRepresentationItem);
 
 protected:
-    KDeclarative::QmlObject *qmlObject();
+    Plasma::SharedQmlEngine *qmlObject();
 
     // Reimplementation
     void childEvent(QChildEvent *event) override;

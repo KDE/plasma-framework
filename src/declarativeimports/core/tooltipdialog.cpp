@@ -13,7 +13,7 @@
 #include <QQuickItem>
 
 #include <KWindowSystem>
-#include <kdeclarative/qmlobjectsharedengine.h>
+#include <plasma/sharedqmlengine.h>
 
 ToolTipDialog::ToolTipDialog(QQuickItem *parent)
     : Dialog(parent)
@@ -39,7 +39,7 @@ ToolTipDialog::~ToolTipDialog()
 QQuickItem *ToolTipDialog::loadDefaultItem()
 {
     if (!m_qmlObject) {
-        m_qmlObject = new KDeclarative::QmlObjectSharedEngine(this);
+        m_qmlObject = new Plasma::SharedQmlEngine(this);
     }
 
     if (!m_qmlObject->rootObject()) {

@@ -29,9 +29,6 @@
 #include "plasmoid/wallpaperinterface.h"
 
 #include <KConfigPropertyMap>
-#include <kdeclarative/kdeclarative_export.h>
-
-#include <kdeclarative/qmlobject.h>
 
 DeclarativeAppletScript::DeclarativeAppletScript(QObject *parent, const QVariantList &args)
     : Plasma::AppletScript(parent)
