@@ -544,7 +544,8 @@ void DialogPrivate::getSizeHints(QSize &min, QSize &max) const
         maximumHeight = qMin(q->screen()->availableGeometry().height(), maximumHeight);
     }
 
-    min = QSize(minimumWidth, minimumHeight);
+    // Make sure that we never return min that would be larger than max
+    min = QSize(qMin(minimumWidth, maximumWidth), qMin(minimumHeight, maximumHeight));
     max = QSize(maximumWidth, maximumHeight);
 }
 
