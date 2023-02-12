@@ -25,7 +25,6 @@ include(ECMQtDeclareLoggingCategory)
 include(ECMAddQch)
 include(KDEPackageAppTemplates)
 include(ECMGenerateQmlTypes)
-include(ECMSetupQtPluginMacroNames)
 include(ECMMarkNonGuiExecutable)
 include(ECMDeprecationSettings)
 include(ECMQmlModule)
@@ -130,30 +129,7 @@ else()
     message(STATUS "OpenGL::EGL is not available")
 endif()
 
-
 #########################################################################
-
-# TODO KF6 remove
-ecm_setup_qtplugin_macro_names(
-    JSON_NONE
-        "K_EXPORT_PLASMA_SERVICE"
-        "K_EXPORT_PLASMA_APPLET"
-        "K_EXPORT_PLASMA_PACKAGE"
-        "K_EXPORT_PLASMA_APPLETSCRIPTENGINE"
-        "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE"
-        "K_EXPORT_PLASMA_DATAENGINE"
-    JSON_ARG2
-        "K_EXPORT_PLASMA_PACKAGE_WITH_JSON"
-    JSON_ARG3
-        "K_EXPORT_PLASMA_SERVICE_WITH_JSON"
-        "K_EXPORT_PLASMA_APPLET_WITH_JSON"
-        "K_EXPORT_PLASMA_APPLETSCRIPTENGINE_WITH_JSON"
-        "K_EXPORT_PLASMA_DATAENGINESCRIPTENGINE_WITH_JSON"
-        "K_EXPORT_PLASMA_CONTAINMENTACTIONS_WITH_JSON"
-        "K_EXPORT_PLASMA_DATAENGINE_WITH_JSON"
-    CONFIG_CODE_VARIABLE
-        PACKAGE_SETUP_AUTOMOC_VARIABLES
-)
 
 ecm_set_disabled_deprecation_versions(
     QT 6.4
