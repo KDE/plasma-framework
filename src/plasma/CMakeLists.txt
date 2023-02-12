@@ -19,6 +19,7 @@ target_sources(KF6Plasma PRIVATE
 #global
     plasma.cpp
     pluginloader.cpp
+    sharedqmlengine.cpp
 
 #applets,containments,corona
     applet.cpp
@@ -89,6 +90,7 @@ PUBLIC
 PRIVATE
     Qt6::Sql
     Qt6::Svg
+    Qt6::Quick # QQuickItem usage in sharedqmlengine that we might get rid of later on
     Qt6::DBus
     KF6::Archive
     KF6::GuiAddons #kimagecache
