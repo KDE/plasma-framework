@@ -33,7 +33,6 @@ target_link_libraries(corebindingsplugin
         KF6::IconThemes
         KF6::I18n
         Qt6::Svg
-        KF6::Service #for kplugininfo.h
         KF6::WindowSystem
         KF6::Plasma
         KF6::PlasmaQuick

@@ -18,7 +18,6 @@ target_link_libraries(plasmaextracomponentsplugin
         Qt6::Qml
         Qt6::Widgets
         ${KACTIVITIES_LIBRARY}
-        KF6::Service
         KF6::ConfigWidgets
         KF6::Plasma)
 

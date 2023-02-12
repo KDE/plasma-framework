@@ -14,7 +14,6 @@
 
 #include <KConfigLoader>
 #include <KConfigSkeleton>
-#include <KService>
 #include <KSharedConfig>
 #include <QDebug>
 

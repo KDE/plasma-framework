@@ -27,7 +27,6 @@
 #include <KGlobalAccel>
 #include <KLocalizedString>
 #include <KPackage/Package>
-#include <KService>
 
 #include "containment.h"
 #include "corona.h"

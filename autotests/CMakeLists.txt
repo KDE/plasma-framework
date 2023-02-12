@@ -21,8 +21,7 @@ MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
                set(libs Qt6::Qml Qt6::Test KF6::Plasma KF6::PlasmaQuick
                         KF6::Archive KF6::CoreAddons KF6::ConfigGui KF6::I18n
-                        KF6::Service KF6::IconThemes
-                        KF6::Declarative)
+                        KF6::IconThemes KF6::Declarative)
                if(QT_QTOPENGL_FOUND)
                    list(APPEND libs Qt6::OpenGL)
                endif()
@@ -68,7 +67,7 @@ ecm_add_test(
     ../src/declarativeimports/core/datamodel.cpp
     ../src/declarativeimports/core/datasource.cpp
     TEST_NAME plasma-sortfiltermodeltest
-    LINK_LIBRARIES KF6::Plasma Qt6::Gui Qt6::Test KF6::I18n KF6::Service Qt6::Qml
+    LINK_LIBRARIES KF6::Plasma Qt6::Gui Qt6::Test KF6::I18n Qt6::Qml
 )
 
 

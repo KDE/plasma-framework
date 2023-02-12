@@ -48,7 +48,6 @@ target_link_libraries(KF6PlasmaQuick
         Qt6::Svg
         KF6::I18n
         KF6::IconThemes
-        KF6::Service
         KF6::CoreAddons
         KF6::XmlGui
         KF6::Declarative

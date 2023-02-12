@@ -8,7 +8,6 @@ target_sources(plasma_dataengine_example_customDataContainers PRIVATE
 target_link_libraries(plasma_dataengine_example_customDataContainers
   KF6::Plasma
   KF6::KIOCore
-  KF6::Service
 )
 
 install(TARGETS plasma_dataengine_example_customDataContainers DESTINATION ${KDE_INSTALL_PLUGINDIR}/plasma/dataengine)

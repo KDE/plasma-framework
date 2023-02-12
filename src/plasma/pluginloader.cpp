@@ -12,7 +12,6 @@
 
 #include <KLazyLocalizedString>
 #include <KRuntimePlatform>
-#include <KService>
 #include <QDebug>
 #include <QRegularExpression>
 #include <kcoreaddons_export.h>

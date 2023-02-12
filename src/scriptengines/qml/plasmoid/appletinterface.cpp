@@ -17,7 +17,6 @@
 #include <KActionCollection>
 #include <KConfigLoader>
 #include <KLocalizedString>
-#include <KService>
 #include <QDebug>
 
 #include <Plasma/ContainmentActions>
