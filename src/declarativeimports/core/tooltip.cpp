@@ -31,6 +31,7 @@ ToolTip::ToolTip(QQuickItem *parent)
     , m_usingDialog(false)
 {
     setAcceptHoverEvents(true);
+    setAcceptTouchEvents(false); // BUG 465650 rely on mouse events synthesized from touch
     setFiltersChildMouseEvents(true);
 
     m_showTimer = new QTimer(this);
