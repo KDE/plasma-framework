@@ -24,6 +24,7 @@ target_sources(corebindingsplugin PRIVATE
     units.cpp
     windowthumbnail.cpp
     managedtexturenode.cpp
+    imagetexturescache.cpp
 )
 
 target_link_libraries(corebindingsplugin
