@@ -57,7 +57,6 @@ Units::Units(QObject *parent)
     }
 
     m_iconSizes = new QQmlPropertyMap(this);
-    m_iconSizeHints = new QQmlPropertyMap(this);
     updateDevicePixelRatio(); // also updates icon sizes
     updateSpacing(); // updates gridUnit and *Spacing properties
 
@@ -119,21 +118,12 @@ void Units::iconLoaderSettingsChanged()
     // roundToIconSize() already does that internally.
     m_iconSizes->insert(QStringLiteral("sizeForLabels"), roundToIconSize(QFontMetrics(QGuiApplication::font()).height()));
 
-    m_iconSizeHints->insert(QStringLiteral("panel"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Panel)));
-    m_iconSizeHints->insert(QStringLiteral("desktop"), devicePixelIconSize(KIconLoader::global()->currentSize(KIconLoader::Desktop)));
-
     Q_EMIT iconSizesChanged();
-    Q_EMIT iconSizeHintsChanged();
 }
 
 QQmlPropertyMap *Units::iconSizes() const
 {
     return m_iconSizes;
-}
-
-QQmlPropertyMap *Units::iconSizeHints() const
-{
-    return m_iconSizeHints;
 }
 
 int Units::roundToIconSize(int size)
