@@ -55,12 +55,6 @@ endif()
 
 if(HAVE_EGL)
     target_link_libraries(corebindingsplugin OpenGL::EGL)
-else()
-
-endif()
-
-if(QtGui_Enabled_Features MATCHES "opengles2")
-    target_link_libraries(corebindingsplugin Qt6::Gui_GLESv2)
 endif()
 
 install(FILES private/DefaultToolTip.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core/private)
