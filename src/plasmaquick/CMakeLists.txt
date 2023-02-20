@@ -18,6 +18,7 @@ target_sources(KF6PlasmaQuick PRIVATE
     packageurlinterceptor.cpp
     private/configcategory_p.cpp
     ../declarativeimports/core/framesvgitem.cpp
+    ../declarativeimports/core/imagetexturescache.cpp
     ../declarativeimports/core/managedtexturenode.cpp
     ../declarativeimports/core/units.cpp
 )
