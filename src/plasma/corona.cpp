@@ -402,9 +402,44 @@ QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
     return freeEdges;
 }
 
-KActionCollection *Corona::actions() const
+QStringList Corona::actions() const
 {
-    return &d->actions;
+    QStringList names;
+    const auto actions = d->actions.actions();
+    for (const QAction *action : actions) {
+        names << action->objectName();
+    }
+
+    return names;
+}
+
+QString actionName(Corona::Action action)
+{
+    switch (action) {
+    case Corona::LockWidgets:
+        return QStringLiteral("lock widgets");
+    case Corona::EditMode:
+        return QStringLiteral("edit mode");
+    case Corona::ManageActivities:
+        return QStringLiteral("manage activities");
+    }
+
+    return QString();
+}
+
+QAction *Corona::action(Action action) const
+{
+    return d->actions.action(actionName(action));
+}
+
+QAction *Corona::action(const QString &action) const
+{
+    return d->actions.action(action);
+}
+
+void Corona::addAction(const QString &name, QAction *action)
+{
+    d->actions.addAction(name, action);
 }
 
 CoronaPrivate::CoronaPrivate(Corona *corona)

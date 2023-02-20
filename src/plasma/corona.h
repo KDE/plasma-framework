@@ -163,10 +163,19 @@ public:
      */
     QList<Plasma::Types::Location> freeEdges(int screen) const;
 
-    /**
-     * The actions associated with this Corona
-     */
-    KActionCollection *actions() const;
+    QStringList actions() const;
+
+    enum Action {
+        LockWidgets,
+        EditMode,
+        ManageActivities,
+    };
+
+    QAction *action(Action action) const;
+
+    QAction *action(const QString &action) const;
+
+    void addAction(const QString &name, QAction *action);
 
     /**
      * Imports an applet layout from a config file. The results will be added to the

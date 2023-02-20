@@ -154,7 +154,7 @@ void ContainmentInterface::init()
     connect(m_containment.data(), &Plasma::Containment::wallpaperChanged, this, &ContainmentInterface::loadWallpaper);
     connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged, this, &ContainmentInterface::containmentTypeChanged);
 
-    connect(m_containment.data()->actions(), &KActionCollection::changed, this, &ContainmentInterface::actionsChanged);
+    connect(m_containment.data(), &Plasma::Applet::actionsChanged, this, &ContainmentInterface::actionsChanged);
 }
 
 QList<QObject *> ContainmentInterface::applets()
@@ -395,7 +395,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
 
 QAction *ContainmentInterface::globalAction(QString name) const
 {
-    return m_containment->corona()->actions()->action(name);
+    return m_containment->corona()->action(name);
 }
 
 void ContainmentInterface::openContextMenu(const QPointF &globalPos)
@@ -843,8 +843,9 @@ QList<QObject *> ContainmentInterface::actions() const
     // use a multimap to sort by action type
     QMultiMap<int, QObject *> actions;
     int i = 0;
-    auto listActions = m_containment->actions()->actions();
-    for (QAction *a : std::as_const(listActions)) {
+    auto listActions = m_containment->actions();
+    for (const QString &actionName : std::as_const(listActions)) {
+        QAction *a = action(actionName);
         if (!actionOrder.contains(a->objectName())) {
             // FIXME QML visualizations don't support menus for now, *and* there is no way to
             // distinguish them on QML side
@@ -858,8 +859,9 @@ QList<QObject *> ContainmentInterface::actions() const
     }
 
     i = 0;
-    listActions = m_containment->corona()->actions()->actions();
-    for (QAction *a : std::as_const(listActions)) {
+    listActions = m_containment->corona()->actions();
+    for (const QString &actionName : std::as_const(listActions)) {
+        QAction *a = action(actionName);
         if (a->objectName() == QLatin1String("lock widgets") || a->menu()) {
             // It is up to the Containment to decide if the user is allowed or not
             // to lock/unluck the widgets, so corona should not add one when there is none
@@ -1090,11 +1092,11 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 
     if (!applet->failedToLaunch()) {
-        QAction *configureApplet = applet->actions()->action(QStringLiteral("configure"));
+        QAction *configureApplet = applet->action(Plasma::Applet::Configure);
         if (configureApplet && configureApplet->isEnabled()) {
             desktopMenu->addAction(configureApplet);
         }
-        QAction *appletAlternatives = applet->actions()->action(QStringLiteral("alternatives"));
+        QAction *appletAlternatives = applet->action(Plasma::Applet::Alternatives);
         if (appletAlternatives && appletAlternatives->isEnabled()) {
             desktopMenu->addAction(appletAlternatives);
         }
@@ -1102,7 +1104,7 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
 
     desktopMenu->addSeparator();
     if (m_containment->containmentType() == Plasma::Types::DesktopContainment) {
-        auto action = m_containment->corona()->actions()->action(QStringLiteral("edit mode"));
+        auto action = m_containment->corona()->action(Plasma::Corona::EditMode);
         if (action) {
             desktopMenu->addAction(action);
         }
@@ -1112,7 +1114,7 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
 
     if (m_containment->immutability() == Plasma::Types::Mutable
         && (m_containment->containmentType() != Plasma::Types::PanelContainment || m_containment->isUserConfiguring())) {
-        QAction *closeApplet = applet->actions()->action(QStringLiteral("remove"));
+        QAction *closeApplet = applet->action(Plasma::Applet::Remove);
         // qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu->isEmpty()) {
@@ -1159,8 +1161,8 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
         /* clang-format off */
         if ((m_containment->containmentType() != Plasma::Types::PanelContainment
                 && m_containment->containmentType() != Plasma::Types::CustomPanelContainment)
-            && m_containment->actions()->action(QStringLiteral("configure"))) { /* clang-format on */
-            desktopMenu->addAction(m_containment->actions()->action(QStringLiteral("configure")));
+            && m_containment->action(Plasma::Applet::Configure)) { /* clang-format on */
+            desktopMenu->addAction(m_containment->action(Plasma::Applet::Configure));
         }
     } else {
         desktopMenu->addActions(actions);

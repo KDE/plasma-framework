@@ -33,7 +33,6 @@ class ConfigModel;
 class DeclarativeAppletScript;
 #include <KPluginFactory>
 
-class KActionCollection;
 class KConfigLoader;
 
 namespace Plasma
@@ -459,10 +458,23 @@ public:
      **/
     virtual QList<QAction *> contextualActions();
 
-    /**
-     * Returns the collection of actions for this Applet
-     */
-    KActionCollection *actions() const;
+    QStringList actions() const;
+
+    enum Action {
+        Alternatives,
+        AddWidgets,
+        Remove,
+        Configure,
+        // LockWidgets,
+    };
+
+    QAction *action(Action action) const;
+
+    QAction *action(const QString &action) const;
+
+    void addAction(Action type, QAction *action);
+
+    void addAction(const QString &name, QAction *action);
 
     /**
      * Sets the global shortcut to associate with this widget.
@@ -608,6 +620,8 @@ Q_SIGNALS:
      * @since 5.20
      */
     void configurationRequiredChanged(bool needsConfig, const QString &reason);
+
+    void actionsChanged();
 
     // TODO KF6 keep as Q_SLOT only stuff that needsto be manually invokable from qml
 public Q_SLOTS:

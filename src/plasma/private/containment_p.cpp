@@ -123,13 +123,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
         // update actions
         const bool unlocked = q->immutability() == Types::Mutable;
 
-        QAction *action = q->actions()->action(QStringLiteral("remove"));
+        QAction *action = q->action(Applet::Remove);
         if (action) {
             action->setEnabled(unlocked);
             action->setVisible(unlocked);
         }
 
-        action = q->actions()->action(QStringLiteral("add widgets"));
+        action = q->action(Applet::AddWidgets);
         if (action) {
             action->setEnabled(unlocked);
             action->setVisible(unlocked);

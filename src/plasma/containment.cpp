@@ -76,17 +76,17 @@ void Containment::init()
     }
 
     // connect actions
-    ContainmentPrivate::addDefaultActions(actions(), this);
+    ContainmentPrivate::addDefaultActions(Applet::d->actions, this);
     bool unlocked = immutability() == Types::Mutable;
 
     // fix the text of the actions that need title()
     // btw, do we really want to use title() when it's a desktopcontainment?
-    QAction *closeApplet = actions()->action(QStringLiteral("remove"));
+    QAction *closeApplet = action(Applet::Remove);
     if (closeApplet) {
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove %1", title()));
     }
 
-    QAction *configAction = actions()->action(QStringLiteral("configure"));
+    QAction *configAction = action(Applet::Configure);
     if (configAction) {
         if (d->type == Types::PanelContainment || d->type == Types::CustomPanelContainment) {
             configAction->setText(i18n("Enter Edit Mode"));
@@ -96,7 +96,7 @@ void Containment::init()
         }
     }
 
-    QAction *appletBrowserAction = actions()->action(QStringLiteral("add widgets"));
+    QAction *appletBrowserAction = action(Applet::AddWidgets);
     if (appletBrowserAction) {
         appletBrowserAction->setVisible(unlocked);
         appletBrowserAction->setEnabled(unlocked);
@@ -104,10 +104,10 @@ void Containment::init()
     }
 
     if (immutability() != Types::SystemImmutable && corona()) {
-        QAction *lockDesktopAction = corona()->actions()->action(QStringLiteral("lock widgets"));
+        QAction *lockDesktopAction = corona()->action(Corona::LockWidgets);
         // keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
-            actions()->addAction(QStringLiteral("lock widgets"), lockDesktopAction);
+            addAction(/*Applet::LockWidgets*/ QStringLiteral("lock widgets"), lockDesktopAction);
         }
     }
 

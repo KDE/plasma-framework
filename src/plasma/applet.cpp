@@ -63,6 +63,8 @@ Applet::Applet(QObject *parentObject, const KPluginMetaData &data, const QVarian
     //          that requires a scene, which is not available at this point
     d->init(QString(), args.mid(3));
     d->setupPackage();
+
+    connect(d->actions, &KActionCollection::changed, this, &Applet::actionsChanged);
 }
 
 Applet::~Applet()
@@ -600,9 +602,53 @@ QList<QAction *> Applet::contextualActions()
     return contextActions;
 }
 
-KActionCollection *Applet::actions() const
+QString actionName(Applet::Action action)
 {
-    return d->actions;
+    switch (action) {
+    case Applet::Alternatives:
+        return QStringLiteral("alternatives");
+    case Applet::AddWidgets:
+        return QStringLiteral("add widgets");
+    case Applet::Remove:
+        return QStringLiteral("remove");
+    // case Applet::LockWidgets:
+    // return QStringLiteral("lock widgets");
+    case Applet::Configure:
+        return QStringLiteral("configure");
+    }
+
+    return QString();
+}
+
+QAction *Applet::action(Action action) const
+{
+    return d->actions->action(actionName(action));
+}
+
+QAction *Applet::action(const QString &action) const
+{
+    return d->actions->action(action);
+}
+
+void Applet::addAction(Action type, QAction *action)
+{
+    d->actions->addAction(actionName(type), action);
+}
+
+void Applet::addAction(const QString &name, QAction *action)
+{
+    d->actions->addAction(name, action);
+}
+
+QStringList Applet::actions() const
+{
+    QStringList names;
+    const auto actions = d->actions->actions();
+    for (const QAction *action : actions) {
+        names << action->objectName();
+    }
+
+    return names;
 }
 
 Types::FormFactor Applet::formFactor() const

@@ -394,7 +394,7 @@ QList<QObject *> AppletInterface::contextualActionsObjects() const
     }
 
     for (const QString &name : std::as_const(m_actions)) {
-        QAction *action = a->actions()->action(name);
+        QAction *action = a->action(name);
 
         if (action) {
             actions << action;
@@ -413,7 +413,7 @@ QList<QAction *> AppletInterface::contextualActions() const
     }
 
     for (const QString &name : std::as_const(m_actions)) {
-        QAction *action = a->actions()->action(name);
+        QAction *action = a->action(name);
 
         if (action) {
             actions << action;
@@ -426,14 +426,14 @@ QList<QAction *> AppletInterface::contextualActions() const
 void AppletInterface::setActionSeparator(const QString &name)
 {
     Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(name);
+    QAction *action = a->action(name);
 
     if (action) {
         action->setSeparator(true);
     } else {
         action = new QAction(this);
         action->setSeparator(true);
-        a->actions()->addAction(name, action);
+        a->addAction(name, action);
         m_actions.append(name);
         Q_EMIT contextualActionsChanged();
     }
@@ -442,7 +442,7 @@ void AppletInterface::setActionSeparator(const QString &name)
 void AppletInterface::setActionGroup(const QString &actionName, const QString &group)
 {
     Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(actionName);
+    QAction *action = a->action(actionName);
 
     if (!action) {
         return;
@@ -458,13 +458,13 @@ void AppletInterface::setActionGroup(const QString &actionName, const QString &g
 void AppletInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
 {
     Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(name);
+    QAction *action = a->action(name);
 
     if (action) {
         action->setText(text);
     } else {
         action = new QAction(text, this);
-        a->actions()->addAction(name, action);
+        a->addAction(name, action);
 
         Q_ASSERT(!m_actions.contains(name));
         m_actions.append(name);
@@ -491,7 +491,7 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
 void AppletInterface::removeAction(const QString &name)
 {
     Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(name);
+    QAction *action = a->action(name);
     delete action;
     m_actions.removeAll(name);
 }
@@ -506,7 +506,7 @@ void AppletInterface::clearActions()
 
 QAction *AppletInterface::action(QString name) const
 {
-    return applet()->actions()->action(name);
+    return applet()->action(name);
 }
 
 bool AppletInterface::immutable() const
@@ -729,7 +729,12 @@ bool AppletInterface::event(QEvent *event)
         QKeyEvent *ke = static_cast<QKeyEvent *>(event);
         QKeySequence seq(ke->key() | ke->modifiers());
 
-        QList<QAction *> actions = applet()->actions()->actions();
+        QList<QAction *> actions;
+        const QStringList actionNames = applet()->actions();
+        for (const QString &actionName : actionNames) {
+            actions << action(actionName);
+        }
+
         // find the wallpaper action if we are a containment
         ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(this);
         if (ci) {
@@ -741,7 +746,10 @@ bool AppletInterface::event(QEvent *event)
 
         // add any actions of the corona
         if (applet()->containment() && applet()->containment()->corona()) {
-            actions << applet()->containment()->corona()->actions()->actions();
+            const QStringList actionNames = applet()->containment()->corona()->actions();
+            for (const QString &actionName : actionNames) {
+                actions << action(actionName);
+            }
         }
 
         bool keySequenceUsed = false;

@@ -145,7 +145,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     if (!q->isContainment()) {
         QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("widget-alternatives")), i18n("Show Alternatives..."), q);
         a->setVisible(false);
-        q->actions()->addAction(QStringLiteral("alternatives"), a);
+        q->addAction(Applet::Alternatives, a);
         QObject::connect(a, &QAction::triggered, q, [this] {
             if (q->containment()) {
                 Q_EMIT q->containment()->appletAlternativesRequested(q);
