@@ -16,12 +16,12 @@
 #include <QQmlComponent>
 #include <QQmlContext>
 #include <QQmlEngine>
+#include <QQmlFileSelector>
 #include <QQuickItem>
 
 #include <KAuthorized>
 #include <KLocalizedContext>
 #include <KLocalizedString>
-#include <KQuickAddons/ConfigModule>
 #include <packageurlinterceptor.h>
 
 #include <Plasma/Corona>
