@@ -418,7 +418,7 @@ void FrameSvg::paintFrame(QPainter *painter, const QPointF &pos)
 int FrameSvg::minimumDrawingHeight()
 {
     if (d->frame) {
-        return d->frame->fixedTopHeight + d->frame->fixedBottomHeight;
+        return d->frame->topHeight + d->frame->bottomHeight;
     }
     return 0;
 }
@@ -426,7 +426,7 @@ int FrameSvg::minimumDrawingHeight()
 int FrameSvg::minimumDrawingWidth()
 {
     if (d->frame) {
-        return d->frame->fixedRightWidth + d->frame->fixedLeftWidth;
+        return d->frame->rightWidth + d->frame->leftWidth;
     }
     return 0;
     
