@@ -7,6 +7,7 @@
 #ifndef HTTPCONTAINER_H
 #define HTTPCONTAINER_H
 
+#include <QPointer>
 #include <QUrl>
 
 #include <Plasma/DataContainer>
