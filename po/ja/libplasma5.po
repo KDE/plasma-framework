@@ -1,14 +1,14 @@
 # Fuminobu Takeyama <ftake@geeko.jp>, 2016.
 # Tomohiro Hyakutake <tomhioo@outlook.jp>, 2019.
-# Ryuichi Yamada <ryuichi_ya220@outlook.jp>, 2022.
+# Ryuichi Yamada <ryuichi_ya220@outlook.jp>, 2022, 2023.
 # Fumiaki Okushi <fumiaki.okushi@gmail.com>, 2011, 2016, 2022.
 msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-06 00:44+0000\n"
-"PO-Revision-Date: 2022-08-13 21:39-0700\n"
-"Last-Translator: Fumiaki Okushi <fumiaki.okushi@gmail.com>\n"
+"PO-Revision-Date: 2023-02-22 21:27+0900\n"
+"Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
 "X-Text-Markup: kde4\n"
-"X-Generator: Lokalize 22.04.1\n"
+"X-Generator: Lokalize 22.12.2\n"
 
 #: declarativeimports/calendar/eventdatadecorator.cpp:51
 #, kde-format
@@ -161,7 +161,7 @@ msgstr "%1 ウィジェットを有効化"
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
-msgstr "%1 を削除"
+msgstr "%1を削除"
 
 #: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
 #, kde-format
@@ -172,7 +172,7 @@ msgstr "編集モードに入る"
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
-msgstr "%1 を設定..."
+msgstr "%1を設定..."
 
 #: plasma/corona.cpp:355 plasma/corona.cpp:482
 #, kde-format
@@ -203,9 +203,10 @@ msgid ""
 "files are sparse files, so the maximum size may not be used. Setting a "
 "larger size is therefore often quite safe."
 msgstr ""
-"ディスク上のテーマキャッシュの最大サイズ(キロバイト)です。これらのファイルは"
-"スパースファイルなので、最大サイズまで使われないかもしれないことに注意してく"
-"ださい。したがって、より大きなサイズを設定するのが多くの場合とても安全です。"
+"ディスク上のテーマキャッシュの最大サイズ (キロバイト) です。これらのファイル"
+"はスパースファイルなので、設定された最大サイズが使用されない可能性があること"
+"に注意してください。したがって、より大きなサイズを設定することが、多くの場合"
+"安全です。"
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
