@@ -8,6 +8,7 @@ ExpandableListItem 2.0 ExpandableListItem.qml
 Heading 2.0 Heading.qml
 Highlight 2.0 Highlight.qml
 ListItem 2.0 ListItem.qml
+ModelContextMenu 2.0 ModelContextMenu.qml
 PasswordField 2.0 PasswordField.qml
 PlaceholderMessage 2.0 PlaceholderMessage.qml
 PlasmoidHeading 2.0 PlasmoidHeading.qml
