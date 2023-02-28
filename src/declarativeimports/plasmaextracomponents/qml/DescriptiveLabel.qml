@@ -5,7 +5,7 @@
 */
 
 import QtQuick 2.0
-import org.kde.plasma.components 2.0
+import org.kde.plasma.components 3.0
 
 /**
  * This is a descriptive label which uses the plasma theme. The characteristics of
