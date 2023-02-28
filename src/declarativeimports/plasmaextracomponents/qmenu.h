@@ -29,20 +29,20 @@ class QDeclarativeItem;
  *
  * Example usage:
  * @code
- * import org.kde.plasma.components 2.0 as PlasmaComponents
+ * import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  * [...]
- * PlasmaComponents.Menu {
+ * PlasmaExtras.Menu {
  *     id: menu
  *     ...
- *     PlasmaComponents.MenuItem {
+ *     PlasmaExtras.MenuItem {
  *         text: "Delete"
  *         onClicked: {
  *             myListItem.remove();
  *         }
  *     }
  * }
- * PlasmaComponents.Button {
+ * PlasmaExtras.Button {
  *     id: btn
  *     onClicked: {
  *         menu.visualParent = btn
