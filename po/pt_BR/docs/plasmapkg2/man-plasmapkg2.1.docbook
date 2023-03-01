@@ -30,7 +30,7 @@
 >plasmapkg2</command
 ></refname>
 <refpurpose
->Instalar, listar e remover os pacotes do Plasma</refpurpose>
+>Instalar, listar e remover os pacotes do &plasma;</refpurpose>
 </refnamediv>
 
 <refsynopsisdiv>
@@ -100,7 +100,7 @@
 <para
 >O <command
 >plasmapkg2</command
-> é uma ferramenta de linha de comando para instalar, listar e remover pacotes do Plasma.</para>
+> é uma ferramenta de linha de comando para instalar, listar e remover pacotes do &plasma;.</para>
 
 </refsect1>
 
@@ -245,9 +245,7 @@
 <para
 >Documentação do usuário mais detalhada está disponível em <ulink url="help:/plasma-desktop"
 >help:/plasma-desktop</ulink
-> (quer através deste <acronym
->URL</acronym
-> no &konqueror;, quer através do comando <userinput
+> (quer através deste &URL; no &konqueror;, quer através do comando <userinput
 ><command
 >khelpcenter</command
 > <parameter

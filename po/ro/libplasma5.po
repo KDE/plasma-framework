@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 00:44+0000\n"
+"POT-Creation-Date: 2023-03-01 21:29+0000\n"
 "PO-Revision-Date: 2022-04-04 11:55+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -18,114 +18,18 @@ msgstr ""
 "20)) ? 1 : 2;\n"
 "X-Generator: Lokalize 21.12.3\n"
 
-#: declarativeimports/calendar/eventdatadecorator.cpp:51
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Holidays"
-msgstr "Sărbători"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:53
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Events"
-msgstr "Evenimente"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:55
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Todo"
-msgstr "Obiective"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:57
-#, kde-format
-msgctxt "Means 'Other calendar items'"
-msgid "Other"
-msgstr "Altele"
-
-#: declarativeimports/calendar/qml/MonthView.qml:244
-#, kde-format
-msgctxt "Format: month year"
-msgid "%1 %2"
-msgstr "%1 %2"
-
-#: declarativeimports/calendar/qml/MonthView.qml:255
-#, kde-format
-msgid "Previous Month"
-msgstr "Luna trecută"
-
-#: declarativeimports/calendar/qml/MonthView.qml:257
-#, kde-format
-msgid "Previous Year"
-msgstr "Anul trecut"
-
-#: declarativeimports/calendar/qml/MonthView.qml:259
-#, kde-format
-msgid "Previous Decade"
-msgstr "Deceniul trecut"
-
-#: declarativeimports/calendar/qml/MonthView.qml:272
-#, kde-format
-msgctxt "Reset calendar to today"
-msgid "Today"
-msgstr "Azi"
-
-#: declarativeimports/calendar/qml/MonthView.qml:273
-#, kde-format
-msgid "Reset calendar to today"
-msgstr "Reinițializează calendarul la azi"
-
-#: declarativeimports/calendar/qml/MonthView.qml:282
-#, kde-format
-msgid "Next Month"
-msgstr "Luna viitoare"
-
-#: declarativeimports/calendar/qml/MonthView.qml:284
-#, kde-format
-msgid "Next Year"
-msgstr "Anul viitor"
-
-#: declarativeimports/calendar/qml/MonthView.qml:286
-#, kde-format
-msgid "Next Decade"
-msgstr "Deceniul viitor"
-
-#: declarativeimports/calendar/qml/MonthView.qml:306
-#, kde-format
-msgid "Days"
-msgstr "Zile"
-
-#: declarativeimports/calendar/qml/MonthView.qml:311
-#, kde-format
-msgid "Months"
-msgstr "Luni"
-
-#: declarativeimports/calendar/qml/MonthView.qml:316
-#, kde-format
-msgid "Years"
-msgstr "Ani"
-
-#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
-#, kde-format
-msgid "OK"
-msgstr "Bine"
-
-#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
-#, kde-format
-msgid "Cancel"
-msgstr "Renunță"
-
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
 msgid "More actions"
 msgstr "Acțiuni suplimentare"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -146,66 +50,47 @@ msgstr "Caută…"
 msgid "Search"
 msgstr "Caută"
 
-#: plasma/applet.cpp:379
+#: plasma/applet.cpp:288
 #, kde-format
 msgid "Unknown"
 msgstr "Necunoscut"
 
-#: plasma/applet.cpp:759
+#: plasma/applet.cpp:656
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Activează controlul %1"
 
-#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:103
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Elimină %1"
 
-#: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
+#: plasma/containment.cpp:91 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Intră în regim de modificare"
 
-#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#: plasma/containment.cpp:94 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Configurare %1..."
 
-#: plasma/corona.cpp:355 plasma/corona.cpp:482
+#: plasma/corona.cpp:317 plasma/corona.cpp:444
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Blochează controalele"
 
-#: plasma/corona.cpp:355
+#: plasma/corona.cpp:317
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Deblochează controalele"
 
-#: plasma/corona.cpp:404
+#: plasma/corona.cpp:366
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Ieși din regim de modificare"
-
-#. i18n: ectx: label, entry, group (CachePolicies)
-#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
-#, kde-format
-msgid "Whether or not to create an on-disk cache for the theme."
-msgstr "Dacă să fie creată sau nu o prestocare pe disc a tematicii."
-
-#. i18n: ectx: label, entry, group (CachePolicies)
-#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
-#, kde-format
-msgid ""
-"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-"files are sparse files, so the maximum size may not be used. Setting a "
-"larger size is therefore often quite safe."
-msgstr ""
-"Dimensiunea maximă pe disc a prestocării tematicilor, în kilo-octeți. "
-"Rețineți că acestea sunt fișiere „împrăștiate” (engleză: sparse), deci "
-"dimensiunea maximă poate să nu fie utilizată. Stabilirea unei dimensiuni mai "
-"mari este de obicei sigură."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -271,7 +156,7 @@ msgstr "Model de pagină pentru interfața de configurare"
 msgid "Configuration XML file"
 msgstr "Fișier de configurare XML"
 
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
 #, kde-format
 msgid "Custom expander for compact applets"
 msgstr "Expandor personalizat pentru miniaplicații compacte"
@@ -377,98 +262,84 @@ msgstr "Imagine de fundal opacă pentru indicii"
 msgid "KColorScheme configuration file"
 msgstr "Fișier de configurare KColorScheme"
 
-#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
+#: plasma/pluginloader.cpp:324 plasma/pluginloader.cpp:325
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: plasma/private/applet_p.cpp:126
+#: plasma/private/applet_p.cpp:123
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "Controlul grafic „%1” nu a definit un ScriptEngine de utilizat."
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:141
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Nu s-a putut deschide pachetul %1 necesar pentru controlul grafic %2."
 
-#: plasma/private/applet_p.cpp:166
+#: plasma/private/applet_p.cpp:162
 #, kde-format
 msgctxt ""
 "API or programming language the widget was written in, name of the widget"
 msgid "Could not create a %1 ScriptEngine for the %2 widget."
 msgstr "Nu s-a putut crea un ScriptEngine %1 pentru controlul grafic %2."
 
-#: plasma/private/applet_p.cpp:172
+#: plasma/private/applet_p.cpp:168
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Arată alternative..."
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:270
 #, kde-format
 msgid "Widget Removed"
 msgstr "Control eliminat"
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Controlul grafic „%1” a fost eliminat."
 
-#: plasma/private/applet_p.cpp:279
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panou eliminat"
 
-#: plasma/private/applet_p.cpp:280
+#: plasma/private/applet_p.cpp:276
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Un panou a fost eliminat."
 
-#: plasma/private/applet_p.cpp:283
+#: plasma/private/applet_p.cpp:279
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Birou eliminat"
 
-#: plasma/private/applet_p.cpp:284
+#: plasma/private/applet_p.cpp:280
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "A fost eliminat un birou."
 
-#: plasma/private/applet_p.cpp:287
+#: plasma/private/applet_p.cpp:283
 #, kde-format
 msgid "Undo"
 msgstr "Desfă"
 
-#: plasma/private/applet_p.cpp:375
+#: plasma/private/applet_p.cpp:371
 #, kde-format
 msgid "Widget Settings"
 msgstr "Configurări control"
 
-#: plasma/private/applet_p.cpp:382
+#: plasma/private/applet_p.cpp:377
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Elimină acest control"
 
-#: plasma/private/applet_p.cpp:389
-#: plasma/private/associatedapplicationmanager.cpp:65
-#: plasma/private/associatedapplicationmanager.cpp:124
-#: plasma/private/associatedapplicationmanager.cpp:166
-#, kde-format
-msgid "Run the Associated Application"
-msgstr "Rulează aplicația asociată"
-
-#: plasma/private/applet_p.cpp:480
+#: plasma/private/applet_p.cpp:465
 #, kde-format
 msgid "Script initialization failed"
 msgstr "Inițializarea scriptului a eșuat"
-
-#: plasma/private/associatedapplicationmanager.cpp:62
-#: plasma/private/associatedapplicationmanager.cpp:163
-#, kde-format
-msgid "Open with %1"
-msgstr "Deschide cu %1"
 
 #: plasma/private/containment_p.cpp:57
 #, kde-format
@@ -490,32 +361,10 @@ msgstr "Configurări activitate"
 msgid "Add Widgets..."
 msgstr "Adaugă controale…"
 
-#: plasma/private/containment_p.cpp:187
+#: plasma/private/containment_p.cpp:186
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Nu s-a putut găsi componenta cerută: %1"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plasma/private/publish.ui:17
-#, kde-format
-msgid ""
-"Sharing a widget on the network allows you to access this widget from "
-"another computer as a remote control."
-msgstr ""
-"Partajarea unui control grafic în rețea vă permite să accesați acest control "
-"de pe alt calculator ca telecomandă."
-
-#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
-#: plasma/private/publish.ui:27
-#, kde-format
-msgid "Share this widget on the network"
-msgstr "Partajează acest control în rețea"
-
-#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
-#: plasma/private/publish.ui:37
-#, kde-format
-msgid "Allow everybody to freely access this widget"
-msgstr "Permite tuturor să acceseze liber acest control"
 
 #: plasma/private/service_p.h:32
 #, kde-format
@@ -523,17 +372,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Serviciu nevalid (nul), nu se pot efectua operații de niciun fel."
 
-#: plasmaquick/appletquickitem.cpp:609
+#: plasmaquick/appletquickitem.cpp:595
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Miniaplicație necunoscută"
 
-#: plasmaquick/appletquickitem.cpp:624
+#: plasmaquick/appletquickitem.cpp:610
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Eroare la încărcarea fișierului QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:626
+#: plasmaquick/appletquickitem.cpp:612
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Eroare la încărcarea miniaplicației: pachet inexistent. %1"
@@ -543,51 +392,51 @@ msgstr "Eroare la încărcarea miniaplicației: pachet inexistent. %1"
 msgid "%1 Settings"
 msgstr "Configurări %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
 #, kde-format
 msgid "Plasma Package"
 msgstr "Pachet Plasma"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:611
 #, kde-format
 msgid "Install"
 msgstr "Instalează"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Instalarea pachetului a eșuat"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Pachetul pe care tocmai l-ați lăsat nu e valid."
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:652
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:721
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:656
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
 #, kde-format
 msgid "Widgets"
 msgstr "Controale grafice"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Adaugă %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:671
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:675
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:729
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Adaugă pictogramă"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
 #, kde-format
 msgid "Wallpaper"
 msgstr "Tapet"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:697
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
@@ -597,6 +446,98 @@ msgstr "Stabilește %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Conținut lăsat"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Holidays"
+#~ msgstr "Sărbători"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Events"
+#~ msgstr "Evenimente"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Todo"
+#~ msgstr "Obiective"
+
+#~ msgctxt "Means 'Other calendar items'"
+#~ msgid "Other"
+#~ msgstr "Altele"
+
+#~ msgctxt "Format: month year"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgid "Previous Month"
+#~ msgstr "Luna trecută"
+
+#~ msgid "Previous Year"
+#~ msgstr "Anul trecut"
+
+#~ msgid "Previous Decade"
+#~ msgstr "Deceniul trecut"
+
+#~ msgctxt "Reset calendar to today"
+#~ msgid "Today"
+#~ msgstr "Azi"
+
+#~ msgid "Reset calendar to today"
+#~ msgstr "Reinițializează calendarul la azi"
+
+#~ msgid "Next Month"
+#~ msgstr "Luna viitoare"
+
+#~ msgid "Next Year"
+#~ msgstr "Anul viitor"
+
+#~ msgid "Next Decade"
+#~ msgstr "Deceniul viitor"
+
+#~ msgid "Days"
+#~ msgstr "Zile"
+
+#~ msgid "Months"
+#~ msgstr "Luni"
+
+#~ msgid "Years"
+#~ msgstr "Ani"
+
+#~ msgid "OK"
+#~ msgstr "Bine"
+
+#~ msgid "Cancel"
+#~ msgstr "Renunță"
+
+#~ msgid "Whether or not to create an on-disk cache for the theme."
+#~ msgstr "Dacă să fie creată sau nu o prestocare pe disc a tematicii."
+
+#~ msgid ""
+#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+#~ "files are sparse files, so the maximum size may not be used. Setting a "
+#~ "larger size is therefore often quite safe."
+#~ msgstr ""
+#~ "Dimensiunea maximă pe disc a prestocării tematicilor, în kilo-octeți. "
+#~ "Rețineți că acestea sunt fișiere „împrăștiate” (engleză: sparse), deci "
+#~ "dimensiunea maximă poate să nu fie utilizată. Stabilirea unei dimensiuni "
+#~ "mai mari este de obicei sigură."
+
+#~ msgid "Run the Associated Application"
+#~ msgstr "Rulează aplicația asociată"
+
+#~ msgid "Open with %1"
+#~ msgstr "Deschide cu %1"
+
+#~ msgid ""
+#~ "Sharing a widget on the network allows you to access this widget from "
+#~ "another computer as a remote control."
+#~ msgstr ""
+#~ "Partajarea unui control grafic în rețea vă permite să accesați acest "
+#~ "control de pe alt calculator ca telecomandă."
+
+#~ msgid "Share this widget on the network"
+#~ msgstr "Partajează acest control în rețea"
+
+#~ msgid "Allow everybody to freely access this widget"
+#~ msgstr "Permite tuturor să acceseze liber acest control"
 
 #~ msgid "Accessibility"
 #~ msgstr "Accesibilitate"

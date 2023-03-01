@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 00:44+0000\n"
+"POT-Creation-Date: 2023-03-01 21:29+0000\n"
 "PO-Revision-Date: 2022-07-27 07:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -22,114 +22,18 @@ msgstr ""
 "Translator: Andrej Mernik <andrejm@ubuntu.si>\n"
 "X-Generator: Lokalize 22.04.1\n"
 
-#: declarativeimports/calendar/eventdatadecorator.cpp:51
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Holidays"
-msgstr "Prazniki"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:53
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Events"
-msgstr "Dogodki"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:55
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Todo"
-msgstr "Za narediti"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:57
-#, kde-format
-msgctxt "Means 'Other calendar items'"
-msgid "Other"
-msgstr "Drugo"
-
-#: declarativeimports/calendar/qml/MonthView.qml:244
-#, kde-format
-msgctxt "Format: month year"
-msgid "%1 %2"
-msgstr "%1 %2"
-
-#: declarativeimports/calendar/qml/MonthView.qml:255
-#, kde-format
-msgid "Previous Month"
-msgstr "Prejšnji mesec"
-
-#: declarativeimports/calendar/qml/MonthView.qml:257
-#, kde-format
-msgid "Previous Year"
-msgstr "Prejšnje leto"
-
-#: declarativeimports/calendar/qml/MonthView.qml:259
-#, kde-format
-msgid "Previous Decade"
-msgstr "Prejšnje desetletje"
-
-#: declarativeimports/calendar/qml/MonthView.qml:272
-#, kde-format
-msgctxt "Reset calendar to today"
-msgid "Today"
-msgstr "Danes"
-
-#: declarativeimports/calendar/qml/MonthView.qml:273
-#, kde-format
-msgid "Reset calendar to today"
-msgstr "Ponastavi koledar na današnji dan"
-
-#: declarativeimports/calendar/qml/MonthView.qml:282
-#, kde-format
-msgid "Next Month"
-msgstr "Naslednji mesec"
-
-#: declarativeimports/calendar/qml/MonthView.qml:284
-#, kde-format
-msgid "Next Year"
-msgstr "Naslednje leto"
-
-#: declarativeimports/calendar/qml/MonthView.qml:286
-#, kde-format
-msgid "Next Decade"
-msgstr "Naslednje desetletje"
-
-#: declarativeimports/calendar/qml/MonthView.qml:306
-#, kde-format
-msgid "Days"
-msgstr "Dni"
-
-#: declarativeimports/calendar/qml/MonthView.qml:311
-#, kde-format
-msgid "Months"
-msgstr "Mesecev"
-
-#: declarativeimports/calendar/qml/MonthView.qml:316
-#, kde-format
-msgid "Years"
-msgstr "Let"
-
-#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
-#, kde-format
-msgid "OK"
-msgstr "V redu"
-
-#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
-#, kde-format
-msgid "Cancel"
-msgstr "Prekliči"
-
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
 msgid "More actions"
 msgstr "Več dejavnosti"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Podri"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -150,65 +54,47 @@ msgstr "Poišči …"
 msgid "Search"
 msgstr "Poišči"
 
-#: plasma/applet.cpp:379
+#: plasma/applet.cpp:288
 #, kde-format
 msgid "Unknown"
 msgstr "Neznan"
 
-#: plasma/applet.cpp:759
+#: plasma/applet.cpp:656
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Omogoči gradnik %1"
 
-#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:103
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Odstrani %1"
 
-#: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
+#: plasma/containment.cpp:91 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Vstop v urejevalni način"
 
-#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#: plasma/containment.cpp:94 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Nastavi %1..."
 
-#: plasma/corona.cpp:355 plasma/corona.cpp:482
+#: plasma/corona.cpp:317 plasma/corona.cpp:444
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Zakleni gradnike"
 
-#: plasma/corona.cpp:355
+#: plasma/corona.cpp:317
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Odkleni gradnike"
 
-#: plasma/corona.cpp:404
+#: plasma/corona.cpp:366
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Izhod iz urejevalnega načina"
-
-#. i18n: ectx: label, entry, group (CachePolicies)
-#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
-#, kde-format
-msgid "Whether or not to create an on-disk cache for the theme."
-msgstr "Ali se naj za temo ustvari predpomnilnik na disku."
-
-#. i18n: ectx: label, entry, group (CachePolicies)
-#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
-#, kde-format
-msgid ""
-"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-"files are sparse files, so the maximum size may not be used. Setting a "
-"larger size is therefore often quite safe."
-msgstr ""
-"Največja velikost diskovnega predpomnilnika za temo v kilobajtih. Zapomnite "
-"si, da so te datoteke raztresene, zato ni mogoče uporabiti največje "
-"velikosti. Pogosto je varno, da nastavite večjo velikost."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -274,7 +160,7 @@ msgstr "Model strani nastavitvenega vmesnika"
 msgid "Configuration XML file"
 msgstr "Datoteka XML z nastavitvami"
 
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
 #, kde-format
 msgid "Custom expander for compact applets"
 msgstr "Razširilnik po meri za strnjene aplete"
@@ -380,98 +266,84 @@ msgstr "Prekrivna slika ozadja za orodne namige"
 msgid "KColorScheme configuration file"
 msgstr "Nastavitvena datoteka KColorScheme"
 
-#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
+#: plasma/pluginloader.cpp:324 plasma/pluginloader.cpp:325
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Razno"
 
-#: plasma/private/applet_p.cpp:126
+#: plasma/private/applet_p.cpp:123
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "Gradnik %1 ni določil kateri skriptni pogon bo uporabljen."
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:141
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Ni bilo mogoče odpreti paketa %1, ki je zahtevan za gradnik %2."
 
-#: plasma/private/applet_p.cpp:166
+#: plasma/private/applet_p.cpp:162
 #, kde-format
 msgctxt ""
 "API or programming language the widget was written in, name of the widget"
 msgid "Could not create a %1 ScriptEngine for the %2 widget."
 msgstr "Ni bilo mogoče ustvariti skriptnega pogona %1 za gradnik %2."
 
-#: plasma/private/applet_p.cpp:172
+#: plasma/private/applet_p.cpp:168
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Pokaži alternative..."
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:270
 #, kde-format
 msgid "Widget Removed"
 msgstr "Gradnik odstranjen"
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Gradnik '%1' je bil odstranjen."
 
-#: plasma/private/applet_p.cpp:279
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Panel Removed"
 msgstr "Plošča odstranjena"
 
-#: plasma/private/applet_p.cpp:280
+#: plasma/private/applet_p.cpp:276
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Plošča je bila odstranjena."
 
-#: plasma/private/applet_p.cpp:283
+#: plasma/private/applet_p.cpp:279
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Namizje odstranjeno"
 
-#: plasma/private/applet_p.cpp:284
+#: plasma/private/applet_p.cpp:280
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Namizje je bilo odstranjeno."
 
-#: plasma/private/applet_p.cpp:287
+#: plasma/private/applet_p.cpp:283
 #, kde-format
 msgid "Undo"
 msgstr "Razveljavi"
 
-#: plasma/private/applet_p.cpp:375
+#: plasma/private/applet_p.cpp:371
 #, kde-format
 msgid "Widget Settings"
 msgstr "Nastavitve gradnika"
 
-#: plasma/private/applet_p.cpp:382
+#: plasma/private/applet_p.cpp:377
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Odstrani ta gradnik"
 
-#: plasma/private/applet_p.cpp:389
-#: plasma/private/associatedapplicationmanager.cpp:65
-#: plasma/private/associatedapplicationmanager.cpp:124
-#: plasma/private/associatedapplicationmanager.cpp:166
-#, kde-format
-msgid "Run the Associated Application"
-msgstr "Zaženi povezan program"
-
-#: plasma/private/applet_p.cpp:480
+#: plasma/private/applet_p.cpp:465
 #, kde-format
 msgid "Script initialization failed"
 msgstr "Začenjanje skripta je spodletelo"
-
-#: plasma/private/associatedapplicationmanager.cpp:62
-#: plasma/private/associatedapplicationmanager.cpp:163
-#, kde-format
-msgid "Open with %1"
-msgstr "Odpri z %1"
 
 #: plasma/private/containment_p.cpp:57
 #, kde-format
@@ -493,32 +365,10 @@ msgstr "Nastavitve dejavnosti"
 msgid "Add Widgets..."
 msgstr "Dodaj gradnike ..."
 
-#: plasma/private/containment_p.cpp:187
+#: plasma/private/containment_p.cpp:186
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Ni bilo mogoče najti zahtevanega sestavnega dela: %1"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plasma/private/publish.ui:17
-#, kde-format
-msgid ""
-"Sharing a widget on the network allows you to access this widget from "
-"another computer as a remote control."
-msgstr ""
-"Če gradnik daste v souporabo prek omrežja, lahko do njega dostopate in ga "
-"daljinsko upravljate z drugega računalnika."
-
-#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
-#: plasma/private/publish.ui:27
-#, kde-format
-msgid "Share this widget on the network"
-msgstr "Deli ta gradnik na omrežju"
-
-#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
-#: plasma/private/publish.ui:37
-#, kde-format
-msgid "Allow everybody to freely access this widget"
-msgstr "Dovoli vsakomur, da prosto dostopa do tega gradnika"
 
 #: plasma/private/service_p.h:32
 #, kde-format
@@ -526,17 +376,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Neveljavna (nična) storitev, ki ne more izvajati opravil."
 
-#: plasmaquick/appletquickitem.cpp:609
+#: plasmaquick/appletquickitem.cpp:595
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Neznan applet"
 
-#: plasmaquick/appletquickitem.cpp:624
+#: plasmaquick/appletquickitem.cpp:610
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Napaka pri nalaganju datoteke QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:626
+#: plasmaquick/appletquickitem.cpp:612
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Napaka med nalaganjem apleta: paket ne obstaja. %1"
@@ -546,51 +396,51 @@ msgstr "Napaka med nalaganjem apleta: paket ne obstaja. %1"
 msgid "%1 Settings"
 msgstr "Nastavitve za %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
 #, kde-format
 msgid "Plasma Package"
 msgstr "Paket za Plasmo"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:611
 #, kde-format
 msgid "Install"
 msgstr "Namesti"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Namestitev paketa ni uspela"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Pravkar spuščen paket ni veljaven."
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:652
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:721
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:656
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
 #, kde-format
 msgid "Widgets"
 msgstr "Gradniki"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Dodaj %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:671
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:675
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:729
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Dodaj ikono"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
 #, kde-format
 msgid "Wallpaper"
 msgstr "Ozadje"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:697
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
@@ -600,6 +450,97 @@ msgstr "Postavi %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Vsebina spuščena"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Holidays"
+#~ msgstr "Prazniki"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Events"
+#~ msgstr "Dogodki"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Todo"
+#~ msgstr "Za narediti"
+
+#~ msgctxt "Means 'Other calendar items'"
+#~ msgid "Other"
+#~ msgstr "Drugo"
+
+#~ msgctxt "Format: month year"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgid "Previous Month"
+#~ msgstr "Prejšnji mesec"
+
+#~ msgid "Previous Year"
+#~ msgstr "Prejšnje leto"
+
+#~ msgid "Previous Decade"
+#~ msgstr "Prejšnje desetletje"
+
+#~ msgctxt "Reset calendar to today"
+#~ msgid "Today"
+#~ msgstr "Danes"
+
+#~ msgid "Reset calendar to today"
+#~ msgstr "Ponastavi koledar na današnji dan"
+
+#~ msgid "Next Month"
+#~ msgstr "Naslednji mesec"
+
+#~ msgid "Next Year"
+#~ msgstr "Naslednje leto"
+
+#~ msgid "Next Decade"
+#~ msgstr "Naslednje desetletje"
+
+#~ msgid "Days"
+#~ msgstr "Dni"
+
+#~ msgid "Months"
+#~ msgstr "Mesecev"
+
+#~ msgid "Years"
+#~ msgstr "Let"
+
+#~ msgid "OK"
+#~ msgstr "V redu"
+
+#~ msgid "Cancel"
+#~ msgstr "Prekliči"
+
+#~ msgid "Whether or not to create an on-disk cache for the theme."
+#~ msgstr "Ali se naj za temo ustvari predpomnilnik na disku."
+
+#~ msgid ""
+#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+#~ "files are sparse files, so the maximum size may not be used. Setting a "
+#~ "larger size is therefore often quite safe."
+#~ msgstr ""
+#~ "Največja velikost diskovnega predpomnilnika za temo v kilobajtih. "
+#~ "Zapomnite si, da so te datoteke raztresene, zato ni mogoče uporabiti "
+#~ "največje velikosti. Pogosto je varno, da nastavite večjo velikost."
+
+#~ msgid "Run the Associated Application"
+#~ msgstr "Zaženi povezan program"
+
+#~ msgid "Open with %1"
+#~ msgstr "Odpri z %1"
+
+#~ msgid ""
+#~ "Sharing a widget on the network allows you to access this widget from "
+#~ "another computer as a remote control."
+#~ msgstr ""
+#~ "Če gradnik daste v souporabo prek omrežja, lahko do njega dostopate in ga "
+#~ "daljinsko upravljate z drugega računalnika."
+
+#~ msgid "Share this widget on the network"
+#~ msgstr "Deli ta gradnik na omrežju"
+
+#~ msgid "Allow everybody to freely access this widget"
+#~ msgstr "Dovoli vsakomur, da prosto dostopa do tega gradnika"
 
 #~ msgid "Accessibility"
 #~ msgstr "Dostopnost"

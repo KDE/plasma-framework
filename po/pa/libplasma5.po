@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-01-06 00:44+0000\n"
+"POT-Creation-Date: 2023-03-01 21:29+0000\n"
 "PO-Revision-Date: 2022-11-19 05:34-0800\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -18,114 +18,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 22.08.2\n"
 
-#: declarativeimports/calendar/eventdatadecorator.cpp:51
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Holidays"
-msgstr "ਛੁੱਟੀਆਂ"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:53
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Events"
-msgstr "ਸਮਾਗਮ"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:55
-#, kde-format
-msgctxt "Agenda listview section title"
-msgid "Todo"
-msgstr "ਟੂ-ਡੂ"
-
-#: declarativeimports/calendar/eventdatadecorator.cpp:57
-#, kde-format
-msgctxt "Means 'Other calendar items'"
-msgid "Other"
-msgstr "ਹੋਰ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:244
-#, kde-format
-msgctxt "Format: month year"
-msgid "%1 %2"
-msgstr "%1 %2"
-
-#: declarativeimports/calendar/qml/MonthView.qml:255
-#, kde-format
-msgid "Previous Month"
-msgstr "ਪਿਛਲਾ ਮਹੀਨਾ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:257
-#, kde-format
-msgid "Previous Year"
-msgstr "ਪਿਛਲਾ ਸਾਲ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:259
-#, kde-format
-msgid "Previous Decade"
-msgstr "ਪਿਛਲਾ ਦਹਾਕਾ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:272
-#, kde-format
-msgctxt "Reset calendar to today"
-msgid "Today"
-msgstr "ਅੱਜ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:273
-#, kde-format
-msgid "Reset calendar to today"
-msgstr "ਕੈਲੰਡਰ ਨੂੰ ਅੱਜ ਲਈ ਮੁੜ-ਸੈੱਟ ਕਰੋ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:282
-#, kde-format
-msgid "Next Month"
-msgstr "ਅਗਲਾ ਮਹੀਨਾ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:284
-#, kde-format
-msgid "Next Year"
-msgstr "ਅਗਲਾ ਸਾਲ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:286
-#, kde-format
-msgid "Next Decade"
-msgstr "ਅਗਲਾ ਦਹਾਕਾ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:306
-#, kde-format
-msgid "Days"
-msgstr "ਦਿਨ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:311
-#, kde-format
-msgid "Months"
-msgstr "ਮਹੀਨੇ"
-
-#: declarativeimports/calendar/qml/MonthView.qml:316
-#, kde-format
-msgid "Years"
-msgstr "ਸਾਲ"
-
-#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:21
-#, kde-format
-msgid "OK"
-msgstr "ਠੀਕ ਹੈ"
-
-#: declarativeimports/plasmacomponents/qml/QueryDialog.qml:22
-#, kde-format
-msgid "Cancel"
-msgstr "ਰੱਦ ਕਰੋ"
-
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
 msgid "More actions"
 msgstr "ਹੋਰ ਕਾਰਵਾਈਆਂ"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "ਸਮੇਟੋ"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:559
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -146,62 +50,47 @@ msgstr "…ਖੋਜੋ"
 msgid "Search"
 msgstr "ਖੋਜੋ"
 
-#: plasma/applet.cpp:379
+#: plasma/applet.cpp:288
 #, kde-format
 msgid "Unknown"
 msgstr "ਅਣਜਾਣ"
 
-#: plasma/applet.cpp:759
+#: plasma/applet.cpp:656
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 ਵਿਦਜੈਟ ਸਰਗਰਮ ਕਰੋ"
 
-#: plasma/containment.cpp:115 plasma/private/applet_p.cpp:106
+#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:103
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1 ਨੂੰ ਹਟਾਓ"
 
-#: plasma/containment.cpp:121 plasma/corona.cpp:406 plasma/corona.cpp:496
+#: plasma/containment.cpp:91 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "ਸੋਧ ਢੰਗ ਵਿੱਚ ਜਾਓ"
 
-#: plasma/containment.cpp:124 plasma/private/applet_p.cpp:111
+#: plasma/containment.cpp:94 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1 ਸੰਰਚਨਾ..."
 
-#: plasma/corona.cpp:355 plasma/corona.cpp:482
+#: plasma/corona.cpp:317 plasma/corona.cpp:444
 #, kde-format
 msgid "Lock Widgets"
 msgstr "ਵਿਦਜੈਟ ਲਾਕ ਕਰੋ"
 
-#: plasma/corona.cpp:355
+#: plasma/corona.cpp:317
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "ਵਿਦਜੈਟ ਅਣ-ਲਾਕ ਕਰੋ"
 
-#: plasma/corona.cpp:404
+#: plasma/corona.cpp:366
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "ਸੋਧ ਢੰਗ ਤੋਂ ਬਾਹਰ"
-
-#. i18n: ectx: label, entry, group (CachePolicies)
-#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
-#, kde-format
-msgid "Whether or not to create an on-disk cache for the theme."
-msgstr ""
-
-#. i18n: ectx: label, entry, group (CachePolicies)
-#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
-#, kde-format
-msgid ""
-"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-"files are sparse files, so the maximum size may not be used. Setting a "
-"larger size is therefore often quite safe."
-msgstr ""
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -267,7 +156,7 @@ msgstr ""
 msgid "Configuration XML file"
 msgstr "ਸੰਰਚਨਾ XML ਫਾਈਲ"
 
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
+#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
 #, kde-format
 msgid "Custom expander for compact applets"
 msgstr ""
@@ -373,98 +262,84 @@ msgstr "ਟੂਲ-ਟਿੱਪ ਲਈ ਧੁੰਦਲਾ ਬੈਕਗਰਾਊ�
 msgid "KColorScheme configuration file"
 msgstr "KColorScheme ਸੰਰਚਨਾ ਫਾਈਲ"
 
-#: plasma/pluginloader.cpp:592 plasma/pluginloader.cpp:593
+#: plasma/pluginloader.cpp:324 plasma/pluginloader.cpp:325
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "ਫੁਟਕਲ"
 
-#: plasma/private/applet_p.cpp:126
+#: plasma/private/applet_p.cpp:123
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:141
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:166
+#: plasma/private/applet_p.cpp:162
 #, kde-format
 msgctxt ""
 "API or programming language the widget was written in, name of the widget"
 msgid "Could not create a %1 ScriptEngine for the %2 widget."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:172
+#: plasma/private/applet_p.cpp:168
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "ਬਦਲ ਦਿਖਾਓ..."
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:270
 #, kde-format
 msgid "Widget Removed"
 msgstr "ਵਿਦਜੈਟ ਹਟਾਇਆ"
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "ਵਿਦਜੈਟ \"%1\" ਨੂੰ ਹਟਾਇਆ ਗਿਆ।"
 
-#: plasma/private/applet_p.cpp:279
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Panel Removed"
 msgstr "ਪੈਨਲ ਹਟਾਇਆ"
 
-#: plasma/private/applet_p.cpp:280
+#: plasma/private/applet_p.cpp:276
 #, kde-format
 msgid "A panel has been removed."
 msgstr "ਪੈਨਲ ਹਟਾਇਆ ਜਾ ਚੁੱਕਾ ਹੈ।"
 
-#: plasma/private/applet_p.cpp:283
+#: plasma/private/applet_p.cpp:279
 #, kde-format
 msgid "Desktop Removed"
 msgstr "ਡੈਸਕਟਾਪ ਹਟਾਇਆ"
 
-#: plasma/private/applet_p.cpp:284
+#: plasma/private/applet_p.cpp:280
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "ਡੈਸਕਟਾਪ ਹਟਾਇਆ ਜਾ ਚੁੱਕਿਆ ਹੈ।"
 
-#: plasma/private/applet_p.cpp:287
+#: plasma/private/applet_p.cpp:283
 #, kde-format
 msgid "Undo"
 msgstr "ਵਾਪਿਸ"
 
-#: plasma/private/applet_p.cpp:375
+#: plasma/private/applet_p.cpp:371
 #, kde-format
 msgid "Widget Settings"
 msgstr "ਵਿਦਜੈਟ ਸੈਟਿੰਗ"
 
-#: plasma/private/applet_p.cpp:382
+#: plasma/private/applet_p.cpp:377
 #, kde-format
 msgid "Remove this Widget"
 msgstr "ਇਹ ਵਿਦਜੈਟ ਹਟਾਓ"
 
-#: plasma/private/applet_p.cpp:389
-#: plasma/private/associatedapplicationmanager.cpp:65
-#: plasma/private/associatedapplicationmanager.cpp:124
-#: plasma/private/associatedapplicationmanager.cpp:166
-#, kde-format
-msgid "Run the Associated Application"
-msgstr "ਸੰਬੰਧਿਤ ਐਪਲੀਕੇਸ਼ਨ ਚਲਾਓ"
-
-#: plasma/private/applet_p.cpp:480
+#: plasma/private/applet_p.cpp:465
 #, kde-format
 msgid "Script initialization failed"
 msgstr "ਸਕ੍ਰਿਪਟ ਸ਼ੁਰੂ ਕਰਨ ਲਈ ਫੇਲ੍ਹ"
-
-#: plasma/private/associatedapplicationmanager.cpp:62
-#: plasma/private/associatedapplicationmanager.cpp:163
-#, kde-format
-msgid "Open with %1"
-msgstr "%1 ਨਾਲ ਖੋਲ੍ਹੋ"
 
 #: plasma/private/containment_p.cpp:57
 #, kde-format
@@ -486,32 +361,10 @@ msgstr "ਸਰਗਰਮੀ ਸੈਟਿੰਗਾਂ"
 msgid "Add Widgets..."
 msgstr "...ਵਿਦਜੈੱਟ ਸ਼ਾਮਿਲ"
 
-#: plasma/private/containment_p.cpp:187
+#: plasma/private/containment_p.cpp:186
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "ਲੋੜੀਦਾ ਭਾਗ ਲੱਭਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ: %1"
-
-#. i18n: ectx: property (text), widget (QLabel, label)
-#: plasma/private/publish.ui:17
-#, kde-format
-msgid ""
-"Sharing a widget on the network allows you to access this widget from "
-"another computer as a remote control."
-msgstr ""
-"ਨੈੱਟਵਰਕ ਉੱਤੇ ਵਿਦਜੈੱਟ ਨੂੰ ਸਾਂਝਾ ਕਰਨ ਨਾਲ ਤੁਸੀਂ ਇਸ ਵਿਦਜੈੱਟ ਨੂੰ ਹੋਰ ਕੰਪਿਊਟਰ ਤੋਂ ਰਿਮੋਟ ਕੰਟਰੋਲ ਵਜੋਂ ਅਸੈੱਸ "
-"ਮਨਜ਼ੂਰ ਕਰਦੇ ਹੋ।"
-
-#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
-#: plasma/private/publish.ui:27
-#, kde-format
-msgid "Share this widget on the network"
-msgstr "ਇਹ ਵਿਦਜੈੱਟ ਨੈੱਟਵਰਕ ਉੱਤੇ ਸਾਂਝਾ ਕਰੋ"
-
-#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
-#: plasma/private/publish.ui:37
-#, kde-format
-msgid "Allow everybody to freely access this widget"
-msgstr "ਹਰੇਕ ਨੂੰ ਇਹ ਵਿਦਜੈੱਟ ਵਰਤਣ ਦਿਓ"
 
 #: plasma/private/service_p.h:32
 #, kde-format
@@ -519,17 +372,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "ਗਲਤ (ਨਲ) ਸਰਵਿਸ, ਕੋਈ ਵੀ ਓਪਰੇਸ਼ਨ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।"
 
-#: plasmaquick/appletquickitem.cpp:609
+#: plasmaquick/appletquickitem.cpp:595
 #, kde-format
 msgid "Unknown Applet"
 msgstr "ਅਣਪਛਾਤਾ ਐਪਲਿਟ"
 
-#: plasmaquick/appletquickitem.cpp:624
+#: plasmaquick/appletquickitem.cpp:610
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "QML ਫਾਈਲ ਲੋਡ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:626
+#: plasmaquick/appletquickitem.cpp:612
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr ""
@@ -539,51 +392,51 @@ msgstr ""
 msgid "%1 Settings"
 msgstr "%1 ਸੈਟਿੰਗਾਂ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:603
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
 #, kde-format
 msgid "Plasma Package"
 msgstr "ਪਲਾਜ਼ਮਾ ਪੈਕੇਜ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:611
 #, kde-format
 msgid "Install"
 msgstr "ਇੰਸਟਾਲ ਕਰੋ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:620
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "ਪੈਕੇਜ ਇੰਸਟਾਲੇਸ਼ਨ ਅਸਫ਼ਲ ਹੈ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:643
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr ""
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:652
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:721
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:656
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
 #, kde-format
 msgid "Widgets"
 msgstr "ਵਿਦਜੈੱਟ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:657
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1 ਜੋੜੋ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:671
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:675
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:729
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "ਆਈਕਾਨ ਜੋੜੋ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:683
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
 #, kde-format
 msgid "Wallpaper"
 msgstr "ਵਾਲਪੇਪਰ"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:693
+#: scriptengines/qml/plasmoid/containmentinterface.cpp:697
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
@@ -593,6 +446,85 @@ msgstr "%1 ਸੈੱਟ ਕਰੋ"
 #, kde-format
 msgid "Content dropped"
 msgstr ""
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Holidays"
+#~ msgstr "ਛੁੱਟੀਆਂ"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Events"
+#~ msgstr "ਸਮਾਗਮ"
+
+#~ msgctxt "Agenda listview section title"
+#~ msgid "Todo"
+#~ msgstr "ਟੂ-ਡੂ"
+
+#~ msgctxt "Means 'Other calendar items'"
+#~ msgid "Other"
+#~ msgstr "ਹੋਰ"
+
+#~ msgctxt "Format: month year"
+#~ msgid "%1 %2"
+#~ msgstr "%1 %2"
+
+#~ msgid "Previous Month"
+#~ msgstr "ਪਿਛਲਾ ਮਹੀਨਾ"
+
+#~ msgid "Previous Year"
+#~ msgstr "ਪਿਛਲਾ ਸਾਲ"
+
+#~ msgid "Previous Decade"
+#~ msgstr "ਪਿਛਲਾ ਦਹਾਕਾ"
+
+#~ msgctxt "Reset calendar to today"
+#~ msgid "Today"
+#~ msgstr "ਅੱਜ"
+
+#~ msgid "Reset calendar to today"
+#~ msgstr "ਕੈਲੰਡਰ ਨੂੰ ਅੱਜ ਲਈ ਮੁੜ-ਸੈੱਟ ਕਰੋ"
+
+#~ msgid "Next Month"
+#~ msgstr "ਅਗਲਾ ਮਹੀਨਾ"
+
+#~ msgid "Next Year"
+#~ msgstr "ਅਗਲਾ ਸਾਲ"
+
+#~ msgid "Next Decade"
+#~ msgstr "ਅਗਲਾ ਦਹਾਕਾ"
+
+#~ msgid "Days"
+#~ msgstr "ਦਿਨ"
+
+#~ msgid "Months"
+#~ msgstr "ਮਹੀਨੇ"
+
+#~ msgid "Years"
+#~ msgstr "ਸਾਲ"
+
+#~ msgid "OK"
+#~ msgstr "ਠੀਕ ਹੈ"
+
+#~ msgid "Cancel"
+#~ msgstr "ਰੱਦ ਕਰੋ"
+
+#~ msgid "Run the Associated Application"
+#~ msgstr "ਸੰਬੰਧਿਤ ਐਪਲੀਕੇਸ਼ਨ ਚਲਾਓ"
+
+#~ msgid "Open with %1"
+#~ msgstr "%1 ਨਾਲ ਖੋਲ੍ਹੋ"
+
+#~ msgid ""
+#~ "Sharing a widget on the network allows you to access this widget from "
+#~ "another computer as a remote control."
+#~ msgstr ""
+#~ "ਨੈੱਟਵਰਕ ਉੱਤੇ ਵਿਦਜੈੱਟ ਨੂੰ ਸਾਂਝਾ ਕਰਨ ਨਾਲ ਤੁਸੀਂ ਇਸ ਵਿਦਜੈੱਟ ਨੂੰ ਹੋਰ ਕੰਪਿਊਟਰ ਤੋਂ ਰਿਮੋਟ ਕੰਟਰੋਲ ਵਜੋਂ ਅਸੈੱਸ "
+#~ "ਮਨਜ਼ੂਰ ਕਰਦੇ ਹੋ।"
+
+#~ msgid "Share this widget on the network"
+#~ msgstr "ਇਹ ਵਿਦਜੈੱਟ ਨੈੱਟਵਰਕ ਉੱਤੇ ਸਾਂਝਾ ਕਰੋ"
+
+#~ msgid "Allow everybody to freely access this widget"
+#~ msgstr "ਹਰੇਕ ਨੂੰ ਇਹ ਵਿਦਜੈੱਟ ਵਰਤਣ ਦਿਓ"
 
 #~ msgid "Accessibility"
 #~ msgstr "ਅਸੈੱਸਬਿਲਟੀ"
