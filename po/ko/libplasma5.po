@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-10-03 16:23+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-i18n-doc@kde.org>\n"
@@ -91,6 +91,23 @@ msgstr "위젯 잠금 풀기"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "편집 모드 끝내기"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "테마의 디스크 캐시를 생성할 수 있는지 여부입니다."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"킬로바이트 단위의 디스크 테마 캐시 최대 크기입니다. 이 파일은 스파스 파일이므"
+"로 최대 크기까지 도달하지 않을 수도 있습니다. 크게 설정하여도 무방합니다."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -366,6 +383,28 @@ msgstr "위젯 추가..."
 msgid "Could not find requested component: %1"
 msgstr "요청한 구성 요소를 찾을 수 없습니다: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"위젯을 네트워크로 공유하면 다른 컴퓨터에서 원격으로 위젯을 제어할 수 있습니"
+"다."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "이 위젯을 네트워크로 공유하기"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "모든 사람이 위젯에 자유롭게 접근하도록 하기"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -507,36 +546,11 @@ msgstr "내용 드롭됨"
 #~ msgid "Cancel"
 #~ msgstr "취소"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "테마의 디스크 캐시를 생성할 수 있는지 여부입니다."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "킬로바이트 단위의 디스크 테마 캐시 최대 크기입니다. 이 파일은 스파스 파일"
-#~ "이므로 최대 크기까지 도달하지 않을 수도 있습니다. 크게 설정하여도 무방합니"
-#~ "다."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "연결된 프로그램을 실행합니다"
 
 #~ msgid "Open with %1"
 #~ msgstr "%1(으)로 열기"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "위젯을 네트워크로 공유하면 다른 컴퓨터에서 원격으로 위젯을 제어할 수 있습"
-#~ "니다."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "이 위젯을 네트워크로 공유하기"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "모든 사람이 위젯에 자유롭게 접근하도록 하기"
 
 #~ msgid "Accessibility"
 #~ msgstr "접근성"

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2023-01-08 18:16+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -105,6 +105,24 @@ msgstr "Déverrouiller les composants graphiques"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Quitter le mode d'édition"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Créer ou non un cache pour le thème sur le disque."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"La taille maximum pour le stockage du cache de Thème en kilo-octet. Veuillez "
+"noter que ces fichiers sont fragmentés, la taille maximale pourrait ne pas "
+"être utilisée. Il est souvent plus sûr de spécifier une  taille plus grande."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -382,6 +400,28 @@ msgstr "Ajouter des composants graphiques..."
 msgid "Could not find requested component: %1"
 msgstr "Impossible de trouver le composant demandé : %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Partager un composant graphique sur le réseau vous permet d'accéder à ce "
+"composant depuis un autre ordinateur en tant que commande à distance."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Partager ce composant graphique sur le réseau"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Permettre à tous le monde d'accéder librement à ce composant graphique"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -523,38 +563,11 @@ msgstr "Contenu déposé"
 #~ msgid "Cancel"
 #~ msgstr "Annuler"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Créer ou non un cache pour le thème sur le disque."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "La taille maximum pour le stockage du cache de Thème en kilo-octet. "
-#~ "Veuillez noter que ces fichiers sont fragmentés, la taille maximale "
-#~ "pourrait ne pas être utilisée. Il est souvent plus sûr de spécifier une  "
-#~ "taille plus grande."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Lancer l'application associée"
 
 #~ msgid "Open with %1"
 #~ msgstr "Ouvrir avec %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Partager un composant graphique sur le réseau vous permet d'accéder à ce "
-#~ "composant depuis un autre ordinateur en tant que commande à distance."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Partager ce composant graphique sur le réseau"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr ""
-#~ "Permettre à tous le monde d'accéder librement à ce composant graphique"
 
 #~ msgid "Accessibility"
 #~ msgstr "Accessibilité"

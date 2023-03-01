@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-06-12 10:21+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@linux.org.tw>\n"
@@ -94,6 +94,23 @@ msgstr "解除鎖定元件"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "離開編輯模式"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "是否要建立一個主題的磁碟快取。"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"磁碟中主題快取的最大大小，以 KB 為單位。注意這些檔案通常不會用到最大大小，因"
+"此設大一點是安全的。"
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -369,6 +386,26 @@ msgstr "新增元件..."
 msgid "Could not find requested component: %1"
 msgstr "找不到請求的組件：%1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr "在網路上分享元件能讓您存取另一台電腦上的此元件。"
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "將此元件分享在網路上"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "允許所有人自由存取此元件"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -511,33 +548,11 @@ msgstr "已放入的內容"
 #~ msgid "Cancel"
 #~ msgstr "取消"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "是否要建立一個主題的磁碟快取。"
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "磁碟中主題快取的最大大小，以 KB 為單位。注意這些檔案通常不會用到最大大小，"
-#~ "因此設大一點是安全的。"
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "執行相關的應用程式"
 
 #~ msgid "Open with %1"
 #~ msgstr "用 %1 開啟"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr "在網路上分享元件能讓您存取另一台電腦上的此元件。"
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "將此元件分享在網路上"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "允許所有人自由存取此元件"
 
 #~ msgid "Accessibility"
 #~ msgstr "無障礙輔助"

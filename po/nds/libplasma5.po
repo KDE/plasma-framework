@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2014-08-13 22:05+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -94,6 +94,25 @@ msgstr "Lüttprogrammen opsluten"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+"Gifft an, wat för't Muster en Twischenspieker op de Fastplaat bruukt warrt."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"De Hööchstgrött vun den Muster-Twischenspieker op de Fastplaat in Kilobytes. "
+"Disse Dateien sünd verdeelt Dateien, ehr Hööchstgrott warrt villicht gor "
+"nich bruukt. En höger Grött is dorüm faken ok seker."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -376,6 +395,28 @@ msgstr "Lüttprogrammen tofögen..."
 msgid "Could not find requested component: %1"
 msgstr "Anfraagt Komponent lett sik nich finnen: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Na't Apenmaken vun en Lüttprogramm in't Nettwark kannst Du dor vun en anner "
+"Reekner ut op togriepen."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Dit Lüttprogramm in't Nettwark apenmaken"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Jan un Allemann den Togriep op dit Lüttprogramm verlöven"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -468,38 +509,11 @@ msgstr ""
 #~ msgid "Cancel"
 #~ msgstr "Afbreken"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr ""
-#~ "Gifft an, wat för't Muster en Twischenspieker op de Fastplaat bruukt "
-#~ "warrt."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "De Hööchstgrött vun den Muster-Twischenspieker op de Fastplaat in "
-#~ "Kilobytes. Disse Dateien sünd verdeelt Dateien, ehr Hööchstgrott warrt "
-#~ "villicht gor nich bruukt. En höger Grött is dorüm faken ok seker."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Dat tohören Programm utföhren"
 
 #~ msgid "Open with %1"
 #~ msgstr "Mit %1 opmaken"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Na't Apenmaken vun en Lüttprogramm in't Nettwark kannst Du dor vun en "
-#~ "anner Reekner ut op togriepen."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Dit Lüttprogramm in't Nettwark apenmaken"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Jan un Allemann den Togriep op dit Lüttprogramm verlöven"
 
 #~ msgid "Accessibility"
 #~ msgstr "Toganghülp"

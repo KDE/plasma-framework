@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2021-09-02 09:12+0200\n"
 "Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -92,6 +92,24 @@ msgstr "Felületi elemek feloldása"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Kilépés a szerkesztőmódból"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Hozzon-e létre gyorsítótárat a lemezen a témához, vagy sem."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"A téma gyorsítótárának maximális mérete, kilobájtban megadva. Ezek a fájlok "
+"ritkán használtak, vagyis a maximális méret nem mindig lesz kihasználva, "
+"ugyanakkor biztonságosabb nagyobb méretet beállítani."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -369,6 +387,28 @@ msgstr "Felületi elemek hozzáadása…"
 msgid "Could not find requested component: %1"
 msgstr "A kért komponens nem található: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"A felületi elemek hálózaton történő megosztásakor lehetővé teszi ehhez a "
+"felületi elemhez való hozzáférést másik számítógépről mint távirányítóról."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Felületi elem megosztása a hálózaton"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Bárki számára szabad hozzáférést enged ehhez a felületi elemhez"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -510,36 +550,11 @@ msgstr "Tartalom ejtve"
 #~ msgid "Cancel"
 #~ msgstr "Mégsem"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Hozzon-e létre gyorsítótárat a lemezen a témához, vagy sem."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "A téma gyorsítótárának maximális mérete, kilobájtban megadva. Ezek a "
-#~ "fájlok ritkán használtak, vagyis a maximális méret nem mindig lesz "
-#~ "kihasználva, ugyanakkor biztonságosabb nagyobb méretet beállítani."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "A társított alkalmazás futtatása"
 
 #~ msgid "Open with %1"
 #~ msgstr "Megnyitás ezzel: %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "A felületi elemek hálózaton történő megosztásakor lehetővé teszi ehhez a "
-#~ "felületi elemhez való hozzáférést másik számítógépről mint távirányítóról."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Felületi elem megosztása a hálózaton"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Bárki számára szabad hozzáférést enged ehhez a felületi elemhez"
 
 #~ msgid "Accessibility"
 #~ msgstr "Akadálymentesítés"

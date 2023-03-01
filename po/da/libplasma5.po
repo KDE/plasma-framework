@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2019-11-26 19:29+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -90,6 +90,24 @@ msgstr "Lås widgets op"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Om der skal oprettes en cache på disken til temaet."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Den maksimale størrelse på tema-cachen på disken i kilobyte. Bemærk at disse "
+"filer er små, så den maksimale størrelse bliver måske ikke brugt. Det er "
+"altså normalt helt ufarligt at angive en stor størrelse."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -365,6 +383,28 @@ msgstr "Tilføj widgets..."
 msgid "Could not find requested component: %1"
 msgstr "Kunne ikke finde den anmodede komponent: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Deling af en widget på netværket lader dig tilgå denne widget fra en anden "
+"computer som fjernbetjening."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Del denne widget på netværket"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Lad alle få fri adgang til denne widget"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -500,36 +540,11 @@ msgstr "Indhold droppet"
 #~ msgid "Cancel"
 #~ msgstr "Annullér"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Om der skal oprettes en cache på disken til temaet."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "Den maksimale størrelse på tema-cachen på disken i kilobyte. Bemærk at "
-#~ "disse filer er små, så den maksimale størrelse bliver måske ikke brugt. "
-#~ "Det er altså normalt helt ufarligt at angive en stor størrelse."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Kør det associerede program"
 
 #~ msgid "Open with %1"
 #~ msgstr "Åbn med %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Deling af en widget på netværket lader dig tilgå denne widget fra en "
-#~ "anden computer som fjernbetjening."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Del denne widget på netværket"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Lad alle få fri adgang til denne widget"
 
 #~ msgid "Accessibility"
 #~ msgstr "Tilgængelighed"

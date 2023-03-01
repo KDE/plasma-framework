@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-07-25 09:37+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -88,6 +88,24 @@ msgstr "Desbloquear os Elementos"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Sair do Modo de Edição"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Se deve criar ou não uma 'cache' no disco para o tema."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"O tamanho máximo da 'cache' do tema no disco em 'quilobytes'. Lembre-se que "
+"estes ficheiros são esparsos, pelo que o tamanho máximo poderá não ser "
+"usado. A definição de um tamanho mais elevado será à partida bastante seguro."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -363,6 +381,28 @@ msgstr "Adicionar Elementos..."
 msgid "Could not find requested component: %1"
 msgstr "Não foi possível encontrar o componente pedido: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"A publicação de um elemento na rede permite-lhe aceder a este elemento a "
+"partir de outro computador, como se fosse um comando à distância."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Publicar este elemento na rede"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Permitir o acesso por todos a este elemento"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -504,37 +544,11 @@ msgstr "Conteúdo largado"
 #~ msgid "Cancel"
 #~ msgstr "Cancelar"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Se deve criar ou não uma 'cache' no disco para o tema."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "O tamanho máximo da 'cache' do tema no disco em 'quilobytes'. Lembre-se "
-#~ "que estes ficheiros são esparsos, pelo que o tamanho máximo poderá não "
-#~ "ser usado. A definição de um tamanho mais elevado será à partida bastante "
-#~ "seguro."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Executar a Aplicação Associada"
 
 #~ msgid "Open with %1"
 #~ msgstr "Abrir com o %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "A publicação de um elemento na rede permite-lhe aceder a este elemento a "
-#~ "partir de outro computador, como se fosse um comando à distância."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Publicar este elemento na rede"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Permitir o acesso por todos a este elemento"
 
 #~ msgid "Accessibility"
 #~ msgstr "Acessibilidade"

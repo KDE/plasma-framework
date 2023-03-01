@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2023-02-11 10:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -93,6 +93,24 @@ msgstr "Araç Takımlarının Kilidini Aç"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Düzenleme Kipinden Çık"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Tema için disk üzerinde önbellek oluşturulup oluşturulmayacağı."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Kilobyte türünden diskteki Tema önbelleğinin en büyük boyutu. Bu dosyalar "
+"diskte tanımlanan boyutu hemen kullanmadıklarından en büyük boyut "
+"kullanılmıyor olabilir. Genellikle daha büyük boyut atamak güvenli sayılır."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -368,6 +386,28 @@ msgstr "Araç Takımları Ekle..."
 msgid "Could not find requested component: %1"
 msgstr "İstenilen bileşen bulunamadı: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Ağ üzerinden bir araç takımı paylaştığınızda, bu araç takımına ağ üzerindeki "
+"diğer bir bilgisayar uzaktan erişebilir."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Bu araç takımını ağda paylaş"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Bu araç takımına herkesin erişmesine izin ver"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -509,37 +549,11 @@ msgstr "İçerik bırakıldı"
 #~ msgid "Cancel"
 #~ msgstr "İptal"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Tema için disk üzerinde önbellek oluşturulup oluşturulmayacağı."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "Kilobyte türünden diskteki Tema önbelleğinin en büyük boyutu. Bu dosyalar "
-#~ "diskte tanımlanan boyutu hemen kullanmadıklarından en büyük boyut "
-#~ "kullanılmıyor olabilir. Genellikle daha büyük boyut atamak güvenli "
-#~ "sayılır."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "İlişkilendirilmiş uygulamayı çalıştır"
 
 #~ msgid "Open with %1"
 #~ msgstr "%1 ile aç"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Ağ üzerinden bir araç takımı paylaştığınızda, bu araç takımına ağ "
-#~ "üzerindeki diğer bir bilgisayar uzaktan erişebilir."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Bu araç takımını ağda paylaş"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Bu araç takımına herkesin erişmesine izin ver"
 
 #~ msgid "Accessibility"
 #~ msgstr "Erişilebilirlik"

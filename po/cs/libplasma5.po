@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2023-01-03 16:05+0100\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -94,6 +94,21 @@ msgstr "Odemknout widgety"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Ukončit režim úprav"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Zda pro motiv vytvářet nebo nevytvářet mezipaměť na disku."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -369,6 +384,28 @@ msgstr "Přidat widgety..."
 msgid "Could not find requested component: %1"
 msgstr "Požadovanou komponentu se nepovedlo nalézt: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Sdílení widgetu na síti vám umožní přístup k widgetu z jiného počítače a "
+"vzdáleně jej ovládat."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Sdílet tento widget na síti"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Umožnit každému volný přístup k tomuto widgetu"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -510,24 +547,8 @@ msgstr "Obsah byl zahozen"
 #~ msgid "Cancel"
 #~ msgstr "Zrušit"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Zda pro motiv vytvářet nebo nevytvářet mezipaměť na disku."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Spustit asociovanou aplikaci"
 
 #~ msgid "Open with %1"
 #~ msgstr "Otevřít pomocí %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Sdílení widgetu na síti vám umožní přístup k widgetu z jiného počítače a "
-#~ "vzdáleně jej ovládat."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Sdílet tento widget na síti"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Umožnit každému volný přístup k tomuto widgetu"

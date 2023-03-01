@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-08-02 10:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -90,6 +90,25 @@ msgstr "Bỏ khoá các phụ kiện"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Thoát khỏi chế độ sửa"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Có tạo bộ nhớ sẵn trên đĩa cho chủ đề này hay không."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Kích thước tối đa của bộ nhớ sẵn trên đĩa cho chủ đề, tính theo ki-lô byte. "
+"Lưu ý rằng các tệp này là các tệp thưa, nên kích thước tối đa kia có thể sẽ "
+"không bị đạt đến. Vì vậy, đặt một kích thước lớn thường cũng không gây vấn "
+"đề gì."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -365,6 +384,28 @@ msgstr "Thêm phụ kiện..."
 msgid "Could not find requested component: %1"
 msgstr "Không tìm thấy thành phần được yêu cầu: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Việc chia sẻ một phụ kiện trong mạng cho phép bạn truy cập phụ kiện này từ "
+"một máy tính khác như là một điều khiển từ xa."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Chia sẻ phụ kiện này trong mạng"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Cho phép mọi người tự do truy cập phụ kiện này"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -506,37 +547,11 @@ msgstr "Nội dung được thả"
 #~ msgid "Cancel"
 #~ msgstr "Huỷ"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Có tạo bộ nhớ sẵn trên đĩa cho chủ đề này hay không."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "Kích thước tối đa của bộ nhớ sẵn trên đĩa cho chủ đề, tính theo ki-lô "
-#~ "byte. Lưu ý rằng các tệp này là các tệp thưa, nên kích thước tối đa kia "
-#~ "có thể sẽ không bị đạt đến. Vì vậy, đặt một kích thước lớn thường cũng "
-#~ "không gây vấn đề gì."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Chạy ứng dụng liên kết"
 
 #~ msgid "Open with %1"
 #~ msgstr "Mở bằng %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Việc chia sẻ một phụ kiện trong mạng cho phép bạn truy cập phụ kiện này "
-#~ "từ một máy tính khác như là một điều khiển từ xa."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Chia sẻ phụ kiện này trong mạng"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Cho phép mọi người tự do truy cập phụ kiện này"
 
 #~ msgid "Accessibility"
 #~ msgstr "Hỗ trợ truy cập"

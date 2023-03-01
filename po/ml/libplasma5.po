@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -90,6 +90,21 @@ msgstr "വിഡ്ജറ്റുകളുടെ വിലക്കഴിക�
 #: plasma/corona.cpp:366
 #, kde-format
 msgid "Exit Edit Mode"
+msgstr ""
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "പ്രമേയത്തിനായുള്ള ഓണ്‍-ഡിസ്ക് കാഷെ സൃഷ്ടിക്കണോ വേണ്ടയോ."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
 msgstr ""
 
 #: plasma/packagestructure/packages.cpp:28
@@ -366,6 +381,28 @@ msgstr "വിഡ്ജറ്റ് ചേര്‍ക്കുക..."
 msgid "Could not find requested component: %1"
 msgstr "ആവശ്യപ്പെട്ട ഘടകം കണ്ടെത്തുവാനായില്ല: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"ഒരു വി‍‍ഡ്ജറ്റ് ശൃഖലയില്‍ പങ്കുവയ്ക്കുന്നത് ആ വിഡ്ജറ്റ് വിദൂരത്തിലുള്ള മറ്റൊരു കമ്പ്യൂട്ടറില്‍ നിന്ന് "
+"നിയന്ത്രിക്കാന്‍ അനുവദിക്കുന്നു."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "ഈ വിഡ്ജറ്റ് ശൃംഖലയില്‍ പങ്കുവയ്ക്കുക"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "എല്ലാവരേയും ഈ വിഡ്ജറ്റ് ഉപയോഗിക്കാന്‍ അനുവദിക്കുക"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -501,27 +538,11 @@ msgstr "ഉള്ളടക്കം ഉപേക്ഷിക്കപ്പെ�
 #~ msgid "Cancel"
 #~ msgstr "റദ്ദാക്കുക"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "പ്രമേയത്തിനായുള്ള ഓണ്‍-ഡിസ്ക് കാഷെ സൃഷ്ടിക്കണോ വേണ്ടയോ."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "ബന്ധപ്പെട്ട ആപ്ലിക്കേഷന്‍ പ്രവര്‍ത്തിപ്പിക്കുക"
 
 #~ msgid "Open with %1"
 #~ msgstr "%1-ഓടുകൂടി തുറക്കുക"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "ഒരു വി‍‍ഡ്ജറ്റ് ശൃഖലയില്‍ പങ്കുവയ്ക്കുന്നത് ആ വിഡ്ജറ്റ് വിദൂരത്തിലുള്ള മറ്റൊരു കമ്പ്യൂട്ടറില്‍ നിന്ന് "
-#~ "നിയന്ത്രിക്കാന്‍ അനുവദിക്കുന്നു."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "ഈ വിഡ്ജറ്റ് ശൃംഖലയില്‍ പങ്കുവയ്ക്കുക"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "എല്ലാവരേയും ഈ വിഡ്ജറ്റ് ഉപയോഗിക്കാന്‍ അനുവദിക്കുക"
 
 #~ msgid "Accessibility"
 #~ msgstr "പ്രാപ്യത"

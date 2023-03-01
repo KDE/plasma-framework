@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-07-27 19:21+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -96,6 +96,24 @@ msgstr "Giltzapetik askatu trepetak"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Irten editatzeko modutik"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Gaiarentzako diskoan cachea sortu behar den hala ez."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Diskoan gaiaren cacheak izango duen gehienezko neurria kilobytetan. Jakizu "
+"fitxategi hauek 'sparse' fitxategiak direla, beraz balitekeela gehienezko "
+"neurria ez erabiltzea. Neurri handiagoa ezartzea beraz segurua izaten da."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -371,6 +389,28 @@ msgstr "Gehitu trepetak..."
 msgid "Could not find requested component: %1"
 msgstr "Ezin izan da aurkitu eskautako osagaia: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Trepeta bat sarean partekatzeak trepeta beste ordenagailu batetik atzitzea "
+"eta urrunetik kontrolatzea ahalbidetzen dizu."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Partekatu trepeta hau sarean"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Baimendu guztiei trepeta hau oztopo gabe atzitzea"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -512,37 +552,11 @@ msgstr "Edukia jaregin da"
 #~ msgid "Cancel"
 #~ msgstr "Utzi"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Gaiarentzako diskoan cachea sortu behar den hala ez."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "Diskoan gaiaren cacheak izango duen gehienezko neurria kilobytetan. "
-#~ "Jakizu fitxategi hauek 'sparse' fitxategiak direla, beraz balitekeela "
-#~ "gehienezko neurria ez erabiltzea. Neurri handiagoa ezartzea beraz segurua "
-#~ "izaten da."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Exekutatu elkartutako aplikazioa"
 
 #~ msgid "Open with %1"
 #~ msgstr "Ireki %1(r)ekin"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Trepeta bat sarean partekatzeak trepeta beste ordenagailu batetik "
-#~ "atzitzea eta urrunetik kontrolatzea ahalbidetzen dizu."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Partekatu trepeta hau sarean"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Baimendu guztiei trepeta hau oztopo gabe atzitzea"
 
 #~ msgid "Accessibility"
 #~ msgstr "Irisgarritasuna"

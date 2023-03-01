@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-08-17 10:42+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -87,6 +87,24 @@ msgstr "Отключване на уиджети"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Излизане от режима за редактиране"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Създаване на кеш на диска за темата."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Максималният размер на кеша на темата на диска в килобайта. Имайте предвид, "
+"че тези файлове са малки файлове, така че максималният размер може да не се "
+"използва. Следователно задаване на по-голям размер често е безопасно."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -362,6 +380,28 @@ msgstr "Добавяне на уиджети..."
 msgid "Could not find requested component: %1"
 msgstr "Не можа да се намери заявения компонент:%1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Споделянето на уиджета в мрежата ви позволява да получите достъп до него от "
+"друг компютър като отдалечено управление."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Споделяне на този уиджет в мрежата"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Позволяване на всички да имат свободен достъп до този уиджет"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -503,34 +543,8 @@ msgstr "Съдържанието е пуснато"
 #~ msgid "Cancel"
 #~ msgstr "Отказ"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "Създаване на кеш на диска за темата."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "Максималният размер на кеша на темата на диска в килобайта. Имайте "
-#~ "предвид, че тези файлове са малки файлове, така че максималният размер "
-#~ "може да не се използва. Следователно задаване на по-голям размер често е "
-#~ "безопасно."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Стартиране на асоциираното приложение"
 
 #~ msgid "Open with %1"
 #~ msgstr "Отваряне с %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Споделянето на уиджета в мрежата ви позволява да получите достъп до него "
-#~ "от друг компютър като отдалечено управление."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Споделяне на този уиджет в мрежата"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Позволяване на всички да имат свободен достъп до този уиджет"

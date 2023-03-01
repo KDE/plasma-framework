@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-12-12 08:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -91,6 +91,24 @@ msgstr "ვიჯეტების განბლოკვა"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "რედაქტირების რეჟიმიდან გასვლა"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "თემისთვის დისკზე მდებარე ქეშის შეიქმნება, თუ არა."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"დისკზე მდებარე თემის ქეშის მაქსიმალური ზომა, კილობაიტებში. დაიმახსოვრეთ, რომ "
+"ეს ფაილები დამატებითი ფაილებია, ასე რომ მაქსიმალურ ზომას ვერ მიუთითეთ. ასე "
+"რომ, უფრო მეტი ზომის მითითება ჩვეულებრივ საკმაოდ უსაფრთხოა."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -366,6 +384,28 @@ msgstr "ვიჯეტების დამატება..."
 msgid "Could not find requested component: %1"
 msgstr "მოთხოვნილი კომპონენტის პოვნა ვერ მოხერხდა: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"ვიჯეტის ქსელში გაზიარება საშუალებას გაძლევთ, ეს ვიჯეტი სხვა კომპიუტერიდან "
+"პულტის როლში დაიმატოთ."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "ვიჯეტის ქსელში გაზიარება"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "ვიჯეტთან წვდომის ყველასთვის მიცემა"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -507,36 +547,11 @@ msgstr "შემცველობა მოცილებულია"
 #~ msgid "Cancel"
 #~ msgstr "გაუქმენა"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr "თემისთვის დისკზე მდებარე ქეშის შეიქმნება, თუ არა."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "დისკზე მდებარე თემის ქეშის მაქსიმალური ზომა, კილობაიტებში. დაიმახსოვრეთ, "
-#~ "რომ ეს ფაილები დამატებითი ფაილებია, ასე რომ მაქსიმალურ ზომას ვერ "
-#~ "მიუთითეთ. ასე რომ, უფრო მეტი ზომის მითითება ჩვეულებრივ საკმაოდ უსაფრთხოა."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "შესაბამისი აპლიკაციის გაშვება"
 
 #~ msgid "Open with %1"
 #~ msgstr "%1-ით გახსნა"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "ვიჯეტის ქსელში გაზიარება საშუალებას გაძლევთ, ეს ვიჯეტი სხვა კომპიუტერიდან "
-#~ "პულტის როლში დაიმატოთ."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "ვიჯეტის ქსელში გაზიარება"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "ვიჯეტთან წვდომის ყველასთვის მიცემა"
 
 #~ msgid "Accessibility"
 #~ msgstr "წვდომადობა"

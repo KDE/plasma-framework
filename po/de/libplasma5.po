@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 21:29+0000\n"
+"POT-Creation-Date: 2023-03-01 22:21+0000\n"
 "PO-Revision-Date: 2022-03-13 10:04+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -88,6 +88,26 @@ msgstr "Miniprogramme entsperren"
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Bearbeitungsmodus beenden"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr ""
+"Ob ein Zwischenspeicher für Designs auf der Festplatte erstellt werden soll."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"Die maximale Größe des Design-Zwischenspeichers auf dem Datenträger. "
+"Beachten Sie, dass diese Dateien selten verwendet werden, sodass die "
+"maximale Größe wahrscheinlich nicht erreicht wird. Ein höheres Limit zu "
+"setzen, ist hier daher oft eine gute Wahl."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
@@ -364,6 +384,28 @@ msgstr "Miniprogramme hinzufügen ..."
 msgid "Could not find requested component: %1"
 msgstr "Die angeforderte Komponente ist nicht auffindbar: %1"
 
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Das Freigeben eines Miniprogramms im Netzwerk ermöglicht Ihnen den Zugriff "
+"darauf von einem anderen Rechner aus (wie mit einer Fernbedienung)."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Dieses Miniprogramm im Netzwerk freigeben"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Beliebigen Benutzern den Zugriff auf dieses Miniprogramm erlauben"
+
 #: plasma/private/service_p.h:32
 #, kde-format
 msgctxt "Error message, tried to start an invalid service"
@@ -505,40 +547,11 @@ msgstr "Inhalt abgelegt"
 #~ msgid "Cancel"
 #~ msgstr "Abbrechen"
 
-#~ msgid "Whether or not to create an on-disk cache for the theme."
-#~ msgstr ""
-#~ "Ob ein Zwischenspeicher für Designs auf der Festplatte erstellt werden "
-#~ "soll."
-
-#~ msgid ""
-#~ "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
-#~ "files are sparse files, so the maximum size may not be used. Setting a "
-#~ "larger size is therefore often quite safe."
-#~ msgstr ""
-#~ "Die maximale Größe des Design-Zwischenspeichers auf dem Datenträger. "
-#~ "Beachten Sie, dass diese Dateien selten verwendet werden, sodass die "
-#~ "maximale Größe wahrscheinlich nicht erreicht wird. Ein höheres Limit zu "
-#~ "setzen, ist hier daher oft eine gute Wahl."
-
 #~ msgid "Run the Associated Application"
 #~ msgstr "Die zugewiesene Anwendung starten"
 
 #~ msgid "Open with %1"
 #~ msgstr "Öffnen mit %1"
-
-#~ msgid ""
-#~ "Sharing a widget on the network allows you to access this widget from "
-#~ "another computer as a remote control."
-#~ msgstr ""
-#~ "Das Freigeben eines Miniprogramms im Netzwerk ermöglicht Ihnen den "
-#~ "Zugriff darauf von einem anderen Rechner aus (wie mit einer "
-#~ "Fernbedienung)."
-
-#~ msgid "Share this widget on the network"
-#~ msgstr "Dieses Miniprogramm im Netzwerk freigeben"
-
-#~ msgid "Allow everybody to freely access this widget"
-#~ msgstr "Beliebigen Benutzern den Zugriff auf dieses Miniprogramm erlauben"
 
 #~ msgid "Accessibility"
 #~ msgstr "Zugangshilfen"
