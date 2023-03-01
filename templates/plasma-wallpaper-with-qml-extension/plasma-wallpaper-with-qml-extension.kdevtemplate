@@ -1,6 +1,7 @@
 [General]
 Name=Simple Plasma Wallpaper with QML extension
 Name[az]=Sadə Plasma Divar kağızı QML əlavəsi ilə
+Name[be]=Простыя шпалеры Plasma з пашырэннем QML
 Name[bg]=Прост тапет на Plasma с QML разширение
 Name[ca]=Fons de pantalla senzill del Plasma amb extensió QML
 Name[ca@valencia]=Fons de pantalla senzill de Plasma amb extensió QML
@@ -40,6 +41,7 @@ Name[zh_CN]=带有 QML 扩展的 Plasma 简易壁纸程序
 Name[zh_TW]=含有 QML 副檔名的簡易 Plasma 桌布
 Comment=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
 Comment[az]=QML əlavəsi kimi təqdim edilən öz APİ -sini istifadə edən Plasma üçün divar kağızı nümunələri
+Comment[be]=Шпалеры Plasma, якія выкарыстоўваюць уласны API з дапамогай ўласнай убудовы пашырэння QML
 Comment[bg]=Тапет на Plasma, който използва потребителски API, предоставен от собствена QML приставка на разширение
 Comment[ca]=Un fons de pantalla del Plasma que usa una API personalitzada proporcionada per un connector propi d'una extensió en QML
 Comment[ca@valencia]=Un fons de pantalla de Plasma que utilitza una API personalitzada proporcionada per un connector propi d'una extensió en QML
