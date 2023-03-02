@@ -312,9 +312,9 @@ void DataContainer::disconnectVisualization(QObject *visualization)
                 disconnect(this, SIGNAL(modelChanged(QString, QAbstractItemModel *)), visualization, SLOT(modelChanged(QString, QAbstractItemModel *)));
             }
         }
+        d->relayObjects.erase(objIt);
     }
 
-    d->relayObjects.erase(objIt);
     d->checkUsage();
 }
 
