@@ -112,9 +112,6 @@
         "Name[vi]": "Nguồn khi có yêu cầu",
         "Name[x-test]": "xxSources On Requestxx",
         "Name[zh_CN]": "按需请求源",
-        "ServiceTypes": [
-            "Plasma/DataEngine"
-        ],
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
     }

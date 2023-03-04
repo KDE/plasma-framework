@@ -112,9 +112,6 @@
         "Name[vi]": "DataContainer riêng",
         "Name[x-test]": "xxCustom DataContainersxx",
         "Name[zh_CN]": "自定义数据容器",
-        "ServiceTypes": [
-            "Plasma/DataEngine"
-        ],
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
     }

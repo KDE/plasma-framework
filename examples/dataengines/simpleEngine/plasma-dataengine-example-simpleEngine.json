@@ -113,9 +113,6 @@
         "Name[vi]": "Ví dụ DataEngine đơn giản",
         "Name[x-test]": "xxSimple DataEngine Examplexx",
         "Name[zh_CN]": "简单数据引擎示例",
-        "ServiceTypes": [
-            "Plasma/DataEngine"
-        ],
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
     }
