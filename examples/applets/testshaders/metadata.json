@@ -95,14 +95,12 @@
         "Name[vi]": "Kiểm thử trình đánh bóng",
         "Name[x-test]": "xxShader Testxx",
         "Name[zh_CN]": "着色器测试",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/testshaderapplet.qml"
+    "X-Plasma-MainScript": "ui/testshaderapplet.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

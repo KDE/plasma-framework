@@ -67,15 +67,12 @@
         "Name[vi]": "Kiểm thử việc bao chứa",
         "Name[x-test]": "xxContainment Testxx",
         "Name[zh_CN]": "容器测试",
-        "ServiceTypes": [
-            "Plasma/Applet",
-            "Plasma/Containment"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

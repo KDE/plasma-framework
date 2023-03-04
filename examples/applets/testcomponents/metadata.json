@@ -68,14 +68,12 @@
         "Name[vi]": "Kiểm thử các thành phần",
         "Name[x-test]": "xxComponents Testxx",
         "Name[zh_CN]": "组件测试",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/testcomponents.qml"
+    "X-Plasma-MainScript": "ui/testcomponents.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

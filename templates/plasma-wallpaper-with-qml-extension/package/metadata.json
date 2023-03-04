@@ -69,11 +69,9 @@
         "Name[vi]": "%{APPNAME}",
         "Name[x-test]": "xx%{APPNAME}xx",
         "Name[zh_CN]": "%{APPNAME}",
-        "ServiceTypes": [
-            "Plasma/Wallpaper"
-        ],
         "Version": "%{VERSION}",
         "Website": "https://plasma.kde.org/"
     },
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Wallpaper"
 }

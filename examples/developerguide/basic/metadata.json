@@ -100,12 +100,10 @@
         "Name[vi]": "Lỗi",
         "Name[x-test]": "xxBugxx",
         "Name[zh_CN]": "程序缺陷",
-        "ServiceTypes": [
-            "KPackage/GenericQML"
-        ],
         "Version": "1.0",
         "Website": "https://www.kde.org"
     },
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "KPackage/GenericQML"
 }

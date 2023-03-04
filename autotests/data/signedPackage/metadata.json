@@ -88,13 +88,11 @@
         "Name[x-test]": "xxJavaScript File Operationsxx",
         "Name[zh_CN]": "JavaScript 文件操作",
         "Name[zh_TW]": "JavaScript 檔案操作",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "0.1",
         "Website": ""
     },
     "X-Plasma-API": "javascript",
     "X-Plasma-MainScript": "code/main.js",
-    "X-Plasma-OptionalExtensions": "http"
+    "X-Plasma-OptionalExtensions": "http",
+    "KPackageStructure": "Plasma/Applet"
 }

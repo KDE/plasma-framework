@@ -69,13 +69,11 @@
         "Name[vi]": "Mùa thu",
         "Name[x-test]": "xxAutumnxx",
         "Name[zh_CN]": "Autumn 秋色",
-        "ServiceTypes": [
-            "Plasma/Wallpaper"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Wallpaper"
 }

@@ -99,12 +99,10 @@
         "Name[vi]": "%{APPNAME}",
         "Name[x-test]": "xx%{APPNAME}xx",
         "Name[zh_CN]": "%{APPNAME}",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
     },
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

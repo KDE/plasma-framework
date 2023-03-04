@@ -98,12 +98,10 @@
         "Name[vi]": "Bộ sưu tập phụ kiện",
         "Name[x-test]": "xxWidgets galleryxx",
         "Name[zh_CN]": "挂件展厅",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
     },
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

@@ -96,14 +96,12 @@
         "Name[vi]": "Danh sách ví dụ các hình nhỏ của cửa sổ",
         "Name[x-test]": "xxExample window thumbnails listxx",
         "Name[zh_CN]": "窗口缩略图列表示例",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

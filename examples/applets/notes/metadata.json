@@ -96,9 +96,6 @@
         "Name[vi]": "Ghi chú ví dụ",
         "Name[x-test]": "xxExample notesxx",
         "Name[zh_CN]": "示例便笺",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "",
         "Website": ""
     },
@@ -108,5 +105,6 @@
     "X-Plasma-DropMimeTypes": [
         "text/plain"
     ],
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

@@ -69,14 +69,12 @@
         "Name[vi]": "Kiểm thử chủ đề",
         "Name[x-test]": "xxTheme Testxx",
         "Name[zh_CN]": "主题测试",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/testtheme.qml"
+    "X-Plasma-MainScript": "ui/testtheme.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

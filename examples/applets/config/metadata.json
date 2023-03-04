@@ -68,14 +68,12 @@
         "Name[vi]": "Kiểm thử cấu hình",
         "Name[x-test]": "xxConfiguration testxx",
         "Name[zh_CN]": "配置测试",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml"
+    "X-Plasma-MainScript": "ui/main.qml",
+    "KPackageStructure": "Plasma/Applet"
 }

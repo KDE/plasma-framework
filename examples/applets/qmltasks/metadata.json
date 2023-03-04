@@ -96,14 +96,12 @@
         "Name[vi]": "Tác vụ của người đàn ông nghèo",
         "Name[x-test]": "xxPoor Man's Tasksxx",
         "Name[zh_CN]": "简易版任务栏控件",
-        "ServiceTypes": [
-            "Plasma/Applet"
-        ],
         "Version": "",
         "Website": ""
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/qmltasks.qml"
+    "X-Plasma-MainScript": "ui/qmltasks.qml",
+    "KPackageStructure": "Plasma/Applet"
 }
