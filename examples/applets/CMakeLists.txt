@@ -1,4 +1,4 @@
- 
+
 plasma_install_package(bugreport org.kde.example.bugreport)
 plasma_install_package(config org.kde.example.configuration)
 plasma_install_package(dataenginemodel org.kde.example.dataenginemodel)
@@ -6,7 +6,6 @@ plasma_install_package(notes org.kde.example.notes)
 plasma_install_package(widgetgallery org.kde.example.widgetgallery)
 plasma_install_package(qmltasks org.kde.example.tasks)
 plasma_install_package(windowthumbnails org.kde.example.windowthumbnails)
-plasma_install_package(conditionalloader org.kde.example.conditionalloader)
 plasma_install_package(testcomponents org.kde.example.testcomponents)
 plasma_install_package(testtheme org.kde.example.testtheme)
 plasma_install_package(testshaders org.kde.example.testshaders)
