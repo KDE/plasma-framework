@@ -4,7 +4,7 @@
 
 # do not use PACKAGE_CMAKE_INSTALL_PREFIX after calls to find_dependency, its content can change!
 set(PlasmaQuick_INSTALL_PREFIX "@PACKAGE_CMAKE_INSTALL_PREFIX@")
-set_and_check(PlasmaQuick_INCLUDE_DIR    "@PACKAGE_KDE_INSTALL_INCLUDEDIR_KF@")
+set_and_check(PlasmaQuick_INCLUDE_DIR    "@PACKAGE_PLASMAQUICK_INSTALL_INCLUDEDIR@")
 
 include(CMakeFindDependencyMacro)
 find_dependency(Qt6Quick "@REQUIRED_QT_VERSION@")

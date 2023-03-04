@@ -4,6 +4,11 @@ if(KDE_PLATFORM_FEATURE_BINARY_COMPATIBLE_FEATURE_REDUCTION)
     set(PLASMA_NO_PACKAGE_EXTRADATA TRUE)
 endif()
 
+# Consumer's include dir which has to be explicitly used to make headers of this lib visible to documented includes
+# Results in duplicate of prefix-dir & C++ namespace below, but part of different things, so by design:
+# <visibility-layer>/<C++ namespace>/class header files
+set(PLASMA_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF}/Plasma")
+
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
 add_library(KF6Plasma)
@@ -112,11 +117,11 @@ set(Plasma_BUILD_INCLUDE_DIRS
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/Plasma
 )
-target_include_directories(KF6Plasma PUBLIC
-  "$<BUILD_INTERFACE:${Plasma_BUILD_INCLUDE_DIRS}>"
-)
-target_include_directories(KF6Plasma INTERFACE
-  "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF};${KDE_INSTALL_INCLUDEDIR_KF}/Plasma>"
+target_include_directories(KF6Plasma
+    PUBLIC
+        "$<BUILD_INTERFACE:${Plasma_BUILD_INCLUDE_DIRS}>"
+    INTERFACE
+        "$<INSTALL_INTERFACE:${PLASMA_INSTALL_INCLUDEDIR}>"
 )
 
 ########### install files ###############
@@ -148,17 +153,25 @@ set(PlasmaScripting_HEADERS
 )
 
 
-install(FILES
+install(
+    FILES
         ${Plasma_HEADERS}
         ${CMAKE_CURRENT_BINARY_DIR}/plasma/plasma_export.h
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/plasma COMPONENT Devel)
+    DESTINATION ${PLASMA_INSTALL_INCLUDEDIR}/plasma # C++ namespace
+    COMPONENT Devel
+)
 
-install(FILES ${Plasma_CamelCase_HEADERS}
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/Plasma COMPONENT Devel)
+install(
+    FILES ${Plasma_CamelCase_HEADERS}
+    DESTINATION ${PLASMA_INSTALL_INCLUDEDIR}/Plasma # C++ namespace
+    COMPONENT Devel
+)
 
-
-install(FILES ${PlasmaScripting_HEADERS}
-    DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/plasma/scripting COMPONENT Devel)
+install(
+    FILES ${PlasmaScripting_HEADERS}
+    DESTINATION ${PLASMA_INSTALL_INCLUDEDIR}/plasma/scripting
+    COMPONENT Devel
+)
 
 install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
