@@ -23,7 +23,6 @@ class QAbstractItemModel;
 namespace Plasma
 {
 class DataContainer;
-class DataEngineScript;
 class Package;
 class Service;
 class DataEnginePrivate;
@@ -158,10 +157,7 @@ public:
 
     /**
      * Retrieves a pointer to the DataContainer for a given source. This method
-     * should not be used if possible. An exception is for script engines that
-     * can not provide a QMetaObject as required by connectSource for the initial
-     * call to dataUpdated. Using this method, such engines can provide their own
-     * connectSource API.
+     * should not be used if possible.
      *
      * @param source the name of the source.
      * @return pointer to a DataContainer, or zero on failure
@@ -406,7 +402,6 @@ protected Q_SLOTS:
 
 private:
     friend class DataEnginePrivate;
-    friend class DataEngineScript;
     friend class DataEngineManager;
     friend class PlasmoidServiceJob;
     friend class NullEngine;

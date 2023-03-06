@@ -18,7 +18,6 @@
 #include "pluginloader.h"
 #include "private/datacontainer_p.h"
 #include "private/dataengine_p.h"
-#include "scripting/scriptengine.h"
 
 namespace Plasma
 {

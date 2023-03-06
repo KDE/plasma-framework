@@ -25,7 +25,6 @@ class KKeySequenceWidget;
 
 namespace Plasma
 {
-class AppletScript;
 class Service;
 
 class AppletPrivate
@@ -40,10 +39,7 @@ public:
     void askDestroy();
     virtual void cleanUpAndDelete();
 
-    // put all setup routines for script here. at this point we can assume that
-    // package exists and that we have a script engin
     void setupPackage();
-    void setupScripting();
 
     QString globalName() const;
     void scheduleConstraintsUpdate(Plasma::Types::Constraints c);
@@ -78,8 +74,7 @@ public:
     KConfigGroup *mainConfig;
     Plasma::Types::Constraints pendingConstraints;
 
-    // scripting and package stuff
-    AppletScript *script;
+    // config and package stuff
     KPackage::Package package;
     KConfigLoader *configLoader;
 

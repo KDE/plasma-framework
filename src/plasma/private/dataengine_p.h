@@ -24,7 +24,6 @@ public:
     void connectSource(DataContainer *s, QObject *visualization, uint pollingInterval, Plasma::Types::IntervalAlignment align, bool immediateCall = true);
     DataContainer *requestSource(const QString &sourceName, bool *newSource = nullptr);
     void internalUpdateSource(DataContainer *);
-    void setupScriptSupport();
 
     /**
      * Reference counting method. Calling this method increases the count
@@ -83,7 +82,6 @@ public:
     QElapsedTimer updateTimer;
     DataEngine::SourceDict sources;
     bool valid;
-    DataEngineScript *script;
     QString serviceName;
     QString waitingSourceRequest;
 };

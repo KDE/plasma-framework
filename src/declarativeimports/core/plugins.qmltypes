@@ -589,8 +589,7 @@ Module {
                 "ScreenConstraint": 4,
                 "ImmutableConstraint": 8,
                 "StartupCompletedConstraint": 16,
-                "ContextConstraint": 32,
-                "UiReadyConstraint": 64,
+                "UiReadyConstraint": 32,
                 "AllConstraints": 15
             }
         }

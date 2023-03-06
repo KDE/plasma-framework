@@ -22,7 +22,6 @@
 
 #include "datacontainer.h"
 #include "pluginloader.h"
-#include "scripting/dataenginescript.h"
 #include "service.h"
 
 #include "config-plasma.h"
@@ -35,13 +34,8 @@ DataEngine::DataEngine(const KPluginMetaData &plugin, QObject *parent)
     : QObject(parent)
     , d(new DataEnginePrivate(this, plugin))
 {
-    if (d->script) {
-        d->setupScriptSupport();
-        d->script->init();
-    } else {
-        // default implementation does nothing. this is for engines that have to
-        // start things in motion external to themselves before they can work
-    }
+    // default implementation does nothing. this is for engines that have to
+    // start things in motion external to themselves before they can work
 }
 
 DataEngine::DataEngine(QObject *parent, const QVariantList &args)
@@ -52,10 +46,6 @@ DataEngine::DataEngine(QObject *parent, const QVariantList &args)
         data = args.first().value<KPluginMetaData>();
     }
     d = new DataEnginePrivate(this, data, args);
-    if (d->script) {
-        d->setupScriptSupport();
-        d->script->init();
-    }
 }
 
 DataEngine::~DataEngine()
@@ -66,22 +56,11 @@ DataEngine::~DataEngine()
 
 QStringList DataEngine::sources() const
 {
-    if (d->script) {
-        return d->script->sources();
-    } else {
-        return d->sources.keys();
-    }
+    return d->sources.keys();
 }
 
 Service *DataEngine::serviceForSource(const QString &source)
 {
-    if (d->script) {
-        Service *s = d->script->serviceForSource(source);
-        if (s) {
-            return s;
-        }
-    }
-
     return new NullService(source, this);
 }
 
@@ -132,21 +111,13 @@ DataContainer *DataEngine::containerForSource(const QString &source)
 
 bool DataEngine::sourceRequestEvent(const QString &name)
 {
-    if (d->script) {
-        return d->script->sourceRequestEvent(name);
-    } else {
-        return false;
-    }
+    return false;
 }
 
 bool DataEngine::updateSourceEvent(const QString &source)
 {
-    if (d->script) {
-        return d->script->updateSourceEvent(source);
-    } else {
-        // qCDebug(LOG_PLASMA) << source;
-        return false; // TODO: should this be true to trigger, even needless, updates on every tick?
-    }
+    // qCDebug(LOG_PLASMA) << source;
+    return false; // TODO: should this be true to trigger, even needless, updates on every tick?
 }
 
 void DataEngine::setData(const QString &source, const QVariant &value)
@@ -393,7 +364,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
     , updateTimerId(0)
     , minPollingInterval(-1)
     , valid(false)
-    , script(nullptr)
 {
     updateTimer.start();
 
@@ -405,8 +375,6 @@ DataEnginePrivate::DataEnginePrivate(DataEngine *e, const KPluginMetaData &md, c
 
 DataEnginePrivate::~DataEnginePrivate()
 {
-    delete script;
-    script = nullptr;
 }
 
 void DataEnginePrivate::internalUpdateSource(DataContainer *source)
@@ -543,25 +511,6 @@ DataContainer *DataEnginePrivate::requestSource(const QString &sourceName, bool 
     }
 
     return s;
-}
-
-// put all setup routines for script here. at this point we can assume that
-// package exists and that we have a script engine
-void DataEnginePrivate::setupScriptSupport()
-{
-    /*
-    #ifndef NDEBUG
-    // qCDebug(LOG_PLASMA) << "sletting up script support, package is in" << package->path()
-    #endif
-             << "which is a" << package->structure()->type() << "package"
-             << ", main script is" << package->filePath("mainscript");
-    */
-
-    // FIXME: Replace with ki18n functionality once semantics is clear.
-    // const QString translationsPath = package->filePath("translations");
-    // if (!translationsPath.isEmpty()) {
-    //     KGlobal::dirs()->addResourceDir("locale", translationsPath);
-    // }
 }
 
 void DataEnginePrivate::scheduleSourcesUpdated()

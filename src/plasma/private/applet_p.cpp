@@ -32,8 +32,6 @@
 #include "debug_p.h"
 #include "pluginloader.h"
 #include "private/containment_p.h"
-#include "scripting/appletscript.h"
-#include "scripting/scriptengine.h"
 #include "timetracker.h"
 
 namespace Plasma
@@ -47,7 +45,6 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
     , icon(appletDescription.iconName())
     , mainConfig(nullptr)
     , pendingConstraints(Types::NoConstraint)
-    , script(nullptr)
     , package(nullptr)
     , configLoader(nullptr)
     , actions(AppletPrivate::defaultActions(applet))
@@ -83,8 +80,6 @@ AppletPrivate::~AppletPrivate()
         deleteNotification->close();
     }
 
-    delete script;
-    script = nullptr;
     delete configLoader;
     configLoader = nullptr;
     delete mainConfig;
@@ -143,25 +138,6 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
                                            appletDescription.name()));
             return;
         }
-    }
-
-    // now we try and set up the script engine.
-    // it will be parented to this applet and so will get
-    // deleted when the applet does
-    script = Plasma::loadScriptEngine(api, q, args);
-
-    // It's valid, let's try to load the icon from within the package
-    if (script) {
-        // use the absolute path of the in-package icon as icon name
-        if (appletDescription.iconName().startsWith(QLatin1Char('/'))) {
-            icon = package.filePath({}, appletDescription.iconName());
-        }
-        // package not valid, get rid of it
-    } else {
-        q->setLaunchErrorMessage(i18nc("API or programming language the widget was written in, name of the widget",
-                                       "Could not create a %1 ScriptEngine for the %2 widget.",
-                                       api,
-                                       appletDescription.name()));
     }
 
     if (!q->isContainment()) {
@@ -455,15 +431,6 @@ void AppletPrivate::setupPackage()
 
     if (!package.filePath("mainconfigui").isEmpty()) {
         q->setHasConfigurationInterface(true);
-    }
-}
-
-void AppletPrivate::setupScripting()
-{
-    if (script) {
-        if (!script->init() && !failed) {
-            q->setLaunchErrorMessage(i18n("Script initialization failed"));
-        }
     }
 }
 

@@ -86,6 +86,7 @@ public:
 
     AppletQuickItem *q;
 
+    static QHash<Plasma::Applet *, AppletQuickItem *> s_itemsForApplet;
     static PreloadPolicy s_preloadPolicy;
     int switchWidth;
     int switchHeight;

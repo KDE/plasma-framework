@@ -81,7 +81,7 @@ class ContainmentInterface : public AppletInterface
                    containmentDisplayHintsChanged)
 
 public:
-    ContainmentInterface(DeclarativeAppletScript *parent, const QVariantList &args = QVariantList());
+    ContainmentInterface(Plasma::Applet *parent, const QVariantList &args = QVariantList());
 
     // Not for QML
     Plasma::Containment *containment() const

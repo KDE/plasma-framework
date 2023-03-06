@@ -32,7 +32,6 @@
 #include "corona.h"
 #include "plasma.h"
 #include "pluginloader.h"
-#include "scripting/appletscript.h"
 
 #include "debug_p.h"
 #include "private/containment_p.h"
@@ -173,10 +172,6 @@ void Applet::setLaunchErrorMessage(const QString &message)
 
 void Applet::saveState(KConfigGroup &group) const
 {
-    if (d->script) {
-        Q_EMIT d->script->saveState(group);
-    }
-
     if (group.config()->name() != config().config()->name()) {
         // we're being saved to a different file!
         // let's just copy the current values in our configuration over
@@ -270,9 +265,6 @@ void Applet::constraintsEvent(Plasma::Types::Constraints constraints)
     Q_UNUSED(constraints)
     // qCDebug(LOG_PLASMA) << constraints << "constraints are FormFactor: " << formFactor()
     //         << ", Location: " << location();
-    if (d->script) {
-        d->script->constraintsEvent(constraints);
-    }
 }
 
 QString Applet::title() const
@@ -596,7 +588,9 @@ void Applet::flushPendingConstraintsEvents()
 QList<QAction *> Applet::contextualActions()
 {
     // qCDebug(LOG_PLASMA) << "empty context actions";
-    return d->script ? d->script->contextualActions() : QList<QAction *>();
+    // TODO: make a public property out of that?
+    // return d->script ? d->script->contextualActions() : QList<QAction *>();
+    return {};
 }
 
 KActionCollection *Applet::actions() const
@@ -719,11 +713,8 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
 
 void Applet::configChanged()
 {
-    if (d->script) {
-        if (d->configLoader) {
-            d->configLoader->load();
-        }
-        d->script->configChanged();
+    if (d->configLoader) {
+        d->configLoader->load();
     }
 }
 

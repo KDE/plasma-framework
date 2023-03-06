@@ -30,10 +30,9 @@
 
 #include <KConfigPropertyMap>
 
-AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariantList &args, QQuickItem *parent)
-    : AppletQuickItem(script->applet(), parent)
+AppletInterface::AppletInterface(Plasma::Applet *applet, const QVariantList &args, QQuickItem *parent)
+    : AppletQuickItem(applet, parent)
     , m_configuration(nullptr)
-    , m_appletScriptEngine(script)
     , m_toolTipTextFormat(0)
     , m_toolTipItem(nullptr)
     , m_args(args)
@@ -44,61 +43,60 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 {
     qmlRegisterAnonymousType<QAction>("org.kde.plasma.plasmoid", 1);
 
-    connect(applet()->containment()->corona(), &Plasma::Corona::editModeChanged, this, &AppletInterface::editModeChanged);
-    connect(this, &AppletInterface::configNeedsSaving, applet(), &Plasma::Applet::configNeedsSaving);
-    connect(applet(), &Plasma::Applet::immutabilityChanged, this, &AppletInterface::immutabilityChanged);
-    connect(applet(), &Plasma::Applet::userConfiguringChanged, this, &AppletInterface::userConfiguringChanged);
+    connect(applet->containment()->corona(), &Plasma::Corona::editModeChanged, this, &AppletInterface::editModeChanged);
+    connect(this, &AppletInterface::configNeedsSaving, applet, &Plasma::Applet::configNeedsSaving);
+    connect(applet, &Plasma::Applet::immutabilityChanged, this, &AppletInterface::immutabilityChanged);
+    connect(applet, &Plasma::Applet::userConfiguringChanged, this, &AppletInterface::userConfiguringChanged);
 
-    connect(applet(), &Plasma::Applet::contextualActionsAboutToShow, this, &AppletInterface::contextualActionsAboutToShow);
+    connect(applet, &Plasma::Applet::contextualActionsAboutToShow, this, &AppletInterface::contextualActionsAboutToShow);
 
-    connect(applet(), &Plasma::Applet::statusChanged, this, &AppletInterface::statusChanged);
+    connect(applet, &Plasma::Applet::statusChanged, this, &AppletInterface::statusChanged);
 
-    connect(applet(), &Plasma::Applet::destroyedChanged, this, &AppletInterface::destroyedChanged);
+    connect(applet, &Plasma::Applet::destroyedChanged, this, &AppletInterface::destroyedChanged);
 
-    connect(applet(), &Plasma::Applet::titleChanged, this, &AppletInterface::titleChanged);
+    connect(applet, &Plasma::Applet::titleChanged, this, &AppletInterface::titleChanged);
 
-    connect(applet(), &Plasma::Applet::titleChanged, this, [this]() {
+    connect(applet, &Plasma::Applet::titleChanged, this, [this]() {
         if (m_toolTipMainText.isNull()) {
             Q_EMIT toolTipMainTextChanged();
         }
     });
 
-    connect(applet(), &Plasma::Applet::iconChanged, this, &AppletInterface::iconChanged);
+    connect(applet, &Plasma::Applet::iconChanged, this, &AppletInterface::iconChanged);
 
-    connect(applet(), &Plasma::Applet::busyChanged, this, &AppletInterface::busyChanged);
+    connect(applet, &Plasma::Applet::busyChanged, this, &AppletInterface::busyChanged);
 
-    connect(applet(), &Plasma::Applet::backgroundHintsChanged, this, &AppletInterface::backgroundHintsChanged);
-    connect(applet(), &Plasma::Applet::effectiveBackgroundHintsChanged, this, &AppletInterface::effectiveBackgroundHintsChanged);
-    connect(applet(), &Plasma::Applet::userBackgroundHintsChanged, this, &AppletInterface::userBackgroundHintsChanged);
+    connect(applet, &Plasma::Applet::backgroundHintsChanged, this, &AppletInterface::backgroundHintsChanged);
+    connect(applet, &Plasma::Applet::effectiveBackgroundHintsChanged, this, &AppletInterface::effectiveBackgroundHintsChanged);
+    connect(applet, &Plasma::Applet::userBackgroundHintsChanged, this, &AppletInterface::userBackgroundHintsChanged);
 
-    connect(applet(), &Plasma::Applet::configurationRequiredChanged, this, [this](bool configurationRequired, const QString &reason) {
+    connect(applet, &Plasma::Applet::configurationRequiredChanged, this, [this](bool configurationRequired, const QString &reason) {
         Q_UNUSED(configurationRequired);
         Q_UNUSED(reason);
         Q_EMIT configurationRequiredChanged();
         Q_EMIT configurationRequiredReasonChanged();
     });
 
-    connect(applet(), &Plasma::Applet::activated, this, &AppletInterface::activated);
-    connect(applet(), &Plasma::Applet::containmentDisplayHintsChanged, this, &AppletInterface::containmentDisplayHintsChanged);
+    connect(applet, &Plasma::Applet::activated, this, &AppletInterface::activated);
+    connect(applet, &Plasma::Applet::containmentDisplayHintsChanged, this, &AppletInterface::containmentDisplayHintsChanged);
 
-    connect(appletScript(), &DeclarativeAppletScript::formFactorChanged, this, &AppletInterface::formFactorChanged);
-    connect(appletScript(), &DeclarativeAppletScript::locationChanged, this, &AppletInterface::locationChanged);
-    connect(appletScript(), &DeclarativeAppletScript::contextChanged, this, &AppletInterface::contextChanged);
+    connect(applet, &Plasma::Applet::formFactorChanged, this, &AppletInterface::formFactorChanged);
+    connect(applet, &Plasma::Applet::locationChanged, this, &AppletInterface::locationChanged);
 
-    if (applet()->containment()) {
-        connect(applet()->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenChanged);
+    if (applet->containment()) {
+        connect(applet->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenChanged);
 
         // Screen change implies geo change for good measure.
-        connect(applet()->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenGeometryChanged);
+        connect(applet->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenGeometryChanged);
 
-        connect(applet()->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
-            if (id == applet()->containment()->screen()) {
+        connect(applet->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
+            if (id == AppletQuickItem::applet()->containment()->screen()) {
                 Q_EMIT screenGeometryChanged();
             }
         });
 
-        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRegionChanged, this, &ContainmentInterface::availableScreenRegionChanged);
-        connect(applet()->containment()->corona(), &Plasma::Corona::availableScreenRectChanged, this, &ContainmentInterface::availableScreenRectChanged);
+        connect(applet->containment()->corona(), &Plasma::Corona::availableScreenRegionChanged, this, &ContainmentInterface::availableScreenRegionChanged);
+        connect(applet->containment()->corona(), &Plasma::Corona::availableScreenRectChanged, this, &ContainmentInterface::availableScreenRectChanged);
     }
 
     connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {
@@ -123,11 +121,6 @@ AppletInterface::AppletInterface(DeclarativeAppletScript *script, const QVariant
 
 AppletInterface::~AppletInterface()
 {
-}
-
-DeclarativeAppletScript *AppletInterface::appletScript() const
-{
-    return m_appletScriptEngine;
 }
 
 void AppletInterface::init()
@@ -389,17 +382,7 @@ void AppletInterface::setUserBackgroundHints(Plasma::Types::BackgroundHints hint
 
 void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QString &reason)
 {
-    appletScript()->setConfigurationRequired(needsConfiguring, reason);
-}
-
-QString AppletInterface::file(const QString &fileType)
-{
-    return appletScript()->filePath(fileType, QString());
-}
-
-QString AppletInterface::file(const QString &fileType, const QString &filePath)
-{
-    return appletScript()->filePath(fileType, filePath);
+    applet()->setConfigurationRequired(needsConfiguring, reason);
 }
 
 QList<QObject *> AppletInterface::contextualActionsObjects() const
@@ -632,7 +615,7 @@ bool AppletInterface::configurationRequired() const
 
 void AppletInterface::setConfigurationRequiredProperty(bool needsConfiguring)
 {
-    appletScript()->setConfigurationRequired(needsConfiguring, applet()->configurationRequiredReason());
+    applet()->setConfigurationRequired(needsConfiguring, applet()->configurationRequiredReason());
 }
 
 QString AppletInterface::configurationRequiredReason() const
@@ -642,7 +625,7 @@ QString AppletInterface::configurationRequiredReason() const
 
 void AppletInterface::setConfigurationRequiredReason(const QString &reason)
 {
-    appletScript()->setConfigurationRequired(applet()->configurationRequired(), reason);
+    applet()->setConfigurationRequired(applet()->configurationRequired(), reason);
 }
 
 QString AppletInterface::downloadPath() const
@@ -823,7 +806,8 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
                 return false;
             }
 
-            ContainmentInterface *ci = c->property("_plasma_graphicObject").value<ContainmentInterface *>();
+            ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(AppletQuickItem::itemForApplet(c));
+
             if (!ci) {
                 return false;
             }

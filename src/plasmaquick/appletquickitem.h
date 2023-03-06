@@ -108,6 +108,8 @@ public:
     bool isActivationTogglesExpanded() const;
     void setActivationTogglesExpanded(bool activationTogglesExpanded);
 
+    static AppletQuickItem *itemForApplet(Plasma::Applet *applet);
+
     ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
     static AppletQuickItem *qmlAttachedProperties(QObject *object);
 

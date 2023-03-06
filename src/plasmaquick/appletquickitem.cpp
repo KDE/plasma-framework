@@ -6,6 +6,8 @@
 
 #include "appletquickitem.h"
 #include "debug_p.h"
+#include "plasmoid/appletinterface.h"
+#include "plasmoid/containmentinterface.h"
 #include "private/appletquickitem_p.h"
 
 #include <QJsonArray>
@@ -29,6 +31,7 @@
 
 namespace PlasmaQuick
 {
+QHash<Plasma::Applet *, AppletQuickItem *> AppletQuickItemPrivate::s_itemsForApplet = QHash<Plasma::Applet *, AppletQuickItem *>();
 AppletQuickItemPrivate::PreloadPolicy AppletQuickItemPrivate::s_preloadPolicy = AppletQuickItemPrivate::Uninitialized;
 
 AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
@@ -482,9 +485,6 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
                 d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + d->applet->pluginMetaData().pluginId());
             }
         }
-
-        // set the graphicObject dynamic property on applet
-        d->applet->setProperty("_plasma_graphicObject", QVariant::fromValue(this));
     }
 
     d->qmlObject->setInitializationDelayed(true);
@@ -494,6 +494,7 @@ AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
 
 AppletQuickItem::~AppletQuickItem()
 {
+    AppletQuickItemPrivate::s_itemsForApplet.remove(d->applet);
     // decrease weight
     if (d->s_preloadPolicy >= AppletQuickItemPrivate::Adaptive) {
         d->applet->config().writeEntry(QStringLiteral("PreloadWeight"), qMax(0, d->preloadWeight() - AppletQuickItemPrivate::PreloadWeightDecrement));
@@ -537,6 +538,35 @@ AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
         qWarning() << "Could not find the Plasmoid for" << object << context << context->baseUrl();
     }
     return ret;
+}
+
+AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
+{
+    if (!applet) {
+        return nullptr;
+    }
+
+    auto it = AppletQuickItemPrivate::s_itemsForApplet.constFind(applet);
+    if (it != AppletQuickItemPrivate::s_itemsForApplet.constEnd()) {
+        return it.value();
+    }
+    Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet);
+
+    AppletQuickItem *item = nullptr;
+    if (pc && pc->isContainment()) {
+        // TODO: creation parameters
+        item = new ContainmentInterface(applet, {});
+    } else {
+        // fail? so it's a normal Applet
+        item = new AppletInterface(applet, {});
+    }
+    AppletQuickItemPrivate::s_itemsForApplet[applet] = item;
+    applet->connect(applet, &QObject::destroyed, applet, [applet]() {
+        AppletQuickItemPrivate::s_itemsForApplet.remove(applet);
+    });
+    item->init();
+
+    return item;
 }
 
 Plasma::Applet *AppletQuickItem::applet() const
@@ -587,7 +617,6 @@ void AppletQuickItem::init()
     }
 
     d->qmlObject->setSource(d->applet->kPackage().fileUrl("mainscript"));
-
     if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError()
         || d->applet->failedToLaunch()) {
         QString reason;
@@ -673,7 +702,7 @@ void AppletQuickItem::init()
     if (!d->compactRepresentationExpander) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         QUrl compactExpanderUrl = d->containmentPackage.fileUrl("compactapplet");
-
+        qWarning() << "compactExpanderUrl" << compactExpanderUrl;
         if (compactExpanderUrl.isEmpty()) {
             compactExpanderUrl = d->coronaPackage.fileUrl("compactapplet");
         }

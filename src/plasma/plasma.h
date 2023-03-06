@@ -43,8 +43,7 @@ public:
         ScreenConstraint = 4, /**< Which screen an object is on */
         ImmutableConstraint = 8, /**< the immutability (locked) nature of the applet changed  */
         StartupCompletedConstraint = 16, /**< application startup has completed */
-        ContextConstraint = 32, /**< the context (e.g. activity) has changed */
-        UiReadyConstraint = 64,
+        UiReadyConstraint = 32,
         /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
         AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint | ImmutableConstraint,
     };

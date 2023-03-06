@@ -1,5 +1,5 @@
 /*
-    SPDX-FileCopyrightText: 2006-2007 Aaron Seigo <aseigo@kde.org>
+    SPDX-FileCopyrightText: 2006-2007 Aaron Seigo <:wqaseigo@kde.org>
     SPDX-FileCopyrightText: 2007 Riccardo Iaconelli <riccardo@kde.org>
     SPDX-FileCopyrightText: 2008 Ménard Alexis <darktears31@gmail.com>
 
@@ -304,6 +304,19 @@ public:
     virtual void restore(KConfigGroup &group);
 
     /**
+     * When the applet needs to be configured before being usable, this
+     * method can be called to show a standard interface prompting the user
+     * to configure the applet
+     *
+     * @param needsConfiguring true if the applet needs to be configured,
+     *                         or false if it doesn't
+     * @param reason a translated message for the user explaining that the
+     *               applet needs configuring; this should note what needs
+     *               to be configured
+     */
+    void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
+
+    /**
      * @return true if the applet currently needs to be configured,
      *         otherwise, false
      */
@@ -457,6 +470,17 @@ public:
      * an empty shortcut if no global shortcut is associated.
      */
     QKeySequence globalShortcut() const;
+
+    /**
+     * Sets whether or not this applet provides a user interface for
+     * configuring the applet.
+     *
+     * It defaults to false, and if true is passed in you should
+     * also reimplement createConfigurationInterface()
+     *
+     * @param hasInterface whether or not there is a user interface available
+     **/
+    void setHasConfigurationInterface(bool hasInterface);
 
     // Completely UI-specific, remove or move to scriptengine
     /**
@@ -657,30 +681,6 @@ protected:
      * this method.
      **/
     virtual void saveState(KConfigGroup &config) const;
-
-    /**
-     * Sets whether or not this applet provides a user interface for
-     * configuring the applet.
-     *
-     * It defaults to false, and if true is passed in you should
-     * also reimplement createConfigurationInterface()
-     *
-     * @param hasInterface whether or not there is a user interface available
-     **/
-    void setHasConfigurationInterface(bool hasInterface);
-
-    /**
-     * When the applet needs to be configured before being usable, this
-     * method can be called to show a standard interface prompting the user
-     * to configure the applet
-     *
-     * @param needsConfiguring true if the applet needs to be configured,
-     *                         or false if it doesn't
-     * @param reason a translated message for the user explaining that the
-     *               applet needs configuring; this should note what needs
-     *               to be configured
-     */
-    void setConfigurationRequired(bool needsConfiguring, const QString &reason = QString());
 
     // UTILS
     /**

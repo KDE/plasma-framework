@@ -6,6 +6,7 @@
 
 #include "containmentview.h"
 #include "configview.h"
+#include "plasmoid/containmentinterface.h"
 
 #include <QDebug>
 #include <QQmlContext>
@@ -58,8 +59,9 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
 
     if (containment) {
         QObject::disconnect(containment, nullptr, q, nullptr);
-        QObject *oldGraphicObject = containment->property("_plasma_graphicObject").value<QObject *>();
+        QObject *oldGraphicObject = AppletQuickItem::itemForApplet(containment);
         if (auto item = qobject_cast<QQuickItem *>(oldGraphicObject)) {
+            // TODO: delete the item when needed instead of just hiding, but there are quite a lot of cornercases to manage beforehand
             item->setVisible(false);
         }
         containment->reactToScreenChange();
@@ -109,7 +111,7 @@ void ContainmentViewPrivate::setContainment(Plasma::Containment *cont)
         return;
     }
 
-    QQuickItem *graphicObject = qobject_cast<QQuickItem *>(containment->property("_plasma_graphicObject").value<QObject *>());
+    QQuickItem *graphicObject = AppletQuickItem::itemForApplet(containment);
 
     if (graphicObject) {
         //         qDebug() << "using as graphic containment" << graphicObject << containment.data();
@@ -222,7 +224,8 @@ ContainmentView::~ContainmentView()
 
 void ContainmentView::destroy()
 {
-    QObject *graphicObject = d->containment->property("_plasma_graphicObject").value<QObject *>();
+    // TODO: do we need a version which does not create?
+    QQuickItem *graphicObject = AppletQuickItem::itemForApplet(d->containment);
     if (auto item = qobject_cast<QQuickItem *>(graphicObject)) {
         item->setVisible(false);
         item->setParentItem(nullptr); // First, remove the item from the view
