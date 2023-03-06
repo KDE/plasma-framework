@@ -562,6 +562,7 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     }
     AppletQuickItemPrivate::s_itemsForApplet[applet] = item;
     applet->connect(applet, &QObject::destroyed, applet, [applet]() {
+        delete AppletQuickItemPrivate::s_itemsForApplet[applet];
         AppletQuickItemPrivate::s_itemsForApplet.remove(applet);
     });
     item->init();
