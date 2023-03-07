@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 22:21+0000\n"
+"POT-Creation-Date: 2023-03-07 02:21+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -50,28 +50,28 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: plasma/applet.cpp:288
+#: plasma/applet.cpp:280
 #, kde-format
 msgid "Unknown"
 msgstr "അജ്ഞാതം"
 
-#: plasma/applet.cpp:656
+#: plasma/applet.cpp:650
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 വിഡ്ജറ്റ് സജീവമാക്കുക"
 
-#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:103
+#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:98
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1 കളയുക"
 
-#: plasma/containment.cpp:91 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:90 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr ""
 
-#: plasma/containment.cpp:94 plasma/private/applet_p.cpp:108
+#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:103
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -283,78 +283,66 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "പലവക"
 
-#: plasma/private/applet_p.cpp:123
+#: plasma/private/applet_p.cpp:118
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "%1 വിഡ്ജറ്റ് ഏത് സ്ക്രിപ്റ്റ് എന്‍ജിനാണ് ഉപയോഗിക്കേണ്ടതെന്ന് നിര്‍വചിച്ചിട്ടില്ല."
 
-#: plasma/private/applet_p.cpp:141
+#: plasma/private/applet_p.cpp:136
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "%2 വിഡ്ജറ്റിനാവശ്യമായ %1 പാക്കേജ് തുറക്കാനായില്ല."
 
-#: plasma/private/applet_p.cpp:162
-#, kde-format
-msgctxt ""
-"API or programming language the widget was written in, name of the widget"
-msgid "Could not create a %1 ScriptEngine for the %2 widget."
-msgstr "%2 വിഡ്ജറ്റിനു വേണ്ട %1 സ്ക്രിപ്റ്റ് എന്‍ജിന്‍ സൃഷ്ടിക്കുവാനായില്ല."
-
-#: plasma/private/applet_p.cpp:168
+#: plasma/private/applet_p.cpp:144
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "മറ്റു മാര്‍ഗങ്ങള്‍ കാണിക്കുക..."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:246
 #, kde-format
 msgid "Widget Removed"
 msgstr "വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:247
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "%1 വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:251
 #, kde-format
 msgid "Panel Removed"
 msgstr "പാളി നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:276
+#: plasma/private/applet_p.cpp:252
 #, kde-format
 msgid "A panel has been removed."
 msgstr "ഒരു പാളി നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:279
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "Desktop Removed"
 msgstr "പണിയിടം നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:280
+#: plasma/private/applet_p.cpp:256
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "ഒരു പണിയിടം നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:283
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Undo"
 msgstr "തിരിച്ചെടുക്കുക"
 
-#: plasma/private/applet_p.cpp:371
+#: plasma/private/applet_p.cpp:347
 #, kde-format
 msgid "Widget Settings"
 msgstr "വിഡ്ജറ്റ് ക്രമീകരണങ്ങള്‍"
 
-#: plasma/private/applet_p.cpp:377
+#: plasma/private/applet_p.cpp:353
 #, kde-format
 msgid "Remove this Widget"
 msgstr "ഈ വിഡ്ജറ്റ് നീക്കംചെയ്യുക"
-
-#: plasma/private/applet_p.cpp:465
-#, kde-format
-msgid "Script initialization failed"
-msgstr "സ്ക്രിപ്റ്റ് ആരംഭിക്കല്‍ പരാജയപ്പെട്ടു"
 
 #: plasma/private/containment_p.cpp:57
 #, kde-format
@@ -409,19 +397,19 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "അസാധുവായ സേവനം, യാതൊരു പ്രക്രിയയും നിര്‍വഹിക്കാനാവുന്നില്ല."
 
-#: plasmaquick/appletquickitem.cpp:595
+#: plasmaquick/appletquickitem.cpp:624
 #, fuzzy, kde-format
 #| msgid "Unknown"
 msgid "Unknown Applet"
 msgstr "അജ്ഞാതം"
 
-#: plasmaquick/appletquickitem.cpp:610
+#: plasmaquick/appletquickitem.cpp:639
 #, fuzzy, kde-format
 #| msgid "Error loading QML file: %1"
 msgid "Error loading QML file: %1 %2"
 msgstr "ക്യുഎംഎല്‍ ഫയല്‍ തുറക്കുന്നതിനിടയില്‍ പിശക്: %1"
 
-#: plasmaquick/appletquickitem.cpp:612
+#: plasmaquick/appletquickitem.cpp:641
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "ആപ്‌ലെറ്റ് ലോഡ് ചെയ്യുന്നതിൽ പിശക് : പാക്കേജ് നിലവിലില്ല. %1"
@@ -431,60 +419,68 @@ msgstr "ആപ്‌ലെറ്റ് ലോഡ് ചെയ്യുന്ന�
 msgid "%1 Settings"
 msgstr "%1 ക്രമീകരണങ്ങള്‍"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+#: plasmaquick/plasmoid/containmentinterface.cpp:617
 #, kde-format
 msgid "Plasma Package"
 msgstr "പ്ലാസ്മ പാക്കേജ്"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:611
+#: plasmaquick/plasmoid/containmentinterface.cpp:621
 #, kde-format
 msgid "Install"
 msgstr "ഇന്‍സ്റ്റാള്‍"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
+#: plasmaquick/plasmoid/containmentinterface.cpp:634
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "പാക്കേജ് ഇന്‍സ്റ്റാളേഷന്‍ പരാജയപ്പെട്ടു"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#: plasmaquick/plasmoid/containmentinterface.cpp:657
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "നിങ്ങളിപ്പോള്‍ നല്‍കിയ പാക്കേജ് സ്വീകാര്യമല്ല."
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:656
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
+#: plasmaquick/plasmoid/containmentinterface.cpp:666
+#: plasmaquick/plasmoid/containmentinterface.cpp:735
 #, kde-format
 msgid "Widgets"
 msgstr "വിഡ്ജറ്റുകള്‍"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: plasmaquick/plasmoid/containmentinterface.cpp:671
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1 ചേര്‍ക്കുക [വിഡ്ജറ്റ് ചേര്‍ക്കുക]"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:675
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:729
+#: plasmaquick/plasmoid/containmentinterface.cpp:685
+#: plasmaquick/plasmoid/containmentinterface.cpp:739
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "സൂചനാചിത്രങ്ങള്‍ ചേര്‍ക്കുക"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#: plasmaquick/plasmoid/containmentinterface.cpp:697
 #, kde-format
 msgid "Wallpaper"
 msgstr "പശ്ചാത്തലചിത്രം"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:697
+#: plasmaquick/plasmoid/containmentinterface.cpp:707
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
 msgstr "%1 -നെ തീര്‍ച്ചപ്പെടുത്തുക"
 
-#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#: plasmaquick/plasmoid/dropmenu.cpp:28
 #, kde-format
 msgid "Content dropped"
 msgstr "ഉള്ളടക്കം ഉപേക്ഷിക്കപ്പെട്ടു"
+
+#~ msgctxt ""
+#~ "API or programming language the widget was written in, name of the widget"
+#~ msgid "Could not create a %1 ScriptEngine for the %2 widget."
+#~ msgstr "%2 വിഡ്ജറ്റിനു വേണ്ട %1 സ്ക്രിപ്റ്റ് എന്‍ജിന്‍ സൃഷ്ടിക്കുവാനായില്ല."
+
+#~ msgid "Script initialization failed"
+#~ msgstr "സ്ക്രിപ്റ്റ് ആരംഭിക്കല്‍ പരാജയപ്പെട്ടു"
 
 #~ msgctxt "Agenda listview section title"
 #~ msgid "Holidays"

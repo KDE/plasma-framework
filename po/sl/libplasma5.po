@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 22:21+0000\n"
+"POT-Creation-Date: 2023-03-07 02:21+0000\n"
 "PO-Revision-Date: 2022-07-27 07:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -54,28 +54,28 @@ msgstr "Poišči …"
 msgid "Search"
 msgstr "Poišči"
 
-#: plasma/applet.cpp:288
+#: plasma/applet.cpp:280
 #, kde-format
 msgid "Unknown"
 msgstr "Neznan"
 
-#: plasma/applet.cpp:656
+#: plasma/applet.cpp:650
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Omogoči gradnik %1"
 
-#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:103
+#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:98
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Odstrani %1"
 
-#: plasma/containment.cpp:91 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:90 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Vstop v urejevalni način"
 
-#: plasma/containment.cpp:94 plasma/private/applet_p.cpp:108
+#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:103
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -290,78 +290,66 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Razno"
 
-#: plasma/private/applet_p.cpp:123
+#: plasma/private/applet_p.cpp:118
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "Gradnik %1 ni določil kateri skriptni pogon bo uporabljen."
 
-#: plasma/private/applet_p.cpp:141
+#: plasma/private/applet_p.cpp:136
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Ni bilo mogoče odpreti paketa %1, ki je zahtevan za gradnik %2."
 
-#: plasma/private/applet_p.cpp:162
-#, kde-format
-msgctxt ""
-"API or programming language the widget was written in, name of the widget"
-msgid "Could not create a %1 ScriptEngine for the %2 widget."
-msgstr "Ni bilo mogoče ustvariti skriptnega pogona %1 za gradnik %2."
-
-#: plasma/private/applet_p.cpp:168
+#: plasma/private/applet_p.cpp:144
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Pokaži alternative..."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:246
 #, kde-format
 msgid "Widget Removed"
 msgstr "Gradnik odstranjen"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:247
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Gradnik '%1' je bil odstranjen."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:251
 #, kde-format
 msgid "Panel Removed"
 msgstr "Plošča odstranjena"
 
-#: plasma/private/applet_p.cpp:276
+#: plasma/private/applet_p.cpp:252
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Plošča je bila odstranjena."
 
-#: plasma/private/applet_p.cpp:279
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Namizje odstranjeno"
 
-#: plasma/private/applet_p.cpp:280
+#: plasma/private/applet_p.cpp:256
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Namizje je bilo odstranjeno."
 
-#: plasma/private/applet_p.cpp:283
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Undo"
 msgstr "Razveljavi"
 
-#: plasma/private/applet_p.cpp:371
+#: plasma/private/applet_p.cpp:347
 #, kde-format
 msgid "Widget Settings"
 msgstr "Nastavitve gradnika"
 
-#: plasma/private/applet_p.cpp:377
+#: plasma/private/applet_p.cpp:353
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Odstrani ta gradnik"
-
-#: plasma/private/applet_p.cpp:465
-#, kde-format
-msgid "Script initialization failed"
-msgstr "Začenjanje skripta je spodletelo"
 
 #: plasma/private/containment_p.cpp:57
 #, kde-format
@@ -416,17 +404,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Neveljavna (nična) storitev, ki ne more izvajati opravil."
 
-#: plasmaquick/appletquickitem.cpp:595
+#: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Neznan applet"
 
-#: plasmaquick/appletquickitem.cpp:610
+#: plasmaquick/appletquickitem.cpp:639
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Napaka pri nalaganju datoteke QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:612
+#: plasmaquick/appletquickitem.cpp:641
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Napaka med nalaganjem apleta: paket ne obstaja. %1"
@@ -436,60 +424,68 @@ msgstr "Napaka med nalaganjem apleta: paket ne obstaja. %1"
 msgid "%1 Settings"
 msgstr "Nastavitve za %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+#: plasmaquick/plasmoid/containmentinterface.cpp:617
 #, kde-format
 msgid "Plasma Package"
 msgstr "Paket za Plasmo"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:611
+#: plasmaquick/plasmoid/containmentinterface.cpp:621
 #, kde-format
 msgid "Install"
 msgstr "Namesti"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
+#: plasmaquick/plasmoid/containmentinterface.cpp:634
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Namestitev paketa ni uspela"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#: plasmaquick/plasmoid/containmentinterface.cpp:657
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Pravkar spuščen paket ni veljaven."
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:656
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
+#: plasmaquick/plasmoid/containmentinterface.cpp:666
+#: plasmaquick/plasmoid/containmentinterface.cpp:735
 #, kde-format
 msgid "Widgets"
 msgstr "Gradniki"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: plasmaquick/plasmoid/containmentinterface.cpp:671
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Dodaj %1"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:675
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:729
+#: plasmaquick/plasmoid/containmentinterface.cpp:685
+#: plasmaquick/plasmoid/containmentinterface.cpp:739
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Dodaj ikono"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#: plasmaquick/plasmoid/containmentinterface.cpp:697
 #, kde-format
 msgid "Wallpaper"
 msgstr "Ozadje"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:697
+#: plasmaquick/plasmoid/containmentinterface.cpp:707
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
 msgstr "Postavi %1"
 
-#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#: plasmaquick/plasmoid/dropmenu.cpp:28
 #, kde-format
 msgid "Content dropped"
 msgstr "Vsebina spuščena"
+
+#~ msgctxt ""
+#~ "API or programming language the widget was written in, name of the widget"
+#~ msgid "Could not create a %1 ScriptEngine for the %2 widget."
+#~ msgstr "Ni bilo mogoče ustvariti skriptnega pogona %1 za gradnik %2."
+
+#~ msgid "Script initialization failed"
+#~ msgstr "Začenjanje skripta je spodletelo"
 
 #~ msgctxt "Agenda listview section title"
 #~ msgid "Holidays"

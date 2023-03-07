@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-01 22:21+0000\n"
+"POT-Creation-Date: 2023-03-07 02:21+0000\n"
 "PO-Revision-Date: 2023-02-11 10:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -52,28 +52,28 @@ msgstr "Ara…"
 msgid "Search"
 msgstr "Ara"
 
-#: plasma/applet.cpp:288
+#: plasma/applet.cpp:280
 #, kde-format
 msgid "Unknown"
 msgstr "Bilinmeyen"
 
-#: plasma/applet.cpp:656
+#: plasma/applet.cpp:650
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 Araç Takımını Etkinleştir"
 
-#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:103
+#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:98
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1 kaldır"
 
-#: plasma/containment.cpp:91 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:90 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Düzenleme Kipine Gir"
 
-#: plasma/containment.cpp:94 plasma/private/applet_p.cpp:108
+#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:103
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -288,78 +288,66 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Diğer"
 
-#: plasma/private/applet_p.cpp:123
+#: plasma/private/applet_p.cpp:118
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "%1 araç takımı kullanılacak Betik Motorunu tanımlamadı."
 
-#: plasma/private/applet_p.cpp:141
+#: plasma/private/applet_p.cpp:136
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "%2 araç takımı için gereken %1 paketi açılamadı."
 
-#: plasma/private/applet_p.cpp:162
-#, kde-format
-msgctxt ""
-"API or programming language the widget was written in, name of the widget"
-msgid "Could not create a %1 ScriptEngine for the %2 widget."
-msgstr "%2 araç takımı için %1 Betik Motoru oluşturulamadı."
-
-#: plasma/private/applet_p.cpp:168
+#: plasma/private/applet_p.cpp:144
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Alternatifleri Göster..."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:246
 #, kde-format
 msgid "Widget Removed"
 msgstr "Araç Takımı Kaldırıldı"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:247
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "\"%1\" araç takımı kaldırıldı."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:251
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panel Kaldırıldı"
 
-#: plasma/private/applet_p.cpp:276
+#: plasma/private/applet_p.cpp:252
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Bir panel kaldırıldı."
 
-#: plasma/private/applet_p.cpp:279
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Masaüstü Kaldırıldı"
 
-#: plasma/private/applet_p.cpp:280
+#: plasma/private/applet_p.cpp:256
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Bir masaüstü kaldırıldı."
 
-#: plasma/private/applet_p.cpp:283
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Undo"
 msgstr "Geri Al"
 
-#: plasma/private/applet_p.cpp:371
+#: plasma/private/applet_p.cpp:347
 #, kde-format
 msgid "Widget Settings"
 msgstr "Araç Takımı Ayarları"
 
-#: plasma/private/applet_p.cpp:377
+#: plasma/private/applet_p.cpp:353
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Bu araç takımını kaldır"
-
-#: plasma/private/applet_p.cpp:465
-#, kde-format
-msgid "Script initialization failed"
-msgstr "Betik başlatma başarısız"
 
 #: plasma/private/containment_p.cpp:57
 #, kde-format
@@ -414,17 +402,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Geçersiz (boş) hizmet, hiçbir işlem yapamaz."
 
-#: plasmaquick/appletquickitem.cpp:595
+#: plasmaquick/appletquickitem.cpp:624
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Bilinmeyen Uygulamacık"
 
-#: plasmaquick/appletquickitem.cpp:610
+#: plasmaquick/appletquickitem.cpp:639
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "QML dosyası yüklenirken hata: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:612
+#: plasmaquick/appletquickitem.cpp:641
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Uygulamacık yükleme hatası: Paket mevcut değil. %1"
@@ -434,60 +422,68 @@ msgstr "Uygulamacık yükleme hatası: Paket mevcut değil. %1"
 msgid "%1 Settings"
 msgstr "%1 Ayarları"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:607
+#: plasmaquick/plasmoid/containmentinterface.cpp:617
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma Paketi"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:611
+#: plasmaquick/plasmoid/containmentinterface.cpp:621
 #, kde-format
 msgid "Install"
 msgstr "Kur"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:624
+#: plasmaquick/plasmoid/containmentinterface.cpp:634
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Paket Kurulumu Başarısız"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:647
+#: plasmaquick/plasmoid/containmentinterface.cpp:657
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Az önce bıraktığınız paket geçersiz."
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:656
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:725
+#: plasmaquick/plasmoid/containmentinterface.cpp:666
+#: plasmaquick/plasmoid/containmentinterface.cpp:735
 #, kde-format
 msgid "Widgets"
 msgstr "Araç Takımlanı"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:661
+#: plasmaquick/plasmoid/containmentinterface.cpp:671
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1 Ekle"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:675
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:729
+#: plasmaquick/plasmoid/containmentinterface.cpp:685
+#: plasmaquick/plasmoid/containmentinterface.cpp:739
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Simge Ekle"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:687
+#: plasmaquick/plasmoid/containmentinterface.cpp:697
 #, kde-format
 msgid "Wallpaper"
 msgstr "Duvar Kağıdı"
 
-#: scriptengines/qml/plasmoid/containmentinterface.cpp:697
+#: plasmaquick/plasmoid/containmentinterface.cpp:707
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
 msgstr "%1 Ayarla"
 
-#: scriptengines/qml/plasmoid/dropmenu.cpp:28
+#: plasmaquick/plasmoid/dropmenu.cpp:28
 #, kde-format
 msgid "Content dropped"
 msgstr "İçerik bırakıldı"
+
+#~ msgctxt ""
+#~ "API or programming language the widget was written in, name of the widget"
+#~ msgid "Could not create a %1 ScriptEngine for the %2 widget."
+#~ msgstr "%2 araç takımı için %1 Betik Motoru oluşturulamadı."
+
+#~ msgid "Script initialization failed"
+#~ msgstr "Betik başlatma başarısız"
 
 #~ msgctxt "Agenda listview section title"
 #~ msgid "Holidays"
