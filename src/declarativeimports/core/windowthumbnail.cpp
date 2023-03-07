@@ -233,7 +233,7 @@ void WindowThumbnail::releaseResources()
 {
     QQuickWindow::RenderStage m_renderStage = QQuickWindow::NoStage;
     if (m_textureProvider) {
-        window()->scheduleRenderJob(new DiscardTextureProviderRunnable(m_textureProvider), m_renderStage);
+        window()->scheduleRenderJob(new DiscardTextureProviderRunnable(m_textureProvider), QQuickWindow::AfterSynchronizingStage);
         m_textureProvider = nullptr;
     }
 
