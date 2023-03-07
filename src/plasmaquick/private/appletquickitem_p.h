@@ -26,12 +26,12 @@
 namespace Plasma
 {
 class Applet;
-class SharedQmlEngine;
 }
 
 namespace PlasmaQuick
 {
 class AppletQuickItem;
+class SharedQmlEngine;
 
 class AppletQuickItemPrivate
 {
@@ -107,7 +107,7 @@ public:
     QPointer<QObject> ownLayout;
 
     Plasma::Applet *applet;
-    Plasma::SharedQmlEngine *qmlObject;
+    PlasmaQuick::SharedQmlEngine *qmlObject;
 
     KPackage::Package appletPackage;
     KPackage::Package coronaPackage;

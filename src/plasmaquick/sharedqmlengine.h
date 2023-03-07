@@ -8,7 +8,7 @@
 #ifndef PLASMA_SHAREDQMLENGINE_H
 #define PLASMA_SHAREDQMLENGINE_H
 
-#include <plasma/plasma_export.h>
+#include <plasmaquick/plasmaquick_export.h>
 
 #include <QObject>
 #include <QQmlComponent>
@@ -20,23 +20,23 @@ class QQmlComponent;
 class QQmlEngine;
 class KLocalizedContext;
 
-namespace Plasma
+namespace PlasmaQuick
 {
 class SharedQmlEnginePrivate;
 
 /**
- * @class Plasma::SharedQmlEngine Plasma/sharedqmlengine.h Plasma/SharedQmlEngine
+ * @class PlasmaQuick::SharedQmlEngine PlasmaQuick/sharedqmlengine.h PlasmaQuick/SharedQmlEngine
  *
  * @short An object that instantiates an entire QML context, with its own declarative engine
  *
- * Plasma::SharedQmlEngine provides a class to conveniently use QML based
+ * PlasmaQuick::SharedQmlEngine provides a class to conveniently use QML based
  * declarative user interfaces.
  * A SharedQmlEngine corresponds to one QML file (which can include others).
  * It will a shared QQmlEngine with a single root object, described in the QML file.
  *
  * @since 6.0
  */
-class PLASMA_EXPORT SharedQmlEngine : public QObject
+class PLASMAQUICK_EXPORT SharedQmlEngine : public QObject
 {
     Q_OBJECT
 
@@ -48,7 +48,7 @@ class PLASMA_EXPORT SharedQmlEngine : public QObject
 
 public:
     /**
-     * Construct a new Plasma::SharedQmlEngine
+     * Construct a new PlasmaQuick::SharedQmlEngine
      *
      * @param parent The QObject parent for this object.
      */

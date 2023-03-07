@@ -21,6 +21,7 @@ target_sources(KF6PlasmaQuick PRIVATE
     configmodel.cpp
     configview.cpp
     packageurlinterceptor.cpp
+    sharedqmlengine.cpp
     private/configcategory_p.cpp
     ../declarativeimports/core/framesvgitem.cpp
     ../declarativeimports/core/imagetexturescache.cpp
@@ -118,6 +119,7 @@ ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
         ConfigView
         ConfigModel
         Dialog
+        SharedQmlEngine
     REQUIRED_HEADERS plasmaquick_LIB_INCLUDES
     PREFIX PlasmaQuick
 )

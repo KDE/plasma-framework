@@ -28,12 +28,12 @@
 namespace Plasma
 {
 class Applet;
-class SharedQmlEngine;
 }
 
 namespace PlasmaQuick
 {
 class AppletQuickItemPrivate;
+class SharedQmlEngine;
 
 class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
 {
@@ -129,7 +129,7 @@ Q_SIGNALS:
     void fullRepresentationItemChanged(QObject *fullRepresentationItem);
 
 protected:
-    Plasma::SharedQmlEngine *qmlObject();
+    PlasmaQuick::SharedQmlEngine *qmlObject();
 
     // Reimplementation
     void childEvent(QChildEvent *event) override;

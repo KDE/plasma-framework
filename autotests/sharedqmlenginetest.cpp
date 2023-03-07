@@ -2,9 +2,9 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 #include <QTest>
-#include <sharedqmlengine.h>
+#include <plasmaquick/sharedqmlengine.h>
 
-using namespace Plasma;
+using namespace PlasmaQuick;
 
 class SharedQmlEngineTest : public QObject
 {

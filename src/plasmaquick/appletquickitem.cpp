@@ -9,6 +9,7 @@
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
 #include "private/appletquickitem_p.h"
+#include "sharedqmlengine.h"
 
 #include <QJsonArray>
 #include <QQmlContext>
@@ -24,7 +25,6 @@
 #include <Plasma/Applet>
 #include <Plasma/Containment>
 #include <Plasma/Corona>
-#include <Plasma/SharedQmlEngine>
 
 #include <packageurlinterceptor.h>
 #include <qloggingcategory.h>
@@ -63,7 +63,7 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
 
 void AppletQuickItemPrivate::init()
 {
-    qmlObject = new Plasma::SharedQmlEngine(q);
+    qmlObject = new PlasmaQuick::SharedQmlEngine(q);
     if (qmlObject->engine()->urlInterceptors().isEmpty()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine().get(), KPackage::Package());
         interceptor->setForcePlasmaStyle(true);
@@ -883,7 +883,7 @@ void AppletQuickItem::setActivationTogglesExpanded(bool activationTogglesExpande
 
 ////////////Internals
 
-Plasma::SharedQmlEngine *AppletQuickItem::qmlObject()
+PlasmaQuick::SharedQmlEngine *AppletQuickItem::qmlObject()
 {
     return d->qmlObject;
 }

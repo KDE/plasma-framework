@@ -18,7 +18,7 @@
 
 #include "debug_p.h"
 
-namespace Plasma
+namespace PlasmaQuick
 {
 class QmlObjectIncubator : public QQmlIncubator
 {
@@ -118,13 +118,13 @@ void SharedQmlEnginePrivate::errorPrint(QQmlComponent *component)
                 (error.line() > 0 ? QString(QString::number(error.line()) + QLatin1String(": ")) : QLatin1String("")) + error.description() + QLatin1Char('\n');
         }
     }
-    qWarning(LOG_PLASMA) << component->url().toString() << '\n' << errorStr;
+    qWarning(LOG_PLASMAQUICK) << component->url().toString() << '\n' << errorStr;
 }
 
 void SharedQmlEnginePrivate::execute(const QUrl &source)
 {
     if (source.isEmpty()) {
-        qWarning(LOG_PLASMA) << "File name empty!";
+        qWarning(LOG_PLASMAQUICK) << "File name empty!";
         return;
     }
 
@@ -205,7 +205,7 @@ std::shared_ptr<QQmlEngine> SharedQmlEngine::engine()
 QObject *SharedQmlEngine::rootObject() const
 {
     if (d->incubator.status() == QQmlIncubator::Loading) {
-        qWarning(LOG_PLASMA) << "Trying to use rootObject before initialization is completed, whilst using setInitializationDelayed. Forcing completion";
+        qWarning(LOG_PLASMAQUICK) << "Trying to use rootObject before initialization is completed, whilst using setInitializationDelayed. Forcing completion";
         d->incubator.forceCompletion();
     }
     return d->incubator.object();
@@ -258,7 +258,7 @@ void SharedQmlEngine::completeInitialization(const QVariantHash &initialProperti
     }
 
     if (!d->component) {
-        qWarning(LOG_PLASMA) << "No component for" << source();
+        qWarning(LOG_PLASMAQUICK) << "No component for" << source();
         return;
     }
 

@@ -15,7 +15,7 @@
 
 class QQuickItem;
 
-namespace Plasma
+namespace PlasmaQuick
 {
 class SharedQmlEngine;
 }
@@ -58,7 +58,7 @@ private Q_SLOTS:
     void valueChanged(const QVariant &value);
 
 private:
-    Plasma::SharedQmlEngine *m_qmlObject;
+    PlasmaQuick::SharedQmlEngine *m_qmlObject;
     QTimer *m_showTimer;
     int m_hideTimeout;
     bool m_interactive;

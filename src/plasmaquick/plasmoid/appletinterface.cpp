@@ -6,6 +6,7 @@
 */
 
 #include "appletinterface.h"
+#include "sharedqmlengine.h"
 
 #include <QAction>
 #include <QActionGroup>
@@ -23,7 +24,6 @@
 #include <Plasma/Corona>
 #include <Plasma/Plasma>
 #include <Plasma/PluginLoader>
-#include <Plasma/SharedQmlEngine>
 
 #include "containmentinterface.h"
 #include "wallpaperinterface.h"

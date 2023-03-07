@@ -7,6 +7,7 @@
 #include "wallpaperinterface.h"
 
 #include "containmentinterface.h"
+#include "sharedqmlengine.h"
 
 #include <KConfigPropertyMap>
 #include <KActionCollection>
@@ -21,7 +22,6 @@
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
-#include <Plasma/SharedQmlEngine>
 #include <kpackage/packageloader.h>
 
 QHash<QObject *, WallpaperInterface *> WallpaperInterface::s_rootObjects = QHash<QObject *, WallpaperInterface *>();
@@ -114,10 +114,10 @@ void WallpaperInterface::syncWallpaperPackage()
     m_wallpaperPlugin = m_containmentInterface->containment()->wallpaper();
 
     if (!m_qmlObject) {
-        m_qmlObject = new Plasma::SharedQmlEngine(this);
+        m_qmlObject = new PlasmaQuick::SharedQmlEngine(this);
         s_rootObjects[m_qmlObject->engine().get()] = this;
         m_qmlObject->setInitializationDelayed(true);
-        connect(m_qmlObject, &Plasma::SharedQmlEngine::finished, this, &WallpaperInterface::loadFinished);
+        connect(m_qmlObject, &PlasmaQuick::SharedQmlEngine::finished, this, &WallpaperInterface::loadFinished);
     }
 
     m_actions->clear();

@@ -8,6 +8,7 @@
 
 #include "containmentinterface.h"
 #include "dropmenu.h"
+#include "sharedqmlengine.h"
 #include "wallpaperinterface.h"
 
 #include <QApplication>
@@ -34,7 +35,6 @@
 #include <Plasma/ContainmentActions>
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
-#include <Plasma/SharedQmlEngine>
 #include <plasma.h>
 
 #include <KPackage/Package>
