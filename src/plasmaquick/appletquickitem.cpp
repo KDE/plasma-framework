@@ -563,10 +563,10 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     AppletQuickItem *item = nullptr;
     if (pc && pc->isContainment()) {
         // TODO: creation parameters
-        item = new ContainmentInterface(applet, {});
+        item = new ContainmentInterface(applet, applet->startupArguments());
     } else {
         // fail? so it's a normal Applet
-        item = new AppletInterface(applet, {});
+        item = new AppletInterface(applet, applet->startupArguments());
     }
     AppletQuickItemPrivate::s_itemsForApplet[applet] = item;
     applet->connect(applet, &QObject::destroyed, applet, [applet]() {

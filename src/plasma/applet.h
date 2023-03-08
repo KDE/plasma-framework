@@ -193,6 +193,13 @@ public:
     uint id() const;
 
     /**
+     * @return the arguments this applet was started with.
+     * Some applets support arguments, for instance the notes applet supports to be
+     * instantiated with a given text already passed as paramenter
+     */
+    QVariantList startupArguments() const;
+
+    /**
      * @return The type of immutability of this applet
      */
     Types::ImmutabilityType immutability() const;

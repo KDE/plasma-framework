@@ -89,6 +89,8 @@ AppletPrivate::~AppletPrivate()
 
 void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
 {
+    startupArguments = args;
+
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a Corona, which is not available at this point
     q->setHasConfigurationInterface(true);

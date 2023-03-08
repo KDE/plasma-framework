@@ -70,6 +70,8 @@ public:
     QString customTitle;
     QString icon;
 
+    QVariantList startupArguments;
+
     // bookkeeping
     KConfigGroup *mainConfig;
     Plasma::Types::Constraints pendingConstraints;

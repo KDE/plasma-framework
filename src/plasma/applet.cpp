@@ -92,6 +92,11 @@ uint Applet::id() const
     return d->appletId;
 }
 
+QVariantList Applet::startupArguments() const
+{
+    return d->startupArguments;
+}
+
 void Applet::save(KConfigGroup &g) const
 {
     if (d->transient || !d->appletDescription.isValid()) {
