@@ -761,18 +761,6 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     //     qDebug() << "Applet added on containment:" << m_containment->title() << this
     //              << "Applet: " << applet << applet->title() << appletGraphicObject;
 
-#if 0
-    TODO remove
-    // applets can not have a graphic object if they don't have a script engine loaded
-    // this can happen if they were loaded with an invalid metadata
-    if (!appletGraphicObject) {
-        // TODO: pass the args
-        appletGraphicObject = new AppletInterface(applet, {}, this);
-        applet->setProperty("_plasma_graphicObject", QVariant::fromValue(appletGraphicObject));
-        appletGraphicObject->init();
-    }
-#endif
-
     appletGraphicObject->setProperty("visible", false);
     appletGraphicObject->setProperty("parent", QVariant::fromValue(this));
 
