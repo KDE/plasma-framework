@@ -12,14 +12,11 @@ target_sources(corebindingsplugin PRIVATE
     corebindingsplugin.cpp
     colorscope.cpp
     datamodel.cpp
-    datasource.cpp
-    #    runnermodel.cpp
     svgitem.cpp
     framesvgitem.cpp
     quicktheme.cpp
     tooltip.cpp
     tooltipdialog.cpp
-    serviceoperationstatus.cpp
     iconitem.cpp
     units.cpp
     windowthumbnail.cpp

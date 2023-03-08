@@ -34,17 +34,6 @@ target_sources(KF6Plasma PRIVATE
     private/containment_p.cpp
     private/timetracker.cpp
 
-#Dataengines, services
-    datacontainer.cpp
-    dataengine.cpp
-    dataengineconsumer.cpp
-    service.cpp
-    servicejob.cpp
-    private/datacontainer_p.cpp
-    private/dataenginemanager.cpp
-    private/storage.cpp
-    private/storagethread.cpp
-
 #graphics
     framesvg.cpp
     svg.cpp
@@ -87,14 +76,10 @@ PUBLIC
     KF6::ConfigCore
     KF6::CoreAddons
 PRIVATE
-    Qt6::Sql
     Qt6::Svg
-    Qt6::DBus
     KF6::Archive
     KF6::GuiAddons #kimagecache
     KF6::I18n
-    KF6::KIOCore    #ServiceJob
-    KF6::KIOWidgets  #KIO::JobUiDelegate
     KF6::WindowSystem #compositingActive
     KF6::XmlGui   #KActionCollection
     KF6::GlobalAccel #Applet::setGlobalShortcut
@@ -124,13 +109,8 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
         Containment
         ContainmentActions
         Corona
-        DataContainer
-        DataEngine
-        DataEngineConsumer
         PluginLoader
         FrameSvg
-        Service
-        ServiceJob
         Svg
         Theme
         Plasma
@@ -150,10 +130,6 @@ install(
     DESTINATION ${PLASMA_INSTALL_INCLUDEDIR}/Plasma # C++ namespace
     COMPONENT Devel
 )
-
-install(FILES data/operations/dataengineservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
-install(FILES data/operations/plasmoidservice.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
-install(FILES data/operations/storage.operations DESTINATION ${PLASMA_DATA_INSTALL_DIR}/services)
 
 install(TARGETS KF6Plasma EXPORT KF6PlasmaTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 

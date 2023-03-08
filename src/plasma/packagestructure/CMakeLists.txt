@@ -9,7 +9,6 @@ set_property(TARGET plasma_packagestructure_static PROPERTY POSITION_INDEPENDENT
 
 install_package_structure(plasma_generic)
 install_package_structure(plasma_applet)
-install_package_structure(plasma_dataengine)
 install_package_structure(plasma_theme)
 install_package_structure(plasma_containmentactions)
 

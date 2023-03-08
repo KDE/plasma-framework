@@ -18,21 +18,16 @@
 
 #include "colorscope.h"
 #include "datamodel.h"
-#include "datasource.h"
 #include "dialog.h"
 #include "framesvgitem.h"
 #include "iconitem.h"
 #include "quicktheme.h"
-#include "serviceoperationstatus.h"
 #include "svgitem.h"
 #include "theme.h"
 
 #include "tooltip.h"
 #include "units.h"
 #include "windowthumbnail.h"
-#include <plasma/servicejob.h>
-
-// #include "dataenginebindings_p.h"
 
 #include <QDebug>
 #include <QWindow>
@@ -77,8 +72,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     });
     qmlRegisterType<ColorScope>(uri, 2, 0, "ColorScope");
 
-    qmlRegisterType<Plasma::DataSource>(uri, 2, 0, "DataSource");
-    qmlRegisterType<Plasma::DataModel>(uri, 2, 0, "DataModel");
+    // TODO: remove
     qmlRegisterType<Plasma::SortFilterModel, 0>(uri, 2, 0, "SortFilterModel");
     qmlRegisterType<Plasma::SortFilterModel, 1>(uri, 2, 1, "SortFilterModel");
 
@@ -88,28 +82,6 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterRevision<QQuickItem, 1>(uri, 2, 0);
     qmlRegisterType<ToolTip>(uri, 2, 0, "ToolTipArea");
 
-    // TODO KF6: check if it makes sense to call qmlRegisterInterface for any of these
-    // as they seem currently not used as properties and are only used from JavaScript engine
-    // due to being return types of Q_INVOKABLE methods,
-    // so registering the pointers to the qobject meta-object system would be enough:
-    // Plasma::Service, Plasma::ServiceJob
-    // So this here would become just
-    // qRegisterMetaType<Plasma::Service *>();
-    // qRegisterMetaType<Plasma::ServiceJob *>();
-    // For that also change all usages with those methods to use the fully namespaced type name
-    // in the method signature.
-    QT_WARNING_PUSH
-    QT_WARNING_DISABLE_CLANG("-Wdeprecated-declarations")
-    QT_WARNING_DISABLE_GCC("-Wdeprecated-declarations")
-    // Do not to port these two for KF5 to
-    // qmlRegisterInterface<Plasma::T>(uri, 1);
-    // as this will incompatibly register with the fully namespaced name "Plasma::T",
-    // not just the now explicitly passed alias name "T"
-    qRegisterMetaType<Plasma::Service>();
-    qRegisterMetaType<Plasma::ServiceJob>();
-    QT_WARNING_POP
-
-    qmlRegisterType<ServiceOperationStatus>(uri, 2, 0, "ServiceOperationStatus");
     qmlRegisterAnonymousType<QAbstractItemModel>(uri, 1);
 
     qmlRegisterAnonymousType<QQmlPropertyMap>(uri, 1);

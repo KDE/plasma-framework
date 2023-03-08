@@ -7,7 +7,6 @@ set_package_properties(KF6WidgetsAddons PROPERTIES PURPOSE "Required for example
 add_subdirectory(applets)
 add_subdirectory(containments)
 add_subdirectory(wallpapers)
-add_subdirectory(dataengines)
 add_subdirectory(testcontainmentactionsplugin)
 add_subdirectory(developerguide)
 add_subdirectory(shell)

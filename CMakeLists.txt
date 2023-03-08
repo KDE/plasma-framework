@@ -42,7 +42,7 @@ ecm_setup_version(PROJECT
 
 set (REQUIRED_QT_VERSION 6.4.0)
 
-find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Sql Qml Svg QuickControls2)
+find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Qml Svg QuickControls2 DBus)
 
 find_package(KF6 ${KF_DEP_VERSION} REQUIRED
     COMPONENTS
@@ -51,7 +51,6 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         Config
         ConfigWidgets
         CoreAddons
-        DBusAddons
         Declarative
         GlobalAccel
         GuiAddons
@@ -145,6 +144,10 @@ include(KF6PlasmaMacros.cmake)
 
 option(BUILD_EXAMPLES "Build and install Plasma examples." OFF)
 option(BUILD_COVERAGE "Build Plasma Frameworks with gcov support" OFF)
+
+if (BUILD_EXAMPLES)
+    find_package(KF6DBusAddons ${KF6_MIN_VERSION})
+endif()
 
 if(BUILD_COVERAGE)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fprofile-arcs -ftest-coverage")

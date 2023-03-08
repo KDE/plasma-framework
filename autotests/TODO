@@ -16,8 +16,6 @@ containment
 corona
 datacontainer
 datacontainer_p
-dataengine
-dataenginemanager
 glapplet
 packages_p
 phase

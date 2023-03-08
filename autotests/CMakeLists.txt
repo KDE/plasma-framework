@@ -65,7 +65,6 @@ ecm_add_test(
 ecm_add_test(
     sortfiltermodeltest.cpp
     ../src/declarativeimports/core/datamodel.cpp
-    ../src/declarativeimports/core/datasource.cpp
     TEST_NAME plasma-sortfiltermodeltest
     LINK_LIBRARIES KF6::Plasma Qt6::Gui Qt6::Test KF6::I18n Qt6::Qml
 )

@@ -6,7 +6,7 @@ and its components. This includes applet and extension definitions and loading,
 common GUI elements, data and service interaction, search system, etc.
 
 Domain specific sets of functionality, e.g. for network awareness or sensors,
-are not found here but as DataEngine, Service, Applet, Package, Wallpaper,
+are not found here but as Applet, Wallpaper,
 ContainmentActions, Containment and other plugins.
 
 Commit Guidelines:

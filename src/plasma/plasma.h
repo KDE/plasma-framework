@@ -203,16 +203,6 @@ public:
     Q_DECLARE_FLAGS(Flip, FlipDirection)
 
     /**
-     * Possible timing alignments
-     **/
-    enum IntervalAlignment {
-        NoAlignment = 0, /**< No alignment **/
-        AlignToMinute, /**< Align to the minute **/
-        AlignToHour, /**< Align to the hour **/
-    };
-    Q_ENUM(IntervalAlignment)
-
-    /**
      * Defines the immutability of items like applets, corona and containments
      * they can be free to modify, locked down by the user or locked down by the
      * system (e.g. kiosk setups).
@@ -232,10 +222,9 @@ public:
      */
     enum ComponentType {
         AppletComponent = 1, /**< Plasma::Applet based plugins **/
-        DataEngineComponent = 2, /**< Plasma::DataEngine based plugins **/
-        ContainmentComponent = 4, /**< Plasma::Containment based plugins **/
-        WallpaperComponent = 8, /**< Plasma::Wallpaper based plugins **/
-        GenericComponent = 16, /** Generic repositories of files, usually they keep QML files and their assets **/
+        ContainmentComponent = 2, /**< Plasma::Containment based plugins **/
+        WallpaperComponent = 4, /**< Plasma::Wallpaper based plugins **/
+        GenericComponent = 8, /** Generic repositories of files, usually they keep QML files and their assets **/
     };
     Q_ENUM(ComponentType)
     Q_DECLARE_FLAGS(ComponentTypes, ComponentType)

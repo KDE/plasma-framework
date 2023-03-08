@@ -90,65 +90,6 @@ Module {
         }
     }
     Component {
-        name: "Plasma::DataSource"
-        prototype: "QObject"
-        exports: ["org.kde.plasma.core/DataSource 2.0"]
-        exportMetaObjectRevisions: [0]
-        Property { name: "valid"; type: "bool"; isReadonly: true }
-        Property { name: "interval"; type: "int" }
-        Property { name: "intervalAlignment"; type: "Plasma::Types::IntervalAlignment" }
-        Property { name: "dataEngine"; type: "string" }
-        Property { name: "engine"; type: "string" }
-        Property { name: "connectedSources"; type: "QStringList" }
-        Property { name: "sources"; type: "QStringList"; isReadonly: true }
-        Property { name: "data"; type: "QQmlPropertyMap"; isReadonly: true; isPointer: true }
-        Property { name: "models"; type: "QQmlPropertyMap"; isReadonly: true; isPointer: true }
-        Signal {
-            name: "newData"
-            Parameter { name: "sourceName"; type: "string" }
-            Parameter { name: "data"; type: "QVariantMap" }
-        }
-        Signal {
-            name: "sourceAdded"
-            Parameter { name: "source"; type: "string" }
-        }
-        Signal {
-            name: "sourceRemoved"
-            Parameter { name: "source"; type: "string" }
-        }
-        Signal {
-            name: "sourceConnected"
-            Parameter { name: "source"; type: "string" }
-        }
-        Signal {
-            name: "sourceDisconnected"
-            Parameter { name: "source"; type: "string" }
-        }
-        Method {
-            name: "dataUpdated"
-            Parameter { name: "sourceName"; type: "string" }
-            Parameter { name: "data"; type: "Plasma::DataEngine::Data" }
-        }
-        Method {
-            name: "modelChanged"
-            Parameter { name: "sourceName"; type: "string" }
-            Parameter { name: "model"; type: "QAbstractItemModel"; isPointer: true }
-        }
-        Method {
-            name: "serviceForSource"
-            type: "QObject*"
-            Parameter { name: "source"; type: "string" }
-        }
-        Method {
-            name: "connectSource"
-            Parameter { name: "source"; type: "string" }
-        }
-        Method {
-            name: "disconnectSource"
-            Parameter { name: "source"; type: "string" }
-        }
-    }
-    Component {
         name: "Plasma::FrameSvg"
         prototype: "Plasma::Svg"
         exports: ["org.kde.plasma.core/FrameSvg 2.0"]

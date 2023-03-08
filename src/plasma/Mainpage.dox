@@ -2,8 +2,7 @@
 
 Plasma framework is the core of the Plasma desktop.  It provides a framework of graphical
 widgets (Plasma::Applet) that can be organised into managed groupings
-(Plasma::Containment), such as a desktop or panel.  It also provides a data
-abstraction layer (Plasma::DataEngine) and a corresponding service interaction
+(Plasma::Containment), such as a desktop or panel.) and a corresponding service interaction
 layer (Plasma::Service) to make implementing widgets easier.
 
 The <a href="https://doc.qt.io/qt-5/qtquick-index.html">Qt Quick
@@ -30,8 +29,6 @@ Other important classes are:
  - Plasma::Package: provides descriptions of packages containing plugins
    for libplasma
  - Plasma::Svg and Plasma::FrameSvg: provides themable, cached SVGs
- - Plasma::AppletScript, Plasma::DataEngineScript and
-   Plasma::ScriptEngine: provide scripting interfaces for plugins
 
 
 The

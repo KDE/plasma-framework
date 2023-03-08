@@ -11,7 +11,7 @@ The plasma framework provides the following:
 ## QML components
 ### org.kde.plasma.core
 
-Bindings for libplasma functionality, such as DataEngine and FrameSvg, see @ref core.
+Bindings for libplasma functionality, such FrameSvg, see @ref core.
 
 ### org.kde.plasma.components
 Graphical components for common items such as buttons, lineedits, tabbars and so on. Compatible subset of the MeeGo components used on the N9, see @ref plasmacomponents.

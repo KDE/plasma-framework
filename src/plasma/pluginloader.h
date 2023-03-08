@@ -19,8 +19,6 @@ namespace Plasma
 class Applet;
 class Containment;
 class ContainmentActions;
-class DataEngine;
-class Service;
 
 class PluginLoaderPrivate;
 
@@ -37,7 +35,7 @@ class PluginLoaderPrivate;
  * default PluginLoader implementation will be used. The reimplemented version should
  * not do more than simply returning a loaded plugin. It should not init() it, and it should not
  * hang on to it. The associated methods will be called only when a component of Plasma
- * needs to load a _new_ plugin. (e.g. DataEngine does its own caching).
+ * needs to load a _new_ plugin.
  *
  * @author Ryan Rix <ry@n.rix.si>
  * @since 4.6
@@ -55,17 +53,6 @@ public:
      * @return a pointer to the loaded applet, or 0 on load failure
      **/
     Applet *loadApplet(const QString &name, uint appletId = 0, const QVariantList &args = QVariantList());
-
-    /**
-     * Load a Service plugin.
-     *
-     * @param name the plugin name of the service to load
-     * @param args a list of arguments to supply to the service plugin when loading it
-     * @param parent the parent object, if any, for the service
-     *
-     * @return a Service object, unlike Plasma::Service::loadService, this can return null.
-     **/
-    Service *loadService(const QString &name, const QVariantList &args, QObject *parent = nullptr);
 
     /**
      * Load a ContainmentActions plugin.
@@ -162,18 +149,6 @@ public:
      * @return list of containments
      */
     static QList<KPluginMetaData> listContainmentsMetaDataOfType(const QString &type);
-
-    /**
-     * Returns a list of all known dataengines.
-     *
-     * @param parentApp the application to filter dataengines on. Uses the
-     *                  X-KDE-ParentApp entry (if any) in the plugin info.
-     *                  The default value of QString() will result in a
-     *                  list of all dataengines
-     * @return list of dataengines
-     * @since 5.77
-     **/
-    QVector<KPluginMetaData> listDataEngineMetaData(const QString &parentApp = QString());
 
     /**
      * Returns a list of all known ContainmentActions.

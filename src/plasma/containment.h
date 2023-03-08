@@ -15,8 +15,6 @@
 
 namespace Plasma
 {
-class DataEngine;
-class Package;
 class Corona;
 class ContainmentActions;
 class ContainmentPrivate;

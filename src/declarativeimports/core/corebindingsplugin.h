@@ -13,8 +13,6 @@
 #include <QQmlEngine>
 #include <QQmlExtensionPlugin>
 
-#include <plasma/service.h>
-
 class CoreBindingsPlugin : public QQmlExtensionPlugin
 {
     Q_OBJECT

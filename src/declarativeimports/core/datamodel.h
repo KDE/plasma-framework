@@ -13,15 +13,12 @@
 #include <QSortFilterProxyModel>
 #include <QVector>
 
-#include <Plasma/DataEngine>
-
 class QTimer;
 
-// All classes here will hopefully be removed in KF6 (along with DataEngines in general)
+// All classes here will hopefully be removed in KF6
 
 namespace Plasma
 {
-class DataSource;
 class DataModel;
 
 /**
@@ -149,113 +146,6 @@ private:
     QJSValue m_filterCallback;
     QHash<QString, int> m_roleIds;
 };
-
-/**
- * @class DataModel
- * @short DataSource data as a model
- */
-class DataModel : public QAbstractItemModel
-{
-    Q_OBJECT
-
-    /**
-     * The instance of DataSource to construct this model on
-     */
-    Q_PROPERTY(QObject *dataSource READ dataSource WRITE setDataSource)
-
-    /**
-     * It's a regular expression. Only data with keys that match this filter
-     * expression will be inserted in the model
-     */
-    Q_PROPERTY(QString keyRoleFilter READ keyRoleFilter WRITE setKeyRoleFilter)
-
-    /**
-     * It's a regular expression. If the DataSource is connected to more than one source,
-     * only inserts data from sources matching this filter expression in the model. If we
-     * want to have a source watch all sources beginning with say "name:", the required
-     * regexp would be sourceFilter: "name:.*"
-     */
-    Q_PROPERTY(QString sourceFilter READ sourceFilter WRITE setSourceFilter)
-
-    /**
-     * How many items are in this model
-     */
-    Q_PROPERTY(int count READ count NOTIFY countChanged)
-
-public:
-    DataModel(QObject *parent = nullptr);
-    ~DataModel() override;
-
-    void setDataSource(QObject *source);
-    QObject *dataSource() const;
-
-    /**
-     * Include only items with a key that matches this regexp in the model
-     */
-    void setKeyRoleFilter(const QString &key);
-    QString keyRoleFilter() const;
-
-    /**
-     * Include only sources that matches this regexp in the model
-     */
-    void setSourceFilter(const QString &key);
-    QString sourceFilter() const;
-
-    // Reimplemented
-    QVariant data(const QModelIndex &index, int role) const override;
-    QVariant headerData(int section, Qt::Orientation orientation, int role = Qt::DisplayRole) const override;
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const override;
-    QModelIndex parent(const QModelIndex &child) const override;
-    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
-
-    int count() const
-    {
-        return countItems();
-    }
-
-    /**
-     * Returns the item at index in the list model.
-     * This allows the item data to be accessed (but not modified) from JavaScript.
-     * It returns an Object with a property for each role.
-     *
-     * @param i the row we want
-     */
-    Q_INVOKABLE QVariantMap get(int i) const;
-
-protected:
-    void setItems(const QString &sourceName, const QVariantList &list);
-    inline int countItems() const;
-    QHash<int, QByteArray> roleNames() const override;
-Q_SIGNALS:
-    void countChanged();
-    void sourceModelChanged(QObject *);
-    void filterRegExpChanged(const QString &);
-
-private Q_SLOTS:
-    void dataUpdated(const QString &sourceName, const QVariantMap &data);
-    void removeSource(const QString &sourceName);
-
-private:
-    DataSource *m_dataSource;
-    QString m_keyRoleFilter;
-    QRegularExpression m_keyRoleFilterRE;
-    QString m_sourceFilter;
-    QRegularExpression m_sourceFilterRE;
-    QMap<QString, QVector<QVariant>> m_items;
-    QHash<int, QByteArray> m_roleNames;
-    QHash<QString, int> m_roleIds;
-    int m_maxRoleId;
-};
-
-int DataModel::countItems() const
-{
-    int count = 0;
-    for (const QVector<QVariant> &v : std::as_const(m_items)) {
-        count += v.count();
-    }
-    return count;
-}
 
 }
 #endif

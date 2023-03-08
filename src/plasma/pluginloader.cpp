@@ -22,11 +22,8 @@
 #include "applet.h"
 #include "containment.h"
 #include "containmentactions.h"
-#include "dataengine.h"
 #include "debug_p.h"
 #include "private/applet_p.h"
-#include "private/service_p.h" // for NullService
-#include "private/storage_p.h"
 
 namespace Plasma
 {
@@ -47,10 +44,8 @@ public:
     static QSet<QString> s_customCategories;
     bool isDefaultLoader;
 
-    static QString s_dataEnginePluginDir;
     static QString s_packageStructurePluginDir;
     static QString s_plasmoidsPluginDir;
-    static QString s_servicesPluginDir;
     static QString s_containmentActionsPluginDir;
 
     class Cache
@@ -69,16 +64,13 @@ public:
         KPluginMetaData findPluginById(const QString &name, const QString &pluginNamespace);
     };
     Cache plasmoidCache;
-    Cache dataengineCache;
     Cache containmentactionCache;
 };
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
 
-QString PluginLoaderPrivate::s_dataEnginePluginDir = QStringLiteral("plasma/dataengine");
 QString PluginLoaderPrivate::s_packageStructurePluginDir = QStringLiteral("plasma/packagestructure");
 QString PluginLoaderPrivate::s_plasmoidsPluginDir = QStringLiteral("plasma/applets");
-QString PluginLoaderPrivate::s_servicesPluginDir = QStringLiteral("plasma/services");
 QString PluginLoaderPrivate::s_containmentActionsPluginDir = QStringLiteral("plasma/containmentactions");
 
 PluginLoader::PluginLoader()
@@ -156,33 +148,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         KLocalizedString::addDomainLocaleDir(QByteArray("plasma_applet_") + name.toLatin1(), localePath);
     }
     return applet;
-}
-
-Service *PluginLoader::loadService(const QString &name, const QVariantList &args, QObject *parent)
-{
-    Service *service = nullptr;
-
-    // TODO: scripting API support
-    if (name.isEmpty()) {
-        return new NullService(QString(), parent);
-    } else if (name == QLatin1String("org.kde.servicestorage")) {
-        return new Storage(parent);
-    }
-
-    // Look for C++ plugins first
-    KPluginMetaData plugin = KPluginMetaData::findPluginById(PluginLoaderPrivate::s_servicesPluginDir, name);
-    if (plugin.isValid()) {
-        service = KPluginFactory::instantiatePlugin<Plasma::Service>(plugin, parent, args).plugin;
-    }
-
-    if (service) {
-        if (service->name().isEmpty()) {
-            service->setName(name);
-        }
-        return service;
-    } else {
-        return new NullService(name, parent);
-    }
 }
 
 ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, const QString &name, const QVariantList &args)
@@ -372,22 +337,6 @@ QList<KPluginMetaData> PluginLoader::listContainmentsMetaDataOfType(const QStrin
     };
 
     return listContainmentsMetaData(filter);
-}
-
-QVector<KPluginMetaData> PluginLoader::listDataEngineMetaData(const QString &parentApp)
-{
-    auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
-        return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp;
-    };
-
-    QVector<KPluginMetaData> plugins;
-    if (parentApp.isEmpty()) {
-        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir);
-    } else {
-        plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_dataEnginePluginDir, filter);
-    }
-
-    return plugins;
 }
 
 QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QString &parentApp)

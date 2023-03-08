@@ -11,7 +11,6 @@ target_link_libraries(KirigamiPlasmaStyle
         Qt6::Core
         KF6::Kirigami2
     PRIVATE
-        Qt6::DBus
         Qt6::Qml
         Qt6::Quick
         KF6::ConfigWidgets

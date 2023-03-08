@@ -40,7 +40,6 @@ namespace Plasma
 {
 class AppletPrivate;
 class Containment;
-class DataEngine;
 class Package;
 
 /**
@@ -51,10 +50,8 @@ class Package;
  * Applet provides several important roles for add-ons widgets in Plasma.
  *
  * First, it is the base class for the plugin system and therefore is the
- * interface to applets for host applications. It also handles the life time
- * management of data engines (e.g. all data engines accessed via
- * Applet::dataEngine(const QString&) are properly deref'd on Applet
- * destruction), background painting (allowing for consistent and complex
+ * interface to applets for host applications.
+ * Background painting (allowing for consistent and complex
  * look and feel in just one line of code for applets), loading and starting
  * of scripting support for each applet, providing access to the associated
  * plasmoid package (if any) and access to configuration data.

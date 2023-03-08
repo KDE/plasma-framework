@@ -19,7 +19,6 @@ class KConfigGroup;
 
 namespace Plasma
 {
-class DataEngine;
 class Containment;
 class ContainmentActionsPrivate;
 
