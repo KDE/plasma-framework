@@ -7,6 +7,7 @@
 #include "configview.h"
 #include "Plasma/Applet"
 #include "Plasma/Containment"
+#include "appletquickitem.h"
 #include "configmodel.h"
 #include "private/configcategory_p.h"
 //#include "plasmoid/wallpaperinterface.h"
@@ -117,7 +118,7 @@ void ConfigViewPrivate::init()
 
     q->setResizeMode(QQuickView::SizeViewToRootObject);
 
-    auto plasmoid = applet.data()->property("_plasma_graphicObject").value<QObject *>();
+    auto plasmoid = AppletQuickItem::itemForApplet(applet);
     q->engine()->rootContext()->setProperty("_plasmoid_property", QVariant::fromValue(plasmoid));
     if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
         q->engine()->rootContext()->setContextProperties({QQmlContext::PropertyPair{QStringLiteral("plasmoid"), QVariant::fromValue(plasmoid)},
