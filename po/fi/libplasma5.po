@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 02:21+0000\n"
+"POT-Creation-Date: 2023-03-08 02:24+0000\n"
 "PO-Revision-Date: 2022-10-17 01:32+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@iki.fi>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -407,17 +407,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Viallinen (tyhjä) palvelu: ei kykene mihinkään toimintoon."
 
-#: plasmaquick/appletquickitem.cpp:624
+#: plasmaquick/appletquickitem.cpp:625
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Tuntematon sovelma"
 
-#: plasmaquick/appletquickitem.cpp:639
+#: plasmaquick/appletquickitem.cpp:640
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "QML-tiedoston avaaminen epäonnistui: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:641
+#: plasmaquick/appletquickitem.cpp:642
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Sovelman lataaminen epäonnistui: pakettia ei ole olemassa. %1"

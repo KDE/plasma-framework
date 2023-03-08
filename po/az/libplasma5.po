@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-07 02:21+0000\n"
+"POT-Creation-Date: 2023-03-08 02:24+0000\n"
 "PO-Revision-Date: 2023-02-19 15:12+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -400,17 +400,17 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Xidmətin istifadəsində xəta."
 
-#: plasmaquick/appletquickitem.cpp:624
+#: plasmaquick/appletquickitem.cpp:625
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Naməlum Qoşma"
 
-#: plasmaquick/appletquickitem.cpp:639
+#: plasmaquick/appletquickitem.cpp:640
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "QML faylının yüklənməsi xətası: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:641
+#: plasmaquick/appletquickitem.cpp:642
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Vidjetin yüklənməsində xəta: paket mövcud olmayan paket: %1"
