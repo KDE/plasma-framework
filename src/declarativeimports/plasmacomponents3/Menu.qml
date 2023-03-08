@@ -5,6 +5,7 @@
 */
 
 import QtQuick 2.7
+import QtQuick.Window 2.15
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
@@ -41,7 +42,7 @@ T.Menu {
             return maxWidth;
         }
 
-        interactive: ApplicationWindow.window ? contentHeight > ApplicationWindow.window.height : false
+        interactive: Window.window ? contentHeight + control.topPadding + control.bottomPadding > Window.window.height : false
         clip: true
         currentIndex: control.currentIndex || 0
         keyNavigationEnabled: true
