@@ -8,6 +8,7 @@
 #include "debug_p.h"
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
+#include "plasmoid/wallpaperinterface.h"
 #include "private/appletquickitem_p.h"
 #include "sharedqmlengine.h"
 
@@ -546,6 +547,13 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
         return nullptr;
     }
 
+    // TODO: move somewhere else? in plasmacore import?
+    if (AppletQuickItemPrivate::s_itemsForApplet.isEmpty()) {
+        const char *uri = "org.kde.plasma.plasmoid";
+        qmlRegisterUncreatableType<AppletInterface>(uri, 2, 0, "Plasmoid", QStringLiteral("Do not create objects of type Plasmoid"));
+        qmlRegisterUncreatableType<ContainmentInterface>(uri, 2, 0, "Containment", QStringLiteral("Do not create objects of type Containment"));
+        qmlRegisterUncreatableType<WallpaperInterface>(uri, 2, 0, "Wallpaper", QStringLiteral("Do not create objects of type Wallpaper"));
+    }
     auto it = AppletQuickItemPrivate::s_itemsForApplet.constFind(applet);
     if (it != AppletQuickItemPrivate::s_itemsForApplet.constEnd()) {
         return it.value();
