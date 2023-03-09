@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-08 02:24+0000\n"
+"POT-Creation-Date: 2023-03-09 02:15+0000\n"
 "PO-Revision-Date: 2022-08-03 09:42+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -49,17 +49,17 @@ msgstr "Sök…"
 msgid "Search"
 msgstr "Sök"
 
-#: plasma/applet.cpp:280
+#: plasma/applet.cpp:285
 #, kde-format
 msgid "Unknown"
 msgstr "Okänd"
 
-#: plasma/applet.cpp:650
+#: plasma/applet.cpp:655
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktivera komponenten %1"
 
-#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:98
+#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
@@ -70,7 +70,7 @@ msgstr "Ta bort %1"
 msgid "Enter Edit Mode"
 msgstr "Starta redigeringsläge"
 
-#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:103
+#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -141,13 +141,11 @@ msgid "User Interface"
 msgstr "Användargränssnitt"
 
 #: plasma/packagestructure/packages.cpp:83
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
 #, kde-format
 msgid "Data Files"
 msgstr "Datafiler"
 
 #: plasma/packagestructure/packages.cpp:85
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
 #, kde-format
 msgid "Executable Scripts"
 msgstr "Körbara skript"
@@ -158,7 +156,6 @@ msgid "Screenshot"
 msgstr "Skärmbild"
 
 #: plasma/packagestructure/packages.cpp:91
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
 #, kde-format
 msgid "Translations"
 msgstr "Översättningar"
@@ -177,11 +174,6 @@ msgstr "XML-inställningsfil"
 #, kde-format
 msgid "Custom expander for compact applets"
 msgstr "Egen expandering för kompakta miniprogram"
-
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
-#, kde-format
-msgid "Service Descriptions"
-msgstr "Tjänstbeskrivningar"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
 #, kde-format
@@ -279,71 +271,71 @@ msgstr "Ogenomskinlig bakgrundsbild för verktygstips"
 msgid "KColorScheme configuration file"
 msgstr "Inställningsfil för färgschema"
 
-#: plasma/pluginloader.cpp:324 plasma/pluginloader.cpp:325
+#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Diverse"
 
-#: plasma/private/applet_p.cpp:118
+#: plasma/private/applet_p.cpp:120
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr ""
 "Den grafiska komponenten %1 definierar inte vilket skriptgränssnitt som ska "
 "användas."
 
-#: plasma/private/applet_p.cpp:136
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Kunde inte öppna paketet %1 som krävs för den grafiska komponenten %2."
 
-#: plasma/private/applet_p.cpp:144
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Visa alternativ..."
 
-#: plasma/private/applet_p.cpp:246
+#: plasma/private/applet_p.cpp:248
 #, kde-format
 msgid "Widget Removed"
 msgstr "Grafisk komponent borttagen"
 
-#: plasma/private/applet_p.cpp:247
+#: plasma/private/applet_p.cpp:249
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Den grafiska komponenten \"%1\" har tagits bort."
 
-#: plasma/private/applet_p.cpp:251
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panel borttagen"
 
-#: plasma/private/applet_p.cpp:252
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "A panel has been removed."
 msgstr "En panel har tagits bort."
 
-#: plasma/private/applet_p.cpp:255
+#: plasma/private/applet_p.cpp:257
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Skrivbord borttaget"
 
-#: plasma/private/applet_p.cpp:256
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Ett skrivbord har tagits bort."
 
-#: plasma/private/applet_p.cpp:259
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "Undo"
 msgstr "Ångra"
 
-#: plasma/private/applet_p.cpp:347
+#: plasma/private/applet_p.cpp:349
 #, kde-format
 msgid "Widget Settings"
 msgstr "Inställningar av grafiska komponenter"
 
-#: plasma/private/applet_p.cpp:353
+#: plasma/private/applet_p.cpp:355
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Ta bort den här grafiska komponenten"
@@ -401,22 +393,22 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Ogiltig (tom) tjänst, kan inte utföra några åtgärder."
 
-#: plasmaquick/appletquickitem.cpp:625
+#: plasmaquick/appletquickitem.cpp:633
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Okänt miniprogram"
 
-#: plasmaquick/appletquickitem.cpp:640
+#: plasmaquick/appletquickitem.cpp:648
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Fel vid inläsning av QML-fil: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:642
+#: plasmaquick/appletquickitem.cpp:650
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Fel vid inläsning av miniprogram: Paketet finns inte. %1"
 
-#: plasmaquick/configview.cpp:92
+#: plasmaquick/configview.cpp:93
 #, kde-format
 msgid "%1 Settings"
 msgstr "Inställningar av %1"
@@ -475,6 +467,9 @@ msgstr "Ställ in %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Innehåll släppt"
+
+#~ msgid "Service Descriptions"
+#~ msgstr "Tjänstbeskrivningar"
 
 #~ msgctxt ""
 #~ "API or programming language the widget was written in, name of the widget"

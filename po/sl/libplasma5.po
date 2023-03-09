@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-08 02:24+0000\n"
+"POT-Creation-Date: 2023-03-09 02:15+0000\n"
 "PO-Revision-Date: 2022-07-27 07:49+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -54,17 +54,17 @@ msgstr "Poišči …"
 msgid "Search"
 msgstr "Poišči"
 
-#: plasma/applet.cpp:280
+#: plasma/applet.cpp:285
 #, kde-format
 msgid "Unknown"
 msgstr "Neznan"
 
-#: plasma/applet.cpp:650
+#: plasma/applet.cpp:655
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Omogoči gradnik %1"
 
-#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:98
+#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
@@ -75,7 +75,7 @@ msgstr "Odstrani %1"
 msgid "Enter Edit Mode"
 msgstr "Vstop v urejevalni način"
 
-#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:103
+#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -146,13 +146,11 @@ msgid "User Interface"
 msgstr "Uporabniški vmesnik"
 
 #: plasma/packagestructure/packages.cpp:83
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:29
 #, kde-format
 msgid "Data Files"
 msgstr "Datoteke s podatki"
 
 #: plasma/packagestructure/packages.cpp:85
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:31
 #, kde-format
 msgid "Executable Scripts"
 msgstr "Izvedljivi skripti"
@@ -163,7 +161,6 @@ msgid "Screenshot"
 msgstr "Zaslonska slika"
 
 #: plasma/packagestructure/packages.cpp:91
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:39
 #, kde-format
 msgid "Translations"
 msgstr "Prevodi"
@@ -182,11 +179,6 @@ msgstr "Datoteka XML z nastavitvami"
 #, kde-format
 msgid "Custom expander for compact applets"
 msgstr "Razširilnik po meri za strnjene aplete"
-
-#: plasma/packagestructure/plasma_dataengine_packagestructure.cpp:36
-#, kde-format
-msgid "Service Descriptions"
-msgstr "Opisi storitev"
 
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
 #, kde-format
@@ -284,69 +276,69 @@ msgstr "Prekrivna slika ozadja za orodne namige"
 msgid "KColorScheme configuration file"
 msgstr "Nastavitvena datoteka KColorScheme"
 
-#: plasma/pluginloader.cpp:324 plasma/pluginloader.cpp:325
+#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Razno"
 
-#: plasma/private/applet_p.cpp:118
+#: plasma/private/applet_p.cpp:120
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "Gradnik %1 ni določil kateri skriptni pogon bo uporabljen."
 
-#: plasma/private/applet_p.cpp:136
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Ni bilo mogoče odpreti paketa %1, ki je zahtevan za gradnik %2."
 
-#: plasma/private/applet_p.cpp:144
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Pokaži alternative..."
 
-#: plasma/private/applet_p.cpp:246
+#: plasma/private/applet_p.cpp:248
 #, kde-format
 msgid "Widget Removed"
 msgstr "Gradnik odstranjen"
 
-#: plasma/private/applet_p.cpp:247
+#: plasma/private/applet_p.cpp:249
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Gradnik '%1' je bil odstranjen."
 
-#: plasma/private/applet_p.cpp:251
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "Panel Removed"
 msgstr "Plošča odstranjena"
 
-#: plasma/private/applet_p.cpp:252
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Plošča je bila odstranjena."
 
-#: plasma/private/applet_p.cpp:255
+#: plasma/private/applet_p.cpp:257
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Namizje odstranjeno"
 
-#: plasma/private/applet_p.cpp:256
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Namizje je bilo odstranjeno."
 
-#: plasma/private/applet_p.cpp:259
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "Undo"
 msgstr "Razveljavi"
 
-#: plasma/private/applet_p.cpp:347
+#: plasma/private/applet_p.cpp:349
 #, kde-format
 msgid "Widget Settings"
 msgstr "Nastavitve gradnika"
 
-#: plasma/private/applet_p.cpp:353
+#: plasma/private/applet_p.cpp:355
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Odstrani ta gradnik"
@@ -404,22 +396,22 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Neveljavna (nična) storitev, ki ne more izvajati opravil."
 
-#: plasmaquick/appletquickitem.cpp:625
+#: plasmaquick/appletquickitem.cpp:633
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Neznan applet"
 
-#: plasmaquick/appletquickitem.cpp:640
+#: plasmaquick/appletquickitem.cpp:648
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Napaka pri nalaganju datoteke QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:642
+#: plasmaquick/appletquickitem.cpp:650
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Napaka med nalaganjem apleta: paket ne obstaja. %1"
 
-#: plasmaquick/configview.cpp:92
+#: plasmaquick/configview.cpp:93
 #, kde-format
 msgid "%1 Settings"
 msgstr "Nastavitve za %1"
@@ -478,6 +470,9 @@ msgstr "Postavi %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Vsebina spuščena"
+
+#~ msgid "Service Descriptions"
+#~ msgstr "Opisi storitev"
 
 #~ msgctxt ""
 #~ "API or programming language the widget was written in, name of the widget"
