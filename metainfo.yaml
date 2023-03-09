@@ -5,8 +5,6 @@ type: solution
 platforms:
     - name: Linux
     - name: FreeBSD
-    - name: Windows
-    - name: macOS
 portingAid: false
 deprecated: false
 release: true
