@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Applet",
     "KPlugin": {
         "Authors": [
             {
@@ -105,6 +106,5 @@
     "X-Plasma-DropMimeTypes": [
         "text/plain"
     ],
-    "X-Plasma-MainScript": "ui/main.qml",
-    "KPackageStructure": "Plasma/Applet"
+    "X-Plasma-MainScript": "ui/main.qml"
 }

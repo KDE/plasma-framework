@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Applet",
     "KPlugin": {
         "Authors": [
             {
@@ -102,6 +103,5 @@
         "Website": "https://plasma.kde.org/"
     },
     "X-Plasma-API": "declarativeappletscript",
-    "X-Plasma-MainScript": "ui/main.qml",
-    "KPackageStructure": "Plasma/Applet"
+    "X-Plasma-MainScript": "ui/main.qml"
 }

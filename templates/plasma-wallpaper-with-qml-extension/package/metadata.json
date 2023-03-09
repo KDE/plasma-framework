@@ -1,4 +1,5 @@
 {
+    "KPackageStructure": "Plasma/Wallpaper",
     "KPlugin": {
         "Authors": [
             {
@@ -72,6 +73,5 @@
         "Version": "%{VERSION}",
         "Website": "https://plasma.kde.org/"
     },
-    "X-Plasma-MainScript": "ui/main.qml",
-    "KPackageStructure": "Plasma/Wallpaper"
+    "X-Plasma-MainScript": "ui/main.qml"
 }
