@@ -10,7 +10,8 @@
 #include "Plasma/Containment"
 #include "configview.h"
 #include "private/configcategory_p.h"
-//#include "plasmoid/wallpaperinterface.h"
+#include "sharedqmlengine.h"
+// #include "plasmoid/wallpaperinterface.h"
 
 #include <QDebug>
 #include <QDir>
@@ -21,10 +22,12 @@
 
 #include <KLocalizedString>
 #include <KPackage/Package>
-#include <KQuickAddons/ConfigModule>
+#include <KQuickConfigModule>
+#include <KQuickConfigModuleLoader>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
+#include <kquickconfigmoduleloader.h>
 
 namespace PlasmaQuick
 {
@@ -39,7 +42,7 @@ public:
     ConfigModel *q;
     QList<ConfigCategory *> categories;
     QPointer<Plasma::Applet> appletInterface;
-    QHash<QString, KQuickAddons::ConfigModule *> kcms;
+    QHash<QString, KQuickConfigModule *> kcms;
 
     void appendCategory(ConfigCategory *c);
     void removeCategory(ConfigCategory *c);
@@ -242,20 +245,19 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
         if (d->kcms.contains(pluginName)) {
             return QVariant::fromValue(d->kcms.value(pluginName));
         }
-
-        const auto result = KPluginFactory::instantiatePlugin<KQuickAddons::ConfigModule>(KPluginMetaData(pluginName), const_cast<ConfigModel *>(this));
-
-        if (result) {
-            KQuickAddons::ConfigModule *cm = result.plugin;
+        auto parent = const_cast<ConfigModel *>(this);
+        auto engine = new PlasmaQuick::SharedQmlEngine(parent);
+        auto cmResult = KQuickConfigModuleLoader::loadModule(KPluginMetaData(pluginName), parent, QVariantList(), engine->engine());
+        if (KQuickConfigModule *cm = cmResult.plugin) {
             if (QQmlContext *ctx = QQmlEngine::contextForObject(this)) {
                 // assign the ConfigModule the same QML context as we have so it can use the same QML engine as we do
-                QQmlEngine::setContextForObject(cm, ctx);
+                QQmlEngine::setContextForObject(cmResult.plugin, ctx);
             }
 
             d->kcms[pluginName] = cm;
             return QVariant::fromValue(cm);
         } else {
-            qWarning() << "Error loading KCM:" << result.errorText;
+            qWarning() << "Error loading KCM:" << cmResult.errorText;
             return QVariant();
         }
     }
