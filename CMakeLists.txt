@@ -51,7 +51,6 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         Config
         ConfigWidgets
         CoreAddons
-        Declarative
         GlobalAccel
         GuiAddons
         I18n
@@ -62,6 +61,7 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         Notifications
         Package
         Kirigami2
+        KCMUtils
     OPTIONAL_COMPONENTS
         Wayland
 )

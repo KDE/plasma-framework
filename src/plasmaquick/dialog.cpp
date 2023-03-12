@@ -14,6 +14,7 @@
 #include "config-plasma.h"
 #include "configview.h"
 #include "dialogshadows_p.h"
+#include "sharedqmlengine.h"
 
 #include <QLayout>
 #include <QMenu>
@@ -25,8 +26,6 @@
 #include <KWindowSystem/KWindowInfo>
 #include <KWindowSystem>
 #include <KX11Extras>
-
-#include <kquickaddons/quickviewsharedengine.h>
 
 #include <KWindowEffects>
 #include <Plasma/Corona>
@@ -947,10 +946,7 @@ Qt::Edges DialogPrivate::hitTest(const QPointF &pos)
 bool DialogPrivate::hitTestLeft(const QPointF &pos)
 {
     const QRect geometry = q->geometry();
-    const QRectF rect(geometry.x(),
-                      geometry.y(),
-                      frameSvgItem->fixedMargins()->left(),
-                      geometry.height());
+    const QRectF rect(geometry.x(), geometry.y(), frameSvgItem->fixedMargins()->left(), geometry.height());
     return rect.contains(pos);
 }
 
@@ -967,10 +963,7 @@ bool DialogPrivate::hitTestRight(const QPointF &pos)
 bool DialogPrivate::hitTestTop(const QPointF &pos)
 {
     const QRect geometry = q->geometry();
-    const QRectF rect(geometry.x(),
-                      geometry.y(),
-                      geometry.width(),
-                      frameSvgItem->fixedMargins()->top());
+    const QRectF rect(geometry.x(), geometry.y(), geometry.width(), frameSvgItem->fixedMargins()->top());
     return rect.contains(pos);
 }
 
@@ -1218,13 +1211,13 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         switch (d->location) {
         case Plasma::Types::TopEdge:
         case Plasma::Types::BottomEdge:
-            if (qAbs(dialogPos.x() + size.width() / 2 - avail.center().x() ) < size.width() / 2 - parentRect.width() / 3) {
+            if (qAbs(dialogPos.x() + size.width() / 2 - avail.center().x()) < size.width() / 2 - parentRect.width() / 3) {
                 dialogPos.setX(avail.center().x() - size.width() / 2);
             }
             break;
         case Plasma::Types::LeftEdge:
         case Plasma::Types::RightEdge:
-            if (qAbs(dialogPos.y() + size.height() / 2 - avail.center().y() ) < size.height() / 2 - parentRect.height() / 3) {
+            if (qAbs(dialogPos.y() + size.height() / 2 - avail.center().y()) < size.height() / 2 - parentRect.height() / 3) {
                 dialogPos.setY(avail.center().y() - size.height() / 2);
             }
             break;
@@ -1393,7 +1386,7 @@ void Dialog::focusOutEvent(QFocusEvent *ev)
         const QWindow *focusWindow = QGuiApplication::focusWindow();
         bool childHasFocus = focusWindow && ((focusWindow->isActive() && isAncestorOf(focusWindow)) || (focusWindow->type() & Qt::Popup) == Qt::Popup);
 
-        const bool viewClicked = qobject_cast<const KQuickAddons::QuickViewSharedEngine *>(focusWindow) || qobject_cast<const ConfigView *>(focusWindow);
+        const bool viewClicked = qobject_cast<const PlasmaQuick::SharedQmlEngine *>(focusWindow) || qobject_cast<const ConfigView *>(focusWindow);
 
         if (viewClicked || (!parentHasFocus && !childHasFocus)) {
             setVisible(false);

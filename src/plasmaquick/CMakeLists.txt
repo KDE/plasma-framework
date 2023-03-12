@@ -22,6 +22,7 @@ target_sources(KF6PlasmaQuick PRIVATE
     configview.cpp
     packageurlinterceptor.cpp
     sharedqmlengine.cpp
+    quickviewsharedengine.cpp
     private/configcategory_p.cpp
     ../declarativeimports/core/framesvgitem.cpp
     ../declarativeimports/core/imagetexturescache.cpp
@@ -68,12 +69,12 @@ target_link_libraries(KF6PlasmaQuick
         KF6::IconThemes
         KF6::CoreAddons
         KF6::XmlGui
-        KF6::QuickAddons
         KF6::Package
         KF6::KIOCore
         KF6::KIOWidgets
         KF6::Notifications
         KF6::Activities
+        KF6::KCMUtilsQuick
 )
 
 if(HAVE_KWAYLAND)
@@ -120,6 +121,7 @@ ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
         ConfigModel
         Dialog
         SharedQmlEngine
+        QuickViewSharedEngine
     REQUIRED_HEADERS plasmaquick_LIB_INCLUDES
     PREFIX PlasmaQuick
 )

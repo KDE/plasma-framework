@@ -7,11 +7,10 @@
 #ifndef PLASMAQUICKCONTAINMENTVIEW_H
 #define PLASMAQUICKCONTAINMENTVIEW_H
 
-#include <kquickaddons/quickviewsharedengine.h>
-
 #include "plasma/containment.h"
 #include "plasma/corona.h"
 #include <plasmaquick/plasmaquick_export.h>
+#include <plasmaquick/quickviewsharedengine.h>
 
 //
 //  W A R N I N G
@@ -28,7 +27,7 @@ namespace PlasmaQuick
 {
 class ContainmentViewPrivate;
 
-class PLASMAQUICK_EXPORT ContainmentView : public KQuickAddons::QuickViewSharedEngine
+class PLASMAQUICK_EXPORT ContainmentView : public PlasmaQuick::QuickViewSharedEngine
 {
     Q_OBJECT
     Q_PROPERTY(Plasma::Types::Location location READ location WRITE setLocation NOTIFY locationChanged)

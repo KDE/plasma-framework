@@ -179,7 +179,7 @@ void ContainmentViewPrivate::updateDestroyed(bool destroyed)
 }
 
 ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
-    : KQuickAddons::QuickViewSharedEngine(parent)
+    : PlasmaQuick::QuickViewSharedEngine(parent)
     , d(new ContainmentViewPrivate(corona, this))
 {
     setColor(Qt::transparent);
@@ -200,7 +200,8 @@ ContainmentView::ContainmentView(Plasma::Corona *corona, QWindow *parent)
     // Force QtQuickControls to use the "Plasma" style for this engine.
     // this way is possible to mix QtQuickControls and plasma components in applets
     // while still having the desktop style in configuration dialogs
-    QQmlComponent c(engine());
+    auto sharedEngine = engine();
+    QQmlComponent c(sharedEngine.get());
     c.setData(
         "import QtQuick 2.1\n\
         import QtQuick.Controls 1.0\n\

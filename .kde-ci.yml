@@ -13,7 +13,6 @@ Dependencies:
     'frameworks/kcoreaddons' : '@same'
     'frameworks/kcrash' : '@same'
     'frameworks/kdbusaddons' : '@same'
-    'frameworks/kdeclarative' : '@same'
     'frameworks/kdnssd' : '@same'
     'frameworks/kglobalaccel' : '@same'
     'frameworks/kguiaddons' : '@same'
@@ -39,6 +38,7 @@ Dependencies:
     'frameworks/ktexteditor' : '@same'
     'frameworks/oxygen-icons5' : '@same'
     'frameworks/kirigami' : '@same'
+    'frameworks/kcmutils' : '@same'
 
 - 'on': ['Linux', 'FreeBSD']
   'require':

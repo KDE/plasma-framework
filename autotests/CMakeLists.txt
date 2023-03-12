@@ -68,6 +68,10 @@ ecm_add_test(
     TEST_NAME plasma-sortfiltermodeltest
     LINK_LIBRARIES KF6::Plasma Qt6::Gui Qt6::Test KF6::I18n Qt6::Qml
 )
+ecm_add_test(
+    quickviewsharedenginetest.cpp
+    LINK_LIBRARIES Qt6::Test KF6::PlasmaQuick
+)
 
 
 #Add a test that i18n is not used directly in any import.
