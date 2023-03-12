@@ -38,6 +38,7 @@
 #include <plasma.h>
 
 #include <KPackage/Package>
+#include <KPackage/PackageJob>
 #include <KPackage/PackageLoader>
 
 #include <kactivities/info.h>
@@ -624,11 +625,9 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 const QString &packagePath = tjob->url().toLocalFile();
                 connect(installPlasmaPackageAction, &QAction::triggered, this, [this, packagePath]() {
                     using namespace KPackage;
-                    PackageStructure *structure = PackageLoader::self()->loadPackageStructure(QStringLiteral("Plasma/Applet"));
-                    Package package(structure);
 
-                    KJob *installJob = package.update(packagePath);
-                    connect(installJob, &KJob::result, this, [this, packagePath, structure](KJob *job) {
+                    PackageJob *job = PackageJob::update(QStringLiteral("Plasma/Applet"), packagePath);
+                    connect(job, &KJob::finished, this, [this, packagePath, job]() {
                         auto fail = [](const QString &text) {
                             KNotification::event(QStringLiteral("plasmoidInstallationFailed"),
                                                  i18n("Package Installation Failed"),
@@ -640,19 +639,13 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         };
 
                         // if the applet is already installed, just add it to the containment
-                        if (job->error() != KJob::NoError && job->error() != Package::PackageAlreadyInstalledError
-                            && job->error() != Package::NewerVersionAlreadyInstalledError) {
+                        if (job->error() != KJob::NoError && job->error() != PackageJob::PackageAlreadyInstalledError
+                            && job->error() != PackageJob::NewerVersionAlreadyInstalledError) {
                             fail(job->errorText());
                             return;
                         }
 
-                        using namespace KPackage;
-                        Package package(structure);
-                        // TODO how can I get the path of the actual package?
-
-                        package.setPath(packagePath);
-
-                        // TODO how can I get the plugin id? Package::metadata() is deprecated
+                        const Package package = job->package();
                         if (!package.isValid() || !package.metadata().isValid()) {
                             fail(i18n("The package you just dropped is invalid."));
                             return;
