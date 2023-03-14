@@ -475,6 +475,8 @@ void AppletInterface::setAction(const QString &name, const QString &text, const 
         });
     }
 
+    action->setProperty("_contextualAction", true);
+
     if (!icon.isEmpty()) {
         action->setIcon(QIcon::fromTheme(icon));
     }

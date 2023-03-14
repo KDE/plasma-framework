@@ -592,10 +592,12 @@ void Applet::flushPendingConstraintsEvents()
 
 QList<QAction *> Applet::contextualActions()
 {
-    // qCDebug(LOG_PLASMA) << "empty context actions";
-    // TODO: make a public property out of that?
-    // return d->script ? d->script->contextualActions() : QList<QAction *>();
-    return {};
+    QList<QAction *> contextActions = d->actions->actions();
+    std::remove_if(contextActions.begin(), contextActions.end(), [](QAction *a) {
+        return !a->property("_contextualAction").toBool();
+    });
+
+    return contextActions;
 }
 
 KActionCollection *Applet::actions() const
