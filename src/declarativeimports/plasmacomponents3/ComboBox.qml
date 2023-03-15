@@ -7,7 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQuick.Controls @QQC2_VERSION@ as Controls
-import QtGraphicalEffects 1.0
+import Qt5Compat.GraphicalEffects
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
