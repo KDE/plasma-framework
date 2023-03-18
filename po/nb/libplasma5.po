@@ -468,29 +468,3 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
-
-#~ msgid "Service Descriptions"
-#~ msgstr "Tjenestebeskrivelser"
-
-#~ msgctxt ""
-#~ "API or programming language the widget was written in, name of the widget"
-#~ msgid "Could not create a %1 ScriptEngine for the %2 widget."
-#~ msgstr "Klarte ikke lage en %1-ScriptEngine for skjermelementet %2."
-
-#~ msgid "Script initialization failed"
-#~ msgstr "Klarte ikke å klargjøre skript"
-
-#~ msgid "Previous Year"
-#~ msgstr "I fjor"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Cancel"
-#~ msgstr "Avbryt"
-
-#~ msgid "Run the Associated Application"
-#~ msgstr "Kjør det tilordnede programmet"
-
-#~ msgid "Open with %1"
-#~ msgstr "Åpne med %1"
