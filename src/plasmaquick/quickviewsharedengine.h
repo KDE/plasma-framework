@@ -24,7 +24,7 @@ namespace PlasmaQuick
 class QuickViewSharedEnginePrivate;
 
 /**
- * @class KQuickAddons::QuickViewSharedEngine quickviewsharedengine.h KQuickAddons/QuickViewSharedEngine
+ * @class PlasmaQuick::QuickViewSharedEngine quickviewsharedengine.h KQuickAddons/QuickViewSharedEngine
  */
 class PLASMAQUICK_EXPORT QuickViewSharedEngine : public QQuickWindow
 {
@@ -58,13 +58,11 @@ public:
      * domain can be used.
      *
      * @param translationDomain The translation domain to be used for i18n calls.
-     * @since 5.25
      */
     void setTranslationDomain(const QString &translationDomain);
 
     /**
      * @return the translation domain for the i18n calls done in this QML engine
-     * @since 5.25
      */
     QString translationDomain() const;
 
