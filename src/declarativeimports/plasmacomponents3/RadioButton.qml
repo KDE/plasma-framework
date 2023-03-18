@@ -8,7 +8,7 @@
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.1 as PlasmaCore
-import "private"
+import "private" as Private
 
 T.RadioButton {
     id: control
@@ -36,7 +36,7 @@ T.RadioButton {
         control: control
     }
 
-    contentItem: IconLabel {
+    contentItem: Private.IconLabel {
         readonly property int effectiveIndicatorWidth: control.indicator && control.indicator.visible && control.indicator.width > 0
             ? control.indicator.width + control.spacing : 0
 

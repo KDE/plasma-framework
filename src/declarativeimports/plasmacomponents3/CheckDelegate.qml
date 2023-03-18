@@ -8,7 +8,7 @@
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.1 as PlasmaCore
-import "private"
+import "private" as Private
 
 T.CheckDelegate {
     id: control
@@ -32,7 +32,7 @@ T.CheckDelegate {
     icon.width: PlasmaCore.Units.iconSizes.sizeForLabels
     icon.height: PlasmaCore.Units.iconSizes.sizeForLabels
 
-    contentItem: IconLabel {
+    contentItem: Private.IconLabel {
         readonly property int effectiveIndicatorWidth: control.indicator && control.indicator.visible && control.indicator.width > 0
             ? control.indicator.width + control.spacing : 0
 
@@ -58,5 +58,5 @@ T.CheckDelegate {
         control: control
     }
 
-    background: DefaultListItemBackground {}
+    background: Private.DefaultListItemBackground {}
 }

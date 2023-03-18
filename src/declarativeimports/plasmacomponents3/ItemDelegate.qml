@@ -8,7 +8,7 @@
 import QtQuick 2.5
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
-import "private"
+import "private" as Private
 
 T.ItemDelegate {
     id: control
@@ -32,7 +32,7 @@ T.ItemDelegate {
     icon.width: PlasmaCore.Units.iconSizes.sizeForLabels
     icon.height: PlasmaCore.Units.iconSizes.sizeForLabels
 
-    contentItem: IconLabel {
+    contentItem: Private.IconLabel {
         mirrored: control.mirrored
         palette: control.palette
         font: control.font
@@ -45,5 +45,5 @@ T.ItemDelegate {
         label.text: control.text
     }
 
-    background: DefaultListItemBackground {}
+    background: Private.DefaultListItemBackground {}
 }
