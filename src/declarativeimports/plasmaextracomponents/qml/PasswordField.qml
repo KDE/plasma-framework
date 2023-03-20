@@ -43,7 +43,7 @@ PlasmaExtras.ActionTextField {
     }
 
     echoMode: root.showPassword ? TextInput.Normal : TextInput.Password
-    placeholderText: i18nd("libplasma5", "Password")
+    placeholderText: i18nd("libplasma6", "Password")
     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
     rightActions: QQC2.Action {
         icon.name: root.showPassword ? "password-show-off" : "password-show-on"

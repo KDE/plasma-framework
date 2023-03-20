@@ -65,9 +65,9 @@ PlasmaExtras.ActionTextField {
         }
     }
 
-    placeholderText: i18nd("libplasma5", "Search…")
+    placeholderText: i18nd("libplasma6", "Search…")
 
-    Accessible.name: i18nd("libplasma5", "Search")
+    Accessible.name: i18nd("libplasma6", "Search")
     Accessible.searchEdit: true
 
     focusSequence: StandardKey.Find

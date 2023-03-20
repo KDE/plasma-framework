@@ -555,7 +555,7 @@ Item {
                     visible: listItem.hasExpandableContent
 
                     display: PlasmaComponents3.AbstractButton.IconOnly
-                    text: expandedView.expanded ? i18ndc("libplasma5", "@action:button", "Collapse") : i18ndc("libplasma5", "@action:button", "Expand")
+                    text: expandedView.expanded ? i18ndc("libplasma6", "@action:button", "Collapse") : i18ndc("libplasma6", "@action:button", "Expand")
                     icon.name: expandedView.expanded ? "collapse" : "expand"
 
                     Keys.onUpPressed: event => listItem.Keys.onUpPressed(event)
