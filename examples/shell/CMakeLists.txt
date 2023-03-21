@@ -15,7 +15,6 @@ target_link_libraries(exampleplasmashell
     KF6::Plasma
     KF6::DBusAddons
     KF6::Notifications
-    KF6::QuickAddons
     KF6::Package
 )
 
