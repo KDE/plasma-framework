@@ -472,14 +472,3 @@ msgstr "Establix %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contingut descartat"
-
-#~ msgid "Service Descriptions"
-#~ msgstr "Descripcions dels serveis"
-
-#~ msgctxt ""
-#~ "API or programming language the widget was written in, name of the widget"
-#~ msgid "Could not create a %1 ScriptEngine for the %2 widget."
-#~ msgstr "No s'ha pogut crear «ScriptEngine» %1 pel giny %2."
-
-#~ msgid "Script initialization failed"
-#~ msgstr "Ha fallat la inicialització de l'script"
