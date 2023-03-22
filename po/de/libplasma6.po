@@ -1,11 +1,11 @@
 # Burkhard Lück <lueck@hube-lueck.de>, 2013, 2014, 2015, 2018, 2019, 2020, 2021.
-# Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2022.
+# Frederik Schwarzer <schwarzer@kde.org>, 2014, 2016, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-15 02:11+0000\n"
-"PO-Revision-Date: 2022-03-13 10:04+0100\n"
+"PO-Revision-Date: 2023-03-21 20:07+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 21.12.3\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
@@ -24,13 +24,13 @@ msgstr "Weitere Aktionen"
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
-msgstr ""
+msgstr "Einklappen"
 
 #: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
-msgstr ""
+msgstr "Ausklappen"
 
 #: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
 #, kde-format
