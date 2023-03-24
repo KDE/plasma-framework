@@ -711,7 +711,6 @@ void AppletQuickItem::init()
     if (!d->compactRepresentationExpander) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         QUrl compactExpanderUrl = d->containmentPackage.fileUrl("compactapplet");
-        qWarning() << "compactExpanderUrl" << compactExpanderUrl;
         if (compactExpanderUrl.isEmpty()) {
             compactExpanderUrl = d->coronaPackage.fileUrl("compactapplet");
         }
