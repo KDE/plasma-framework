@@ -82,6 +82,11 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<Plasma::SortFilterModel, 0>(uri, 2, 0, "SortFilterModel");
     qmlRegisterType<Plasma::SortFilterModel, 1>(uri, 2, 1, "SortFilterModel");
 
+    // To help with forward compatibility of DataEngines users to Plasma 6
+    const char *compat5Uri = "org.kde.plasma.plasma5support";
+    qmlRegisterType<Plasma::DataSource>(compat5Uri, 2, 0, "DataSource");
+    qmlRegisterType<Plasma::DataModel>(compat5Uri, 2, 0, "DataModel");
+
     qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 0, "Dialog");
     // HACK make properties like "opacity" work that are in REVISION 1 of QWindow
     qmlRegisterRevision<QWindow, 1>(uri, 2, 0);
