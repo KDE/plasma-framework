@@ -1064,13 +1064,22 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
 
 void ContainmentInterface::keyPressEvent(QKeyEvent *event)
 {
+    AppletInterface::keyPressEvent(event);
+    if (event->isAccepted()) {
+        return;
+    }
+
     if (event->key() == Qt::Key_Menu) {
-        QMouseEvent me(QEvent::MouseButtonRelease, QPoint(), Qt::RightButton, Qt::RightButton, event->modifiers());
+        QPointF localPos;
+        auto focusedItem = window()->activeFocusItem();
+        if (focusedItem) {
+            localPos = focusedItem->mapToItem(this, QPointF(0, 0));
+        }
+
+        QMouseEvent me(QEvent::MouseButtonRelease, localPos, Qt::RightButton, Qt::RightButton, event->modifiers());
         mousePressEvent(&me);
         event->accept();
     }
-
-    AppletInterface::keyPressEvent(event);
 }
 
 void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event)
