@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This file is copyright:
 # This file is distributed under the same license as the plasma-framework package.
 #
-# Kishore G <kishore96@gmail.com>, 2021, 2022.
+# Kishore G <kishore96@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-03-15 02:11+0000\n"
-"PO-Revision-Date: 2022-07-26 21:16+0530\n"
+"PO-Revision-Date: 2023-03-26 12:30+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 22.07.80\n"
+"X-Generator: Lokalize 23.03.80\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
@@ -95,7 +95,7 @@ msgstr "திருத்தும் பயன்முறையிலிர�
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
 #, kde-format
 msgid "Whether or not to create an on-disk cache for the theme."
-msgstr ""
+msgstr "தோற்றத்திட்டத்திற்கு வட்டில் தற்காலிக நினைவிடத்தை உருவாக்க வேண்டுமா."
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
@@ -130,7 +130,7 @@ msgstr "தோற்றத்திட்டத்தின் படங்க�
 #: plasma/packagestructure/packages.cpp:76
 #, kde-format
 msgid "Configuration Definitions"
-msgstr ""
+msgstr "அமைப்புத்திட்டங்கள்"
 
 #: plasma/packagestructure/packages.cpp:81
 #, kde-format
@@ -266,7 +266,7 @@ msgstr "கருவித்துப்புகளுக்கான ஒள�
 #: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
 #, kde-format
 msgid "KColorScheme configuration file"
-msgstr ""
+msgstr "KColorScheme அமைப்புக்கோப்பு"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
