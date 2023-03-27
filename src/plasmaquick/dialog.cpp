@@ -23,7 +23,7 @@
 #include <QQuickItem>
 #include <QScreen>
 
-#include <KWindowSystem/KWindowInfo>
+#include <KWindowInfo>
 #include <KWindowSystem>
 #include <KX11Extras>
 
