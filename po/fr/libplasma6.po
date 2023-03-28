@@ -122,7 +122,7 @@ msgid ""
 msgstr ""
 "La taille maximum pour le stockage du cache de Thème en kilo-octet. Veuillez "
 "noter que ces fichiers sont fragmentés, la taille maximale pourrait ne pas "
-"être utilisée. Il est souvent plus sûr de spécifier une  taille plus grande."
+"être utilisée. Il est souvent plus sûr de spécifier une taille plus grande."
 
 #: plasma/packagestructure/packages.cpp:28
 #: plasma/packagestructure/packages.cpp:47
