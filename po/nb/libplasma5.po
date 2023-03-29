@@ -1,4 +1,4 @@
-# Translation of libplasma5 to Norwegian Bokmål
+# Translation of libplasma6 to Norwegian Bokmål
 #
 # Bjørn Steensrud <bjornst@skogkatt.homelinux.org>, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015.
 # Øystein Steffensen-Alværvik <oysteins.omsetting@protonmail.com>, 2018.
