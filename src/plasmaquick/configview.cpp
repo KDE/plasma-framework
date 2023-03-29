@@ -266,6 +266,8 @@ ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
     : QQuickView(parent)
     , d(new ConfigViewPrivate(applet, this))
 {
+    // See https://bugreports.qt.io/browse/QTBUG-112376 the workaround should be removed when the bug is fixed
+    setInitialProperties({{QStringLiteral("parent"), QVariant::fromValue(contentItem())}});
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     // Only register types once
     [[maybe_unused]] static int configModelRegisterResult = qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
