@@ -1,5 +1,5 @@
 function(install_package_structure name)
-    kcoreaddons_add_plugin(${name} SOURCES ${name}_packagestructure.cpp INSTALL_NAMESPACE "kpackage/packagestructure")
+    kcoreaddons_add_plugin(${name} SOURCES ${name}_packagestructure.cpp INSTALL_NAMESPACE "kf6/packagestructure")
     target_link_libraries(${name} plasma_packagestructure_static)
 endfunction()
 
