@@ -27,47 +27,39 @@ public:
         package->setContentsPrefixPaths(QStringList());
         package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/"));
 
-        package->addDirectoryDefinition("dialogs", QStringLiteral("dialogs/"), i18n("Images for dialogs"));
-        package->addFileDefinition("dialogs/background", QStringLiteral("dialogs/background.svg"), i18n("Generic dialog background"));
-        package->addFileDefinition("dialogs/background", QStringLiteral("dialogs/background.svgz"), i18n("Generic dialog background"));
-        package->addFileDefinition("dialogs/shutdowndialog", QStringLiteral("dialogs/shutdowndialog.svg"), i18n("Theme for the logout dialog"));
-        package->addFileDefinition("dialogs/shutdowndialog", QStringLiteral("dialogs/shutdowndialog.svgz"), i18n("Theme for the logout dialog"));
+        package->addDirectoryDefinition("dialogs", QStringLiteral("dialogs/"));
+        package->addFileDefinition("dialogs/background", QStringLiteral("dialogs/background.svg"));
+        package->addFileDefinition("dialogs/background", QStringLiteral("dialogs/background.svgz"));
+        package->addFileDefinition("dialogs/shutdowndialog", QStringLiteral("dialogs/shutdowndialog.svg"));
+        package->addFileDefinition("dialogs/shutdowndialog", QStringLiteral("dialogs/shutdowndialog.svgz"));
 
-        package->addDirectoryDefinition("wallpapers", QStringLiteral("wallpapers/"), i18n("Wallpaper packages"));
+        package->addDirectoryDefinition("wallpapers", QStringLiteral("wallpapers/"));
 
-        package->addDirectoryDefinition("widgets", QStringLiteral("widgets/"), i18n("Images for widgets"));
-        package->addFileDefinition("widgets/background", QStringLiteral("widgets/background.svg"), i18n("Background image for widgets"));
-        package->addFileDefinition("widgets/background", QStringLiteral("widgets/background.svgz"), i18n("Background image for widgets"));
-        package->addFileDefinition("widgets/clock", QStringLiteral("widgets/clock.svg"), i18n("Analog clock face"));
-        package->addFileDefinition("widgets/clock", QStringLiteral("widgets/clock.svgz"), i18n("Analog clock face"));
-        package->addFileDefinition("widgets/panel-background", QStringLiteral("widgets/panel-background.svg"), i18n("Background image for panels"));
-        package->addFileDefinition("widgets/panel-background", QStringLiteral("widgets/panel-background.svgz"), i18n("Background image for panels"));
-        package->addFileDefinition("widgets/plot-background", QStringLiteral("widgets/plot-background.svg"), i18n("Background for graphing widgets"));
-        package->addFileDefinition("widgets/plot-background", QStringLiteral("widgets/plot-background.svgz"), i18n("Background for graphing widgets"));
-        package->addFileDefinition("widgets/tooltip", QStringLiteral("widgets/tooltip.svg"), i18n("Background image for tooltips"));
-        package->addFileDefinition("widgets/tooltip", QStringLiteral("widgets/tooltip.svgz"), i18n("Background image for tooltips"));
+        package->addDirectoryDefinition("widgets", QStringLiteral("widgets/"));
+        package->addFileDefinition("widgets/background", QStringLiteral("widgets/background.svg"));
+        package->addFileDefinition("widgets/background", QStringLiteral("widgets/background.svgz"));
+        package->addFileDefinition("widgets/clock", QStringLiteral("widgets/clock.svg"));
+        package->addFileDefinition("widgets/clock", QStringLiteral("widgets/clock.svgz"));
+        package->addFileDefinition("widgets/panel-background", QStringLiteral("widgets/panel-background.svg"));
+        package->addFileDefinition("widgets/panel-background", QStringLiteral("widgets/panel-background.svgz"));
+        package->addFileDefinition("widgets/plot-background", QStringLiteral("widgets/plot-background.svg"));
+        package->addFileDefinition("widgets/plot-background", QStringLiteral("widgets/plot-background.svgz"));
+        package->addFileDefinition("widgets/tooltip", QStringLiteral("widgets/tooltip.svg"));
+        package->addFileDefinition("widgets/tooltip", QStringLiteral("widgets/tooltip.svgz"));
 
-        package->addDirectoryDefinition("opaque/dialogs", QStringLiteral("opaque/dialogs/"), i18n("Opaque images for dialogs"));
-        package->addFileDefinition("opaque/dialogs/background", QStringLiteral("opaque/dialogs/background.svg"), i18n("Opaque generic dialog background"));
-        package->addFileDefinition("opaque/dialogs/background", QStringLiteral("opaque/dialogs/background.svgz"), i18n("Opaque generic dialog background"));
-        package->addFileDefinition("opaque/dialogs/shutdowndialog",
-                                   QStringLiteral("opaque/dialogs/shutdowndialog.svg"),
-                                   i18n("Opaque theme for the logout dialog"));
-        package->addFileDefinition("opaque/dialogs/shutdowndialog",
-                                   QStringLiteral("opaque/dialogs/shutdowndialog.svgz"),
-                                   i18n("Opaque theme for the logout dialog"));
+        package->addDirectoryDefinition("opaque/dialogs", QStringLiteral("opaque/dialogs/"));
+        package->addFileDefinition("opaque/dialogs/background", QStringLiteral("opaque/dialogs/background.svg"));
+        package->addFileDefinition("opaque/dialogs/background", QStringLiteral("opaque/dialogs/background.svgz"));
+        package->addFileDefinition("opaque/dialogs/shutdowndialog", QStringLiteral("opaque/dialogs/shutdowndialog.svg"));
+        package->addFileDefinition("opaque/dialogs/shutdowndialog", QStringLiteral("opaque/dialogs/shutdowndialog.svgz"));
 
-        package->addDirectoryDefinition("opaque/widgets", QStringLiteral("opaque/widgets/"), i18n("Opaque images for widgets"));
-        package->addFileDefinition("opaque/widgets/panel-background",
-                                   QStringLiteral("opaque/widgets/panel-background.svg"),
-                                   i18n("Opaque background image for panels"));
-        package->addFileDefinition("opaque/widgets/panel-background",
-                                   QStringLiteral("opaque/widgets/panel-background.svgz"),
-                                   i18n("Opaque background image for panels"));
-        package->addFileDefinition("opaque/widgets/tooltip", QStringLiteral("opaque/widgets/tooltip.svg"), i18n("Opaque background image for tooltips"));
-        package->addFileDefinition("opaque/widgets/tooltip", QStringLiteral("opaque/widgets/tooltip.svgz"), i18n("Opaque background image for tooltips"));
+        package->addDirectoryDefinition("opaque/widgets", QStringLiteral("opaque/widgets/"));
+        package->addFileDefinition("opaque/widgets/panel-background", QStringLiteral("opaque/widgets/panel-background.svg"));
+        package->addFileDefinition("opaque/widgets/panel-background", QStringLiteral("opaque/widgets/panel-background.svgz"));
+        package->addFileDefinition("opaque/widgets/tooltip", QStringLiteral("opaque/widgets/tooltip.svg"));
+        package->addFileDefinition("opaque/widgets/tooltip", QStringLiteral("opaque/widgets/tooltip.svgz"));
 
-        package->addFileDefinition("colors", QStringLiteral("colors"), i18n("KColorScheme configuration file"));
+        package->addFileDefinition("colors", QStringLiteral("colors"));
 
         QStringList mimetypes;
         mimetypes << QStringLiteral("image/svg+xml");

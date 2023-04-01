@@ -27,8 +27,8 @@ public:
         GenericPackage::initPackage(package);
         package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/plasmoids/"));
 
-        package->addFileDefinition("configmodel", QStringLiteral("config/config.qml"), i18n("Configuration UI pages model"));
-        package->addFileDefinition("mainconfigxml", QStringLiteral("config/main.xml"), i18n("Configuration XML file"));
+        package->addFileDefinition("configmodel", QStringLiteral("config/config.qml"));
+        package->addFileDefinition("mainconfigxml", QStringLiteral("config/main.xml"));
     }
 
     void pathChanged(KPackage::Package *package) override
@@ -40,7 +40,7 @@ public:
             return;
         }
         if (md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"))) {
-            package->addFileDefinition("compactapplet", QStringLiteral("applet/CompactApplet.qml"), i18n("Custom expander for compact applets"));
+            package->addFileDefinition("compactapplet", QStringLiteral("applet/CompactApplet.qml"));
         } else {
             package->removeDefinition("compactapplet");
         }
