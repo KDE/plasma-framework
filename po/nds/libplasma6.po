@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2014-08-13 22:05+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -113,169 +113,6 @@ msgstr ""
 "De Hööchstgrött vun den Muster-Twischenspieker op de Fastplaat in Kilobytes. "
 "Disse Dateien sünd verdeelt Dateien, ehr Hööchstgrott warrt villicht gor "
 "nich bruukt. En höger Grött is dorüm faken ok seker."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Hööft-Skriptdatei"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr ""
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Biller"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Musterbiller"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Instellen-Daten"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Böversiet"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Datendateien"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Utföhrbor Skripten"
-
-#: plasma/packagestructure/packages.cpp:89
-#, fuzzy, kde-format
-#| msgid "Screenlocker"
-msgid "Screenshot"
-msgstr "Schirmafsluten"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Översetten"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Modell vun Instellen-Böversietsieden"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "XML-Instellendatei"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr ""
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Biller för Dialogen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Normaal Dialoogachtergrund"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Muster för den Afmelldialoog"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Achtergrundbiller-Paketen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Biller för Lüttprogrammen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Achtergrundbild för Lüttprogrammen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Analoogklock-Utsehn"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Achtergrundbild för Paneels"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Achtergrund för graafsch Lüttprogrammen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Achtergrundbild för Kortinfos"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Decken Biller för Dialogen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Decken normaal Dialoogachtergrund"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Decken Muster för den Afmelldialoog"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Decken Biller för Lüttprogrammen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Decken Achtergrundbild för Paneels"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Decken Achtergrundbild för Kortinfos"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme-Instellendatei"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -482,6 +319,92 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
+
+#~ msgid "Main Script File"
+#~ msgstr "Hööft-Skriptdatei"
+
+#~ msgid "Images"
+#~ msgstr "Biller"
+
+#~ msgid "Themed Images"
+#~ msgstr "Musterbiller"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Instellen-Daten"
+
+#~ msgid "User Interface"
+#~ msgstr "Böversiet"
+
+#~ msgid "Data Files"
+#~ msgstr "Datendateien"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Utföhrbor Skripten"
+
+#, fuzzy
+#~| msgid "Screenlocker"
+#~ msgid "Screenshot"
+#~ msgstr "Schirmafsluten"
+
+#~ msgid "Translations"
+#~ msgstr "Översetten"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Modell vun Instellen-Böversietsieden"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "XML-Instellendatei"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Biller för Dialogen"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Normaal Dialoogachtergrund"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Muster för den Afmelldialoog"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Achtergrundbiller-Paketen"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Biller för Lüttprogrammen"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Achtergrundbild för Lüttprogrammen"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Analoogklock-Utsehn"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Achtergrundbild för Paneels"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Achtergrund för graafsch Lüttprogrammen"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Achtergrundbild för Kortinfos"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Decken Biller för Dialogen"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Decken normaal Dialoogachtergrund"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Decken Muster för den Afmelldialoog"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Decken Biller för Lüttprogrammen"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Decken Achtergrundbild för Paneels"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Decken Achtergrundbild för Kortinfos"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme-Instellendatei"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Deenstbeschrieven"

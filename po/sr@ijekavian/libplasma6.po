@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2016-03-20 15:24+0100\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -115,198 +115,6 @@ msgstr ""
 "Највећа величина кеша теме на диску у килобајтима. Имајте на уму да су ови "
 "фајлови ретки, тако да задата величина не мора бити потпуно искоришћена. "
 "Зато је задавање веће вредности често сасвим безбедно."
-
-# >> @item:intext
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "главни фајл скрипте"
-
-# >> @item:intext
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "пробе"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "слике"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "тематске слике"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "дефиниције поставе"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "корисничко сучеље"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "подаци"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "извршне скрипте"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "снимак екрана"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "преводи"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "модел УИ страница поставе"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "ИксМЛ фајл поставе"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "посебни проширивач за сажете аплете"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "слике за дијалоге"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "генеричка позадина дијалога"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "тема за одјавни дијалог"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "пакети тапета"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "слике за виџете"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "позадинска слика за виџете"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "лице аналогног сата"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "позадинска слика за панеле"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "позадина за цртачке виџете"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "позадинска слика за облачиће"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "непрозирне слике за дијалоге"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "непрозирна генеричка позадина дијалога"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "непрозирна тема за одјавни дијалог"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "непрозирне слике за виџете"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "непрозирна позадинска слика за панеле"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "непрозирна позадинска слика за облачиће"
-
-# >> @item file/directory definition
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "поставни фајл шеме боја"
 
 # >> @item applet category
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
@@ -512,6 +320,126 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr "Садржај превучен"
+
+# >> @item:intext
+#~ msgid "Main Script File"
+#~ msgstr "главни фајл скрипте"
+
+# >> @item:intext
+#~ msgid "Tests"
+#~ msgstr "пробе"
+
+# >> @item file/directory definition
+#~ msgid "Images"
+#~ msgstr "слике"
+
+# >> @item file/directory definition
+#~ msgid "Themed Images"
+#~ msgstr "тематске слике"
+
+# >> @item file/directory definition
+#~ msgid "Configuration Definitions"
+#~ msgstr "дефиниције поставе"
+
+# >> @item file/directory definition
+#~ msgid "User Interface"
+#~ msgstr "корисничко сучеље"
+
+# >> @item file/directory definition
+#~ msgid "Data Files"
+#~ msgstr "подаци"
+
+# >> @item file/directory definition
+#~ msgid "Executable Scripts"
+#~ msgstr "извршне скрипте"
+
+# >> @item file/directory definition
+#~ msgid "Screenshot"
+#~ msgstr "снимак екрана"
+
+# >> @item file/directory definition
+#~ msgid "Translations"
+#~ msgstr "преводи"
+
+# >> @item file/directory definition
+#~ msgid "Configuration UI pages model"
+#~ msgstr "модел УИ страница поставе"
+
+# >> @item file/directory definition
+#~ msgid "Configuration XML file"
+#~ msgstr "ИксМЛ фајл поставе"
+
+# >> @item file/directory definition
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "посебни проширивач за сажете аплете"
+
+# >> @item file/directory definition
+#~ msgid "Images for dialogs"
+#~ msgstr "слике за дијалоге"
+
+# >> @item file/directory definition
+#~ msgid "Generic dialog background"
+#~ msgstr "генеричка позадина дијалога"
+
+# >> @item file/directory definition
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "тема за одјавни дијалог"
+
+# >> @item file/directory definition
+#~ msgid "Wallpaper packages"
+#~ msgstr "пакети тапета"
+
+# >> @item file/directory definition
+#~ msgid "Images for widgets"
+#~ msgstr "слике за виџете"
+
+# >> @item file/directory definition
+#~ msgid "Background image for widgets"
+#~ msgstr "позадинска слика за виџете"
+
+# >> @item file/directory definition
+#~ msgid "Analog clock face"
+#~ msgstr "лице аналогног сата"
+
+# >> @item file/directory definition
+#~ msgid "Background image for panels"
+#~ msgstr "позадинска слика за панеле"
+
+# >> @item file/directory definition
+#~ msgid "Background for graphing widgets"
+#~ msgstr "позадина за цртачке виџете"
+
+# >> @item file/directory definition
+#~ msgid "Background image for tooltips"
+#~ msgstr "позадинска слика за облачиће"
+
+# >> @item file/directory definition
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "непрозирне слике за дијалоге"
+
+# >> @item file/directory definition
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "непрозирна генеричка позадина дијалога"
+
+# >> @item file/directory definition
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "непрозирна тема за одјавни дијалог"
+
+# >> @item file/directory definition
+#~ msgid "Opaque images for widgets"
+#~ msgstr "непрозирне слике за виџете"
+
+# >> @item file/directory definition
+#~ msgid "Opaque background image for panels"
+#~ msgstr "непрозирна позадинска слика за панеле"
+
+# >> @item file/directory definition
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "непрозирна позадинска слика за облачиће"
+
+# >> @item file/directory definition
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "поставни фајл шеме боја"
 
 # >> @item file/directory definition
 #~ msgid "Service Descriptions"

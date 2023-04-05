@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-12-02 12:05+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -112,168 +112,6 @@ msgstr ""
 "questi file sono file sparsi, perciò la dimensione massima potrebbe non "
 "essere utilizzata. L'impostazione di una dimensione maggiore è sicura nella "
 "maggior parte dei casi."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "File di script principale"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Test"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Immagini"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Immagini a tema"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Definizioni della configurazione"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Interfaccia utente"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "File di dati"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Script eseguibili"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Schermata"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Traduzioni"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Modello delle pagine dell'interfaccia di configurazione"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "File XML di configurazione"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Estensore personalizzato per le applet compatte"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Immagini per le finestre di dialogo"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Sfondo finestra di dialogo generica"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Tema per la finestra di dialogo di uscita"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Pacchetti di sfondi"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Immagini per gli oggetti"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Immagine di sfondo per gli oggetti"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Aspetto orologio analogico"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Immagine di sfondo per i pannelli"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Sfondo per elementi grafici"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Immagine di sfondo per i suggerimenti"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Immagini opache per finestre di dialogo"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Sfondo finestra di dialogo generica opaco"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Tema opaco per la finestra di dialogo di uscita"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Immagini opache per gli oggetti"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Immagine di sfondo opaca per i pannelli"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Immagine di sfondo opaca per i suggerimenti"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "File di configurazione di KColorScheme"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -470,6 +308,96 @@ msgstr "Imposta %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contenuto scartato"
+
+#~ msgid "Main Script File"
+#~ msgstr "File di script principale"
+
+#~ msgid "Tests"
+#~ msgstr "Test"
+
+#~ msgid "Images"
+#~ msgstr "Immagini"
+
+#~ msgid "Themed Images"
+#~ msgstr "Immagini a tema"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Definizioni della configurazione"
+
+#~ msgid "User Interface"
+#~ msgstr "Interfaccia utente"
+
+#~ msgid "Data Files"
+#~ msgstr "File di dati"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Script eseguibili"
+
+#~ msgid "Screenshot"
+#~ msgstr "Schermata"
+
+#~ msgid "Translations"
+#~ msgstr "Traduzioni"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Modello delle pagine dell'interfaccia di configurazione"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "File XML di configurazione"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Estensore personalizzato per le applet compatte"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Immagini per le finestre di dialogo"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Sfondo finestra di dialogo generica"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Tema per la finestra di dialogo di uscita"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Pacchetti di sfondi"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Immagini per gli oggetti"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Immagine di sfondo per gli oggetti"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Aspetto orologio analogico"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Immagine di sfondo per i pannelli"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Sfondo per elementi grafici"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Immagine di sfondo per i suggerimenti"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Immagini opache per finestre di dialogo"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Sfondo finestra di dialogo generica opaco"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Tema opaco per la finestra di dialogo di uscita"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Immagini opache per gli oggetti"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Immagine di sfondo opaca per i pannelli"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Immagine di sfondo opaca per i suggerimenti"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "File di configurazione di KColorScheme"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Descrizioni del servizio"

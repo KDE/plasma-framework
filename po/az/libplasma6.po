@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2023-02-19 15:12+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -108,168 +108,6 @@ msgstr ""
 "Diskdəki Mövzuların kilobytla maksimum ölçüsü. Qeyd edək ki, bu fayllar "
 "seyrək fayllardır, bu halda maksimum ölçü istifadə olunmaya bilər. Buna görə "
 "daha böyük bir ölçü qurmaq əslində daha etibarlıdır."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Əsas skript faylı"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Testlər"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Şəkillər"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Mövzu şəkilləri"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Ayarların təyinatı"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "İstifadəçi interfeysi"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Verilənlər faylı"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "İcra olunabilən skriptlər"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Ekranın şəkli"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Tərcümələr"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Ayarlar dialoqu səhifəsinin izahı"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "XML konfiqurasiya faylı"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Yığcam vidjetlər üçün açılan pəncərə"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Dialoqlar üçün şəkillər"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Əsas dialoq arxa fonları"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Sistemdən çıxış dialoqu Mövzusu"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Divar kağızlı paketlər"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Vidjetlər üçün şəkillər"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Vidjetlər üçün arxa fon şəkilləri"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Əqrəbli saat üzlüyü"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "pabellər üçün arxa fon şəkilləri"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Qrafik vidjetlər üçün arxa fon"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "İpucları üçün arxa fon şəkli"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Dialoqlar üçün qeyri-şəffaf şəkillər"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Qeyri-şəffaf əsas dialoq arxa fonu"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Sistemdən çıxış dialoqu üçün qeyri-şəffaf Mövzu"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Vidjet üçün qeyri-şəffaf şəkillər"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Panellər üçün qeyri-şəffaf arxa fon"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Yardımçı mətnləri üçün qeyri-şəffaf arxa fon şəkili"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme rəng sxemi konfiqurasiya faylı"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -466,6 +304,96 @@ msgstr "%1 istifadə et"
 #, kde-format
 msgid "Content dropped"
 msgstr "Elementin daşınması"
+
+#~ msgid "Main Script File"
+#~ msgstr "Əsas skript faylı"
+
+#~ msgid "Tests"
+#~ msgstr "Testlər"
+
+#~ msgid "Images"
+#~ msgstr "Şəkillər"
+
+#~ msgid "Themed Images"
+#~ msgstr "Mövzu şəkilləri"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Ayarların təyinatı"
+
+#~ msgid "User Interface"
+#~ msgstr "İstifadəçi interfeysi"
+
+#~ msgid "Data Files"
+#~ msgstr "Verilənlər faylı"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "İcra olunabilən skriptlər"
+
+#~ msgid "Screenshot"
+#~ msgstr "Ekranın şəkli"
+
+#~ msgid "Translations"
+#~ msgstr "Tərcümələr"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Ayarlar dialoqu səhifəsinin izahı"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "XML konfiqurasiya faylı"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Yığcam vidjetlər üçün açılan pəncərə"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Dialoqlar üçün şəkillər"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Əsas dialoq arxa fonları"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Sistemdən çıxış dialoqu Mövzusu"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Divar kağızlı paketlər"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Vidjetlər üçün şəkillər"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Vidjetlər üçün arxa fon şəkilləri"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Əqrəbli saat üzlüyü"
+
+#~ msgid "Background image for panels"
+#~ msgstr "pabellər üçün arxa fon şəkilləri"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Qrafik vidjetlər üçün arxa fon"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "İpucları üçün arxa fon şəkli"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Dialoqlar üçün qeyri-şəffaf şəkillər"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Qeyri-şəffaf əsas dialoq arxa fonu"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Sistemdən çıxış dialoqu üçün qeyri-şəffaf Mövzu"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Vidjet üçün qeyri-şəffaf şəkillər"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Panellər üçün qeyri-şəffaf arxa fon"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Yardımçı mətnləri üçün qeyri-şəffaf arxa fon şəkili"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme rəng sxemi konfiqurasiya faylı"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Xidmətin təsviri"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2023-02-22 21:27+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -111,168 +111,6 @@ msgstr ""
 "はスパースファイルなので、設定された最大サイズが使用されない可能性があること"
 "に注意してください。したがって、より大きなサイズを設定することが、多くの場合"
 "安全です。"
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "メインスクリプトファイル"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "テスト"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "画像"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "テーマ画像"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "設定の定義"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "ユーザインターフェース"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "データファイル"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "実行可能スクリプト"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "スクリーンショット"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "翻訳"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "UI ページモデルの設定"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "設定 XML ファイル"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "コンパクトなアプレットのためのカスタムエクスパンダー"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "ダイアログの画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "一般ダイアログの背景"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "ログアウトダイアログのテーマ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "壁紙パッケージ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "ウィジェットの画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "ウィジェットの背景画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "アナログ時計の文字盤"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "パネルの背景画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "グラフウィジェットの背景"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "ツールチップの背景画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "ダイアログの不透明な画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "一般ダイアログの不透明な背景"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "ログアウトダイアログの不透明なテーマ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "ウィジェットの不透明な画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "パネルの不透明な背景画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "ツールチップの不透明な背景画像"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme 設定ファイル"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -469,6 +307,96 @@ msgstr "%1 を設定"
 #, kde-format
 msgid "Content dropped"
 msgstr "コンテンツがドロップされました"
+
+#~ msgid "Main Script File"
+#~ msgstr "メインスクリプトファイル"
+
+#~ msgid "Tests"
+#~ msgstr "テスト"
+
+#~ msgid "Images"
+#~ msgstr "画像"
+
+#~ msgid "Themed Images"
+#~ msgstr "テーマ画像"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "設定の定義"
+
+#~ msgid "User Interface"
+#~ msgstr "ユーザインターフェース"
+
+#~ msgid "Data Files"
+#~ msgstr "データファイル"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "実行可能スクリプト"
+
+#~ msgid "Screenshot"
+#~ msgstr "スクリーンショット"
+
+#~ msgid "Translations"
+#~ msgstr "翻訳"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "UI ページモデルの設定"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "設定 XML ファイル"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "コンパクトなアプレットのためのカスタムエクスパンダー"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "ダイアログの画像"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "一般ダイアログの背景"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "ログアウトダイアログのテーマ"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "壁紙パッケージ"
+
+#~ msgid "Images for widgets"
+#~ msgstr "ウィジェットの画像"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "ウィジェットの背景画像"
+
+#~ msgid "Analog clock face"
+#~ msgstr "アナログ時計の文字盤"
+
+#~ msgid "Background image for panels"
+#~ msgstr "パネルの背景画像"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "グラフウィジェットの背景"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "ツールチップの背景画像"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "ダイアログの不透明な画像"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "一般ダイアログの不透明な背景"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "ログアウトダイアログの不透明なテーマ"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "ウィジェットの不透明な画像"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "パネルの不透明な背景画像"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "ツールチップの不透明な背景画像"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme 設定ファイル"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "サービスの説明"

@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-07-25 13:03+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -113,168 +113,6 @@ msgstr ""
 "La mida màxima de la memòria cau al disc per al tema en kilobytes. Cal tenir "
 "en compte que aquests fitxers són fitxers dispersos, per tant, gairebé no "
 "s'usarà la mida màxima. Per consegüent, es força segur definir una mida gran."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Fitxer principal de script"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Proves"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Imatges"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Imatges temàtiques"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Definicions de la configuració"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Interfície d'usuari"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Fitxers de dades"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Scripts executables"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Captura de pantalla"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Traduccions"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Model de pàgines IU de configuració"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Fitxer XML de configuració"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Expansió personalitzada per a les miniaplicacions compactes"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Imatges per als diàlegs"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Fons de diàleg genèric"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Tema per al diàleg de desconnexió"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Paquets de fons de pantalla"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Imatges per als ginys"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Imatge de fons per als ginys"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Esfera de rellotge analògic"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Imatge de fons per als plafons"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Fons per als ginys gràfics"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Imatge de fons per als consells"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Imatges opaques per als diàlegs"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Fons opac de diàleg genèric"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Tema opac per al diàleg de desconnexió"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Imatges opaques per als ginys"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Imatge de fons opaca per als plafons"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Imatge de fons opaca per als consells"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "Fitxer de configuració del KColorScheme"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -470,3 +308,93 @@ msgstr "Estableix el %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contingut descartat"
+
+#~ msgid "Main Script File"
+#~ msgstr "Fitxer principal de script"
+
+#~ msgid "Tests"
+#~ msgstr "Proves"
+
+#~ msgid "Images"
+#~ msgstr "Imatges"
+
+#~ msgid "Themed Images"
+#~ msgstr "Imatges temàtiques"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Definicions de la configuració"
+
+#~ msgid "User Interface"
+#~ msgstr "Interfície d'usuari"
+
+#~ msgid "Data Files"
+#~ msgstr "Fitxers de dades"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Scripts executables"
+
+#~ msgid "Screenshot"
+#~ msgstr "Captura de pantalla"
+
+#~ msgid "Translations"
+#~ msgstr "Traduccions"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Model de pàgines IU de configuració"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Fitxer XML de configuració"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Expansió personalitzada per a les miniaplicacions compactes"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Imatges per als diàlegs"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Fons de diàleg genèric"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Tema per al diàleg de desconnexió"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Paquets de fons de pantalla"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Imatges per als ginys"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Imatge de fons per als ginys"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Esfera de rellotge analògic"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Imatge de fons per als plafons"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Fons per als ginys gràfics"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Imatge de fons per als consells"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Imatges opaques per als diàlegs"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Fons opac de diàleg genèric"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Tema opac per al diàleg de desconnexió"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Imatges opaques per als ginys"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Imatge de fons opaca per als plafons"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Imatge de fons opaca per als consells"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "Fitxer de configuració del KColorScheme"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -106,168 +106,6 @@ msgid ""
 "files are sparse files, so the maximum size may not be used. Setting a "
 "larger size is therefore often quite safe."
 msgstr ""
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "പ്രധാനസ്ക്രിപ്റ്റ് ഫയല്‍"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "പരിശോധനകള്‍"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "ചിത്രങ്ങള്‍"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "പ്രമേയമുള്ള ചിത്രങ്ങള്‍"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "സജ്ജീകരണ നിര്‍വചനങ്ങള്‍"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "സമ്പർക്കമുഖം"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "ഡാറ്റ ഫയലുകള്‍"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "പ്രവര്‍ത്തിപ്പിക്കാവുന്ന സ്ക്രിപ്റ്റുകള്‍"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "സ്ക്രീന്‍ഷോട്ട്"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "പരിഭാഷ"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "സജ്ജീകരണ സമ്പർക്കമുഖങ്ങളുടെ മാതൃക"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "സജ്ജീകരണ എക്സ് എം എൽ ഫയൽ"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr ""
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "ഡയലോഗിനായുള്ള ചിത്രങ്ങള്‍"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "പൊതുവായ ഡയലോഗ് പശ്ചാത്തലം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "പുറത്തിറങ്ങുന്നതിനുള്ള ഡയലോഗിന്റെ പ്രമേയം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "പശ്ചാത്തലചിത്രപാക്കേജുകള്‍"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "വിഡ്ജറ്റുകള്‍ക്കായുള്ള ചിത്രങ്ങള്‍"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "വിഡ്ജറ്റുകള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "അനലോഗ് ഘടികാരപ്രതലം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "പാളികള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "ഗ്രാഫിംഗ് വിഡ്ജറ്റുകള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "സൂചനകള്‍ക്കുള്ള പശ്ചാത്തലചിത്രം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "ഡയലോഗുകൾക്കുള്ള അതാര്യ ചിത്രങ്ങൾ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "പൊതുവായ ഡയലോഗുകളുടെ അതാര്യ പശ്ചാത്തലം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "ലോഗൗട്ട് ഡയലോഗിനായുള്ള അതാര്യ പ്രമേയം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "വിഡ്ജറ്റിനായുള്ള അതാര്യ ചിത്രങ്ങള്‍"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "പാളികള്‍ക്കായുള്ള അതാര്യ പശ്ചാത്തലചിത്രം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "സൂചനകള്‍ക്കുള്ള അതാര്യപശ്ചാത്തലചിത്രം"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "കെ കളര്‍സ്കീം സജ്ജീകരണ ഫയ"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -465,6 +303,93 @@ msgstr "%1 -നെ തീര്‍ച്ചപ്പെടുത്തുക"
 #, kde-format
 msgid "Content dropped"
 msgstr "ഉള്ളടക്കം ഉപേക്ഷിക്കപ്പെട്ടു"
+
+#~ msgid "Main Script File"
+#~ msgstr "പ്രധാനസ്ക്രിപ്റ്റ് ഫയല്‍"
+
+#~ msgid "Tests"
+#~ msgstr "പരിശോധനകള്‍"
+
+#~ msgid "Images"
+#~ msgstr "ചിത്രങ്ങള്‍"
+
+#~ msgid "Themed Images"
+#~ msgstr "പ്രമേയമുള്ള ചിത്രങ്ങള്‍"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "സജ്ജീകരണ നിര്‍വചനങ്ങള്‍"
+
+#~ msgid "User Interface"
+#~ msgstr "സമ്പർക്കമുഖം"
+
+#~ msgid "Data Files"
+#~ msgstr "ഡാറ്റ ഫയലുകള്‍"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "പ്രവര്‍ത്തിപ്പിക്കാവുന്ന സ്ക്രിപ്റ്റുകള്‍"
+
+#~ msgid "Screenshot"
+#~ msgstr "സ്ക്രീന്‍ഷോട്ട്"
+
+#~ msgid "Translations"
+#~ msgstr "പരിഭാഷ"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "സജ്ജീകരണ സമ്പർക്കമുഖങ്ങളുടെ മാതൃക"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "സജ്ജീകരണ എക്സ് എം എൽ ഫയൽ"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "ഡയലോഗിനായുള്ള ചിത്രങ്ങള്‍"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "പൊതുവായ ഡയലോഗ് പശ്ചാത്തലം"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "പുറത്തിറങ്ങുന്നതിനുള്ള ഡയലോഗിന്റെ പ്രമേയം"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "പശ്ചാത്തലചിത്രപാക്കേജുകള്‍"
+
+#~ msgid "Images for widgets"
+#~ msgstr "വിഡ്ജറ്റുകള്‍ക്കായുള്ള ചിത്രങ്ങള്‍"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "വിഡ്ജറ്റുകള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
+
+#~ msgid "Analog clock face"
+#~ msgstr "അനലോഗ് ഘടികാരപ്രതലം"
+
+#~ msgid "Background image for panels"
+#~ msgstr "പാളികള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "ഗ്രാഫിംഗ് വിഡ്ജറ്റുകള്‍ക്കായുള്ള പശ്ചാത്തലചിത്രം"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "സൂചനകള്‍ക്കുള്ള പശ്ചാത്തലചിത്രം"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "ഡയലോഗുകൾക്കുള്ള അതാര്യ ചിത്രങ്ങൾ"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "പൊതുവായ ഡയലോഗുകളുടെ അതാര്യ പശ്ചാത്തലം"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "ലോഗൗട്ട് ഡയലോഗിനായുള്ള അതാര്യ പ്രമേയം"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "വിഡ്ജറ്റിനായുള്ള അതാര്യ ചിത്രങ്ങള്‍"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "പാളികള്‍ക്കായുള്ള അതാര്യ പശ്ചാത്തലചിത്രം"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "സൂചനകള്‍ക്കുള്ള അതാര്യപശ്ചാത്തലചിത്രം"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "കെ കളര്‍സ്കീം സജ്ജീകരണ ഫയ"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "സേവനവിവരണം"

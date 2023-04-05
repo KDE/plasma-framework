@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-09-19 12:33+0300\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -112,168 +112,6 @@ msgstr ""
 "Didžiausias apipavidalinimo podėlio dydis diske, kilobaitais. Atminkite, kad "
 "failai yra reti masyvai, tad didžiausias dydis gali būti ir nenaudojamas. "
 "Dažniausiai, yra saugiau nurodyti didesnį dydį."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Pagrindinis scenarijaus failas"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Testai"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Paveikslai"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Apipavidalinimų paveikslai"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Konfigūravimo apibrėžimai"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Naudotojo sąsaja"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Duomenų failai"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Vykdomieji scenarijai"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Ekrano kopija"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Vertimai"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Konfigūracinis naudotojo sąsajos puslapių modelis"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Konfigūracinis XML failas"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Tinkintas kompaktiškų programėlių skleidiklis"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Dialogų paveikslai"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Bendrinis dialogo fonas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Atsijungimo dialogo apipavidalinimas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Darbalaukio fonų paketai"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Valdiklių paveikslai"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Valdiklių foniniai paveikslai"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Analoginio laikrodžio ciferblatas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Skydelių foninis paveikslas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Grafikų valdiklių fonas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Foninis paaiškinimų paveikslas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Neskaidrūs dialogų paveikslai"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Neskaidrus bendrinis dialogo fonas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Neskaidrus atsijungimo dialogo apipavidalinimas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Neskaidrūs valdiklių paveikslai"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Neskaidrus foninis skydelių paveikslas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Neskaidrus foninis paaiškinimų paveikslas"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme konfigūracijos failas"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -469,6 +307,96 @@ msgstr "Nustatyti %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Numestas turinys"
+
+#~ msgid "Main Script File"
+#~ msgstr "Pagrindinis scenarijaus failas"
+
+#~ msgid "Tests"
+#~ msgstr "Testai"
+
+#~ msgid "Images"
+#~ msgstr "Paveikslai"
+
+#~ msgid "Themed Images"
+#~ msgstr "Apipavidalinimų paveikslai"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Konfigūravimo apibrėžimai"
+
+#~ msgid "User Interface"
+#~ msgstr "Naudotojo sąsaja"
+
+#~ msgid "Data Files"
+#~ msgstr "Duomenų failai"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Vykdomieji scenarijai"
+
+#~ msgid "Screenshot"
+#~ msgstr "Ekrano kopija"
+
+#~ msgid "Translations"
+#~ msgstr "Vertimai"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Konfigūracinis naudotojo sąsajos puslapių modelis"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Konfigūracinis XML failas"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Tinkintas kompaktiškų programėlių skleidiklis"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Dialogų paveikslai"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Bendrinis dialogo fonas"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Atsijungimo dialogo apipavidalinimas"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Darbalaukio fonų paketai"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Valdiklių paveikslai"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Valdiklių foniniai paveikslai"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Analoginio laikrodžio ciferblatas"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Skydelių foninis paveikslas"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Grafikų valdiklių fonas"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Foninis paaiškinimų paveikslas"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Neskaidrūs dialogų paveikslai"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Neskaidrus bendrinis dialogo fonas"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Neskaidrus atsijungimo dialogo apipavidalinimas"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Neskaidrūs valdiklių paveikslai"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Neskaidrus foninis skydelių paveikslas"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Neskaidrus foninis paaiškinimų paveikslas"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme konfigūracijos failas"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Paslaugų aprašai"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-10-03 16:23+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-i18n-doc@kde.org>\n"
@@ -108,168 +108,6 @@ msgid ""
 msgstr ""
 "킬로바이트 단위의 디스크 테마 캐시 최대 크기입니다. 이 파일은 스파스 파일이므"
 "로 최대 크기까지 도달하지 않을 수도 있습니다. 크게 설정하여도 무방합니다."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "주 스크립트 파일"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "시험"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "그림"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "테마의 그림"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "설정 정의"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "사용자 인터페이스"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "데이터 파일"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "실행 가능한 스크립트"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "스크린샷"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "번역"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "설정 UI 페이지 모델"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "설정 XML 파일"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "작은 애플릿의 사용자 정의 확장 도구"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "대화 상자의 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "일반 대화 상자 배경"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "로그아웃 대화 상자의 테마"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "배경 그림 패키지"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "위젯의 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "위젯 배경 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "아날로그 시계 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "패널 배경 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "그래프를 그리는 위젯의 배경"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "풍선 도움말 배경 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "대화 상자의 불투명한 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "일반 대화 상자의 불투명한 배경"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "로그아웃 대화 상자의 불투명한 테마"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "위젯의 불투명한 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "패널의 불투명한 기본 배경 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "풍선 도움말의 불투명한 기본 배경 그림"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme 설정 파일"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -465,6 +303,96 @@ msgstr "%1 설정"
 #, kde-format
 msgid "Content dropped"
 msgstr "내용 드롭됨"
+
+#~ msgid "Main Script File"
+#~ msgstr "주 스크립트 파일"
+
+#~ msgid "Tests"
+#~ msgstr "시험"
+
+#~ msgid "Images"
+#~ msgstr "그림"
+
+#~ msgid "Themed Images"
+#~ msgstr "테마의 그림"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "설정 정의"
+
+#~ msgid "User Interface"
+#~ msgstr "사용자 인터페이스"
+
+#~ msgid "Data Files"
+#~ msgstr "데이터 파일"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "실행 가능한 스크립트"
+
+#~ msgid "Screenshot"
+#~ msgstr "스크린샷"
+
+#~ msgid "Translations"
+#~ msgstr "번역"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "설정 UI 페이지 모델"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "설정 XML 파일"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "작은 애플릿의 사용자 정의 확장 도구"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "대화 상자의 그림"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "일반 대화 상자 배경"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "로그아웃 대화 상자의 테마"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "배경 그림 패키지"
+
+#~ msgid "Images for widgets"
+#~ msgstr "위젯의 그림"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "위젯 배경 그림"
+
+#~ msgid "Analog clock face"
+#~ msgstr "아날로그 시계 그림"
+
+#~ msgid "Background image for panels"
+#~ msgstr "패널 배경 그림"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "그래프를 그리는 위젯의 배경"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "풍선 도움말 배경 그림"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "대화 상자의 불투명한 그림"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "일반 대화 상자의 불투명한 배경"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "로그아웃 대화 상자의 불투명한 테마"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "위젯의 불투명한 그림"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "패널의 불투명한 기본 배경 그림"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "풍선 도움말의 불투명한 기본 배경 그림"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme 설정 파일"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "서비스 설명"

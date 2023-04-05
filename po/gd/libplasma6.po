@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2016-04-30 12:08+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
@@ -115,168 +115,6 @@ msgstr ""
 "ùrlair. Thoir an aire gu bheil na faidhlichean seo gann, mar sin dh'fhaoidte "
 "nach dèid am meud as motha a chleachdadh. Bidh e gu math sàbhailte mar a "
 "trice ma shònraicheas tu meud nas motha."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Prìomh-fhaidhle an sgriobt"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Deuchainnean"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Dealbhan"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Dealbhan ùrlair"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Mìneachaidhean rèiteachaidh"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Eadar-aghaidh"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Faidhlichean dàta"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Sgriobtaichean so-ghnìomhach"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Glacadh-sgrìn"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Eadar-theangachaidhean"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Modal duilleig airson rèiteachadh UI"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Faidhle rèiteachaidh XML"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Meudaichear gnàthaichte dha dh'aplaidean teannta"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Dealbhan airson còmhraidhean"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Cùlaibh còmhraidh coitcheann"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Ùrlar airson còmhradh clàraidh a-mach"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Pacaidean phàipearan-balla"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Dealbhan airson widgets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Dealbhan cùlaibh airson widgets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Uaireadair aodannail"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Dealbhan cùlaibh airson panailean"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Cùlaibh airson grafaigeachd widgets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Dealbhan cùlaibh airson gliocasan-sgrìn"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Dealbhan do-lèirsinneach airson còmhraidhean"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Cùlaibh còmhraidh do-lèirsinneach coitcheann"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Ùrlar do-lèirsinneach airson còmhradh clàraidh a-mach"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Dealbhan do-lèirsinneach airson widgets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Dealbhan cùlaibh do-lèirsinneach airson panailean"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Dealbhan cùlaibh do-lèirsinneach airson gliocasan-sgrìn"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "Faidhle rèiteachadh KColorScheme"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -481,6 +319,96 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr "Chaidh an t-susbaint a leigeil às"
+
+#~ msgid "Main Script File"
+#~ msgstr "Prìomh-fhaidhle an sgriobt"
+
+#~ msgid "Tests"
+#~ msgstr "Deuchainnean"
+
+#~ msgid "Images"
+#~ msgstr "Dealbhan"
+
+#~ msgid "Themed Images"
+#~ msgstr "Dealbhan ùrlair"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Mìneachaidhean rèiteachaidh"
+
+#~ msgid "User Interface"
+#~ msgstr "Eadar-aghaidh"
+
+#~ msgid "Data Files"
+#~ msgstr "Faidhlichean dàta"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Sgriobtaichean so-ghnìomhach"
+
+#~ msgid "Screenshot"
+#~ msgstr "Glacadh-sgrìn"
+
+#~ msgid "Translations"
+#~ msgstr "Eadar-theangachaidhean"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Modal duilleig airson rèiteachadh UI"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Faidhle rèiteachaidh XML"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Meudaichear gnàthaichte dha dh'aplaidean teannta"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Dealbhan airson còmhraidhean"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Cùlaibh còmhraidh coitcheann"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Ùrlar airson còmhradh clàraidh a-mach"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Pacaidean phàipearan-balla"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Dealbhan airson widgets"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Dealbhan cùlaibh airson widgets"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Uaireadair aodannail"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Dealbhan cùlaibh airson panailean"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Cùlaibh airson grafaigeachd widgets"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Dealbhan cùlaibh airson gliocasan-sgrìn"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Dealbhan do-lèirsinneach airson còmhraidhean"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Cùlaibh còmhraidh do-lèirsinneach coitcheann"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Ùrlar do-lèirsinneach airson còmhradh clàraidh a-mach"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Dealbhan do-lèirsinneach airson widgets"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Dealbhan cùlaibh do-lèirsinneach airson panailean"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Dealbhan cùlaibh do-lèirsinneach airson gliocasan-sgrìn"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "Faidhle rèiteachadh KColorScheme"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Tuairisgeulan sheirbheisean"

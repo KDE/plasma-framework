@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-08-11 15:23+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -124,170 +124,6 @@ msgstr ""
 "Максимальный размер кэша темы на диске в килобайтах. Кэш хранится в "
 "разреженных файлах, и на диске может быть не использован указанный "
 "максимальный объём. Поэтому увеличение этого параметра обычно безопасно."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Основной файл скрипта"
-
-# BUGME: for glossary: "тесты"/"испытания"/"проверочные программы"? --aspotashev
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Тесты"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Изображения"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Изображения тем"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Определения параметров"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Пользовательский интерфейс"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Файлы данных"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Исполняемые скрипты"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Снимок экрана"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Переводы"
-
-# Another translation "Файл описания страниц диалога настройки" has poorer readability --aspotashev
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Файл, описывающий страницы диалога настройки"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Файл настройки в XML"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Раскрывающееся окно для компактных виджетов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Изображения для диалогов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Фон стандартных диалогов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Тема экрана выхода из системы"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Пакеты с обоями"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Изображения для виджетов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Фоновое изображение для виджетов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Циферблат аналоговых часов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Фоновое изображение для панелей"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Фоновое изображение для диаграмм"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Фоновое изображение для подсказок"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Непрозрачные изображения для диалогов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Непрозрачный фон для стандартных диалогов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Непрозрачная тема экрана выхода из системы"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Непрозрачные изображения для виджетов"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Непрозрачное фоновое изображение для панелей"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Непрозрачное фоновое изображение для подсказок"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "Файл схемы цветов"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -488,6 +324,98 @@ msgstr "Использовать «%1»"
 #, kde-format
 msgid "Content dropped"
 msgstr "Перетаскивание элемента"
+
+#~ msgid "Main Script File"
+#~ msgstr "Основной файл скрипта"
+
+# BUGME: for glossary: "тесты"/"испытания"/"проверочные программы"? --aspotashev
+#~ msgid "Tests"
+#~ msgstr "Тесты"
+
+#~ msgid "Images"
+#~ msgstr "Изображения"
+
+#~ msgid "Themed Images"
+#~ msgstr "Изображения тем"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Определения параметров"
+
+#~ msgid "User Interface"
+#~ msgstr "Пользовательский интерфейс"
+
+#~ msgid "Data Files"
+#~ msgstr "Файлы данных"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Исполняемые скрипты"
+
+#~ msgid "Screenshot"
+#~ msgstr "Снимок экрана"
+
+#~ msgid "Translations"
+#~ msgstr "Переводы"
+
+# Another translation "Файл описания страниц диалога настройки" has poorer readability --aspotashev
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Файл, описывающий страницы диалога настройки"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Файл настройки в XML"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Раскрывающееся окно для компактных виджетов"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Изображения для диалогов"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Фон стандартных диалогов"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Тема экрана выхода из системы"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Пакеты с обоями"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Изображения для виджетов"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Фоновое изображение для виджетов"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Циферблат аналоговых часов"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Фоновое изображение для панелей"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Фоновое изображение для диаграмм"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Фоновое изображение для подсказок"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Непрозрачные изображения для диалогов"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Непрозрачный фон для стандартных диалогов"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Непрозрачная тема экрана выхода из системы"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Непрозрачные изображения для виджетов"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Непрозрачное фоновое изображение для панелей"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Непрозрачное фоновое изображение для подсказок"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "Файл схемы цветов"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Описания служб"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-07-25 12:38+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -109,168 +109,6 @@ msgstr ""
 "Merk op dat deze bestanden sparse-bestanden zijn, zodat de maximale grootte "
 "niet in gebruikt hoeft te zijn. Instellen van een grotere is daarom vaak "
 "behoorlijk veilig."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Hoofd-scriptbestand"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Testen"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Afbeeldingen"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Afbeeldingen met thema"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Configuratiedefinities"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Gebruikersinterface"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Gegevensbestanden"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Uitvoerbare scripts"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Schermafdruk"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Vertalingen"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Instellingen van het paginamodel van de UI"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "XML-configuratiebestand"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Aangepaste vergroter voor compacte applets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Afbeeldingen voor dialogen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Generieke dialoogachtergrond"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Thema voor de afmelddialoog"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Pakketten met achtergrondafbeeldingen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Afbeeldingen voor widgets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Achtergrondafbeelding voor widgets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Analoge klok"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Achtergrondafbeelding voor panelen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Achtergrond voor grafische elementen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Achtergrondafbeelding voor tekstballonnen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Ondoorzichtige afbeeldingen voor dialogen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Achtergrond voor generieke ondoorzichtige dialoog"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Ondoorzichtig thema voor de afmelddialoog"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Ondoorzichtige afbeeldingen voor widgets"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Ondoorzichtige achtergrondafbeelding voor panelen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Ondoorzichtige achtergrondafbeelding voor tekstballonnen"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme-configuratiebestand"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -467,6 +305,96 @@ msgstr "%1 instellen"
 #, kde-format
 msgid "Content dropped"
 msgstr "Inhoud vervallen"
+
+#~ msgid "Main Script File"
+#~ msgstr "Hoofd-scriptbestand"
+
+#~ msgid "Tests"
+#~ msgstr "Testen"
+
+#~ msgid "Images"
+#~ msgstr "Afbeeldingen"
+
+#~ msgid "Themed Images"
+#~ msgstr "Afbeeldingen met thema"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Configuratiedefinities"
+
+#~ msgid "User Interface"
+#~ msgstr "Gebruikersinterface"
+
+#~ msgid "Data Files"
+#~ msgstr "Gegevensbestanden"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Uitvoerbare scripts"
+
+#~ msgid "Screenshot"
+#~ msgstr "Schermafdruk"
+
+#~ msgid "Translations"
+#~ msgstr "Vertalingen"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Instellingen van het paginamodel van de UI"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "XML-configuratiebestand"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Aangepaste vergroter voor compacte applets"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Afbeeldingen voor dialogen"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Generieke dialoogachtergrond"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Thema voor de afmelddialoog"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Pakketten met achtergrondafbeeldingen"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Afbeeldingen voor widgets"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Achtergrondafbeelding voor widgets"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Analoge klok"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Achtergrondafbeelding voor panelen"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Achtergrond voor grafische elementen"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Achtergrondafbeelding voor tekstballonnen"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Ondoorzichtige afbeeldingen voor dialogen"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Achtergrond voor generieke ondoorzichtige dialoog"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Ondoorzichtig thema voor de afmelddialoog"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Ondoorzichtige afbeeldingen voor widgets"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Ondoorzichtige achtergrondafbeelding voor panelen"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Ondoorzichtige achtergrondafbeelding voor tekstballonnen"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme-configuratiebestand"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Service-beschrijvingen"

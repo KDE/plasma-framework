@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2023-01-11 11:24+0100\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -109,168 +109,6 @@ msgstr ""
 "Maximálna veľkosť cache na disku pre tému v kilobajtoch. Tieto súbory sú "
 "dosť riedke, teda maximálna veľkosť sa nemusí použiť. Nastavenie väčšej "
 "veľkosti je však bezpečné."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Hlavný súbor skriptu"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Testy"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Obrázky"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Témované obrázky"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Definície konfigurácie"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Užívateľské rozhranie"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Dátové súbory"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Spustiteľné skripty"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Snímka obrazovky"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Preklady"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Nastavene modelu UI stránok"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Konfiguračný XML súbor"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Vlastný expander pre kompaktné applety"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Obrázky pre dialógy"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Všeobecné pozadie dialógu"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Téma pre dialóg odhlásenia"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Balíky tapiet"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Obrázky pre miniaplikácie"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Obrázok pozadia pre miniaplikácie"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Vzhľad analógových hodín"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Obrázok pozadia pre panely"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Pozadie pre miniaplikácie s grafom"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Obrázok pozadia pre rady"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Nepriehľadné obrázky pre dialógy"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Všeobecné nepriehľadné pozadie dialógu"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Nepriehľadná téma pre dialóg odhlásenia"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Nepriehľadné obrázky pre miniaplikácie"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Nepriehľadný obrázok pozadia pre panely"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Nepriehľadný obrázok pozadia pre rady"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "Konfiguračný súbor KColorScheme"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -466,6 +304,96 @@ msgstr "Nastaviť %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Obsah zahodený"
+
+#~ msgid "Main Script File"
+#~ msgstr "Hlavný súbor skriptu"
+
+#~ msgid "Tests"
+#~ msgstr "Testy"
+
+#~ msgid "Images"
+#~ msgstr "Obrázky"
+
+#~ msgid "Themed Images"
+#~ msgstr "Témované obrázky"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Definície konfigurácie"
+
+#~ msgid "User Interface"
+#~ msgstr "Užívateľské rozhranie"
+
+#~ msgid "Data Files"
+#~ msgstr "Dátové súbory"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Spustiteľné skripty"
+
+#~ msgid "Screenshot"
+#~ msgstr "Snímka obrazovky"
+
+#~ msgid "Translations"
+#~ msgstr "Preklady"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Nastavene modelu UI stránok"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Konfiguračný XML súbor"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Vlastný expander pre kompaktné applety"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Obrázky pre dialógy"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Všeobecné pozadie dialógu"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Téma pre dialóg odhlásenia"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Balíky tapiet"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Obrázky pre miniaplikácie"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Obrázok pozadia pre miniaplikácie"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Vzhľad analógových hodín"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Obrázok pozadia pre panely"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Pozadie pre miniaplikácie s grafom"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Obrázok pozadia pre rady"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Nepriehľadné obrázky pre dialógy"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Všeobecné nepriehľadné pozadie dialógu"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Nepriehľadná téma pre dialóg odhlásenia"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Nepriehľadné obrázky pre miniaplikácie"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Nepriehľadný obrázok pozadia pre panely"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Nepriehľadný obrázok pozadia pre rady"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "Konfiguračný súbor KColorScheme"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Popisy služby"

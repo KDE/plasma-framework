@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-11-19 05:34-0800\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -106,168 +106,6 @@ msgid ""
 "files are sparse files, so the maximum size may not be used. Setting a "
 "larger size is therefore often quite safe."
 msgstr ""
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "ਮੁੱਖ ਸਕ੍ਰਿਪਟ ਫਾਈਲ"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "ਟੈਸਟ"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "ਚਿੱਤਰ"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "ਥੀਮ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr ""
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "ਵਰਤੋਂਕਾਰ ਇੰਟਰਫੇਸ"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "ਡਾਟਾ ਫਾਈਲਾਂ"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "ਚੱਲਣਯੋਗ ਸਕ੍ਰਿਪਟਾਂ"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "ਸਕਰੀਨਸ਼ਾਟ"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "ਉਲੱਥੇ"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr ""
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "ਸੰਰਚਨਾ XML ਫਾਈਲ"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr ""
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "ਡਾਈਲਾਗਾਂ ਲਈ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "ਆਮ ਡਾਈਲਾਗ ਬੈਕਗਰਾਊਂਡ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "ਲਾਗਆਉਟ ਡਾਈਲਾਗ ਲਈ ਥੀਮ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "ਵਾਲਪੇਪਰ ਪੈਕੇਜ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "ਵਿਦਜੈੱਟ ਲਈ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "ਵਿਦਜੈੱਟਾਂ ਲਈ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "ਐਨਾਲਾਗ ਘੜੀ ਫੇਸ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "ਪੈਨਲਾਂ ਲਈ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "ਗਰਾਫਿਕ ਵਾਲੇ ਵਿਦਜੈੱਟਾਂ ਲਈ ਬੈਕਗਰਾਊਂਡ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "ਟੂਲ-ਟਿੱਪ ਲਈ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "ਡਾਈਲਾਗਾਂ ਲਈ ਧੁੰਦਲੇ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr ""
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "ਲਾਗਆਉਟ ਡਾਈਲਾਗ ਲਈ ਧੁੰਦਲਾ ਥੀਮ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "ਵਿਦਜੈੱਟ ਲਈ ਧੁੰਦਲੇ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "ਪੈਨਲਾਂ ਲਈ ਧੁੰਦਲਾ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "ਟੂਲ-ਟਿੱਪ ਲਈ ਧੁੰਦਲਾ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme ਸੰਰਚਨਾ ਫਾਈਲ"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -463,6 +301,84 @@ msgstr "%1 ਸੈੱਟ ਕਰੋ"
 #, kde-format
 msgid "Content dropped"
 msgstr ""
+
+#~ msgid "Main Script File"
+#~ msgstr "ਮੁੱਖ ਸਕ੍ਰਿਪਟ ਫਾਈਲ"
+
+#~ msgid "Tests"
+#~ msgstr "ਟੈਸਟ"
+
+#~ msgid "Images"
+#~ msgstr "ਚਿੱਤਰ"
+
+#~ msgid "Themed Images"
+#~ msgstr "ਥੀਮ ਚਿੱਤਰ"
+
+#~ msgid "User Interface"
+#~ msgstr "ਵਰਤੋਂਕਾਰ ਇੰਟਰਫੇਸ"
+
+#~ msgid "Data Files"
+#~ msgstr "ਡਾਟਾ ਫਾਈਲਾਂ"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "ਚੱਲਣਯੋਗ ਸਕ੍ਰਿਪਟਾਂ"
+
+#~ msgid "Screenshot"
+#~ msgstr "ਸਕਰੀਨਸ਼ਾਟ"
+
+#~ msgid "Translations"
+#~ msgstr "ਉਲੱਥੇ"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "ਸੰਰਚਨਾ XML ਫਾਈਲ"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "ਡਾਈਲਾਗਾਂ ਲਈ ਚਿੱਤਰ"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "ਆਮ ਡਾਈਲਾਗ ਬੈਕਗਰਾਊਂਡ"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "ਲਾਗਆਉਟ ਡਾਈਲਾਗ ਲਈ ਥੀਮ"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "ਵਾਲਪੇਪਰ ਪੈਕੇਜ"
+
+#~ msgid "Images for widgets"
+#~ msgstr "ਵਿਦਜੈੱਟ ਲਈ ਚਿੱਤਰ"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "ਵਿਦਜੈੱਟਾਂ ਲਈ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
+
+#~ msgid "Analog clock face"
+#~ msgstr "ਐਨਾਲਾਗ ਘੜੀ ਫੇਸ"
+
+#~ msgid "Background image for panels"
+#~ msgstr "ਪੈਨਲਾਂ ਲਈ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "ਗਰਾਫਿਕ ਵਾਲੇ ਵਿਦਜੈੱਟਾਂ ਲਈ ਬੈਕਗਰਾਊਂਡ"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "ਟੂਲ-ਟਿੱਪ ਲਈ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "ਡਾਈਲਾਗਾਂ ਲਈ ਧੁੰਦਲੇ ਚਿੱਤਰ"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "ਲਾਗਆਉਟ ਡਾਈਲਾਗ ਲਈ ਧੁੰਦਲਾ ਥੀਮ"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "ਵਿਦਜੈੱਟ ਲਈ ਧੁੰਦਲੇ ਚਿੱਤਰ"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "ਪੈਨਲਾਂ ਲਈ ਧੁੰਦਲਾ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "ਟੂਲ-ਟਿੱਪ ਲਈ ਧੁੰਦਲਾ ਬੈਕਗਰਾਊਂਡ ਚਿੱਤਰ"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme ਸੰਰਚਨਾ ਫਾਈਲ"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "ਸਰਵਿਸ ਵੇਰਵਾ"

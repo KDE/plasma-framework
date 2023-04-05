@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2022-10-17 01:32+0300\n"
 "Last-Translator: Lasse Liehu <lasse.liehu@iki.fi>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -116,168 +116,6 @@ msgstr ""
 "Teemavälimuistin enimmäiskoko levyllä kilotavuina. Huomaa, että nämä ovat "
 "ns. harvoja tiedostoja, joten enimmäiskokoa ei saavuteta. Suuren koon "
 "asettaminen on siis yleensä aika turvallista."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Pääskriptitiedosto"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Testit"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Kuvat"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Teemakuvat"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Asetusmäärittelyt"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Käyttöliittymä"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Datatiedostot"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Suoritettavat skriptit"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Kuvakaappaus"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Käännökset"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Asetussivujen käyttöliittymän datamalli"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Asetusten XML-tiedosto"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Mukautettu laajennin tiiviille sovelmille"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Kyselyikkunakuvat"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Yleinen ikkunatausta"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Uloskirjautumisikkunan teema"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Taustakuvapaketit"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Sovelmien kuvat"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Sovelmien taustakuva"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Analoginen kellotaulu"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Paneelien taustakuva"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Mittarisovelmien tausta"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Työkaluvihjeiden taustakuva"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Kyselyikkunoiden läpinäkymättömät kuvat"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Yleisten kyselyikkunoiden läpinäkymättömät kuvat"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Läpinäkymätön teema uloskirjautumisikkunalle"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Sovelmien läpinäkymättömät kuvat"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Paneelien läpinäkymätön taustakuva"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Työkaluvihjeiden läpinäkymätön taustakuva"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme-asetustiedosto"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -473,6 +311,96 @@ msgstr "Aseta %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Sisältö pudotettu"
+
+#~ msgid "Main Script File"
+#~ msgstr "Pääskriptitiedosto"
+
+#~ msgid "Tests"
+#~ msgstr "Testit"
+
+#~ msgid "Images"
+#~ msgstr "Kuvat"
+
+#~ msgid "Themed Images"
+#~ msgstr "Teemakuvat"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Asetusmäärittelyt"
+
+#~ msgid "User Interface"
+#~ msgstr "Käyttöliittymä"
+
+#~ msgid "Data Files"
+#~ msgstr "Datatiedostot"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Suoritettavat skriptit"
+
+#~ msgid "Screenshot"
+#~ msgstr "Kuvakaappaus"
+
+#~ msgid "Translations"
+#~ msgstr "Käännökset"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Asetussivujen käyttöliittymän datamalli"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Asetusten XML-tiedosto"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Mukautettu laajennin tiiviille sovelmille"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Kyselyikkunakuvat"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Yleinen ikkunatausta"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Uloskirjautumisikkunan teema"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Taustakuvapaketit"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Sovelmien kuvat"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Sovelmien taustakuva"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Analoginen kellotaulu"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Paneelien taustakuva"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Mittarisovelmien tausta"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Työkaluvihjeiden taustakuva"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Kyselyikkunoiden läpinäkymättömät kuvat"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Yleisten kyselyikkunoiden läpinäkymättömät kuvat"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Läpinäkymätön teema uloskirjautumisikkunalle"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Sovelmien läpinäkymättömät kuvat"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Paneelien läpinäkymätön taustakuva"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Työkaluvihjeiden läpinäkymätön taustakuva"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme-asetustiedosto"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Palvelujen kuvaukset"

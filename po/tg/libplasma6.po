@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2020-09-19 11:42+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -110,168 +110,6 @@ msgstr ""
 "ҳисоб карда мешавад. Ба назар гиред, ки файлҳо алоҳида нигоҳ дошта мешаванд, "
 "бинобар ин андозаи калонтарин метавонад истифода бурда нашавад. Танзимкунии "
 "андозаи калонтар ба ҳамин сабаб безарар аст."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Файли нақши асосӣ"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Санҷишҳо"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Тасвирҳо"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Тасвирҳои мавзӯӣ"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Таърифҳои танзимот"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Воситаи корбарӣ"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Файлҳои иттилоотӣ"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Нақшҳои иҷрошаванда"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Акси экран"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Тарҷумаҳо"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Танзимоти намунаи саҳифаҳои UI"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Файли танзимии XML"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Васеъкунандаи фармоишӣ барои зербарномаҳои ҷафс"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Тасвирҳо барои равзанаҳои гуфтугӯ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Тасвири заминаи равзанаи гуфтугӯи умумӣ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Мавзӯъ барои равзанаи гуфтугӯи баромад аз низом"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Бастаҳои тасвири замина"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Тасвирҳо барои виҷетҳо"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Тасвири пасзамина барои виҷетҳо"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Лавҳаи соати рақамӣ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Тасвири пасзамина барои лавҳаҳо"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Пасзамина барои виҷетҳои намудсозӣ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Тасвири пасзамина барои маслиҳатҳо"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Тасвирҳои нoшаффoф барои равзанаҳои гуфтугӯ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Тасвири заминаи нoшаффoфи равзанаи гуфтугӯи умумӣ"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Мавзӯи нoшаффoф барои равзанаи гуфтугӯи баромад аз низом"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Тасвирҳои нoшаффoф барои виҷетҳо"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Тасвири пасзаминаи нoшаффoф барои лавҳаҳо"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Тасвири пасзаминаи нoшаффoф барои маслиҳатҳо"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "Файли танзимии KColorScheme"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -471,6 +309,96 @@ msgstr "Танзим кардани %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Ҳаракаткунии муҳтаво"
+
+#~ msgid "Main Script File"
+#~ msgstr "Файли нақши асосӣ"
+
+#~ msgid "Tests"
+#~ msgstr "Санҷишҳо"
+
+#~ msgid "Images"
+#~ msgstr "Тасвирҳо"
+
+#~ msgid "Themed Images"
+#~ msgstr "Тасвирҳои мавзӯӣ"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Таърифҳои танзимот"
+
+#~ msgid "User Interface"
+#~ msgstr "Воситаи корбарӣ"
+
+#~ msgid "Data Files"
+#~ msgstr "Файлҳои иттилоотӣ"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Нақшҳои иҷрошаванда"
+
+#~ msgid "Screenshot"
+#~ msgstr "Акси экран"
+
+#~ msgid "Translations"
+#~ msgstr "Тарҷумаҳо"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Танзимоти намунаи саҳифаҳои UI"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Файли танзимии XML"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Васеъкунандаи фармоишӣ барои зербарномаҳои ҷафс"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Тасвирҳо барои равзанаҳои гуфтугӯ"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Тасвири заминаи равзанаи гуфтугӯи умумӣ"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Мавзӯъ барои равзанаи гуфтугӯи баромад аз низом"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Бастаҳои тасвири замина"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Тасвирҳо барои виҷетҳо"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Тасвири пасзамина барои виҷетҳо"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Лавҳаи соати рақамӣ"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Тасвири пасзамина барои лавҳаҳо"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Пасзамина барои виҷетҳои намудсозӣ"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Тасвири пасзамина барои маслиҳатҳо"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Тасвирҳои нoшаффoф барои равзанаҳои гуфтугӯ"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Тасвири заминаи нoшаффoфи равзанаи гуфтугӯи умумӣ"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Мавзӯи нoшаффoф барои равзанаи гуфтугӯи баромад аз низом"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Тасвирҳои нoшаффoф барои виҷетҳо"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Тасвири пасзаминаи нoшаффoф барои лавҳаҳо"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Тасвири пасзаминаи нoшаффoф барои маслиҳатҳо"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "Файли танзимии KColorScheme"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Тавсифи хидматҳо"

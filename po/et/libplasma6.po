@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-03-15 02:11+0000\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
 "PO-Revision-Date: 2021-09-05 15:52+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -109,168 +109,6 @@ msgstr ""
 "Teema kettapuhvri maksimaalne suurus kilobaitides. Pane tähele, et tegu on "
 "hajusfailiga, nii et maksimaalset suurust küllap ei kasutatagi. Seepärast "
 "võib suurema suuruse määramist pidada üpris turvaliseks valikuks."
-
-#: plasma/packagestructure/packages.cpp:28
-#: plasma/packagestructure/packages.cpp:47
-#, kde-format
-msgid "Main Script File"
-msgstr "Peamine skriptifail"
-
-#: plasma/packagestructure/packages.cpp:29
-#, kde-format
-msgid "Tests"
-msgstr "Testid"
-
-#: plasma/packagestructure/packages.cpp:69
-#, kde-format
-msgid "Images"
-msgstr "Pildid"
-
-#: plasma/packagestructure/packages.cpp:70
-#, kde-format
-msgid "Themed Images"
-msgstr "Teemaga pildid"
-
-#: plasma/packagestructure/packages.cpp:76
-#, kde-format
-msgid "Configuration Definitions"
-msgstr "Seadistamise definitsioonid"
-
-#: plasma/packagestructure/packages.cpp:81
-#, kde-format
-msgid "User Interface"
-msgstr "Kasutajaliides"
-
-#: plasma/packagestructure/packages.cpp:83
-#, kde-format
-msgid "Data Files"
-msgstr "Andmefailid"
-
-#: plasma/packagestructure/packages.cpp:85
-#, kde-format
-msgid "Executable Scripts"
-msgstr "Käivitatavad skriptid"
-
-#: plasma/packagestructure/packages.cpp:89
-#, kde-format
-msgid "Screenshot"
-msgstr "Ekraanipilt"
-
-#: plasma/packagestructure/packages.cpp:91
-#, kde-format
-msgid "Translations"
-msgstr "Tõlked"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:30
-#, kde-format
-msgid "Configuration UI pages model"
-msgstr "Seadistuse UI lehekülgede mudel"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
-#, kde-format
-msgid "Configuration XML file"
-msgstr "Seadistuse XML-fail"
-
-#: plasma/packagestructure/plasma_applet_packagestructure.cpp:43
-#, kde-format
-msgid "Custom expander for compact applets"
-msgstr "Kompaktsete aplettide kohandatav laiendaja"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:30
-#, kde-format
-msgid "Images for dialogs"
-msgstr "Dialoogide pildid"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:31
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:32
-#, kde-format
-msgid "Generic dialog background"
-msgstr "Üldine dialoogi taust"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:33
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:34
-#, kde-format
-msgid "Theme for the logout dialog"
-msgstr "Väljalogimisdialoogi teema"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:36
-#, kde-format
-msgid "Wallpaper packages"
-msgstr "Taustapildipaketid"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:38
-#, kde-format
-msgid "Images for widgets"
-msgstr "Vidinate pildid"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:39
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:40
-#, kde-format
-msgid "Background image for widgets"
-msgstr "Vidinate taustapilt"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:41
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:42
-#, kde-format
-msgid "Analog clock face"
-msgstr "Analoogkella esiplaan"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:43
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:44
-#, kde-format
-msgid "Background image for panels"
-msgstr "Paneelide taustapilt"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:45
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:46
-#, kde-format
-msgid "Background for graphing widgets"
-msgstr "Graafikavidinate taust"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:47
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:48
-#, kde-format
-msgid "Background image for tooltips"
-msgstr "Kohtspikrite taustapilt"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:50
-#, kde-format
-msgid "Opaque images for dialogs"
-msgstr "Dialoogide läbipaistmatud pildid"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:51
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:52
-#, kde-format
-msgid "Opaque generic dialog background"
-msgstr "Üldine läbipaistmatu dialoogi taust"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:55
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:58
-#, kde-format
-msgid "Opaque theme for the logout dialog"
-msgstr "Väljalogimisdialoogi läbipaistmatu teema"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:60
-#, kde-format
-msgid "Opaque images for widgets"
-msgstr "Vidinate läbipaistmatud pildid"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:63
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:66
-#, kde-format
-msgid "Opaque background image for panels"
-msgstr "Paneelide läbipaistmatu taustapilt"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:67
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:68
-#, kde-format
-msgid "Opaque background image for tooltips"
-msgstr "Kohtspikrite läbipaistmatu taustapilt"
-
-#: plasma/packagestructure/plasma_theme_packagestructure.cpp:70
-#, kde-format
-msgid "KColorScheme configuration file"
-msgstr "KColorScheme seadistusfail"
 
 #: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
 #, kde-format
@@ -466,6 +304,96 @@ msgstr "Määra taustapildiks %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Kohale lohistati sisu"
+
+#~ msgid "Main Script File"
+#~ msgstr "Peamine skriptifail"
+
+#~ msgid "Tests"
+#~ msgstr "Testid"
+
+#~ msgid "Images"
+#~ msgstr "Pildid"
+
+#~ msgid "Themed Images"
+#~ msgstr "Teemaga pildid"
+
+#~ msgid "Configuration Definitions"
+#~ msgstr "Seadistamise definitsioonid"
+
+#~ msgid "User Interface"
+#~ msgstr "Kasutajaliides"
+
+#~ msgid "Data Files"
+#~ msgstr "Andmefailid"
+
+#~ msgid "Executable Scripts"
+#~ msgstr "Käivitatavad skriptid"
+
+#~ msgid "Screenshot"
+#~ msgstr "Ekraanipilt"
+
+#~ msgid "Translations"
+#~ msgstr "Tõlked"
+
+#~ msgid "Configuration UI pages model"
+#~ msgstr "Seadistuse UI lehekülgede mudel"
+
+#~ msgid "Configuration XML file"
+#~ msgstr "Seadistuse XML-fail"
+
+#~ msgid "Custom expander for compact applets"
+#~ msgstr "Kompaktsete aplettide kohandatav laiendaja"
+
+#~ msgid "Images for dialogs"
+#~ msgstr "Dialoogide pildid"
+
+#~ msgid "Generic dialog background"
+#~ msgstr "Üldine dialoogi taust"
+
+#~ msgid "Theme for the logout dialog"
+#~ msgstr "Väljalogimisdialoogi teema"
+
+#~ msgid "Wallpaper packages"
+#~ msgstr "Taustapildipaketid"
+
+#~ msgid "Images for widgets"
+#~ msgstr "Vidinate pildid"
+
+#~ msgid "Background image for widgets"
+#~ msgstr "Vidinate taustapilt"
+
+#~ msgid "Analog clock face"
+#~ msgstr "Analoogkella esiplaan"
+
+#~ msgid "Background image for panels"
+#~ msgstr "Paneelide taustapilt"
+
+#~ msgid "Background for graphing widgets"
+#~ msgstr "Graafikavidinate taust"
+
+#~ msgid "Background image for tooltips"
+#~ msgstr "Kohtspikrite taustapilt"
+
+#~ msgid "Opaque images for dialogs"
+#~ msgstr "Dialoogide läbipaistmatud pildid"
+
+#~ msgid "Opaque generic dialog background"
+#~ msgstr "Üldine läbipaistmatu dialoogi taust"
+
+#~ msgid "Opaque theme for the logout dialog"
+#~ msgstr "Väljalogimisdialoogi läbipaistmatu teema"
+
+#~ msgid "Opaque images for widgets"
+#~ msgstr "Vidinate läbipaistmatud pildid"
+
+#~ msgid "Opaque background image for panels"
+#~ msgstr "Paneelide läbipaistmatu taustapilt"
+
+#~ msgid "Opaque background image for tooltips"
+#~ msgstr "Kohtspikrite läbipaistmatu taustapilt"
+
+#~ msgid "KColorScheme configuration file"
+#~ msgstr "KColorScheme seadistusfail"
 
 #~ msgid "Service Descriptions"
 #~ msgstr "Teenuse kirjeldused"
