@@ -57,6 +57,7 @@
         "Description[nn]": "Eit friskt pust",
         "Description[pl]": "Powiew świeżego powietrza",
         "Description[pt]": "Uma brisa de ar fresco",
+        "Description[pt_BR]": "Um pouco de ar fresco",
         "Description[ru]": "Волшебные пузырьки",
         "Description[sl]": "Vdih svežega zraka",
         "Description[sv]": "Ett friskt andetag",
