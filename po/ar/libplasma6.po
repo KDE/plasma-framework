@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the libplasma5 package.
 # Safa Alfulaij <safa1996alfulaij@gmail.com>, 2014, 2015, 2017, 2018.
-# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2021, 2022.
+# Zayed Al-Saidi <zayed.alsaidi@gmail.com>, 2021, 2022, 2023.
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-04-05 02:18+0000\n"
-"PO-Revision-Date: 2022-12-24 18:30+0400\n"
+"PO-Revision-Date: 2023-04-06 12:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
 "Language: ar\n"
@@ -244,7 +244,7 @@ msgstr "خطأ في تحميل ملف QML:‏ %1 %2"
 #: plasmaquick/appletquickitem.cpp:650
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
-msgstr ""
+msgstr "خطأ في تحميل البريمج: الحزمة غير موجودة. %1"
 
 #: plasmaquick/configview.cpp:93
 #, kde-format
@@ -269,7 +269,7 @@ msgstr "فشل تثبيت الحزمة"
 #: plasmaquick/plasmoid/containmentinterface.cpp:650
 #, kde-format
 msgid "The package you just dropped is invalid."
-msgstr ""
+msgstr "الحزمة التي أسقطتها غير صالحة."
 
 #: plasmaquick/plasmoid/containmentinterface.cpp:659
 #: plasmaquick/plasmoid/containmentinterface.cpp:728
@@ -304,7 +304,7 @@ msgstr "عيّن %1"
 #: plasmaquick/plasmoid/dropmenu.cpp:28
 #, kde-format
 msgid "Content dropped"
-msgstr ""
+msgstr "أسقط المحتوى"
 
 #~ msgid "Main Script File"
 #~ msgstr "ملف السكرِبت الرئيسي"
