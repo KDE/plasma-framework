@@ -76,6 +76,7 @@
         "Name[ca@valencia]": "Air",
         "Name[ca]": "Air",
         "Name[cs]": "Vzduch",
+        "Name[de]": "Air",
         "Name[en_GB]": "Air",
         "Name[es]": "Aire",
         "Name[eu]": "Airea",
