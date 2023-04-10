@@ -120,7 +120,7 @@ public:
         CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
                                 but something application specific. "Custom" in metadata */
         CustomPanelContainment = 128, /**< A customized desktop panel. "CustomPanel" in metadata */
-        CustomEmbeddedContainment = 129, /**< A customized containment embedded in another applet */
+        CustomEmbeddedContainment = 129, /**< A customized containment embedded in another applet. "CustomEmbedded" in metadata since 6.0 */
     };
     Q_ENUM(ContainmentType)
 

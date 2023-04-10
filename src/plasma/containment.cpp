@@ -67,9 +67,11 @@ void Containment::init()
             setContainmentType(Plasma::Types::CustomPanelContainment);
         } else if (type == QLatin1String("Desktop")) {
             setContainmentType(Plasma::Types::DesktopContainment);
+        } else if (type == QLatin1String("CustomEmbedded")) {
+            setContainmentType(Plasma::Types::CustomEmbeddedContainment);
         } else {
             qCWarning(LOG_PLASMA) << "Unknown containment type requested:" << type << pluginMetaData().fileName()
-                                  << "valid values are Panel, Custom CustomPanel or Desktop";
+                                  << "valid values are Panel, Custom CustomPanel, CustomEmbedded or Desktop";
         }
     }
 
