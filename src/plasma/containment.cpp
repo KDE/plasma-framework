@@ -57,19 +57,19 @@ void Containment::init()
     Applet::init();
 
     if (d->type == Types::NoContainmentType) {
-        // setContainmentType(Plasma::Types::DesktopContainment);
         // Try to determine the containment type. It must be done as soon as possible
-        QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
-
+        const QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
         if (type == QLatin1String("Panel")) {
             setContainmentType(Plasma::Types::PanelContainment);
         } else if (type == QLatin1String("Custom")) {
             setContainmentType(Plasma::Types::CustomContainment);
         } else if (type == QLatin1String("CustomPanel")) {
             setContainmentType(Plasma::Types::CustomPanelContainment);
-            // default to desktop
-        } else {
+        } else if (type == QLatin1String("Desktop")) {
             setContainmentType(Plasma::Types::DesktopContainment);
+        } else {
+            qCWarning(LOG_PLASMA) << "Unknown containment type requested:" << type << pluginMetaData().fileName()
+                                  << "valid values are Panel, Custom CustomPanel or Desktop";
         }
     }
 
