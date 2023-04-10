@@ -109,15 +109,17 @@ public:
      * This enumeration describes the type of the Containment.
      * DesktopContainments represent main containments that will own a screen in a mutually exclusive fashion,
      * while PanelContainments are accessories which can be present multiple per screen.
+     *
+     * This value is specified in the "X-Plasma-ContainmentType" JSON-metadata value of containments.
      */
     enum ContainmentType {
         NoContainmentType = -1, /**< @internal */
-        DesktopContainment = 0, /**< A desktop containment */
-        PanelContainment, /**< A desktop panel */
+        DesktopContainment = 0, /**< A desktop containment. "Desktop" in metadata */
+        PanelContainment, /**< A desktop panel. "Panel" in metadata */
 
         CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
-                                but something application specific */
-        CustomPanelContainment = 128, /**< A customized desktop panel */
+                                but something application specific. "Custom" in metadata */
+        CustomPanelContainment = 128, /**< A customized desktop panel. "CustomPanel" in metadata */
         CustomEmbeddedContainment = 129, /**< A customized containment embedded in another applet */
     };
     Q_ENUM(ContainmentType)
