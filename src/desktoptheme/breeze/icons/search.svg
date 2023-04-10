@@ -11,7 +11,7 @@
    id="svg2"
    viewBox="0 0 54 32"
    inkscape:version="0.91 r13725"
-   sodipodi:docname="nepomuk.svgz">
+   sodipodi:docname="search.svgz">
   <sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
@@ -85,7 +85,7 @@
       </style>
   </defs>
   <g
-     id="22-22-nepomuk">
+     id="22-22-search">
     <path
        id="path7"
        class="ColorScheme-Text"
@@ -97,7 +97,7 @@
        style="opacity:1;fill:none" />
   </g>
   <g
-     id="nepomuk">
+     id="search">
     <path
        id="path12"
        class="ColorScheme-Text"
