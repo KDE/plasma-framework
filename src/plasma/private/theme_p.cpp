@@ -113,6 +113,8 @@ ThemePrivate::ThemePrivate(QObject *parent)
     updateNotificationTimer->setInterval(100);
     QObject::connect(updateNotificationTimer, &QTimer::timeout, this, &ThemePrivate::notifyOfChanged);
 
+    imageSet.setBasePath(QStringLiteral("plasma/desktopTheme/"));
+
     if (QPixmap::defaultDepth() > 8) {
 #if HAVE_X11
         // watch for background contrast effect property changes as well
@@ -854,6 +856,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
     }
 
     themeName = theme;
+    imageSet.setImageSetName(theme);
 
     // load the color scheme config
     const QString colorsFile = realTheme

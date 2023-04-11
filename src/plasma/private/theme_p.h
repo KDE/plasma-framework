@@ -16,6 +16,7 @@
 #include <KImageCache>
 #include <KPluginMetaData>
 #include <KSharedDataCache>
+#include <KSvg/ImageSet>
 #include <QDebug>
 #include <QTimer>
 
@@ -95,6 +96,7 @@ public:
     static ThemePrivate *globalTheme;
     static QHash<QString, ThemePrivate *> themes;
 
+    KSvg::ImageSet imageSet;
     QString themeName;
     KPluginMetaData pluginMetaData;
     QList<QString> fallbackThemes;

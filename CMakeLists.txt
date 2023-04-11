@@ -61,6 +61,7 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         Notifications
         Package
         Kirigami2
+        Svg
         KCMUtils
     OPTIONAL_COMPONENTS
         Wayland
