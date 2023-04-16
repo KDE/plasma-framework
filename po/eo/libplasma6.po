@@ -1,0 +1,306 @@
+# translation of libplasma6.pot to esperanto
+# Copyright (C) 2014 Free Software Foundation, Inc.
+# This file is distributed under the same license as the plasma-framework package.
+# Oliver Kellogg <okellogg@users.sourceforge.net>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: plasma-framework\n"
+"Report-Msgid-Bugs-To: https://bugs.kde.org\n"
+"POT-Creation-Date: 2023-04-05 02:18+0000\n"
+"PO-Revision-Date: 2023-04-15 07:36+0100\n"
+"Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
+"Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
+"Language: eo\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: translate-po (https://github.com/zcribe/translate-po)\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#, kde-format
+msgid "More actions"
+msgstr "Pli da agoj"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
+#, kde-format
+msgctxt "@action:button"
+msgid "Collapse"
+msgstr "Malvastigi"
+
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
+#, kde-format
+msgctxt "@action:button"
+msgid "Expand"
+msgstr "Vastigi"
+
+#: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
+#, kde-format
+msgid "Password"
+msgstr "Pasvorto"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#, kde-format
+msgid "Search…"
+msgstr "Serĉi…"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#, kde-format
+msgid "Search"
+msgstr "Serĉi"
+
+#: plasma/applet.cpp:285
+#, kde-format
+msgid "Unknown"
+msgstr "Nekonata"
+
+#: plasma/applet.cpp:657
+#, kde-format
+msgid "Activate %1 Widget"
+msgstr "Aktivigi fenestraĵon %1"
+
+#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:100
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Remove %1"
+msgstr "Forigi %1"
+
+#: plasma/containment.cpp:90 plasma/corona.cpp:368 plasma/corona.cpp:457
+#, kde-format
+msgid "Enter Edit Mode"
+msgstr "Eniri redaktan reĝimon"
+
+#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:105
+#, kde-format
+msgctxt "%1 is the name of the applet"
+msgid "Configure %1..."
+msgstr "Agordi %1..."
+
+#: plasma/corona.cpp:317 plasma/corona.cpp:444
+#, kde-format
+msgid "Lock Widgets"
+msgstr "Ŝlosi fenestraĵojn"
+
+#: plasma/corona.cpp:317
+#, kde-format
+msgid "Unlock Widgets"
+msgstr "Malŝlosi fenestraĵojn"
+
+#: plasma/corona.cpp:366
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Eliri redaktan reĝimon"
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
+#, kde-format
+msgid "Whether or not to create an on-disk cache for the theme."
+msgstr "Ĉu aŭ ne krei surdiskan kaŝmemoron por la etoso."
+
+#. i18n: ectx: label, entry, group (CachePolicies)
+#: plasma/data/kconfigxt/libplasma-theme-global.kcfg:14
+#, kde-format
+msgid ""
+"The maximum size of the on-disk Theme cache in kilobytes. Note that these "
+"files are sparse files, so the maximum size may not be used. Setting a "
+"larger size is therefore often quite safe."
+msgstr ""
+"La maksimuma grandeco de la surdiska Etoso-kaŝmemoro en kilobajtoj. Notu, ke "
+"ĉi tiuj dosieroj estas malabundaj dosieroj, do la maksimuma grandeco eble ne "
+"estas uzata. Agordi pli grandan grandecon do ofte estas sufiĉe sekura."
+
+#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
+#, kde-format
+msgctxt "misc category"
+msgid "Miscellaneous"
+msgstr "Diversaj"
+
+#: plasma/private/applet_p.cpp:120
+#, kde-format
+msgid "The %1 widget did not define which ScriptEngine to use."
+msgstr "La %1 fenestraĵo ne difinis kiun ScriptEngine uzi."
+
+#: plasma/private/applet_p.cpp:138
+#, kde-format
+msgctxt "Package file, name of the widget"
+msgid "Could not open the %1 package required for the %2 widget."
+msgstr "Ne eblis malfermi la %1 pakaĵon necesan por la %2 fenestraĵo."
+
+#: plasma/private/applet_p.cpp:146
+#, kde-format
+msgid "Show Alternatives..."
+msgstr "Montri alternativojn..."
+
+#: plasma/private/applet_p.cpp:248
+#, kde-format
+msgid "Widget Removed"
+msgstr "Fenestraĵo forigita"
+
+#: plasma/private/applet_p.cpp:249
+#, kde-format
+msgid "The widget \"%1\" has been removed."
+msgstr "La fenestraĵo \"%1\" estis forigita."
+
+#: plasma/private/applet_p.cpp:253
+#, kde-format
+msgid "Panel Removed"
+msgstr "Panelo forigita"
+
+#: plasma/private/applet_p.cpp:254
+#, kde-format
+msgid "A panel has been removed."
+msgstr "Panelo estis forigita."
+
+#: plasma/private/applet_p.cpp:257
+#, kde-format
+msgid "Desktop Removed"
+msgstr "Labortablo forigita"
+
+#: plasma/private/applet_p.cpp:258
+#, kde-format
+msgid "A desktop has been removed."
+msgstr "Labortablo estis forigita."
+
+#: plasma/private/applet_p.cpp:261
+#, kde-format
+msgid "Undo"
+msgstr "Malfari"
+
+#: plasma/private/applet_p.cpp:349
+#, kde-format
+msgid "Widget Settings"
+msgstr "Agordoj de fenestraĵoj"
+
+#: plasma/private/applet_p.cpp:355
+#, kde-format
+msgid "Remove this Widget"
+msgstr "Forigi ĉi tiun fenestraĵon"
+
+#: plasma/private/containment_p.cpp:57
+#, kde-format
+msgid "Remove this Panel"
+msgstr "Forigi ĉi tiun panelon"
+
+#: plasma/private/containment_p.cpp:59
+#, kde-format
+msgid "Remove this Activity"
+msgstr "Forigi ĉi tiun agadon"
+
+#: plasma/private/containment_p.cpp:65
+#, kde-format
+msgid "Activity Settings"
+msgstr "Agado-Agordoj"
+
+#: plasma/private/containment_p.cpp:71
+#, kde-format
+msgid "Add Widgets..."
+msgstr "Aldoni fenestraĵojn..."
+
+#: plasma/private/containment_p.cpp:186
+#, kde-format
+msgid "Could not find requested component: %1"
+msgstr "Ne eblis trovi petitan komponanton: %1"
+
+#. i18n: ectx: property (text), widget (QLabel, label)
+#: plasma/private/publish.ui:17
+#, kde-format
+msgid ""
+"Sharing a widget on the network allows you to access this widget from "
+"another computer as a remote control."
+msgstr ""
+"Kunhavigi fenestraĵon en la reto permesas al vi aliri ĉi tiun fenestraĵon de "
+"alia komputilo kiel teleregilo."
+
+#. i18n: ectx: property (text), widget (QCheckBox, publishCheckbox)
+#: plasma/private/publish.ui:27
+#, kde-format
+msgid "Share this widget on the network"
+msgstr "Kunhavigi ĉi tiun fenestraĵon en la reto"
+
+#. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
+#: plasma/private/publish.ui:37
+#, kde-format
+msgid "Allow everybody to freely access this widget"
+msgstr "Permesi al ĉiuj libere aliri ĉi tiun fenestraĵon"
+
+#: plasma/private/service_p.h:32
+#, kde-format
+msgctxt "Error message, tried to start an invalid service"
+msgid "Invalid (null) service, can not perform any operations."
+msgstr "Nevalida (nula) servo, ne povas fari ajnajn operaciojn."
+
+#: plasmaquick/appletquickitem.cpp:633
+#, kde-format
+msgid "Unknown Applet"
+msgstr "Nekonata Apleto"
+
+#: plasmaquick/appletquickitem.cpp:648
+#, kde-format
+msgid "Error loading QML file: %1 %2"
+msgstr "Eraro dum ŝarĝo de QML-dosiero: %1 %2"
+
+#: plasmaquick/appletquickitem.cpp:650
+#, kde-format
+msgid "Error loading Applet: package inexistent. %1"
+msgstr "Eraro dum ŝarĝo de apleto: pako neekzistanta. %1"
+
+#: plasmaquick/configview.cpp:93
+#, kde-format
+msgid "%1 Settings"
+msgstr "%1 Agordoj"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#, kde-format
+msgid "Plasma Package"
+msgstr "Plasma Pako"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#, kde-format
+msgid "Install"
+msgstr "Instali"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:633
+#, kde-format
+msgid "Package Installation Failed"
+msgstr "Paka Instalado Malsukcesis"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:650
+#, kde-format
+msgid "The package you just dropped is invalid."
+msgstr "La pako, kiun vi ĵus faligis, estas nevalida."
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:659
+#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#, kde-format
+msgid "Widgets"
+msgstr "Fenestraĵoj"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#, kde-format
+msgctxt "Add widget"
+msgid "Add %1"
+msgstr "Aldoni %1"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:678
+#: plasmaquick/plasmoid/containmentinterface.cpp:732
+#, kde-format
+msgctxt "Add icon widget"
+msgid "Add Icon"
+msgstr "Aldoni piktogramon"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:690
+#, kde-format
+msgid "Wallpaper"
+msgstr "Tapeto"
+
+#: plasmaquick/plasmoid/containmentinterface.cpp:700
+#, kde-format
+msgctxt "Set wallpaper"
+msgid "Set %1"
+msgstr "Agordi %1"
+
+#: plasmaquick/plasmoid/dropmenu.cpp:28
+#, kde-format
+msgid "Content dropped"
+msgstr "Enhavo perdiĝis"
