@@ -113,7 +113,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
     updateNotificationTimer->setInterval(100);
     QObject::connect(updateNotificationTimer, &QTimer::timeout, this, &ThemePrivate::notifyOfChanged);
 
-    imageSet.setBasePath(QStringLiteral("plasma/desktopTheme/"));
+    imageSet.setBasePath(QStringLiteral("plasma/desktoptheme/"));
 
     if (QPixmap::defaultDepth() > 8) {
 #if HAVE_X11
@@ -122,11 +122,21 @@ ThemePrivate::ThemePrivate(QObject *parent)
             s_backgroundContrastEffectWatcher = new EffectWatcher(QStringLiteral("_KDE_NET_WM_BACKGROUND_CONTRAST_REGION"));
         }
 
+        if (compositingActive) {
+            if (backgroundContrastActive) {
+                imageSet.setSelectors({QStringLiteral("translucent")});
+            } else {
+                imageSet.setSelectors({});
+            }
+        } else {
+            imageSet.setSelectors({QStringLiteral("opaque")});
+        }
+
         QObject::connect(s_backgroundContrastEffectWatcher, &EffectWatcher::effectChanged, this, [this](bool active) {
             if (backgroundContrastActive != active) {
                 backgroundContrastActive = active;
                 scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
-                if (active) {
+                if (backgroundContrastActive) {
                     imageSet.setSelectors({QStringLiteral("translucent")});
                 } else {
                     imageSet.setSelectors({});
