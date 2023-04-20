@@ -673,31 +673,31 @@ msgstr "Contento lassate cader"
 #~ msgstr "Schema de color de usar per applicationes."
 
 #~ msgid "Preview Images"
-#~ msgstr "Imagines de vista preliminari"
+#~ msgstr "Imagines de vista preliminar"
 
 #~ msgid "Preview for the Login Manager"
-#~ msgstr "Vista preliminari per le Gerente de Accesso"
+#~ msgstr "Vista preliminar per le Gerente de Accesso"
 
 #~ msgid "Preview for the Lock Screen"
-#~ msgstr "Vista preliminari per le schermo de bloco"
+#~ msgstr "Vista preliminar per le schermo de bloco"
 
 #~ msgid "Preview for the Userswitcher"
-#~ msgstr "Vista preliminari per le commutator de usator"
+#~ msgstr "Vista preliminar per le commutator de usator"
 
 #~ msgid "Preview for the Virtual Desktop Switcher"
-#~ msgstr "Vista preliminari per le commutator de scriptorio virtual"
+#~ msgstr "Vista preliminar per le commutator de scriptorio virtual"
 
 #~ msgid "Preview for Splash Screen"
-#~ msgstr "Vista preliminari per le schermo de Splash"
+#~ msgstr "Vista preliminar per le schermo de Splash"
 
 #~ msgid "Preview for KRunner"
-#~ msgstr "Vista preliminari per KRunner"
+#~ msgstr "Vista preliminar per KRunner"
 
 #~ msgid "Preview for the Window Decorations"
-#~ msgstr "Vista preliminari per le decorationes de fenestra"
+#~ msgstr "Vista preliminar per le decorationes de fenestra"
 
 #~ msgid "Preview for Window Switcher"
-#~ msgstr "Vista preliminari per le commutator de fenestra"
+#~ msgstr "Vista preliminar per le commutator de fenestra"
 
 #~ msgid "Login Manager"
 #~ msgstr "Gerente de Accesso"
