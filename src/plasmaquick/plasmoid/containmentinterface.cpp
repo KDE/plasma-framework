@@ -152,7 +152,6 @@ void ContainmentInterface::init()
         Q_EMIT activityNameChanged();
     });
     connect(m_containment.data(), &Plasma::Containment::wallpaperChanged, this, &ContainmentInterface::loadWallpaper);
-    connect(m_containment.data(), &Plasma::Containment::containmentTypeChanged, this, &ContainmentInterface::containmentTypeChanged);
 
     connect(m_containment.data()->actions(), &KActionCollection::changed, this, &ContainmentInterface::actionsChanged);
 }
@@ -165,11 +164,6 @@ QList<QObject *> ContainmentInterface::applets()
 Plasma::Types::ContainmentType ContainmentInterface::containmentType() const
 {
     return m_containment->containmentType();
-}
-
-void ContainmentInterface::setContainmentType(Plasma::Types::ContainmentType type)
-{
-    m_containment->setContainmentType(type);
 }
 
 Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos)

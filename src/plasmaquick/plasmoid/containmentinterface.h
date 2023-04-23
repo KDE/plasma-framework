@@ -49,7 +49,7 @@ class ContainmentInterface : public AppletInterface
     /**
      * Type of this containment TODO: notify
      */
-    Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType WRITE setContainmentType NOTIFY containmentTypeChanged)
+    Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType CONSTANT)
 
     /**
      * Activity name of this containment
@@ -98,7 +98,6 @@ public:
     QList<QObject *> applets();
 
     Plasma::Types::ContainmentType containmentType() const;
-    void setContainmentType(Plasma::Types::ContainmentType type);
 
     QString activity() const;
     QString activityName() const;
@@ -201,7 +200,6 @@ Q_SIGNALS:
     void activityNameChanged();
     void appletsChanged();
     void drawWallpaperChanged();
-    void containmentTypeChanged();
     void actionsChanged();
     void editModeChanged();
     void wallpaperInterfaceChanged();

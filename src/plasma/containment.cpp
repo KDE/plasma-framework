@@ -44,6 +44,25 @@ Containment::Containment(QObject *parentObject, const KPluginMetaData &data, con
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
     setHasConfigurationInterface(true);
+
+    // Try to determine the containment type. It must be done as soon as possible
+    const QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
+    Plasma::Types::ContainmentType newType = d->type;
+    if (type == QLatin1String("Panel")) {
+        newType = Plasma::Types::PanelContainment;
+    } else if (type == QLatin1String("Custom")) {
+        newType = Plasma::Types::CustomContainment;
+    } else if (type == QLatin1String("CustomPanel")) {
+        newType = Plasma::Types::CustomPanelContainment;
+    } else if (type == QLatin1String("Desktop")) {
+        newType = Plasma::Types::DesktopContainment;
+    } else if (type == QLatin1String("CustomEmbedded")) {
+        newType = Plasma::Types::CustomEmbeddedContainment;
+    } else {
+        qCWarning(LOG_PLASMA) << "Unknown containment type requested:" << type << pluginMetaData().fileName()
+                              << "valid values are Panel, Custom CustomPanel, CustomEmbedded or Desktop";
+    }
+    d->type = newType;
 }
 
 Containment::~Containment()
@@ -55,25 +74,6 @@ Containment::~Containment()
 void Containment::init()
 {
     Applet::init();
-
-    if (d->type == Types::NoContainmentType) {
-        // Try to determine the containment type. It must be done as soon as possible
-        const QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
-        if (type == QLatin1String("Panel")) {
-            setContainmentType(Plasma::Types::PanelContainment);
-        } else if (type == QLatin1String("Custom")) {
-            setContainmentType(Plasma::Types::CustomContainment);
-        } else if (type == QLatin1String("CustomPanel")) {
-            setContainmentType(Plasma::Types::CustomPanelContainment);
-        } else if (type == QLatin1String("Desktop")) {
-            setContainmentType(Plasma::Types::DesktopContainment);
-        } else if (type == QLatin1String("CustomEmbedded")) {
-            setContainmentType(Plasma::Types::CustomEmbeddedContainment);
-        } else {
-            qCWarning(LOG_PLASMA) << "Unknown containment type requested:" << type << pluginMetaData().fileName()
-                                  << "valid values are Panel, Custom CustomPanel, CustomEmbedded or Desktop";
-        }
-    }
 
     // connect actions
     ContainmentPrivate::addDefaultActions(actions(), this);
@@ -274,16 +274,6 @@ void Containment::restoreContents(KConfigGroup &group)
 Plasma::Types::ContainmentType Containment::containmentType() const
 {
     return d->type;
-}
-
-void Containment::setContainmentType(Plasma::Types::ContainmentType type)
-{
-    if (d->type == type) {
-        return;
-    }
-
-    d->type = type;
-    Q_EMIT containmentTypeChanged();
 }
 
 Corona *Containment::corona() const

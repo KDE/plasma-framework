@@ -253,11 +253,6 @@ Q_SIGNALS:
      */
     void uiReadyChanged(bool uiReady);
 
-    /**
-     * emitted when the containment type changed
-     */
-    void containmentTypeChanged();
-
 public Q_SLOTS:
     /**
      * Informs the Corona as to what position it is in. This is informational
@@ -282,11 +277,6 @@ public Q_SLOTS:
      * @since 5.77
      */
     void setContainmentDisplayHints(Plasma::Types::ContainmentDisplayHints hints);
-
-    /**
-     * Sets the type of this containment.
-     */
-    void setContainmentType(Plasma::Types::ContainmentType type);
 
     void reactToScreenChange();
 
