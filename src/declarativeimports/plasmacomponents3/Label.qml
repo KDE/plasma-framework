@@ -11,6 +11,10 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 T.Label {
     id: control
 
+    // Work around Qt bug where left aligned text is not right aligned
+    // in RTL mode unless horizontalAlignment is explicitly set.
+    // https://bugreports.qt.io/browse/QTBUG-95873
+    horizontalAlignment: Text.AlignLeft
     verticalAlignment: lineCount > 1 ? Text.AlignTop : Text.AlignVCenter
 
     activeFocusOnTab: false
