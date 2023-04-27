@@ -580,6 +580,11 @@ void DialogPrivate::updateLayoutParameters()
     repositionIfOffScreen();
     updateTheme();
 
+    // setting the minimum or maximum size will resize the window instantly and min <= max is enforced
+    // so we have to set maximum first in that case, but also care about the new maximum being smaller
+    // than the current minimum
+    // QTBUG-113233
+    q->setMaximumSize(max.expandedTo(q->maximumSize()));
     q->setMinimumSize(min);
     q->setMaximumSize(max);
 
