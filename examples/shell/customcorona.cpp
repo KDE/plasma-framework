@@ -47,7 +47,7 @@ void CustomCorona::load()
 
     bool desktopFound = false;
     for (auto c : containments()) {
-        if (c->containmentType() == Plasma::Types::DesktopContainment) {
+        if (c->containmentType() == Plasma::Types::ContainmentType::Desktop) {
             desktopFound = true;
             break;
         }
@@ -62,7 +62,7 @@ void CustomCorona::load()
 
     // don't let containments to be removed
     for (auto c : containments()) {
-        if (c->containmentType() == Plasma::Types::DesktopContainment) {
+        if (c->containmentType() == Plasma::Types::ContainmentType::Desktop) {
             // example of a shell without a wallpaper
             c->setWallpaper(QStringLiteral("null"));
             m_view->setContainment(c);

@@ -47,22 +47,12 @@ Containment::Containment(QObject *parentObject, const KPluginMetaData &data, con
 
     // Try to determine the containment type. It must be done as soon as possible
     const QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
-    Plasma::Types::ContainmentType newType = d->type;
-    if (type == QLatin1String("Panel")) {
-        newType = Plasma::Types::PanelContainment;
-    } else if (type == QLatin1String("Custom")) {
-        newType = Plasma::Types::CustomContainment;
-    } else if (type == QLatin1String("CustomPanel")) {
-        newType = Plasma::Types::CustomPanelContainment;
-    } else if (type == QLatin1String("Desktop")) {
-        newType = Plasma::Types::DesktopContainment;
-    } else if (type == QLatin1String("CustomEmbedded")) {
-        newType = Plasma::Types::CustomEmbeddedContainment;
-    } else {
+    QMetaEnum metaEnum = QMetaEnum::fromType<Plasma::Types::ContainmentType>();
+    d->type = (Plasma::Types::ContainmentType)metaEnum.keyToValue(type.toLocal8Bit().constData());
+    if (d->type == Plasma::Types::ContainmentType::NoContainment) {
         qCWarning(LOG_PLASMA) << "Unknown containment type requested:" << type << pluginMetaData().fileName()
-                              << "valid values are Panel, Custom CustomPanel, CustomEmbedded or Desktop";
+                              << "check Plasma::Types::ContainmentType for supported values";
     }
-    d->type = newType;
 }
 
 Containment::~Containment()
@@ -88,7 +78,7 @@ void Containment::init()
 
     QAction *configAction = actions()->action(QStringLiteral("configure"));
     if (configAction) {
-        if (d->type == Types::PanelContainment || d->type == Types::CustomPanelContainment) {
+        if (d->type == Types::ContainmentType::Panel || d->type == Types::ContainmentType::CustomPanel) {
             configAction->setText(i18n("Enter Edit Mode"));
             configAction->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
         } else {
@@ -153,7 +143,7 @@ void Containment::restore(KConfigGroup &group)
 
     if (isContainment() && KAuthorized::authorize(QStringLiteral("plasma/containment_actions"))) {
         KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
-        cfg = KConfigGroup(&cfg, QString::number(containmentType()));
+        cfg = KConfigGroup(&cfg, QString::number((int)containmentType()));
 
         // qCDebug(LOG_PLASMA) << cfg.keyList();
         if (cfg.exists()) {
@@ -166,12 +156,12 @@ void Containment::restore(KConfigGroup &group)
             KConfigGroup defaultActionsCfg;
 
             switch (d->type) {
-            case Plasma::Types::PanelContainment:
-                /* fall through*/
-            case Plasma::Types::CustomPanelContainment:
+            case Plasma::Types::ContainmentType::Panel:
+            /* fall through*/
+            case Plasma::Types::ContainmentType::CustomPanel:
                 defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Panel");
                 break;
-            case Plasma::Types::DesktopContainment:
+            case Plasma::Types::ContainmentType::Desktop:
                 defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Desktop");
                 break;
             default:

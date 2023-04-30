@@ -165,11 +165,10 @@ Containment *Corona::containmentForScreen(int screen, const QString &activity, c
     Containment *containment = nullptr;
 
     for (Containment *cont : std::as_const(d->containments)) {
-        /* clang-format off */
-        if (cont->lastScreen() == screen
+        if (cont->lastScreen() == screen //
             && ((cont->activity().isEmpty() || activity.isEmpty()) || cont->activity() == activity)
-            && (cont->containmentType() == Plasma::Types::DesktopContainment
-                || cont->containmentType() == Plasma::Types::CustomContainment)) { /* clang-format on */
+            && (cont->containmentType() == Plasma::Types::ContainmentType::Desktop //
+                || cont->containmentType() == Plasma::Types::ContainmentType::Custom)) {
             containment = cont;
         }
     }
@@ -200,9 +199,8 @@ QList<Containment *> Corona::containmentsForActivity(const QString &activity)
     }
 
     std::copy_if(d->containments.begin(), d->containments.end(), std::back_inserter(conts), [activity](Containment *cont) {
-        return cont->activity() == activity //
-            && (cont->containmentType() == Plasma::Types::DesktopContainment //
-                || cont->containmentType() == Plasma::Types::CustomContainment);
+        return cont->activity() == activity
+            && (cont->containmentType() == Plasma::Types::ContainmentType::Desktop || cont->containmentType() == Plasma::Types::ContainmentType::Custom);
     });
 
     return conts;
@@ -217,9 +215,9 @@ QList<Containment *> Corona::containmentsForScreen(int screen)
     }
 
     std::copy_if(d->containments.begin(), d->containments.end(), std::back_inserter(conts), [screen](Containment *cont) {
-        return cont->lastScreen() == screen //
-            && (cont->containmentType() == Plasma::Types::DesktopContainment //
-                || cont->containmentType() == Plasma::Types::CustomContainment);
+        return cont->lastScreen() == screen
+            && (cont->containmentType() == Plasma::Types::ContainmentType::Desktop //
+                || cont->containmentType() == Plasma::Types::ContainmentType::Custom);
     });
 
     return conts;

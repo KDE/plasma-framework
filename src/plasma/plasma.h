@@ -112,15 +112,13 @@ public:
      *
      * This value is specified in the "X-Plasma-ContainmentType" JSON-metadata value of containments.
      */
-    enum ContainmentType {
-        NoContainmentType = -1, /**< @internal */
-        DesktopContainment = 0, /**< A desktop containment. "Desktop" in metadata */
-        PanelContainment, /**< A desktop panel. "Panel" in metadata */
-
-        CustomContainment = 127, /**< A containment that is neither a desktop nor a panel
-                                but something application specific. "Custom" in metadata */
-        CustomPanelContainment = 128, /**< A customized desktop panel. "CustomPanel" in metadata */
-        CustomEmbeddedContainment = 129, /**< A customized containment embedded in another applet. "CustomEmbedded" in metadata since 6.0 */
+    enum class ContainmentType {
+        NoContainment = -1, /**< @internal */
+        Desktop = 0, /**< A desktop containment */
+        Panel, /**< A desktop panel */
+        Custom = 127, /**< A containment that is neither a desktop nor a panel but something application specific */
+        CustomPanel = 128, /**< A customized desktop panel. "CustomPanel" in metadata */
+        CustomEmbedded = 129, /**< A customized containment embedded in another applet */
     };
     Q_ENUM(ContainmentType)
 

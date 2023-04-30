@@ -29,7 +29,7 @@ ContainmentPrivate::ContainmentPrivate(Containment *c)
     , formFactor(Types::Planar)
     , location(Types::Floating)
     , lastScreen(-1)
-    , type(Plasma::Types::NoContainmentType) // never had a screen
+    , type(Plasma::Types::ContainmentType::NoContainment) // never had a screen
     , uiReady(false)
     , appletsUiReady(false)
 {
@@ -76,7 +76,7 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
 KConfigGroup ContainmentPrivate::containmentActionsConfig() const
 {
     KConfigGroup cfg = KConfigGroup(q->corona()->config(), "ActionPlugins");
-    return KConfigGroup(&cfg, QString::number(type));
+    return KConfigGroup(&cfg, QString::number((int)type));
 }
 
 void ContainmentPrivate::configChanged()
@@ -204,7 +204,7 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 
 bool ContainmentPrivate::isPanelContainment() const
 {
-    return type == Plasma::Types::PanelContainment || type == Plasma::Types::CustomPanelContainment;
+    return type == Plasma::Types::ContainmentType::Panel || type == Plasma::Types::ContainmentType::CustomPanel;
 }
 
 void ContainmentPrivate::setStarted()
