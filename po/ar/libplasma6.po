@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-05 02:18+0000\n"
+"POT-Creation-Date: 2023-05-03 02:19+0000\n"
 "PO-Revision-Date: 2023-04-06 12:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -24,13 +24,13 @@ msgstr ""
 msgid "More actions"
 msgstr "إجراءات أكثر"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "اطوِ"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -61,18 +61,18 @@ msgstr "مجهول"
 msgid "Activate %1 Widget"
 msgstr "فعّل الودجة %1"
 
-#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:86 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "أزِل %1"
 
-#: plasma/containment.cpp:90 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:92 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "ادخل نمط التحرير"
 
-#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."

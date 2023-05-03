@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-04-05 02:18+0000\n"
+"POT-Creation-Date: 2023-05-03 02:19+0000\n"
 "PO-Revision-Date: 2022-07-26 20:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -25,13 +25,13 @@ msgstr ""
 msgid "More actions"
 msgstr "Fleire handlingar"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Fald saman"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:558
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -69,13 +69,13 @@ msgstr "Start %1-elementet"
 # Men viss det ikkje finst ei tilhøyrande oppføring i scripts/frameworks/ki18n5/skjermelement.pmap, vert det heller:
 # Fjern «Panel»
 # Fjern «Global meny»
-#: plasma/containment.cpp:84 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:86 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Fjern «%1»|/|Fjern $[pron %1] $[bunden %1]"
 
-#: plasma/containment.cpp:90 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:92 plasma/corona.cpp:368 plasma/corona.cpp:457
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Start tilpassing"
@@ -87,7 +87,7 @@ msgstr "Start tilpassing"
 # Men viss det ikkje finst ei tilhøyrande oppføring i scripts/frameworks/ki18n5/skjermelement.pmap, vert det heller:
 # Set opp «Panel»
 # Set opp «Global meny»
-#: plasma/containment.cpp:93 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
