@@ -75,6 +75,7 @@
         "Id": "org.kde.plasma.%{APPNAMELC}",
         "License": "LGPL-2.1+",
         "Name": "%{APPNAME}",
+        "Name[ast]": "%{APPNAME}",
         "Name[az]": "%{TƏTBİQ_ADI}",
         "Name[be]": "%{APPNAME}",
         "Name[bg]": "%{APPNAME}",
