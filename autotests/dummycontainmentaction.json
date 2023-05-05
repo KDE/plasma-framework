@@ -1,0 +1,6 @@
+{
+    "KPlugin": {
+        "Name": "DummyContainmentActions"
+    },
+    "X-KDE-ParentApp": "plasma-shell"
+}

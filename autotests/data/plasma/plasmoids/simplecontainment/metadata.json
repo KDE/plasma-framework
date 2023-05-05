@@ -1,7 +1,8 @@
 {
     "KPlugin": {
-      "Name": "Testcontainment",
-      "Category": "System Information"
+        "Id": "simplecontainment",
+        "Name": "Testcontainment",
+        "Category": "System Information"
     },
     "KPackageStructure": "Plasma/Applet",
     "X-Plasma-ContainmentType": "Desktop",

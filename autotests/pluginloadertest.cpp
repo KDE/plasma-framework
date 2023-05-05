@@ -25,7 +25,6 @@ PluginTest::PluginTest()
 void PluginTest::listAppletCategories()
 {
     const QStringList cats = Plasma::PluginLoader::self()->listAppletCategories();
-    qDebug() << "Categories" << cats;
     QVERIFY(cats.count() > 0);
     QVERIFY(cats.contains(QLatin1String("System Information")));
 }
@@ -33,14 +32,19 @@ void PluginTest::listAppletCategories()
 void PluginTest::listContainmentActions()
 {
     const QVector<KPluginMetaData> plugins = Plasma::PluginLoader::self()->listContainmentActionsMetaData(QStringLiteral("plasma-shell"));
-    qDebug() << "Categories: " << plugins;
-    // QVERIFY(plugins.count() > 0);
+    const bool pluginFound = std::any_of(plugins.begin(), plugins.end(), [](const KPluginMetaData &data) {
+        return data.pluginId() == QLatin1String("dummycontainmentaction");
+    });
+    QVERIFY(pluginFound);
 }
 
 void PluginTest::listContainmentsOfType()
 {
-    const QList<KPluginMetaData> pluginsMetaData = Plasma::PluginLoader::listContainmentsMetaDataOfType(QStringLiteral("Desktop"));
-    QVERIFY(pluginsMetaData.count() > 0);
+    const QList<KPluginMetaData> plugins = Plasma::PluginLoader::listContainmentsMetaDataOfType(QStringLiteral("Desktop"));
+    const bool pluginFound = std::any_of(plugins.begin(), plugins.end(), [](const KPluginMetaData &data) {
+        return data.pluginId() == QLatin1String("simplecontainment");
+    });
+    QVERIFY(pluginFound);
 }
 
 #include "moc_pluginloadertest.cpp"

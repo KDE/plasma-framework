@@ -41,6 +41,10 @@ PLASMA_UNIT_TESTS(
     sharedqmlenginetest
 )
 
+kcoreaddons_add_plugin(dummycontainmentaction SOURCES dummycontainmentaction.cpp INSTALL_NAMESPACE "plasma/containmentactions" STATIC)
+target_link_libraries(dummycontainmentaction KF6::Plasma)
+kcoreaddons_target_static_plugins(pluginloadertest "plasma/containmentactions")
+
 if(HAVE_X11)
     ecm_add_test(
         dialognativetest.cpp
