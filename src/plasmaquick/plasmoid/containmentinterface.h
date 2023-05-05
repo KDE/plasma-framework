@@ -49,7 +49,7 @@ class ContainmentInterface : public AppletInterface
     /**
      * Type of this containment TODO: notify
      */
-    Q_PROPERTY(Plasma::Types::ContainmentType containmentType READ containmentType CONSTANT)
+    Q_PROPERTY(Plasma::Containment::Type containmentType READ containmentType CONSTANT)
 
     /**
      * Activity name of this containment
@@ -97,7 +97,7 @@ public:
     // For QML use
     QList<QObject *> applets();
 
-    Plasma::Types::ContainmentType containmentType() const;
+    Plasma::Containment::Type containmentType() const;
 
     QString activity() const;
     QString activityName() const;

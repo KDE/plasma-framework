@@ -89,9 +89,9 @@ void ContainmentInterface::init()
     // Create the ToolBox
     if (m_containment) {
         KConfigGroup defaults;
-        if (m_containment->containmentType() == Plasma::Types::ContainmentType::Desktop) {
+        if (m_containment->containmentType() == Plasma::Containment::Type::Desktop) {
             defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), "Desktop");
-        } else if (m_containment->containmentType() == Plasma::Types::ContainmentType::Panel) {
+        } else if (m_containment->containmentType() == Plasma::Containment::Type::Panel) {
             defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), "Panel");
         }
 
@@ -161,7 +161,7 @@ QList<QObject *> ContainmentInterface::applets()
     return m_appletInterfaces;
 }
 
-Plasma::Types::ContainmentType ContainmentInterface::containmentType() const
+Plasma::Containment::Type ContainmentInterface::containmentType() const
 {
     return m_containment->containmentType();
 }
@@ -222,10 +222,10 @@ QObject *ContainmentInterface::containmentAt(int x, int y)
         if (contInterface && contInterface->isVisible()) {
             QWindow *w = contInterface->window();
             if (w && w->geometry().contains(QPoint(window()->x(), window()->y()) + QPoint(x, y))) {
-                if (c->containmentType() == Plasma::Types::ContainmentType::CustomEmbedded) {
+                if (c->containmentType() == Plasma::Containment::Type::CustomEmbedded) {
                     continue;
                 }
-                if (c->containmentType() == Plasma::Types::ContainmentType::Desktop) {
+                if (c->containmentType() == Plasma::Containment::Type::Desktop) {
                     desktop = contInterface;
                 } else {
                     return contInterface;
@@ -596,8 +596,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
         QList<KPluginMetaData> wallpaperList;
 
-        if (m_containment->containmentType() != Plasma::Types::ContainmentType::Panel
-            && m_containment->containmentType() != Plasma::Types::ContainmentType::CustomPanel) {
+        if (m_containment->containmentType() != Plasma::Containment::Type::Panel
+            && m_containment->containmentType() != Plasma::Containment::Type::CustomPanel) {
             if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
                 wallpaperList << m_wallpaperInterface->kPackage().metadata();
             } else {
@@ -760,7 +760,7 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet)
     QPointF removalPosition = appletGraphicObject->m_positionBeforeRemoval;
     QPointF position = appletGraphicObject->position();
     if (removalPosition.x() < 0.0 && removalPosition.y() < 0.0) {
-        if (position.isNull() && m_containment->containmentType() == Plasma::Types::ContainmentType::Desktop) {
+        if (position.isNull() && m_containment->containmentType() == Plasma::Containment::Type::Desktop) {
             // If no position was provided, and we're adding an applet to the desktop,
             // add the applet to the center. This avoids always placing new applets
             // in the top left corner, which is likely to be covered by something.
@@ -788,8 +788,7 @@ void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
 
 void ContainmentInterface::loadWallpaper()
 {
-    if (m_containment->containmentType() != Plasma::Types::ContainmentType::Desktop
-        && m_containment->containmentType() != Plasma::Types::ContainmentType::Custom) {
+    if (m_containment->containmentType() != Plasma::Containment::Type::Desktop && m_containment->containmentType() != Plasma::Containment::Type::Custom) {
         return;
     }
 
@@ -986,7 +985,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     // end workaround
 
     QPoint pos = event->globalPosition().toPoint();
-    if (window() && m_containment->containmentType() == Plasma::Types::ContainmentType::Panel) {
+    if (window() && m_containment->containmentType() == Plasma::Containment::Type::Panel) {
         desktopMenu->adjustSize();
 
         if (QScreen *screen = window()->screen()) {
@@ -1097,7 +1096,7 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 
     desktopMenu->addSeparator();
-    if (m_containment->containmentType() == Plasma::Types::ContainmentType::Desktop) {
+    if (m_containment->containmentType() == Plasma::Containment::Type::Desktop) {
         auto action = m_containment->corona()->actions()->action(QStringLiteral("edit mode"));
         if (action) {
             desktopMenu->addAction(action);
@@ -1107,7 +1106,7 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 
     if (m_containment->immutability() == Plasma::Types::Mutable
-        && (m_containment->containmentType() != Plasma::Types::ContainmentType::Panel || m_containment->isUserConfiguring())) {
+        && (m_containment->containmentType() != Plasma::Containment::Type::Panel || m_containment->isUserConfiguring())) {
         QAction *closeApplet = applet->actions()->action(QStringLiteral("remove"));
         // qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
@@ -1153,8 +1152,8 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
         // it probably didn't bother implementing the function. give the user a chance to set
         // a better plugin.  note that if the user sets no-plugin this won't happen...
         /* clang-format off */
-        if ((m_containment->containmentType() != Plasma::Types::ContainmentType::Panel
-                && m_containment->containmentType() != Plasma::Types::ContainmentType::CustomPanel)
+        if ((m_containment->containmentType() != Plasma::Containment::Type::Panel
+                && m_containment->containmentType() != Plasma::Containment::Type::CustomPanel)
             && m_containment->actions()->action(QStringLiteral("configure"))) { /* clang-format on */
             desktopMenu->addAction(m_containment->actions()->action(QStringLiteral("configure")));
         }

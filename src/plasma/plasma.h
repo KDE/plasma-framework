@@ -106,23 +106,6 @@ public:
     Q_FLAG(ContainmentDisplayHints)
 
     /**
-     * This enumeration describes the type of the Containment.
-     * DesktopContainments represent main containments that will own a screen in a mutually exclusive fashion,
-     * while PanelContainments are accessories which can be present multiple per screen.
-     *
-     * This value is specified in the "X-Plasma-ContainmentType" JSON-metadata value of containments.
-     */
-    enum class ContainmentType {
-        NoContainment = -1, /**< @internal */
-        Desktop = 0, /**< A desktop containment */
-        Panel, /**< A desktop panel */
-        Custom = 127, /**< A containment that is neither a desktop nor a panel but something application specific */
-        CustomPanel = 128, /**< A customized desktop panel. "CustomPanel" in metadata */
-        CustomEmbedded = 129, /**< A customized containment embedded in another applet */
-    };
-    Q_ENUM(ContainmentType)
-
-    /**
      * The Direction enumeration describes in which direction, relative to the
      * Applet (and its managing container), popup menus, expanders, balloons,
      * message boxes, arrows and other such visually associated widgets should

@@ -29,7 +29,7 @@ ContainmentPrivate::ContainmentPrivate(Containment *c)
     , formFactor(Types::Planar)
     , location(Types::Floating)
     , lastScreen(-1)
-    , type(Plasma::Types::ContainmentType::NoContainment) // never had a screen
+    , type(Plasma::Containment::Type::NoContainment) // never had a screen
     , uiReady(false)
     , appletsUiReady(false)
 {
@@ -204,7 +204,7 @@ void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 
 bool ContainmentPrivate::isPanelContainment() const
 {
-    return type == Plasma::Types::ContainmentType::Panel || type == Plasma::Types::ContainmentType::CustomPanel;
+    return type == Plasma::Containment::Type::Panel || type == Plasma::Containment::Type::CustomPanel;
 }
 
 void ContainmentPrivate::setStarted()

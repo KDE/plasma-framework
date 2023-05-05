@@ -167,8 +167,8 @@ Containment *Corona::containmentForScreen(int screen, const QString &activity, c
     for (Containment *cont : std::as_const(d->containments)) {
         if (cont->lastScreen() == screen //
             && ((cont->activity().isEmpty() || activity.isEmpty()) || cont->activity() == activity)
-            && (cont->containmentType() == Plasma::Types::ContainmentType::Desktop //
-                || cont->containmentType() == Plasma::Types::ContainmentType::Custom)) {
+            && (cont->containmentType() == Plasma::Containment::Type::Desktop //
+                || cont->containmentType() == Plasma::Containment::Type::Custom)) {
             containment = cont;
         }
     }
@@ -200,7 +200,7 @@ QList<Containment *> Corona::containmentsForActivity(const QString &activity)
 
     std::copy_if(d->containments.begin(), d->containments.end(), std::back_inserter(conts), [activity](Containment *cont) {
         return cont->activity() == activity
-            && (cont->containmentType() == Plasma::Types::ContainmentType::Desktop || cont->containmentType() == Plasma::Types::ContainmentType::Custom);
+            && (cont->containmentType() == Plasma::Containment::Type::Desktop || cont->containmentType() == Plasma::Containment::Type::Custom);
     });
 
     return conts;
@@ -216,8 +216,8 @@ QList<Containment *> Corona::containmentsForScreen(int screen)
 
     std::copy_if(d->containments.begin(), d->containments.end(), std::back_inserter(conts), [screen](Containment *cont) {
         return cont->lastScreen() == screen
-            && (cont->containmentType() == Plasma::Types::ContainmentType::Desktop //
-                || cont->containmentType() == Plasma::Types::ContainmentType::Custom);
+            && (cont->containmentType() == Plasma::Containment::Type::Desktop //
+                || cont->containmentType() == Plasma::Containment::Type::Custom);
     });
 
     return conts;

@@ -47,11 +47,11 @@ Containment::Containment(QObject *parentObject, const KPluginMetaData &data, con
 
     // Try to determine the containment type. It must be done as soon as possible
     const QString type = pluginMetaData().value(QStringLiteral("X-Plasma-ContainmentType"));
-    QMetaEnum metaEnum = QMetaEnum::fromType<Plasma::Types::ContainmentType>();
-    d->type = (Plasma::Types::ContainmentType)metaEnum.keyToValue(type.toLocal8Bit().constData());
-    if (d->type == Plasma::Types::ContainmentType::NoContainment) {
+    QMetaEnum metaEnum = QMetaEnum::fromType<Plasma::Containment::Type>();
+    d->type = (Plasma::Containment::Type)metaEnum.keyToValue(type.toLocal8Bit().constData());
+    if (d->type == Plasma::Containment::Type::NoContainment) {
         qCWarning(LOG_PLASMA) << "Unknown containment type requested:" << type << pluginMetaData().fileName()
-                              << "check Plasma::Types::ContainmentType for supported values";
+                              << "check Plasma::Containment::Type for supported values";
     }
 }
 
@@ -78,7 +78,7 @@ void Containment::init()
 
     QAction *configAction = actions()->action(QStringLiteral("configure"));
     if (configAction) {
-        if (d->type == Types::ContainmentType::Panel || d->type == Types::ContainmentType::CustomPanel) {
+        if (d->type == Containment::Type::Panel || d->type == Containment::Type::CustomPanel) {
             configAction->setText(i18n("Enter Edit Mode"));
             configAction->setIcon(QIcon::fromTheme(QStringLiteral("document-edit")));
         } else {
@@ -156,12 +156,12 @@ void Containment::restore(KConfigGroup &group)
             KConfigGroup defaultActionsCfg;
 
             switch (d->type) {
-            case Plasma::Types::ContainmentType::Panel:
+            case Plasma::Containment::Type::Panel:
             /* fall through*/
-            case Plasma::Types::ContainmentType::CustomPanel:
+            case Plasma::Containment::Type::CustomPanel:
                 defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Panel");
                 break;
-            case Plasma::Types::ContainmentType::Desktop:
+            case Plasma::Containment::Type::Desktop:
                 defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Desktop");
                 break;
             default:
@@ -261,7 +261,7 @@ void Containment::restoreContents(KConfigGroup &group)
     }
 }
 
-Plasma::Types::ContainmentType Containment::containmentType() const
+Plasma::Containment::Type Containment::containmentType() const
 {
     return d->type;
 }
