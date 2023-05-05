@@ -416,7 +416,7 @@ Item {
     TapHandler {
         enabled: listItem.hasExpandableContent
 
-        acceptedPointerTypes: PointerDevice.GenericPointer | PointerDevice.Finger
+        acceptedPointerTypes: PointerDevice.Generic | PointerDevice.Finger
 
         onSingleTapped: {
             listItem.ListView.view.currentIndex = index
