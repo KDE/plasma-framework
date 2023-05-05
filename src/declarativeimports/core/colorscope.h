@@ -17,11 +17,11 @@
 class QQuickItem;
 
 /**
- * @class ColorScope
- *
  * @short Sets the colour scheme to be used by all child items
  *
- * It is exposed as org.kde.plasma.core.ColorScope
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class ColorScope : public QQuickItem
 {

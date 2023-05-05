@@ -17,8 +17,11 @@ namespace Plasma
 class Svg;
 
 /**
- * @class SvgItem
  * @short Displays an SVG or an element from an SVG file
+ *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class SvgItem : public QQuickItem
 {

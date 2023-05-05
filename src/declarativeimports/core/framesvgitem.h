@@ -19,9 +19,11 @@ namespace Plasma
 class FrameSvg;
 
 /**
- * @class FrameSvgItemMargins
- *
  * @short The sizes of a frame's margins.
+ *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class FrameSvgItemMargins : public QObject
 {
@@ -89,11 +91,11 @@ private:
 };
 
 /**
- * @class FrameSvgItem
- *
  * @short Provides an SVG with borders.
  *
- * It is exposed as org.kde.plasma.core.FrameSvgItem
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class FrameSvgItem : public QQuickItem
 {

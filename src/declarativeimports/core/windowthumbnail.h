@@ -61,6 +61,9 @@ class WindowTextureProvider;
  * }
  * @endcode
  *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class WindowThumbnail : public QQuickItem, public QAbstractNativeEventFilter
 {

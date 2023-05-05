@@ -15,8 +15,6 @@
 namespace Plasma
 {
 /**
- * @class QuickTheme plasma/theme.h <Plasma/Theme>
- *
  * @short Interface to the Plasma theme
  *
  *
@@ -27,6 +25,10 @@ namespace Plasma
  * Plasma::Svg uses Plasma::Theme internally to locate and load the appropriate
  * SVG data. Alternatively, Plasma::Theme can be used directly to retrieve
  * file system paths to SVGs by name.
+ *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class QuickTheme : public Plasma::Theme
 {

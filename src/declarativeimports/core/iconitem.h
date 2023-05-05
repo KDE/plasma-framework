@@ -22,8 +22,11 @@ class IconItemSource;
 class SvgSource;
 
 /**
- * @class IconItem
  * @short Displays an icon, either from the standard QIcon system or where applicable from the theme SVG files
+ *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class IconItem : public QQuickItem
 {
