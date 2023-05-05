@@ -22,6 +22,3 @@ plasma_install_desktoptheme_svgs(oxygen SUBPATH opaque/widgets FILES ${opaque})
 FILE(GLOB opaque opaque/dialogs/*.svg)
 plasma_install_desktoptheme_svgs(oxygen SUBPATH opaque/dialogs FILES ${opaque})
 
-FILE(GLOB icons ../air/icons/*.svg)
-plasma_install_desktoptheme_svgs(oxygen SUBPATH icons FILES ${icons})
-
