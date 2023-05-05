@@ -32,6 +32,8 @@ include(ECMDeprecationSettings)
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
 
+option(BUILD_DESKTOPTHEMES "Build with desktop themes. Turn this off when getting the desktop files from KF6" ON)
+
 ecm_setup_version(PROJECT
                   VARIABLE_PREFIX PLASMA
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"

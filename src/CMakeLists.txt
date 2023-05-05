@@ -1,4 +1,6 @@
-add_subdirectory(desktoptheme)
+if(BUILD_DESKTOPTHEMES)
+    add_subdirectory(desktoptheme)
+endif()
 add_subdirectory(plasma)
 add_subdirectory(declarativeimports)
 add_subdirectory(plasmapkg)
