@@ -151,7 +151,7 @@
     <g
        transform="translate(271.99999,475.36213)"
        style="fill:none"
-       id="osd-duplicate"
+       id="64-64-osd-duplicate"
        inkscape:label="#64-64osd-duplicate">
       <rect
          id="rect4268"
@@ -175,7 +175,7 @@
     </g>
     <g
        transform="translate(415.99999,517.36213)"
-       id="128-128-osd-duplicate"
+       id="osd-duplicate"
        inkscape:label="#128-128osd-duplicate">
       <rect
          style="fill:none"
@@ -251,7 +251,7 @@
     <g
        transform="translate(271.99999,603.36213)"
        style="fill:none"
-       id="osd-rotate-ccw">
+       id="64-64-osd-rotate-ccw">
       <rect
          id="rect4252"
          height="64"
@@ -274,7 +274,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-rotate-ccw"
+       id="osd-rotate-ccw"
        transform="translate(143.99999,539.36213)">
       <rect
          id="rect4286"
@@ -375,7 +375,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-rotate-cw"
+       id="osd-rotate-cw"
        transform="translate(143.99999,667.36213)">
       <rect
          id="rect4288"
@@ -451,7 +451,7 @@
     <g
        transform="translate(271.99999,859.36213)"
        style="fill:none"
-       id="osd-rotate-flip"
+       id="64-64-osd-rotate-flip"
        inkscape:label="#osd-rotate-flip">
       <rect
          id="rect4249"
@@ -475,7 +475,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-rotate-flip"
+       id="osd-rotate-flip"
        transform="translate(143.99999,795.36213)">
       <rect
          id="rect4274"
@@ -552,7 +552,7 @@
     <g
        transform="translate(271.99999,987.36216)"
        style="fill:none"
-       id="osd-rotate-normal">
+       id="64-64-osd-rotate-normal">
       <rect
          id="rect4263"
          height="64"
@@ -575,7 +575,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-rotate-normal"
+       id="osd-rotate-normal"
        transform="translate(143.99999,923.36216)">
       <rect
          id="rect4294"
@@ -654,7 +654,7 @@
     <g
        transform="translate(0,604.36213)"
        style="fill:none"
-       id="osd-sbs-left">
+       id="64-64-osd-sbs-left">
       <rect
          id="rect4252-1"
          height="64"
@@ -677,7 +677,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-sbs-left"
+       id="osd-sbs-left"
        transform="translate(-128.00001,540.36213)">
       <rect
          id="rect4280"
@@ -756,7 +756,7 @@
     <g
        transform="translate(0,731.36213)"
        style="fill:none"
-       id="osd-sbs-sright">
+       id="64-64-osd-sbs-sright">
       <rect
          id="rect4265"
          height="64"
@@ -779,7 +779,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-sbs-sright"
+       id="osd-sbs-sright"
        transform="translate(-128.00001,668.36213)">
       <rect
          id="rect4296"
@@ -868,7 +868,7 @@
     <g
        transform="translate(0,859.36213)"
        style="fill:none"
-       id="osd-shutd-laptop">
+       id="64-64-osd-shutd-laptop">
       <rect
          id="rect4260"
          height="64"
@@ -896,7 +896,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-shutd-laptop"
+       id="osd-shutd-laptop"
        transform="translate(-128.00001,795.36213)">
       <rect
          id="rect4291"
@@ -986,7 +986,7 @@
     </g>
     <g
        style="fill:none"
-       id="osd-shutd-screen"
+       id="64-64-osd-shutd-screen"
        transform="translate(0,988.36216)">
       <rect
          id="rect4271"
@@ -1016,7 +1016,7 @@
     </g>
     <g
        style="fill:none"
-       id="128-128-osd-shutd-screen"
+       id="osd-shutd-screen"
        transform="translate(-128.00001,923.36216)">
       <rect
          id="rect4305"
