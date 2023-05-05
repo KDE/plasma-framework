@@ -30,11 +30,11 @@ class Info;
 }
 
 /**
- * @class ContainmentInterface
- *
  * @brief This class is exposed to containments QML as the attached property Plasmoid
  *
- *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.plasmoid @endcode
+ * @version 2.0
  */
 class ContainmentInterface : public AppletInterface
 {

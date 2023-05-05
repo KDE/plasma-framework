@@ -35,7 +35,9 @@ class ConfigLoader;
  *
  * @short This class is exposed to applets in QML as the attached property Plasmoid
  *
- * \@import org.kde.plasma.plasmoid
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.plasmoid @endcode
+ * @version 2.0
  */
 class AppletInterface : public PlasmaQuick::AppletQuickItem
 {

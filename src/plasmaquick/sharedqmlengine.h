@@ -25,8 +25,6 @@ namespace PlasmaQuick
 class SharedQmlEnginePrivate;
 
 /**
- * @class PlasmaQuick::SharedQmlEngine PlasmaQuick/sharedqmlengine.h PlasmaQuick/SharedQmlEngine
- *
  * @short An object that instantiates an entire QML context, with its own declarative engine
  *
  * PlasmaQuick::SharedQmlEngine provides a class to conveniently use QML based

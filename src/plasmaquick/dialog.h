@@ -39,8 +39,6 @@ namespace PlasmaQuick
 class DialogPrivate;
 
 /**
- * @class Dialog
- *
  * Dialog creates a Plasma themed top level window that can contain any QML component.
  *
  * It can be automatically positioned relative to a visual parent
@@ -66,6 +64,9 @@ class DialogPrivate;
  * }
  * @endcode
  *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.core @endcode
+ * @version 2.0
  */
 class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
 {

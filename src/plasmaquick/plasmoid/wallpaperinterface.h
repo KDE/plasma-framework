@@ -24,11 +24,11 @@ class SharedQmlEngine;
 }
 
 /**
- * @class WallpaperInterface
- *
  * @brief This class is exposed to wallpapers as the attached property "wallpaper"
  *
- *
+ * <b>Import Statement</b>
+ * @code import org.kde.plasma.plasmoid @endcode
+ * @version 2.0
  */
 class WallpaperInterface : public QQuickItem
 {
