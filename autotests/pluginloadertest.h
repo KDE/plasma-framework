@@ -19,9 +19,6 @@ private Q_SLOTS:
     void listAppletCategories();
     void listContainmentActions();
     void listContainmentsOfType();
-
-private:
-    bool m_buildonly;
 };
 
 #endif

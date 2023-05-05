@@ -17,29 +17,30 @@
 QTEST_MAIN(PluginTest)
 
 PluginTest::PluginTest()
-    : m_buildonly(false)
 {
+    // To pick up the simpelcontianment dummy package
+    qputenv("XDG_DATA_DIRS", QFINDTESTDATA("data/").toLocal8Bit().constData());
 }
 
 void PluginTest::listAppletCategories()
 {
     const QStringList cats = Plasma::PluginLoader::self()->listAppletCategories();
     qDebug() << "Categories" << cats;
-    QVERIFY(cats.count() > 0 || m_buildonly);
+    QVERIFY(cats.count() > 0);
+    QVERIFY(cats.contains(QLatin1String("System Information")));
 }
 
 void PluginTest::listContainmentActions()
 {
     const QVector<KPluginMetaData> plugins = Plasma::PluginLoader::self()->listContainmentActionsMetaData(QStringLiteral("plasma-shell"));
-    qDebug() << "Categories: " << plugins.count();
-    // QVERIFY(plugins.count() > 0 || m_buildonly);
+    qDebug() << "Categories: " << plugins;
+    // QVERIFY(plugins.count() > 0);
 }
 
 void PluginTest::listContainmentsOfType()
 {
     const QList<KPluginMetaData> pluginsMetaData = Plasma::PluginLoader::listContainmentsMetaDataOfType(QStringLiteral("Desktop"));
-    qDebug() << "Desktop Containments MetaData: " << pluginsMetaData.count();
-    QVERIFY(pluginsMetaData.count() > 0 || m_buildonly);
+    QVERIFY(pluginsMetaData.count() > 0);
 }
 
 #include "moc_pluginloadertest.cpp"
