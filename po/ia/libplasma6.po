@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 02:19+0000\n"
+"POT-Creation-Date: 2023-05-06 02:08+0000\n"
 "PO-Revision-Date: 2023-02-01 23:05+0100\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -39,12 +39,12 @@ msgstr "Expande"
 msgid "Password"
 msgstr "Contrasigno"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search…"
 msgstr "Cerca…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
 #, kde-format
 msgid "Search"
 msgstr "Cerca"

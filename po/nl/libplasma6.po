@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 02:19+0000\n"
+"POT-Creation-Date: 2023-05-06 02:08+0000\n"
 "PO-Revision-Date: 2022-07-25 12:38+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
@@ -39,12 +39,12 @@ msgstr "Uitvouwen"
 msgid "Password"
 msgstr "Wachtwoord"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search…"
 msgstr "Zoeken…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
 #, kde-format
 msgid "Search"
 msgstr "Zoeken"

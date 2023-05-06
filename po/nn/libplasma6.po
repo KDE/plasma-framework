@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 02:19+0000\n"
+"POT-Creation-Date: 2023-05-06 02:08+0000\n"
 "PO-Revision-Date: 2022-07-26 20:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -42,12 +42,12 @@ msgstr "Fald ut"
 msgid "Password"
 msgstr "Passord"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search…"
 msgstr "Søk …"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
 #, kde-format
 msgid "Search"
 msgstr "Søk"

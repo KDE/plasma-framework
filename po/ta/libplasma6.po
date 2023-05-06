@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 02:19+0000\n"
+"POT-Creation-Date: 2023-05-06 02:08+0000\n"
 "PO-Revision-Date: 2023-03-26 12:30+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
@@ -39,12 +39,12 @@ msgstr "விரி"
 msgid "Password"
 msgstr "கடவுச்சொல்"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search…"
 msgstr "தேடு…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
 #, kde-format
 msgid "Search"
 msgstr "தேடு"

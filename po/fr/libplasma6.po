@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-03 02:19+0000\n"
+"POT-Creation-Date: 2023-05-06 02:08+0000\n"
 "PO-Revision-Date: 2023-01-08 18:16+0100\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard]neuf.fr>\n"
 "Language-Team: fr\n"
@@ -54,12 +54,12 @@ msgstr "Développer"
 msgid "Password"
 msgstr "Mot de passe"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search…"
 msgstr "Rechercher..."
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
 #, kde-format
 msgid "Search"
 msgstr "Rechercher"
