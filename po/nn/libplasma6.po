@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-06 02:08+0000\n"
+"POT-Creation-Date: 2023-05-10 02:05+0000\n"
 "PO-Revision-Date: 2022-07-26 20:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -69,13 +69,13 @@ msgstr "Start %1-elementet"
 # Men viss det ikkje finst ei tilhøyrande oppføring i scripts/frameworks/ki18n5/skjermelement.pmap, vert det heller:
 # Fjern «Panel»
 # Fjern «Global meny»
-#: plasma/containment.cpp:86 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:76 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Fjern «%1»|/|Fjern $[pron %1] $[bunden %1]"
 
-#: plasma/containment.cpp:92 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Start tilpassing"
@@ -87,23 +87,23 @@ msgstr "Start tilpassing"
 # Men viss det ikkje finst ei tilhøyrande oppføring i scripts/frameworks/ki18n5/skjermelement.pmap, vert det heller:
 # Set opp «Panel»
 # Set opp «Global meny»
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Set opp «%1» …|/|Set opp $[dobbelbest %1]$[bunden %1] …"
 
-#: plasma/corona.cpp:317 plasma/corona.cpp:444
+#: plasma/corona.cpp:315 plasma/corona.cpp:442
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Lås elementa"
 
-#: plasma/corona.cpp:317
+#: plasma/corona.cpp:315
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Lås opp elementa"
 
-#: plasma/corona.cpp:366
+#: plasma/corona.cpp:364
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Avslutt tilpassing"
@@ -266,51 +266,51 @@ msgstr "Feil ved lasting av miniprogram: pakken finst ikkje. %1"
 msgid "%1 Settings"
 msgstr "Set opp «%1»|/|Set opp $[dobbelbest %1]$[bunden %1]"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:613
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma-pakke"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:617
 #, kde-format
 msgid "Install"
 msgstr "Installer"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:633
+#: plasmaquick/plasmoid/containmentinterface.cpp:628
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Feil ved pakkeinstallering"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:650
+#: plasmaquick/plasmoid/containmentinterface.cpp:645
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Pakken du sleppte er ugyldig."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:659
-#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#: plasmaquick/plasmoid/containmentinterface.cpp:654
+#: plasmaquick/plasmoid/containmentinterface.cpp:723
 #, kde-format
 msgid "Widgets"
 msgstr "Skjermelement"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:659
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Legg til %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:678
-#: plasmaquick/plasmoid/containmentinterface.cpp:732
+#: plasmaquick/plasmoid/containmentinterface.cpp:673
+#: plasmaquick/plasmoid/containmentinterface.cpp:727
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Legg til ikon"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:690
+#: plasmaquick/plasmoid/containmentinterface.cpp:685
 #, kde-format
 msgid "Wallpaper"
 msgstr "Bakgrunnsbilete"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:700
+#: plasmaquick/plasmoid/containmentinterface.cpp:695
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

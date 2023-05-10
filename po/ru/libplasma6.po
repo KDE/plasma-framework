@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-06 02:08+0000\n"
+"POT-Creation-Date: 2023-05-10 02:05+0000\n"
 "PO-Revision-Date: 2022-08-11 15:23+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -75,34 +75,34 @@ msgstr "Неизвестный"
 msgid "Activate %1 Widget"
 msgstr "Сделать виджет «%1» активным"
 
-#: plasma/containment.cpp:86 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:76 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Удалить виджет «%1»"
 
-#: plasma/containment.cpp:92 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Режим редактирования"
 
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Настроить виджет «%1»..."
 
-#: plasma/corona.cpp:317 plasma/corona.cpp:444
+#: plasma/corona.cpp:315 plasma/corona.cpp:442
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Заблокировать виджеты"
 
-#: plasma/corona.cpp:317
+#: plasma/corona.cpp:315
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Разблокировать виджеты"
 
-#: plasma/corona.cpp:366
+#: plasma/corona.cpp:364
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Выйти из режима редактирования"
@@ -269,52 +269,52 @@ msgstr "Ошибка загрузки виджета: пакет не сущес
 msgid "%1 Settings"
 msgstr "Настройка виджета «%1»"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:613
 #, kde-format
 msgid "Plasma Package"
 msgstr "Пакет Plasma"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:617
 #, kde-format
 msgid "Install"
 msgstr "Установить"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:633
+#: plasmaquick/plasmoid/containmentinterface.cpp:628
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Ошибка установки пакета"
 
 # BUGME: what does "dropped" mean here? --aspotashev
-#: plasmaquick/plasmoid/containmentinterface.cpp:650
+#: plasmaquick/plasmoid/containmentinterface.cpp:645
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Некорректный пакет."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:659
-#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#: plasmaquick/plasmoid/containmentinterface.cpp:654
+#: plasmaquick/plasmoid/containmentinterface.cpp:723
 #, kde-format
 msgid "Widgets"
 msgstr "Виджеты"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:659
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Добавить виджет «%1»"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:678
-#: plasmaquick/plasmoid/containmentinterface.cpp:732
+#: plasmaquick/plasmoid/containmentinterface.cpp:673
+#: plasmaquick/plasmoid/containmentinterface.cpp:727
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Добавить значок"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:690
+#: plasmaquick/plasmoid/containmentinterface.cpp:685
 #, kde-format
 msgid "Wallpaper"
 msgstr "Обои"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:700
+#: plasmaquick/plasmoid/containmentinterface.cpp:695
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

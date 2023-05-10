@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-06 02:08+0000\n"
+"POT-Creation-Date: 2023-05-10 02:05+0000\n"
 "PO-Revision-Date: 2013-03-09 14:27+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -59,34 +59,34 @@ msgstr "अपरिचीत"
 msgid "Activate %1 Widget"
 msgstr ""
 
-#: plasma/containment.cpp:86 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:76 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr ""
 
-#: plasma/containment.cpp:92 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr ""
 
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr ""
 
-#: plasma/corona.cpp:317 plasma/corona.cpp:444
+#: plasma/corona.cpp:315 plasma/corona.cpp:442
 #, kde-format
 msgid "Lock Widgets"
 msgstr ""
 
-#: plasma/corona.cpp:317
+#: plasma/corona.cpp:315
 #, kde-format
 msgid "Unlock Widgets"
 msgstr ""
 
-#: plasma/corona.cpp:366
+#: plasma/corona.cpp:364
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr ""
@@ -248,53 +248,53 @@ msgstr ""
 msgid "%1 Settings"
 msgstr "%1 संयोजना"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:613
 #, fuzzy, kde-format
 #| msgid "Plasma Package Manager"
 msgid "Plasma Package"
 msgstr "प्लाज्मा पॅकेज व्यवस्थापक"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:617
 #, kde-format
 msgid "Install"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:633
+#: plasmaquick/plasmoid/containmentinterface.cpp:628
 #, fuzzy, kde-format
 #| msgid "Error: Installation of %1 failed: %2"
 msgid "Package Installation Failed"
 msgstr "त्रुटी : %1 ची प्रतिष्ठापना करण्यास अपयश: %2"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:650
+#: plasmaquick/plasmoid/containmentinterface.cpp:645
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:659
-#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#: plasmaquick/plasmoid/containmentinterface.cpp:654
+#: plasmaquick/plasmoid/containmentinterface.cpp:723
 #, kde-format
 msgid "Widgets"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:659
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:678
-#: plasmaquick/plasmoid/containmentinterface.cpp:732
+#: plasmaquick/plasmoid/containmentinterface.cpp:673
+#: plasmaquick/plasmoid/containmentinterface.cpp:727
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:690
+#: plasmaquick/plasmoid/containmentinterface.cpp:685
 #, kde-format
 msgid "Wallpaper"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:700
+#: plasmaquick/plasmoid/containmentinterface.cpp:695
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

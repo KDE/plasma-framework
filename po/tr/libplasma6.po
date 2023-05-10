@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-06 02:08+0000\n"
+"POT-Creation-Date: 2023-05-10 02:05+0000\n"
 "PO-Revision-Date: 2023-02-11 10:40+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -62,34 +62,34 @@ msgstr "Bilinmeyen"
 msgid "Activate %1 Widget"
 msgstr "%1 Araç Takımını Etkinleştir"
 
-#: plasma/containment.cpp:86 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:76 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1 kaldır"
 
-#: plasma/containment.cpp:92 plasma/corona.cpp:368 plasma/corona.cpp:457
+#: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Düzenleme Kipine Gir"
 
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1 Ögesini Yapılandır..."
 
-#: plasma/corona.cpp:317 plasma/corona.cpp:444
+#: plasma/corona.cpp:315 plasma/corona.cpp:442
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Araç Takımlarını Kilitle"
 
-#: plasma/corona.cpp:317
+#: plasma/corona.cpp:315
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Araç Takımlarının Kilidini Aç"
 
-#: plasma/corona.cpp:366
+#: plasma/corona.cpp:364
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Düzenleme Kipinden Çık"
@@ -252,51 +252,51 @@ msgstr "Uygulamacık yükleme hatası: Paket mevcut değil. %1"
 msgid "%1 Settings"
 msgstr "%1 Ayarları"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:613
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma Paketi"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:617
 #, kde-format
 msgid "Install"
 msgstr "Kur"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:633
+#: plasmaquick/plasmoid/containmentinterface.cpp:628
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Paket Kurulumu Başarısız"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:650
+#: plasmaquick/plasmoid/containmentinterface.cpp:645
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Az önce bıraktığınız paket geçersiz."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:659
-#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#: plasmaquick/plasmoid/containmentinterface.cpp:654
+#: plasmaquick/plasmoid/containmentinterface.cpp:723
 #, kde-format
 msgid "Widgets"
 msgstr "Araç Takımlanı"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:659
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1 Ekle"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:678
-#: plasmaquick/plasmoid/containmentinterface.cpp:732
+#: plasmaquick/plasmoid/containmentinterface.cpp:673
+#: plasmaquick/plasmoid/containmentinterface.cpp:727
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Simge Ekle"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:690
+#: plasmaquick/plasmoid/containmentinterface.cpp:685
 #, kde-format
 msgid "Wallpaper"
 msgstr "Duvar Kağıdı"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:700
+#: plasmaquick/plasmoid/containmentinterface.cpp:695
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
