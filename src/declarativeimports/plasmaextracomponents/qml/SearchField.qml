@@ -3,8 +3,6 @@
 // SPDX-License-Identifier: LGPL-2.0-or-later
 
 import QtQuick 2.15
-import QtQuick.Window 2.15
-
 import QtQuick.Controls 2.15 as QQC2
 
 import org.kde.plasma.components 3.0 as PlasmaComponents3
@@ -60,7 +58,6 @@ PlasmaExtras.ActionTextField {
         source: "search"
 
         Behavior on opacity {
-            enabled: Window.visibility !== Window.Hidden
             NumberAnimation {
                 duration: PlasmaCore.Units.longDuration
                 easing.type: Easing.InOutQuad
