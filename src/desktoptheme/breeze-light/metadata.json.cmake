@@ -4,6 +4,7 @@
             {
                 "Email": "kde-artists@kde.org",
                 "Name": "KDE Visual Design Group",
+                "Name[ar]": "مجموعة التصميم المرئي لكِيدِي",
                 "Name[az]": "KDE Vizual Dizayn Qrupu",
                 "Name[be]": "Суполка візуальнага дызайну KDE",
                 "Name[bg]": "KDE Visual Design Group",
@@ -40,6 +41,7 @@
         ],
         "Category": "",
         "Description": "Breeze Light by the KDE VDG",
+        "Description[ar]": "نسيم فاتح من مجموعة تصميم كِيدِي",
         "Description[az]": "Breeze -İşıqlı - KDE VDG tərəfindən",
         "Description[be]": "Breeze Light ад KDE VDG",
         "Description[bg]": "Breeze Светъл от KDE VDG",
@@ -76,6 +78,7 @@
         "Id": "default",
         "License": "LGPL",
         "Name": "Breeze Light",
+        "Name[ar]": "نسيم فاتح",
         "Name[az]": "Breeze - İşıqlı",
         "Name[be]": "Breeze Light",
         "Name[bg]": "Breeze Светъл",

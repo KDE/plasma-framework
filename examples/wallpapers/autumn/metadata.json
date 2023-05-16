@@ -5,6 +5,7 @@
             {
                 "Email": "sebas@kde.org",
                 "Name": "Sebastian Kügler",
+                "Name[ar]": "Sebastian Kügler",
                 "Name[az]": "Sebastian Kügler",
                 "Name[be]": "Sebastian Kügler",
                 "Name[bg]": "Sebastian Kügler",
@@ -44,6 +45,7 @@
         "Id": "org.kde.autumn",
         "License": "GPLv2+",
         "Name": "Autumn",
+        "Name[ar]": "الخريف",
         "Name[az]": "Payız",
         "Name[be]": "Autumn",
         "Name[bg]": "Autumn",

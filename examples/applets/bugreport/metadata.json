@@ -5,6 +5,7 @@
             {
                 "Email": "sebas@kde.org",
                 "Name": "Sebastian Kügler",
+                "Name[ar]": "Sebastian Kügler",
                 "Name[az]": "Sebastian Kügler",
                 "Name[be]": "Sebastian Kügler",
                 "Name[bg]": "Sebastian Kügler",
@@ -77,6 +78,7 @@
         "Id": "org.kde.example.bugreport",
         "License": "GPL",
         "Name": "Bug",
+        "Name[ar]": "علّة",
         "Name[az]": "Xəta",
         "Name[be]": "Хіба",
         "Name[bg]": "Бъг",

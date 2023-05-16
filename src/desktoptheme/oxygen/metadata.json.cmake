@@ -74,6 +74,7 @@
         "Id": "oxygen",
         "License": "GPL",
         "Name": "Oxygen",
+        "Name[ar]": "أكسجين",
         "Name[az]": "Oxygen ayarları",
         "Name[be]": "Oxygen",
         "Name[bg]": "Oxygen",
