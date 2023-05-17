@@ -15,57 +15,85 @@ Item {
 
     required property T.AbstractButton control
 
-    implicitWidth: Math.round(PlasmaCore.Units.gridUnit * 1.5)
-    implicitHeight : PlasmaCore.Units.gridUnit
-
+    implicitWidth: inactive.implicitWidth
+    implicitHeight: Math.max(inactive.implicitHeight, button.implicitHeight)
     opacity: control.enabled ? 1 : 0.6
 
+    PlasmaCore.Svg {
+        id: switchSvg
+        imagePath: "widgets/switch"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
+    }
+
     PlasmaCore.FrameSvgItem {
+        id: inactive
         anchors {
             left: parent.left
             right: parent.right
+            leftMargin: 1
+            rightMargin: 1
             verticalCenter: parent.verticalCenter
         }
-        imagePath: "widgets/bar_meter_horizontal"
-        prefix: "bar-inactive"
+        implicitHeight: switchSvg.hasElement("hint-bar-size")
+                ? switchSvg.elementSize("hint-bar-size").height
+                : button.implicitHeight
+        implicitWidth: switchSvg.hasElement("hint-bar-size")
+                ? switchSvg.elementSize("hint-bar-size").width
+                : root.implicitHeight * 2
+        imagePath: "widgets/switch"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
+        prefix: "inactive"
     }
     PlasmaCore.FrameSvgItem {
-        anchors {
-            left: parent.left
-            right: parent.right
-            verticalCenter: parent.verticalCenter
-        }
-        imagePath: "widgets/bar_meter_horizontal"
-        prefix: "bar-active"
+        anchors.fill: inactive
+        imagePath: "widgets/switch"
+        prefix: "active"
+        colorGroup: PlasmaCore.ColorScope.colorGroup
         opacity: root.control.checked ? 1 : 0
         Behavior on opacity {
             OpacityAnimator {
-                duration: PlasmaCore.Units.longDuration
+                duration: PlasmaCore.Units.shortDuration
                 easing.type: Easing.InOutQuad
             }
         }
     }
     PlasmaCore.SvgItem {
+        id: button
         x: root.control.mirrored ? (root.control.checked ? 0 : parent.width - width) : (root.control.checked ? parent.width - width : 0)
         anchors.verticalCenter: parent.verticalCenter
-        svg: PlasmaCore.Svg {
-            id: buttonSvg
-            imagePath: "widgets/actionbutton"
-        }
-        elementId: "normal"
+        svg: switchSvg
+        elementId: control.pressed ? "handle-pressed" : (control.hovered || control.focus ? "handle-hover" : "handle")
+        implicitWidth: naturalSize.width
+        implicitHeight: naturalSize.height
 
-        implicitWidth: PlasmaCore.Units.gridUnit
-        implicitHeight: PlasmaCore.Units.gridUnit
-
-        Private.RoundShadow {
-            anchors.fill: parent
-            z: -1
-            state: root.control.activeFocus ? "focus" : (root.control.hovered ? "hover" : "shadow")
-        }
         Behavior on x {
             XAnimator {
-                duration: PlasmaCore.Units.longDuration
+                duration: PlasmaCore.Units.shortDuration
                 easing.type: Easing.InOutQuad
+            }
+        }
+        PlasmaCore.SvgItem {
+            svg: switchSvg
+            z: -1
+            anchors.centerIn: parent
+            implicitWidth: naturalSize.width
+            implicitHeight: naturalSize.height
+            elementId: "handle-shadow"
+            visible: enabled && !control.pressed
+        }
+        PlasmaCore.SvgItem {
+            anchors.centerIn: parent
+            implicitWidth: naturalSize.width
+            implicitHeight: naturalSize.height
+            svg: switchSvg
+            elementId: "handle-focus"
+            visible: opacity > 0
+            opacity: control.visualFocus
+            Behavior on opacity {
+                NumberAnimation {
+                    duration: PlasmaCore.Units.longDuration
+                    easing.type: Easing.OutCubic
+                }
             }
         }
     }
