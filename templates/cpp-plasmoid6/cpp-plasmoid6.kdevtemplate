@@ -1,5 +1,15 @@
 [General]
 Name=Plasma QML/C++ Applet (Qt6)
+Name[ca]=Miniaplicació QML/C++ del Plasma (Qt6)
+Name[ca@valencia]=Miniaplicació en QML/C++ de Plasma (Qt6)
+Name[en_GB]=Plasma QML/C++ Applet (Qt6)
+Name[es]=Miniaplicación en QML/C++ para Plasma (Qt6)
+Name[ia]=Applet QML/C++ de Plasma (Qt6)
+Name[nl]=Plasma-applet voor QML/C++ Applet (Qt6)
+Name[sl]=Plasma aplet v QML/C++ (Qt6)
+Name[tr]=Plasma QML/C++ Uygulamacığı (Qt6)
+Name[uk]=Аплет Плазми мовами QML/C++ (Qt6)
+Name[x-test]=xxPlasma QML/C++ Applet (Qt6)xx
 Comment=A Plasma Applet template written in an hybrid mix of QML and C++: a Plasma applet template displaying a SVG picture and a text
 Comment[az]=QML və C ++ bir hibrid qarışıqda yazılmış Plazma Əlavəsi şablonu: SVG şəkli və mətni əks etdirən plazma əlavəsi şablonu
 Comment[be]=Шаблон аплета Plasma, напісаны на QML і C++: шаблон аплета Plasma, які паказвае выяву SVG і тэкст

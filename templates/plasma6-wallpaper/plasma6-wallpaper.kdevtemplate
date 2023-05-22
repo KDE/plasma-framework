@@ -1,5 +1,16 @@
 [General]
 Name=Simple Plasma Wallpaper (Qt6)
+Name[ca]=Fons de pantalla senzill del Plasma (Qt6)
+Name[ca@valencia]=Fons de pantalla senzill de Plasma (Qt6)
+Name[en_GB]=Simple Plasma Wallpaper (Qt6)
+Name[es]=Fondo de escritorio sencillo para Plasma (Qt6)
+Name[ia]=Simple tapete de papiro de Plasma (Qt6)
+Name[nl]=Eenvoudige Plasma-bureaubladachtergrond (Qt6)
+Name[sl]=Preprosta slika ozadja za Plasmo (Qt6)
+Name[ta]=எளிய பிளாஸ்மா பின்புலப் படம் (Qt6)
+Name[tr]=Basit Plasma Duvar Kağıdı (Qt6)
+Name[uk]=Просте тло стільниці Плазми (Qt6)
+Name[x-test]=xxSimple Plasma Wallpaper (Qt6)xx
 Comment=Simple Plasma Wallpaper template: a Plasma wallpaper template displaying a text
 Comment[az]=Sadə Plasma Divar kağızı nümunəsi: Plasma divar kağızı nümunəsi timsalında mətn görünür
 Comment[be]=Шаблон простых шпалер Plasma: шаблон шпалер Plasma, які паказвае тэкст
@@ -35,7 +46,7 @@ Comment[sr@ijekavian]=Шаблон једноставног плазма тап�
 Comment[sr@ijekavianlatin]=Šablon jednostavnog plasma tapeta: tapet koji prikazuje tekst
 Comment[sr@latin]=Šablon jednostavnog plasma tapeta: tapet koji prikazuje tekst
 Comment[sv]=Enkel mall för Plasma-skrivbordsunderlägg: en mall för ett Plasma-skrivbordsunderlägg som visar en text
-Comment[ta]=எளிய பிளாஸ்மா பின்னணிப் பட வார்ப்புரு: உரையை மட்டும் காட்டும் ஒரு பிளாஸ்மா பின்னணிப் பட வார்ப்புரு
+Comment[ta]=எளிய பிளாஸ்மா பின்புலப் பட வார்ப்புரு: உரையை மட்டும் காட்டும் ஒரு பிளாஸ்மா பின்புலப் பட வார்ப்புரு
 Comment[tg]=Қолиби тасвири заминаи содаи Plasma: Қолиби тасвири заминаи Plasma матнеро нишон медиҳад
 Comment[tr]=Basit Plasma Duvar Kağıdı şablonu: Metin görüntüleyen bir Plasma duvar kağıdı şablonu
 Comment[uk]=Простий шаблон тла стільниці Плазми: шаблон шпалер, який показує текст
