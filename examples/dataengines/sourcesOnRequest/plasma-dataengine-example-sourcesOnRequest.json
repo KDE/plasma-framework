@@ -111,7 +111,7 @@
         "Name[uk]": "Джерела за запитом",
         "Name[vi]": "Nguồn khi có yêu cầu",
         "Name[x-test]": "xxSources On Requestxx",
-        "Name[zh_CN]": "按需请求源",
+        "Name[zh_CN]": "按需请求来源",
         "ServiceTypes": [
             "Plasma/DataEngine"
         ],
