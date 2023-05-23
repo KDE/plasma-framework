@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-15 02:02+0000\n"
-"PO-Revision-Date: 2023-02-24 12:43\n"
+"PO-Revision-Date: 2023-05-22 13:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
@@ -14,8 +14,8 @@ msgstr ""
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/plasma-framework/libplasma5.pot\n"
-"X-Crowdin-File-ID: 5538\n"
+"X-Crowdin-File: /kf6-trunk/messages/plasma-framework/libplasma6.pot\n"
+"X-Crowdin-File-ID: 43095\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
@@ -74,7 +74,7 @@ msgstr "进入编辑模式"
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
-msgstr "配置%1..."
+msgstr "配置 %1..."
 
 #: plasma/corona.cpp:315 plasma/corona.cpp:442
 #, kde-format
@@ -300,170 +300,3 @@ msgstr "设置 %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "内容已拖放"
-
-#~ msgid "Main Script File"
-#~ msgstr "主脚本文件"
-
-#~ msgid "Tests"
-#~ msgstr "测试"
-
-#~ msgid "Images"
-#~ msgstr "图像"
-
-#~ msgid "Themed Images"
-#~ msgstr "主题图像"
-
-#~ msgid "Configuration Definitions"
-#~ msgstr "配置定义"
-
-#~ msgid "User Interface"
-#~ msgstr "用户界面"
-
-#~ msgid "Data Files"
-#~ msgstr "数据文件"
-
-#~ msgid "Executable Scripts"
-#~ msgstr "可执行脚本"
-
-#~ msgid "Screenshot"
-#~ msgstr "屏幕截图"
-
-#~ msgid "Translations"
-#~ msgstr "翻译"
-
-#~ msgid "Configuration UI pages model"
-#~ msgstr "配置界面页面模型"
-
-#~ msgid "Configuration XML file"
-#~ msgstr "配置 XML 文件"
-
-#~ msgid "Custom expander for compact applets"
-#~ msgstr "紧凑小程序的自定义扩展器"
-
-#~ msgid "Images for dialogs"
-#~ msgstr "对话框图像"
-
-#~ msgid "Generic dialog background"
-#~ msgstr "常规对话框背景"
-
-#~ msgid "Theme for the logout dialog"
-#~ msgstr "注销对话框主题"
-
-#~ msgid "Wallpaper packages"
-#~ msgstr "壁纸包"
-
-#~ msgid "Images for widgets"
-#~ msgstr "挂件图像"
-
-#~ msgid "Background image for widgets"
-#~ msgstr "挂件背景图像"
-
-#~ msgid "Analog clock face"
-#~ msgstr "模拟时钟钟面"
-
-#~ msgid "Background image for panels"
-#~ msgstr "面板背景图像"
-
-#~ msgid "Background for graphing widgets"
-#~ msgstr "图形绘制挂件背景"
-
-#~ msgid "Background image for tooltips"
-#~ msgstr "工具提示背景图像"
-
-#~ msgid "Opaque images for dialogs"
-#~ msgstr "对话框不透明图像"
-
-#~ msgid "Opaque generic dialog background"
-#~ msgstr "常规不透明对话框背景"
-
-#~ msgid "Opaque theme for the logout dialog"
-#~ msgstr "注销对话框的不透明主题"
-
-#~ msgid "Opaque images for widgets"
-#~ msgstr "挂件的不透明图像"
-
-#~ msgid "Opaque background image for panels"
-#~ msgstr "面板的不透明背景图像"
-
-#~ msgid "Opaque background image for tooltips"
-#~ msgstr "工具提示的不透明背景图像"
-
-#~ msgid "KColorScheme configuration file"
-#~ msgstr "KColorScheme 配置文件"
-
-#~ msgid "Service Descriptions"
-#~ msgstr "服务描述"
-
-#~ msgctxt ""
-#~ "API or programming language the widget was written in, name of the widget"
-#~ msgid "Could not create a %1 ScriptEngine for the %2 widget."
-#~ msgstr "无法为 %2 挂件创建 %1 脚本引擎。"
-
-#~ msgid "Script initialization failed"
-#~ msgstr "脚本初始化失败"
-
-#~ msgctxt "Agenda listview section title"
-#~ msgid "Holidays"
-#~ msgstr "节假日"
-
-#~ msgctxt "Agenda listview section title"
-#~ msgid "Events"
-#~ msgstr "事件"
-
-#~ msgctxt "Agenda listview section title"
-#~ msgid "Todo"
-#~ msgstr "待办事项"
-
-#~ msgctxt "Means 'Other calendar items'"
-#~ msgid "Other"
-#~ msgstr "其他"
-
-#~ msgctxt "Format: month year"
-#~ msgid "%1 %2"
-#~ msgstr "%2年%1"
-
-#~ msgid "Previous Month"
-#~ msgstr "上个月"
-
-#~ msgid "Previous Year"
-#~ msgstr "前一年"
-
-#~ msgid "Previous Decade"
-#~ msgstr "前十年"
-
-#~ msgctxt "Reset calendar to today"
-#~ msgid "Today"
-#~ msgstr "今天"
-
-#~ msgid "Reset calendar to today"
-#~ msgstr "重置日历到今天"
-
-#~ msgid "Next Month"
-#~ msgstr "下个月"
-
-#~ msgid "Next Year"
-#~ msgstr "后一年"
-
-#~ msgid "Next Decade"
-#~ msgstr "后十年"
-
-#~ msgid "Days"
-#~ msgstr "日"
-
-#~ msgid "Months"
-#~ msgstr "月"
-
-#~ msgid "Years"
-#~ msgstr "年"
-
-#~ msgid "OK"
-#~ msgstr "确定"
-
-#~ msgid "Cancel"
-#~ msgstr "取消"
-
-#~ msgid "Run the Associated Application"
-#~ msgstr "运行关联应用程序"
-
-#~ msgid "Open with %1"
-#~ msgstr "用 %1 打开"

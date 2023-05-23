@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-05-15 02:02+0000\n"
-"PO-Revision-Date: 2023-05-09 23:36+0200\n"
+"PO-Revision-Date: 2023-05-23 01:50+0200\n"
 "Last-Translator: Enol P. <enolp@softastur.org>\n"
 "Language-Team: \n"
 "Language: ast\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.0\n"
+"X-Generator: Lokalize 23.04.1\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
@@ -68,7 +68,7 @@ msgstr ""
 #: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
 #, kde-format
 msgid "Enter Edit Mode"
-msgstr "Entar nel mou d'edición"
+msgstr "Entrar nel mou d'edición"
 
 #: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
 #, kde-format
@@ -242,7 +242,7 @@ msgstr ""
 #: plasmaquick/configview.cpp:93
 #, kde-format
 msgid "%1 Settings"
-msgstr ""
+msgstr "Configuración de: %1"
 
 #: plasmaquick/plasmoid/containmentinterface.cpp:613
 #, kde-format
