@@ -2,14 +2,17 @@
 Name=Plasma QML Applet with QML extension (Qt6)
 Name[ca]=Miniaplicació QML del Plasma amb una extensió QML (Qt6)
 Name[ca@valencia]=Miniaplicació en QML de Plasma amb una extensió en QML (Qt6)
+Name[de]=Plasma-QML-Miniprogramm mit QML-Erweiterung (Qt6)
 Name[en_GB]=Plasma QML Applet with QML extension (Qt6)
 Name[es]=Miniaplicación en QML para Plasma con extensión QML (Qt6)
 Name[ia]=Applet QML de Plasma con extension QML (Qt6)
+Name[ka]=Plasma-ის QML აპლეტი QML გაფართოებით (Qt6)
 Name[nl]=Plasma QML-applet met QML-extensie (Qt6)
 Name[sl]=Plasma aplet v QML z razširitvijo QML (Qt6)
 Name[tr]=QML uzantısıyla ile Plasma QML Uygulamacığı (Qt6)
 Name[uk]=Аплет Плазми мовою QML із розширенням QML (Qt6)
 Name[x-test]=xxPlasma QML Applet with QML extension (Qt6)xx
+Name[zh_CN]=带有 QML 扩展的 Plasma QML 小程序 (Qt6)
 Comment=A template for a Plasma applet which uses custom API provided by an own QML extension plugin
 Comment[az]=QML əlavəsi kimi təqdim edilən öz APİ -sini istifadə edən Plasma üçün divar kağızı nümunələri
 Comment[be]=Шаблон аплета для Plasma, які выкарыстоўвае уласны API з дапамогай ўласнай убудовы пашырэння QML
