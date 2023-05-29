@@ -242,7 +242,8 @@ ColumnLayout {
 
         type: PlasmaExtras.Heading.Primary
 
-        Layout.fillWidth: true
+        // Layout.fillWidth + PlasmaExtras.Heading causes rearranges on Qt5, possibly QTBUG-81707
+        Layout.preferredWidth: parent.width
         horizontalAlignment: Qt.AlignHCenter
 
         wrapMode: Text.WordWrap
@@ -256,7 +257,8 @@ ColumnLayout {
         horizontalAlignment: Qt.AlignHCenter
         wrapMode: Text.WordWrap
 
-        Layout.fillWidth: true
+        // same workaround as above
+        Layout.preferredWidth: parent.width
     }
 
     Loader {
