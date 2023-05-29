@@ -217,7 +217,7 @@ private Q_SLOTS:
 
 private:
     void clearDataForMimeJob(KIO::Job *job);
-    void setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QString &data);
+    void setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QVariant &data);
     void deleteWallpaperInterface();
 
     WallpaperInterface *m_wallpaperInterface;

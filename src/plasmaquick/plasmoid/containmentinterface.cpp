@@ -200,13 +200,13 @@ Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const 
     return applet;
 }
 
-void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QString &data)
+void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QVariant &data)
 {
     if (!applet) {
         return;
     }
 
-    ContainmentInterface *appletInterface = qobject_cast<ContainmentInterface *>(AppletQuickItem::itemForApplet(applet));
+    auto appletInterface = qobject_cast<AppletInterface *>(AppletQuickItem::itemForApplet(applet));
     if (appletInterface) {
         Q_EMIT appletInterface->externalData(mimetype, data);
     }
@@ -519,7 +519,8 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         } else if (seenPlugins.count() == 1) {
             selectedPlugin = seenPlugins.constBegin().key();
             Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
-            setAppletArgs(applet, pluginFormats[selectedPlugin], QString::fromUtf8(mimeData->data(pluginFormats[selectedPlugin])));
+            setAppletArgs(applet, pluginFormats[selectedPlugin], mimeData->data(pluginFormats[selectedPlugin]));
+
         } else {
             QHash<QAction *, QString> actionsToPlugins;
             for (const auto &info : std::as_const(seenPlugins)) {
@@ -534,7 +535,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
                 connect(action, &QAction::triggered, this, [this, x, y, mimeData, action]() {
                     const QString selectedPlugin = action->data().toString();
                     Plasma::Applet *applet = createApplet(selectedPlugin, QVariantList(), QRect(x, y, -1, -1));
-                    setAppletArgs(applet, selectedPlugin, QString::fromUtf8(mimeData->data(selectedPlugin)));
+                    setAppletArgs(applet, selectedPlugin, mimeData->data(selectedPlugin));
                 });
 
                 actionsToPlugins.insert(action, info.pluginId());
@@ -666,7 +667,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 const QUrl url = tjob->url();
                 connect(action, &QAction::triggered, this, [this, action, mimetype, url]() {
                     Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
-                    setAppletArgs(applet, mimetype, url.toString());
+                    setAppletArgs(applet, mimetype, url);
                 });
             }
             {
@@ -676,7 +677,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 const QUrl url = tjob->url();
                 connect(action, &QAction::triggered, this, [this, action, mimetype, url]() {
                     Plasma::Applet *applet = createApplet(action->data().toString(), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
-                    setAppletArgs(applet, mimetype, url.toString());
+                    setAppletArgs(applet, mimetype, url);
                 });
             }
 
@@ -717,7 +718,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
             // case in which we created the menu ourselves, just the "fetching type entry, directly create the icon applet
             if (!m_dropMenu->isDropjobMenu()) {
                 Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
-                setAppletArgs(applet, mimetype, tjob->url().toString());
+                setAppletArgs(applet, mimetype, tjob->url());
             } else {
                 QAction *action;
                 QAction *sep = new QAction(i18n("Widgets"), m_dropMenu);
@@ -730,7 +731,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                 const QUrl url = tjob->url();
                 connect(action, &QAction::triggered, this, [this, mimetype, url]() {
                     Plasma::Applet *applet = createApplet(QStringLiteral("org.kde.plasma.icon"), QVariantList(), QRect(m_dropMenu->dropPoint(), QSize(-1, -1)));
-                    setAppletArgs(applet, mimetype, url.toString());
+                    setAppletArgs(applet, mimetype, url);
                 });
             }
         }
