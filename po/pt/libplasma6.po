@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-15 02:02+0000\n"
+"POT-Creation-Date: 2023-05-30 02:41+0000\n"
 "PO-Revision-Date: 2022-07-25 09:37+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -247,51 +247,51 @@ msgstr "Erro ao carregar a 'applet': o pacote é inexistente. %1"
 msgid "%1 Settings"
 msgstr "Configuração do %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:613
+#: plasmaquick/plasmoid/containmentinterface.cpp:614
 #, kde-format
 msgid "Plasma Package"
 msgstr "Pacote do Plasma"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:617
+#: plasmaquick/plasmoid/containmentinterface.cpp:618
 #, kde-format
 msgid "Install"
 msgstr "Instalar"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:628
+#: plasmaquick/plasmoid/containmentinterface.cpp:629
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Falhou a Instalação do Pacote"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:645
+#: plasmaquick/plasmoid/containmentinterface.cpp:646
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "O pacote que acabou de largar é inválido."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:654
-#: plasmaquick/plasmoid/containmentinterface.cpp:723
+#: plasmaquick/plasmoid/containmentinterface.cpp:655
+#: plasmaquick/plasmoid/containmentinterface.cpp:724
 #, kde-format
 msgid "Widgets"
 msgstr "Elementos"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:659
+#: plasmaquick/plasmoid/containmentinterface.cpp:660
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Adicionar um %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:673
-#: plasmaquick/plasmoid/containmentinterface.cpp:727
+#: plasmaquick/plasmoid/containmentinterface.cpp:674
+#: plasmaquick/plasmoid/containmentinterface.cpp:728
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Adicionar um Ícone"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:685
+#: plasmaquick/plasmoid/containmentinterface.cpp:686
 #, kde-format
 msgid "Wallpaper"
 msgstr "Papel de Parede"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:695
+#: plasmaquick/plasmoid/containmentinterface.cpp:696
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
