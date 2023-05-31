@@ -1,5 +1,6 @@
 [General]
 Name=Plasma QML/C++ Applet (Qt6)
+Name[bg]=QML/C++ приставка за Plasma (Qt6)
 Name[ca]=Miniaplicació QML/C++ del Plasma (Qt6)
 Name[ca@valencia]=Miniaplicació en QML/C++ de Plasma (Qt6)
 Name[de]=Plasma-QML/C++-Miniprogramm (Qt6)
