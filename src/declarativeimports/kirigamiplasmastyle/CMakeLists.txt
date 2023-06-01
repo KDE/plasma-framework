@@ -23,5 +23,5 @@ install(FILES
     AbstractApplicationHeader.qml
     Icon.qml
     Theme.qml
-    DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami.2/styles/Plasma
+    DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Plasma
 )
