@@ -205,7 +205,7 @@ std::shared_ptr<QQmlEngine> SharedQmlEngine::engine()
 QObject *SharedQmlEngine::rootObject() const
 {
     if (d->incubator.status() == QQmlIncubator::Loading) {
-        qWarning(LOG_PLASMAQUICK) << "Trying to use rootObject before initialization is completed, whilst using setInitializationDelayed. Forcing completion";
+        qWarning(LOG_PLASMAQUICK) << "Trying to use rootObject before initialization is completed, while using setInitializationDelayed. Forcing completion";
         d->incubator.forceCompletion();
     }
     return d->incubator.object();
