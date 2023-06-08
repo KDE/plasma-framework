@@ -9,6 +9,7 @@
 #ifndef PLASMA_APPLET_H
 #define PLASMA_APPLET_H
 
+#include <QAction>
 #include <QKeySequence>
 #include <QObject>
 #include <QUrl>
@@ -29,12 +30,14 @@ class AppletQuickItem;
 class ConfigViewPrivate;
 class ConfigModelPrivate;
 class ConfigModel;
+class ConfigView;
 };
 class DeclarativeAppletScript;
 #include <KPluginFactory>
 
 class KActionCollection;
 class KConfigLoader;
+class KConfigPropertyMap;
 
 namespace Plasma
 {
@@ -105,6 +108,7 @@ class PLASMA_EXPORT Applet : public QObject
 
     /**
      * Display hints that come from the containment that suggest the applet how to look and behave.
+     * TODO: only in containment?
      */
     Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints NOTIFY containmentDisplayHintsChanged)
 
@@ -137,9 +141,11 @@ class PLASMA_EXPORT Applet : public QObject
     // TODO KF6: activity, screen, screenGeometry, availableScreenRect, availableScreenRegion: should we instead make the containment accessible from qml
     // plasmoids and ask from there?
 
-    // TODO KF6: configuration object
-
-    // TODO KF6: hideOnWindowDeactivate
+    /**
+     * A KConfigPropertyMap instance that represents the configuration
+     * which is usable from QML to read and write settings like any JavaScript Object
+     */
+    Q_PROPERTY(KConfigPropertyMap *configuration READ configuration CONSTANT FINAL)
 
     /**
      * The global shortcut to activate the plasmoid
@@ -155,16 +161,34 @@ class PLASMA_EXPORT Applet : public QObject
      */
     Q_PROPERTY(bool configurationRequired READ configurationRequired WRITE setConfigurationRequired NOTIFY configurationRequiredChanged)
 
-    // TODO KF6: constraintHints
+    /**
+     * The hints that the applet gives to its constraint,
+     * such as asking to fill all the available space ignoring margins.
+     */
+    Q_PROPERTY(Plasma::Types::ConstraintHints constraintHints READ constraintHints WRITE setConstraintHints NOTIFY constraintHintsChanged FINAL)
 
     /**
      * The metadata of the applet.
      */
     Q_PROPERTY(KPluginMetaData metaData READ pluginMetaData CONSTANT)
 
-    // TODO KF6: contextualActions along with AppletInterface::setAction etc, alsongside a declarative way?
+    /**
+     * The Containment managing this applet
+     */
+    Q_PROPERTY(Plasma::Containment *containment READ containment NOTIFY containmentChanged)
 
-    // TODO KF6: editMode
+    // TODO KF6: contextualActions along with AppletInterface::setAction etc, alsongside a declarative way?
+    Q_PROPERTY(QList<QAction *> contextualActions READ contextualActions NOTIFY contextualActionsChanged)
+
+    /**
+     * True if this applet is a Containment and is acting as one, such as a desktop or a panel
+     */
+    Q_PROPERTY(bool isContainment READ isContainment CONSTANT)
+
+    /**
+     * Plugin name for the applet
+     */
+    Q_PROPERTY(QString pluginName READ pluginName CONSTANT FINAL)
 
 public:
     // CONSTRUCTORS
@@ -286,6 +310,12 @@ public:
     KConfigLoader *configScheme() const;
 
     /**
+     * @return a KConfigPropertyMap instance that represents the configuration
+     * which is usable from QML to read and write settings like any JavaScript Object
+     */
+    KConfigPropertyMap *configuration();
+
+    /**
      * Saves state information about this applet that will
      * be accessed when next instantiated in the restore(KConfigGroup&) method.
      *
@@ -337,6 +367,21 @@ public:
     QString configurationRequiredReason() const;
 
     /**
+     * Sets the constraint hits which give a more granular control over sizing in
+     * constrained layouts such as panels
+     *
+     * @param constraintHints such as CanFillArea or MarginAreasSeparator,
+     *                        they can be in bitwise OR
+     */
+    void setConstraintHints(Plasma::Types::ConstraintHints constraintHints);
+
+    /**
+     * @return The constraint hints such as CanFillArea or MarginAreasSeparator,
+     *         they can be in bitwise OR
+     */
+    Plasma::Types::ConstraintHints constraintHints() const;
+
+    /**
      * @return true when the configuration interface is being shown
      * @since 4.5
      */
@@ -366,6 +411,11 @@ public:
      * @since 5.27
      */
     KPluginMetaData pluginMetaData() const;
+
+    /**
+     * @return the plugin name form KPluginMetaData
+     */
+    QString pluginName() const;
 
     /**
      * Returns the user-visible title for the applet, as specified in the
@@ -464,6 +514,28 @@ public:
      */
     KActionCollection *actions() const;
 
+    // BEGIN TODO
+    // TODO: this whole actions api is there for temporary compatibility buy we need a declarative one before the KF6 API freeze
+    Q_INVOKABLE void setActionSeparator(const QString &name);
+
+    Q_INVOKABLE void setActionGroup(const QString &action, const QString &group);
+    /**
+     * Add an action to the Plasmoid contextual menu.
+     * When the action is triggered a function called action_<name> will be called, if there is no function with that name actionTriggered(name) will be called
+     * instead.
+     * @param: action name
+     * @text: user visible displayed text
+     * @icon: user visible optional displayed icon
+     * @shortcut: shortcut to trigger this action
+     */
+    Q_INVOKABLE void setAction(const QString &name, const QString &text, const QString &icon = QString(), const QString &shortcut = QString());
+
+    Q_INVOKABLE QAction *action(const QString &name) const;
+    Q_INVOKABLE void removeAction(const QString &name);
+
+    Q_INVOKABLE void clearActions();
+
+    // END TODO
     /**
      * Sets the global shortcut to associate with this widget.
      */
@@ -609,6 +681,20 @@ Q_SIGNALS:
      */
     void configurationRequiredChanged(bool needsConfig, const QString &reason);
 
+    /**
+     * Emitted when the constraint hints changed
+     * @see setConstraintHints
+     */
+    void constraintHintsChanged(Plasma::Types::ConstraintHints constraintHints);
+
+    /**
+     * Emitted when the containment changes
+     */
+    void containmentChanged(Plasma::Containment *containment);
+
+    // TODO temporary api it should be removed
+    void contextualActionsChanged();
+
     // TODO KF6 keep as Q_SLOT only stuff that needsto be manually invokable from qml
 public Q_SLOTS:
     // BOOKKEEPING
@@ -751,6 +837,7 @@ private:
     friend class PlasmaQuick::ConfigModel;
     friend class PlasmaQuick::ConfigModelPrivate;
     friend class PlasmaQuick::ConfigViewPrivate;
+    friend class PlasmaQuick::ConfigView;
     friend DeclarativeAppletScript;
 };
 

@@ -11,6 +11,7 @@
 #include <QScopedPointer>
 
 #include <plasmaquick/plasmaquick_export.h>
+#include <qquickitem.h>
 
 //
 //  W A R N I N G
@@ -34,7 +35,7 @@ class ConfigViewPrivate;
 
 class ConfigModel;
 
-class PLASMAQUICK_EXPORT ConfigView : public QQuickView
+class PLASMAQUICK_EXPORT ConfigView : public QQuickWindow
 {
     Q_OBJECT
     Q_PROPERTY(PlasmaQuick::ConfigModel *configModel READ configModel CONSTANT)
@@ -47,6 +48,11 @@ public:
      **/
     ConfigView(Plasma::Applet *applet, QWindow *parent = nullptr);
     ~ConfigView() override;
+
+    QQmlEngine *engine();
+    QQmlContext *rootContext();
+    void setSource(const QUrl &src);
+    QQuickItem *rootObject();
 
     virtual void init();
 

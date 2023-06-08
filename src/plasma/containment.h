@@ -12,6 +12,9 @@
 #include <KPluginMetaData>
 #include <KSharedConfig>
 #include <plasma/applet.h>
+#include <qtmetamacros.h>
+
+class QQuickItem;
 
 namespace Plasma
 {
@@ -43,8 +46,62 @@ class ContainmentPrivate;
 class PLASMA_EXPORT Containment : public Applet
 {
     Q_OBJECT
+
+    /**
+     * List of applets this containment has: the containments
+     * KF6: this should be AppletQuickItem *
+     */
+    Q_PROPERTY(QList<Plasma::Applet *> applets READ applets NOTIFY appletsChanged)
+
+    /**
+     * The corona for this contaiment
+     */
+    Q_PROPERTY(Plasma::Corona *corona READ corona CONSTANT)
+
+    /**
+     * Type of this containment
+     */
+    Q_PROPERTY(Plasma::Containment::Type containmentType READ containmentType NOTIFY containmentTypeChanged)
+
+    /**
+     * Activity UID of this containment
+     */
+    Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
+
+    /**
+     * Activity name of this containment
+     */
+    Q_PROPERTY(QString activityName READ activityName NOTIFY activityNameChanged)
+
+    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints WRITE setContainmentDisplayHints NOTIFY
+                   containmentDisplayHintsChanged)
+
     Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
+
     Q_PROPERTY(bool isUiReady READ isUiReady NOTIFY uiReadyChanged)
+
+    /**
+     * The screen number this containment is serving as the desktop for, or -1 if none
+     */
+    Q_PROPERTY(int screen READ screen NOTIFY screenChanged)
+
+    /**
+     * screen area free of panels: the coordinates are relative to the containment,
+     * it's independent from the screen position
+     * For more precise available geometry use availableScreenRegion()
+     */
+    Q_PROPERTY(QRectF availableScreenRect READ availableRelativeScreenRect NOTIFY availableRelativeScreenRectChanged)
+
+    /**
+     * The available region of this screen, panels excluded. It's a list of rectangles
+     */
+    Q_PROPERTY(QList<QRectF> availableScreenRegion READ availableRelativeScreenRegion NOTIFY availableRelativeScreenRegionChanged)
+
+    /**
+     * Provides access to the geometry of the applet is in.
+     * Can be useful to figure out what's the absolute position of the applet.
+     */
+    Q_PROPERTY(QRectF screenGeometry READ screenGeometry NOTIFY screenGeometryChanged)
 
 public:
     /**
@@ -99,20 +156,23 @@ public:
      * @param name the plugin name for the applet, as given by
      *        KPluginInfo::pluginName()
      * @param args argument list to pass to the plasmoid
-     * @param geometry where to place the applet, or to auto-place it if an invalid
-     *                 is provided
+     * @param geometryHint an hint to pass to the GUI on the location
+     *           and size we prefer for the newly created applet;
+     *           the gui might choose whether to respect or not this hint
      *
      * @return a pointer to the applet on success, or 0 on failure
      */
-    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList());
+    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), const QRectF &geometryHint = QRectF());
 
     /**
      * Add an existing applet to this Containment
      *
      * @param applet the applet that should be added
-     * @param pos the containment-relative position
+     * @param geometryHint an hint to pass to the GUI on the location
+     *           and size we prefer for the newly created applet;
+     *           the gui might choose whether to respect or not this hint
      */
-    void addApplet(Applet *applet);
+    Q_INVOKABLE void addApplet(Applet *applet, const QRectF &geometryHint = QRectF());
 
     /**
      * @return the applets currently in this Containment
@@ -171,6 +231,12 @@ public:
     QString activity() const;
 
     /**
+     * @return Activity name corresponding to the activity UID
+     * @see activity
+     */
+    QString activityName() const;
+
+    /**
      * Sets a containmentactions plugin.
      *
      * @param trigger the mouse button (and optional modifier) to associate the plugin with
@@ -190,6 +256,22 @@ public:
      */
     bool isUiReady() const;
 
+    /**
+     * @returns The available screen rect (excluding panels) for the screen this containment is associated to,
+     * empty rectangle if the containment is not active in a screen
+     */
+    QRectF availableRelativeScreenRect() const;
+
+    /**
+     * @returns The available region of this screen, panels excluded. It's a list of rectangles
+     */
+    QList<QRectF> availableRelativeScreenRegion() const;
+
+    /**
+     * @returns The geometry of the screen this containment is associated to
+     */
+    QRectF screenGeometry() const;
+
 Q_SIGNALS:
     /**
      * This signal is emitted when a new applet is added in the containment
@@ -197,13 +279,35 @@ Q_SIGNALS:
      * * The user created the applet
      * * The applet was moved in from another containment
      * * The applet got restored at startup
+     * @param applet the applet that has been added
+     * @param geometryHint an hint to pass to the GUI on the location
+     *           and size we prefer for the newly created applet;
+     *           the gui might choose whether to respect or not this hint
      */
-    void appletAdded(Plasma::Applet *applet);
+    void appletAdded(Plasma::Applet *applet, const QRectF &geometryHint);
+
+    /**
+     * This signal is emitted right before appletAdded, it can be used
+     * to do a preliminary setup on the applet before the handlers of appletAdded are executed.
+     * Useful for instance to prepare the GUI for the applet
+     * @param applet the applet that is about to be added
+     * @param geometryHint an hint to pass to the GUI on the location
+     *           and size we prefer for the newly created applet;
+     *           the gui might choose whether to respect or not this hint
+     */
+    void appletAboutToBeAdded(Plasma::Applet *applet, const QRectF &geometryHint);
 
     /**
      * This signal is emitted when an applet is destroyed
      */
     void appletRemoved(Plasma::Applet *applet);
+
+    /**
+     * This signal is emitted right before appletRemoved, it can be used
+     * to do a preliminary setup on the applet before the handlers of appletRemoved are executed.
+     * Useful for instance to prepare or teardown the GUI for the applet
+     */
+    void appletAboutToBeRemoved(Plasma::Applet *applet);
 
     /**
      * This signal is emitted when a new applet is created by the containment.
@@ -213,12 +317,22 @@ Q_SIGNALS:
      * @see appletAdded
      * @since 5.16
      */
-    void appletCreated(Plasma::Applet *applet);
+    void appletCreated(Plasma::Applet *applet, const QRectF &geometryHint);
+
+    /**
+     * Emitted when the list of applets has changed, either added or removed
+     */
+    void appletsChanged();
 
     /**
      * Emitted when the activity id has changed
      */
     void activityChanged(const QString &activity);
+
+    /**
+     * Emitted when the activity name has changed
+     */
+    void activityNameChanged(const QString &name);
 
     /**
      * Emitted when the containment requests an add widgets dialog is shown.
@@ -265,10 +379,35 @@ Q_SIGNALS:
     void formFactorChanged(Plasma::Types::FormFactor formFactor);
 
     /**
+     * Emitted when the containment disaplay hints change
+     */
+    void containmentDisplayHintsChanged(Plasma::Types::ContainmentDisplayHints hints);
+
+    /**
      * Emitted when the ui has been fully loaded and is fully working
      * @param uiReady true when the ui of the containment is ready, as well the ui of each applet in it
      */
     void uiReadyChanged(bool uiReady);
+
+    /**
+     * emitted when the containment type changed
+     */
+    void containmentTypeChanged();
+
+    /**
+     * Emitted when the available screen rectangle has changed
+     */
+    void availableRelativeScreenRectChanged(const QRectF &rect);
+
+    /**
+     * Emitted when the available screen rectangle has changed
+     */
+    void availableRelativeScreenRegionChanged(const QList<QRectF> &region);
+
+    /**
+     * Emitted when the screen geometry has changed
+     */
+    void screenGeometryChanged(const QRectF &rect);
 
 public Q_SLOTS:
     /**

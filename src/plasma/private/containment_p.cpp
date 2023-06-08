@@ -16,6 +16,8 @@
 
 #include "pluginloader.h"
 
+#include <kactivities/info.h>
+
 #include "debug_p.h"
 #include "private/applet_p.h"
 #include "timetracker.h"
@@ -39,6 +41,8 @@ ContainmentPrivate::ContainmentPrivate(Containment *c)
     if (appletParent) {
         QObject::connect(appletParent->containment(), &Containment::screenChanged, c, &Containment::screenChanged);
     }
+    activityInfo = new KActivities::Info(activityId, q);
+    QObject::connect(activityInfo, &KActivities::Info::nameChanged, q, &Containment::activityNameChanged);
 }
 
 Plasma::ContainmentPrivate::~ContainmentPrivate()
@@ -165,7 +169,7 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
     }
 }
 
-Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList &args, uint id)
+Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList &args, uint id, const QRectF &geometryHint)
 {
     if (!q->isContainment()) {
         return nullptr;
@@ -186,7 +190,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
         applet->setLaunchErrorMessage(i18n("Could not find requested component: %1", name));
     }
 
-    q->addApplet(applet);
+    q->addApplet(applet, geometryHint);
     // mirror behavior of resorecontents: if an applet is not valid, set it immediately to uiReady
     if (!applet->pluginMetaData().isValid()) {
         applet->updateConstraints(Plasma::Types::UiReadyConstraint);
@@ -196,9 +200,11 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
 
 void ContainmentPrivate::appletDeleted(Plasma::Applet *applet)
 {
+    Q_EMIT q->appletAboutToBeRemoved(applet);
     applets.removeAll(applet);
 
     Q_EMIT q->appletRemoved(applet);
+    Q_EMIT q->appletsChanged();
     Q_EMIT q->configNeedsSaving();
 }
 

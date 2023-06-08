@@ -7,6 +7,7 @@
 */
 
 #include "tooltip.h"
+#include "appletquickitem.h"
 #include "tooltipdialog.h"
 
 #include <QDebug>
@@ -15,6 +16,7 @@
 #include "framesvgitem.h"
 #include <KDirWatch>
 #include <KWindowEffects>
+#include <Plasma/Applet>
 
 ToolTipDialog *ToolTip::s_dialog = nullptr;
 int ToolTip::s_dialogUsers = 0;
@@ -131,8 +133,9 @@ void ToolTip::showToolTip()
     if (m_location == Plasma::Types::Floating) {
         QQuickItem *p = parentItem();
         while (p) {
-            if (p->property("location").isValid()) {
-                location = (Plasma::Types::Location)p->property("location").toInt();
+            PlasmaQuick::AppletQuickItem *appletItem = qobject_cast<PlasmaQuick::AppletQuickItem *>(p);
+            if (appletItem) {
+                location = appletItem->applet()->location();
                 break;
             }
             p = p->parentItem();

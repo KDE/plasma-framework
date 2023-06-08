@@ -6,6 +6,7 @@
 */
 
 #include "appletinterface.h"
+#include "appletcontext_p.h"
 #include "sharedqmlengine.h"
 
 #include <QAction>
@@ -30,58 +31,49 @@
 
 #include <KConfigPropertyMap>
 
-AppletInterface::AppletInterface(Plasma::Applet *applet, const QVariantList &args, QQuickItem *parent)
-    : AppletQuickItem(applet, parent)
-    , m_configuration(nullptr)
+AppletInterface::AppletInterface(QQuickItem *parent)
+    : AppletQuickItem(parent)
     , m_toolTipTextFormat(0)
     , m_toolTipItem(nullptr)
-    , m_args(args)
     , m_hideOnDeactivate(true)
     , m_oldKeyboardShortcut(0)
-    , m_dummyNativeInterface(nullptr)
     , m_positionBeforeRemoval(QPointF(-1, -1))
 {
     qmlRegisterAnonymousType<QAction>("org.kde.plasma.plasmoid", 1);
+}
 
-    connect(applet->containment()->corona(), &Plasma::Corona::editModeChanged, this, &AppletInterface::editModeChanged);
-    connect(this, &AppletInterface::configNeedsSaving, applet, &Plasma::Applet::configNeedsSaving);
-    connect(applet, &Plasma::Applet::immutabilityChanged, this, &AppletInterface::immutabilityChanged);
-    connect(applet, &Plasma::Applet::userConfiguringChanged, this, &AppletInterface::userConfiguringChanged);
+AppletInterface::~AppletInterface()
+{
+}
 
+void AppletInterface::init()
+{
+    AppletQuickItem::init();
+
+    auto *applet = AppletInterface::applet();
+    auto connectActions = [this, applet]() {
+        for (auto *a : applet->contextualActions()) {
+            if (!m_actions.contains(a)) {
+                connect(a, &QAction::triggered, this, [this, a]() {
+                    executeAction(a);
+                });
+                connect(a, &QObject::destroyed, this, [this, a]() {
+                    m_actions.remove(a);
+                });
+                m_actions << a;
+            }
+        }
+    };
     connect(applet, &Plasma::Applet::contextualActionsAboutToShow, this, &AppletInterface::contextualActionsAboutToShow);
-
-    connect(applet, &Plasma::Applet::statusChanged, this, &AppletInterface::statusChanged);
-
-    connect(applet, &Plasma::Applet::destroyedChanged, this, &AppletInterface::destroyedChanged);
-
-    connect(applet, &Plasma::Applet::titleChanged, this, &AppletInterface::titleChanged);
+    // FIXME: temporary
+    connect(applet, &Plasma::Applet::contextualActionsChanged, this, connectActions);
+    connectActions();
 
     connect(applet, &Plasma::Applet::titleChanged, this, [this]() {
         if (m_toolTipMainText.isNull()) {
             Q_EMIT toolTipMainTextChanged();
         }
     });
-
-    connect(applet, &Plasma::Applet::iconChanged, this, &AppletInterface::iconChanged);
-
-    connect(applet, &Plasma::Applet::busyChanged, this, &AppletInterface::busyChanged);
-
-    connect(applet, &Plasma::Applet::backgroundHintsChanged, this, &AppletInterface::backgroundHintsChanged);
-    connect(applet, &Plasma::Applet::effectiveBackgroundHintsChanged, this, &AppletInterface::effectiveBackgroundHintsChanged);
-    connect(applet, &Plasma::Applet::userBackgroundHintsChanged, this, &AppletInterface::userBackgroundHintsChanged);
-
-    connect(applet, &Plasma::Applet::configurationRequiredChanged, this, [this](bool configurationRequired, const QString &reason) {
-        Q_UNUSED(configurationRequired);
-        Q_UNUSED(reason);
-        Q_EMIT configurationRequiredChanged();
-        Q_EMIT configurationRequiredReasonChanged();
-    });
-
-    connect(applet, &Plasma::Applet::activated, this, &AppletInterface::activated);
-    connect(applet, &Plasma::Applet::containmentDisplayHintsChanged, this, &AppletInterface::containmentDisplayHintsChanged);
-
-    connect(applet, &Plasma::Applet::formFactorChanged, this, &AppletInterface::formFactorChanged);
-    connect(applet, &Plasma::Applet::locationChanged, this, &AppletInterface::locationChanged);
 
     if (applet->containment()) {
         connect(applet->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenChanged);
@@ -117,31 +109,10 @@ AppletInterface::AppletInterface(Plasma::Applet *applet, const QVariantList &arg
             }
         }
     });
-}
-
-AppletInterface::~AppletInterface()
-{
-}
-
-void AppletInterface::init()
-{
-    if (qmlObject()->rootObject() && m_configuration) {
-        return;
-    }
-
-    m_configuration = new KConfigPropertyMap(applet()->configScheme(), this);
-
-    AppletQuickItem::init();
 
     geometryChange(QRectF(), QRectF(x(), y(), width(), height()));
 
-    Q_EMIT busyChanged();
-
-    updateUiReadyConstraint();
-
-    connect(this, &AppletInterface::isLoadingChanged, this, &AppletInterface::updateUiReadyConstraint);
-
-    connect(applet(), &Plasma::Applet::activated, this, [=]() {
+    connect(applet, &Plasma::Applet::activated, this, [=]() {
         // in case the applet doesn't want to get shrunk on reactivation,
         // we always expand it again (only in order to conform with legacy behaviour)
         bool activate = !(isExpanded() && isActivationTogglesExpanded());
@@ -155,10 +126,14 @@ void AppletInterface::init()
         }
     });
 
-    if (m_args.count() == 1) {
-        Q_EMIT externalData(QString(), m_args.first());
-    } else if (!m_args.isEmpty()) {
-        Q_EMIT externalData(QString(), m_args);
+    connect(applet, &Plasma::Applet::destroyedChanged, this, &AppletInterface::destroyedChanged);
+
+    auto args = applet->startupArguments();
+
+    if (args.count() == 1) {
+        Q_EMIT externalData(QString(), args.first());
+    } else if (!args.isEmpty()) {
+        Q_EMIT externalData(QString(), args);
     }
 }
 
@@ -194,77 +169,10 @@ void AppletInterface::destroyedChanged(bool destroyed)
     setVisible(!destroyed);
 }
 
-Plasma::Types::FormFactor AppletInterface::formFactor() const
-{
-    return applet()->formFactor();
-}
-
-Plasma::Types::Location AppletInterface::location() const
-{
-    return applet()->location();
-}
-
-Plasma::Types::ContainmentDisplayHints AppletInterface::containmentDisplayHints() const
-{
-    return applet()->containmentDisplayHints();
-}
-
-QString AppletInterface::currentActivity() const
-{
-    if (applet()->containment()) {
-        return applet()->containment()->activity();
-    } else {
-        return QString();
-    }
-}
-
-QObject *AppletInterface::configuration() const
-{
-    return m_configuration;
-}
-
-uint AppletInterface::id() const
-{
-    return applet()->id();
-}
-
-QString AppletInterface::pluginName() const
-{
-    return applet()->pluginMetaData().isValid() ? applet()->pluginMetaData().pluginId() : QString();
-}
-
-QString AppletInterface::icon() const
-{
-    return applet()->icon();
-}
-
-void AppletInterface::setIcon(const QString &icon)
-{
-    if (applet()->icon() == icon) {
-        return;
-    }
-
-    applet()->setIcon(icon);
-}
-
-QString AppletInterface::title() const
-{
-    return applet()->title();
-}
-
-void AppletInterface::setTitle(const QString &title)
-{
-    if (applet()->title() == title) {
-        return;
-    }
-
-    applet()->setTitle(title);
-}
-
 QString AppletInterface::toolTipMainText() const
 {
     if (m_toolTipMainText.isNull()) {
-        return title();
+        return applet()->title();
     } else {
         return m_toolTipMainText;
     }
@@ -345,210 +253,6 @@ void AppletInterface::setToolTipItem(QQuickItem *toolTipItem)
     Q_EMIT toolTipItemChanged();
 }
 
-bool AppletInterface::isBusy() const
-{
-    return applet()->isBusy();
-}
-
-void AppletInterface::setBusy(bool busy)
-{
-    applet()->setBusy(busy);
-}
-
-Plasma::Types::BackgroundHints AppletInterface::backgroundHints() const
-{
-    return applet()->backgroundHints();
-}
-
-void AppletInterface::setBackgroundHints(Plasma::Types::BackgroundHints hint)
-{
-    applet()->setBackgroundHints(hint);
-}
-
-Plasma::Types::BackgroundHints AppletInterface::effectiveBackgroundHints() const
-{
-    return applet()->effectiveBackgroundHints();
-}
-
-Plasma::Types::BackgroundHints AppletInterface::userBackgroundHints() const
-{
-    return applet()->userBackgroundHints();
-}
-
-void AppletInterface::setUserBackgroundHints(Plasma::Types::BackgroundHints hint)
-{
-    applet()->setUserBackgroundHints(hint);
-}
-
-void AppletInterface::setConfigurationRequired(bool needsConfiguring, const QString &reason)
-{
-    applet()->setConfigurationRequired(needsConfiguring, reason);
-}
-
-QList<QObject *> AppletInterface::contextualActionsObjects() const
-{
-    QList<QObject *> actions;
-    Plasma::Applet *a = applet();
-    if (a->failedToLaunch()) {
-        return actions;
-    }
-
-    for (const QString &name : std::as_const(m_actions)) {
-        QAction *action = a->actions()->action(name);
-
-        if (action) {
-            actions << action;
-        }
-    }
-
-    return actions;
-}
-
-QList<QAction *> AppletInterface::contextualActions() const
-{
-    QList<QAction *> actions;
-    Plasma::Applet *a = applet();
-    if (a->failedToLaunch()) {
-        return actions;
-    }
-
-    for (const QString &name : std::as_const(m_actions)) {
-        QAction *action = a->actions()->action(name);
-
-        if (action) {
-            actions << action;
-        }
-    }
-
-    return actions;
-}
-
-void AppletInterface::setActionSeparator(const QString &name)
-{
-    Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(name);
-
-    if (action) {
-        action->setSeparator(true);
-    } else {
-        action = new QAction(this);
-        action->setSeparator(true);
-        a->actions()->addAction(name, action);
-        m_actions.append(name);
-        Q_EMIT contextualActionsChanged();
-    }
-}
-
-void AppletInterface::setActionGroup(const QString &actionName, const QString &group)
-{
-    Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(actionName);
-
-    if (!action) {
-        return;
-    }
-
-    if (!m_actionGroups.contains(group)) {
-        m_actionGroups[group] = new QActionGroup(this);
-    }
-
-    action->setActionGroup(m_actionGroups[group]);
-}
-
-void AppletInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
-{
-    Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(name);
-
-    if (action) {
-        action->setText(text);
-    } else {
-        action = new QAction(text, this);
-        a->actions()->addAction(name, action);
-
-        Q_ASSERT(!m_actions.contains(name));
-        m_actions.append(name);
-        Q_EMIT contextualActionsChanged();
-
-        connect(action, &QAction::triggered, this, [this, name] {
-            executeAction(name);
-        });
-    }
-
-    action->setProperty("_contextualAction", true);
-
-    if (!icon.isEmpty()) {
-        action->setIcon(QIcon::fromTheme(icon));
-    }
-
-    if (!shortcut.isEmpty()) {
-        action->setShortcut(shortcut);
-    }
-
-    action->setObjectName(name);
-}
-
-void AppletInterface::removeAction(const QString &name)
-{
-    Plasma::Applet *a = applet();
-    QAction *action = a->actions()->action(name);
-    delete action;
-    m_actions.removeAll(name);
-}
-
-void AppletInterface::clearActions()
-{
-    const auto oldActionsList = m_actions;
-    for (const QString &action : oldActionsList) {
-        removeAction(action);
-    }
-}
-
-QAction *AppletInterface::action(QString name) const
-{
-    return applet()->actions()->action(name);
-}
-
-bool AppletInterface::immutable() const
-{
-    return applet()->immutability() != Plasma::Types::Mutable;
-}
-
-Plasma::Types::ImmutabilityType AppletInterface::immutability() const
-{
-    return applet()->immutability();
-}
-
-bool AppletInterface::userConfiguring() const
-{
-    return applet()->isUserConfiguring();
-}
-
-int AppletInterface::apiVersion() const
-{
-    // Look for C++ plugins first
-    auto filter = [](const KPluginMetaData &md) -> bool {
-        return md.value(QStringLiteral("X-Plasma-API")) == QLatin1String("declarativeappletscript")
-            && md.value(QStringLiteral("X-Plasma-ComponentTypes")).contains(QLatin1String("Applet"));
-    };
-    QVector<KPluginMetaData> plugins = KPluginMetaData::findPlugins(QStringLiteral("plasma/scriptengines"), filter);
-    if (plugins.isEmpty()) {
-        return -1;
-    }
-
-    return plugins.first().value(QStringLiteral("X-KDE-PluginInfo-Version")).toInt();
-}
-
-void AppletInterface::setStatus(const Plasma::Types::ItemStatus &status)
-{
-    applet()->setStatus(status);
-}
-
-Plasma::Types::ItemStatus AppletInterface::status() const
-{
-    return applet()->status();
-}
-
 int AppletInterface::screen() const
 {
     if (Plasma::Containment *c = applet()->containment()) {
@@ -556,15 +260,6 @@ int AppletInterface::screen() const
     }
 
     return -1;
-}
-
-QRect AppletInterface::screenGeometry() const
-{
-    if (!applet() || !applet()->containment() || !applet()->containment()->corona() || applet()->containment()->screen() < 0) {
-        return QRect();
-    }
-
-    return applet()->containment()->corona()->screenGeometry(applet()->containment()->screen());
 }
 
 void AppletInterface::setHideOnWindowDeactivate(bool hide)
@@ -580,88 +275,26 @@ bool AppletInterface::hideOnWindowDeactivate() const
     return m_hideOnDeactivate;
 }
 
-void AppletInterface::setConstraintHints(Plasma::Types::ConstraintHints hints)
+QRect AppletInterface::screenGeometry() const
 {
-    if (m_constraintHints == hints) {
-        return;
+    if (!applet() || !applet()->containment() || !applet()->containment()->corona() || applet()->containment()->screen() < 0) {
+        return QRect();
     }
 
-    m_constraintHints = hints;
-    Q_EMIT constraintHintsChanged();
+    return applet()->containment()->corona()->screenGeometry(applet()->containment()->screen());
 }
 
-Plasma::Types::ConstraintHints AppletInterface::constraintHints() const
+void AppletInterface::executeAction(QAction *action)
 {
-    return m_constraintHints;
-}
-
-QKeySequence AppletInterface::globalShortcut() const
-{
-    return applet()->globalShortcut();
-}
-
-void AppletInterface::setGlobalShortcut(const QKeySequence &sequence)
-{
-    applet()->setGlobalShortcut(sequence);
-}
-
-QObject *AppletInterface::nativeInterface()
-{
-    return applet();
-}
-
-bool AppletInterface::configurationRequired() const
-{
-    return applet()->configurationRequired();
-}
-
-void AppletInterface::setConfigurationRequiredProperty(bool needsConfiguring)
-{
-    applet()->setConfigurationRequired(needsConfiguring, applet()->configurationRequiredReason());
-}
-
-QString AppletInterface::configurationRequiredReason() const
-{
-    return applet()->configurationRequiredReason();
-}
-
-void AppletInterface::setConfigurationRequiredReason(const QString &reason)
-{
-    applet()->setConfigurationRequired(applet()->configurationRequired(), reason);
-}
-
-QString AppletInterface::downloadPath() const
-{
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/")
-        + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
-
-    if (!QFile::exists(downloadDir)) {
-        QDir dir({QLatin1Char('/')});
-        dir.mkpath(downloadDir);
-    }
-
-    return downloadDir;
-}
-
-QStringList AppletInterface::downloadedFiles() const
-{
-    const QString downloadDir = QStandardPaths::writableLocation(QStandardPaths::DownloadLocation) + QStringLiteral("/Plasma/")
-        + applet()->pluginMetaData().pluginId() + QLatin1Char('/');
-    QDir dir(downloadDir);
-    return dir.entryList(QDir::Files | QDir::NoSymLinks | QDir::Readable);
-}
-
-void AppletInterface::executeAction(const QString &name)
-{
-    if (qmlObject()->rootObject()) {
-        const QMetaObject *metaObj = qmlObject()->rootObject()->metaObject();
-        const QByteArray actionMethodName = "action_" + name.toUtf8();
-        const QByteArray actionFunctionName = actionMethodName + QByteArray("()");
-        if (metaObj->indexOfMethod(QMetaObject::normalizedSignature(actionFunctionName.constData()).constData()) != -1) {
-            QMetaObject::invokeMethod(qmlObject()->rootObject(), actionMethodName.constData(), Qt::DirectConnection);
-        } else {
-            QMetaObject::invokeMethod(qmlObject()->rootObject(), "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
-        }
+    // FIXME: this is an assumption on KActionCollection behavior which sets objectName to the name used in addAction
+    QString name = action->objectName();
+    const QMetaObject *metaObj = metaObject();
+    const QByteArray actionMethodName = "action_" + name.toUtf8();
+    const QByteArray actionFunctionName = actionMethodName + QByteArray("()");
+    if (metaObj->indexOfMethod(QMetaObject::normalizedSignature(actionFunctionName.constData()).constData()) != -1) {
+        QMetaObject::invokeMethod(this, actionMethodName.constData(), Qt::DirectConnection);
+    } else {
+        QMetaObject::invokeMethod(this, "actionTriggered", Qt::DirectConnection, Q_ARG(QVariant, name));
     }
 }
 
@@ -849,33 +482,6 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
     }
 
     return AppletQuickItem::eventFilter(watched, event);
-}
-
-void AppletInterface::updateUiReadyConstraint()
-{
-    if (!isLoading()) {
-        applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
-    }
-}
-
-bool AppletInterface::isLoading() const
-{
-    return m_loading;
-}
-
-KPluginMetaData AppletInterface::metaData() const
-{
-    return applet()->pluginMetaData();
-}
-
-AppletInterface *AppletInterface::self()
-{
-    return this;
-}
-
-bool AppletInterface::isEditMode() const
-{
-    return applet()->containment()->corona()->isEditMode();
 }
 
 #include "moc_appletinterface.cpp"

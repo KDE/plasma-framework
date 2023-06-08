@@ -405,6 +405,11 @@ KActionCollection *Corona::actions() const
     return &d->actions;
 }
 
+QAction *Corona::action(const QString &name) const
+{
+    return d->actions.action(name);
+}
+
 CoronaPrivate::CoronaPrivate(Corona *corona)
     : q(corona)
     , immutability(Types::Mutable)

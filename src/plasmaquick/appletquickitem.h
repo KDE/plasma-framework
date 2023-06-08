@@ -9,6 +9,7 @@
 
 #include <QQmlComponent>
 #include <QQmlEngine>
+#include <QQmlParserStatus>
 #include <QQuickItem>
 #include <QTimer>
 
@@ -49,15 +50,23 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
     Q_PROPERTY(QQuickItem *fullRepresentationItem READ fullRepresentationItem NOTIFY fullRepresentationItemChanged)
 
     /**
+     * When true the full representation will be loaded immediately together with the main plasmoid.
+     * Note that this will have a negative impact on plasmoid loading times
+     * This is needed only when some important logic has to live inside the full representation and
+     * needs to be accessed from the outside. Use with care
+     * TODO: remove? we whould find a better way to fix folderview and Notes
+     */
+    Q_PROPERTY(bool preloadFullRepresentation READ preloadFullRepresentation WRITE setPreloadFullRepresentation NOTIFY preloadFullRepresentationChanged)
+
+    /**
      * this is supposed to be either one between compactRepresentation or fullRepresentation
      */
     Q_PROPERTY(QQmlComponent *preferredRepresentation READ preferredRepresentation WRITE setPreferredRepresentation NOTIFY preferredRepresentationChanged)
 
     /**
-     * True when the applet is showing its full representation. either as the main only view, or in a popup.
-     * Setting it will open or close the popup if the plasmoid is iconified, however it won't have effect if the applet is open
+     * Hint set to true if the applet should be siplayed as expanded, such as the main popup open
      */
-    Q_PROPERTY(bool expanded WRITE setExpanded READ isExpanded NOTIFY expandedChanged)
+    Q_PROPERTY(bool expanded READ isExpanded WRITE setExpanded NOTIFY expandedChanged)
 
     /**
      * True when the applet wants the activation signal act in toggle mode, i.e. while being expanded
@@ -66,24 +75,28 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
     Q_PROPERTY(bool activationTogglesExpanded WRITE setActivationTogglesExpanded READ isActivationTogglesExpanded NOTIFY activationTogglesExpandedChanged)
 
     /**
-     * the applet root QML item: sometimes is the same as fullRepresentationItem
-     * if a fullrepresentation was not declared explicitly
+     * Whether the dialog should be hidden when the dialog loses focus.
+     *
+     * The default value is @c false.
+     **/
+    Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
+
+    /**
+     * Gives compatibility to the old plasmoid.* api
      */
-    Q_PROPERTY(QObject *rootItem READ rootItem CONSTANT)
+    Q_PROPERTY(QObject *plasmoid READ applet CONSTANT)
 
 public:
-    AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent = nullptr);
+    AppletQuickItem(QQuickItem *parent = nullptr);
     ~AppletQuickItem() override;
 
     ////API NOT SUPPOSED TO BE USED BY QML
     Plasma::Applet *applet() const;
 
-    // Make the constructor lighter and delay the actual instantiation of the qml in the applet
-    virtual void init();
+    void classBegin() override;
 
     QQuickItem *compactRepresentationItem();
     QQuickItem *fullRepresentationItem();
-    QObject *rootItem();
     QObject *testItem();
 
     ////PROPERTY ACCESSORS
@@ -108,10 +121,14 @@ public:
     bool isActivationTogglesExpanded() const;
     void setActivationTogglesExpanded(bool activationTogglesExpanded);
 
-    static AppletQuickItem *itemForApplet(Plasma::Applet *applet);
+    bool hideOnWindowDeactivate() const;
+    void setHideOnWindowDeactivate(bool hide);
 
-    ////NEEDED BY QML TO CREATE ATTACHED PROPERTIES
-    static AppletQuickItem *qmlAttachedProperties(QObject *object);
+    bool preloadFullRepresentation() const;
+    void setPreloadFullRepresentation(bool preload);
+
+    static bool hasItemForApplet(Plasma::Applet *applet);
+    static AppletQuickItem *itemForApplet(Plasma::Applet *applet);
 
 Q_SIGNALS:
     // Property signals
@@ -119,7 +136,9 @@ Q_SIGNALS:
     void switchHeightChanged(int height);
 
     void expandedChanged(bool expanded);
+
     void activationTogglesExpandedChanged(bool activationTogglesExpanded);
+    void hideOnWindowDeactivateChanged(bool hide);
 
     void compactRepresentationChanged(QQmlComponent *compactRepresentation);
     void fullRepresentationChanged(QQmlComponent *fullRepresentation);
@@ -128,7 +147,11 @@ Q_SIGNALS:
     void compactRepresentationItemChanged(QObject *compactRepresentationItem);
     void fullRepresentationItemChanged(QObject *fullRepresentationItem);
 
+    void preloadFullRepresentationChanged(bool preload);
+
 protected:
+    // Initializations that need to be executed after classBegin()
+    virtual void init();
     PlasmaQuick::SharedQmlEngine *qmlObject();
 
     // Reimplementation
@@ -150,7 +173,5 @@ private:
 };
 
 }
-
-QML_DECLARE_TYPEINFO(PlasmaQuick::AppletQuickItem, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

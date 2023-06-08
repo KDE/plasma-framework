@@ -13,6 +13,7 @@ set_target_properties(KF6PlasmaQuick PROPERTIES
 )
 
 target_sources(KF6PlasmaQuick PRIVATE
+    appletcontext.cpp
     appletquickitem.cpp
     debug_p.cpp
     dialog.cpp
@@ -25,6 +26,7 @@ target_sources(KF6PlasmaQuick PRIVATE
     quickviewsharedengine.cpp
     plasmawindow.cpp
     private/configcategory_p.cpp
+    private/plasmoidattached_p.cpp
     ../declarativeimports/core/framesvgitem.cpp
     ../declarativeimports/core/imagetexturescache.cpp
     ../declarativeimports/core/managedtexturenode.cpp

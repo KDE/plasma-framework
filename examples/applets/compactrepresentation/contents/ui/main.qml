@@ -12,16 +12,17 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
 
 Item {
+    id: root
     Layout.minimumWidth: 200
     Layout.minimumHeight: 300
-    Plasmoid.compactRepresentation: Component {
+    compactRepresentation: Component {
         PlasmaComponents.Button {
             text: i18n("Click me")
-            onClicked: Plasmoid.expanded = !Plasmoid.expanded
+            onClicked: root.expanded = !root.expanded
         }
     }
 
-    PlasmaComponents.Label {
+    fullRepresentation: PlasmaComponents.Label {
         text: i18n("Hello world")
     }
 }

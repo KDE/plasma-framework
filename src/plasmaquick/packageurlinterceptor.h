@@ -30,6 +30,7 @@ namespace PlasmaQuick
 {
 class PackageUrlInterceptorPrivate;
 
+// TODO: Remove completely?
 class PLASMAQUICK_EXPORT PackageUrlInterceptor : public QQmlAbstractUrlInterceptor
 {
 public:

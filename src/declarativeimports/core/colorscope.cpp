@@ -98,13 +98,16 @@ ColorScope *ColorScope::findParentScope()
         candidate = parent();
     }
 
-    while (candidate) {
+    // FIXME: this whole class needs to be removed
+    int depth = 0;
+    while (candidate && depth < 20) {
         auto *quickCandidate = qobject_cast<QQuickItem *>(candidate);
         if (quickCandidate && quickCandidate->parentItem()) {
             candidate = quickCandidate->parentItem();
         } else {
             candidate = candidate->parent();
         }
+        ++depth;
 
         ColorScope *s = qobject_cast<ColorScope *>(candidate);
         if (!s) {

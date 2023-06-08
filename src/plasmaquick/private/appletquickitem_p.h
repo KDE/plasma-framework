@@ -12,6 +12,8 @@
 #include <QQmlEngine>
 #include <QQuickItem>
 
+#include <Plasma/Corona>
+
 //
 //  W A R N I N G
 //  -------------
@@ -32,6 +34,7 @@ namespace PlasmaQuick
 {
 class AppletQuickItem;
 class SharedQmlEngine;
+class AppletContext;
 
 class AppletQuickItemPrivate
 {
@@ -52,9 +55,7 @@ public:
         Aggressive = 2,
     };
 
-    AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item);
-
-    void init();
+    AppletQuickItemPrivate(AppletQuickItem *item);
 
     int preloadWeight() const;
 
@@ -69,6 +70,7 @@ public:
     void preloadForExpansion();
 
     // look into item, and return the Layout attached property, if found
+    QObject *searchLayoutAttached(QObject *parent);
     void connectLayoutAttached(QObject *item);
     void propagateSizeHint(const QByteArray &layoutProperty);
 
@@ -113,7 +115,9 @@ public:
     KPackage::Package coronaPackage;
     KPackage::Package containmentPackage;
 
-    bool expanded : 1;
+    bool expanded = false;
+    bool hideOnWindowDeactivate = false;
+    bool preloadFullRepresentation = false;
     bool activationTogglesExpanded : 1;
     bool initComplete : 1;
     bool compactRepresentationCheckGuard : 1;

@@ -14,6 +14,7 @@
 
 #include "appletinterface.h"
 
+class AppletQuickItem;
 class WallpaperInterface;
 class DropMenu;
 class KJob;
@@ -40,48 +41,17 @@ class ContainmentInterface : public AppletInterface
 {
     Q_OBJECT
 
-    /**
-     * List of applets this containment has: the containments
-     * KF6: this should be AppletQuickItem *
-     */
-    Q_PROPERTY(QList<QObject *> applets READ applets NOTIFY appletsChanged)
-
-    /**
-     * Type of this containment TODO: notify
-     */
-    Q_PROPERTY(Plasma::Containment::Type containmentType READ containmentType CONSTANT)
-
-    /**
-     * Activity name of this containment
-     */
-    Q_PROPERTY(QString activity READ activity NOTIFY activityChanged)
-
-    /**
-     * Activity name of this containment
-     */
-    Q_PROPERTY(QString activityName READ activityName NOTIFY activityNameChanged)
-
-    /**
-     * Actions associated to this containment or corona
-     */
-    Q_PROPERTY(QList<QObject *> actions READ actions NOTIFY actionsChanged)
-
-    /**
-     * True when the Plasma Shell is in an edit mode that allows to move
-     * things around: it's different from userConfiguring as it's about
-     * editing plasmoids inside the containment, rather than the containment
-     * settings dialog itself.
-     * This is global for the whole Plasma process, all containments will have the same value for editMode
-     */
-    Q_PROPERTY(bool editMode READ isEditMode WRITE setEditMode NOTIFY editModeChanged)
-
     Q_PROPERTY(WallpaperInterface *wallpaper READ wallpaperInterface NOTIFY wallpaperInterfaceChanged)
 
-    Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints WRITE setContainmentDisplayHints NOTIFY
-                   containmentDisplayHintsChanged)
+    /**
+     * True if the UI is still loading, for instance a desktop which doesn't have its wallpaper yet
+     */
+    Q_PROPERTY(bool loading READ isLoading NOTIFY isLoadingChanged)
 
 public:
-    ContainmentInterface(Plasma::Applet *parent, const QVariantList &args = QVariantList());
+    ContainmentInterface(QQuickItem *parent = nullptr);
+
+    void classBegin() override;
 
     // Not for QML
     Plasma::Containment *containment() const
@@ -95,16 +65,10 @@ public:
     }
 
     // For QML use
-    QList<QObject *> applets();
-
-    Plasma::Containment::Type containmentType() const;
-
-    QString activity() const;
-    QString activityName() const;
-
-    QList<QObject *> actions() const;
-
-    void setContainmentDisplayHints(Plasma::Types::ContainmentDisplayHints hints);
+    /**
+     * Returns the corresponding AppletInterface of one of its applets
+     */
+    Q_INVOKABLE AppletQuickItem *itemFor(Plasma::Applet *applet) const;
 
     /**
      * Process the mime data arrived to a particular coordinate, either with a drag and drop or paste with middle mouse button
@@ -119,24 +83,19 @@ public:
     /**
      * Search for a containment at those coordinates.
      * the coordinates are passed as local coordinates of *this* containment
+     * TODO: this should be contaimentItemAt() but needs further client code adaptations
      */
-    Q_INVOKABLE QObject *containmentAt(int x, int y);
-
-    /**
-     * Add an existing applet to this containment.
-     * The coordinates are passed as local coordinates of this containment
-     */
-    Q_INVOKABLE void addApplet(AppletInterface *applet, int x, int y);
+    Q_INVOKABLE QObject *containmentItemAt(int x, int y);
 
     /**
      * Map coordinates from relative to the given applet to relative to this containment
      */
-    Q_INVOKABLE QPointF mapFromApplet(AppletInterface *applet, int x, int y);
+    Q_INVOKABLE QPointF mapFromApplet(Plasma::Applet *applet, int x, int y);
 
     /**
      *Map coordinates from relative to this containment to relative to the given applet
      */
-    Q_INVOKABLE QPointF mapToApplet(AppletInterface *applet, int x, int y);
+    Q_INVOKABLE QPointF mapToApplet(Plasma::Applet *applet, int x, int y);
 
     /**
      * Given a geometry, it adjusts it moving it completely inside of the boundaries
@@ -146,11 +105,6 @@ public:
     Q_INVOKABLE QPointF adjustToAvailableScreenRegion(int x, int y, int w, int h) const;
 
     /**
-     * @returns a named action from global Corona's actions
-     */
-    Q_INVOKABLE QAction *globalAction(QString name) const;
-
-    /**
      * Opens the context menu of the Corona
      *
      * @param globalPos menu position in the global coordinate system
@@ -158,16 +112,9 @@ public:
      */
     Q_INVOKABLE void openContextMenu(const QPointF &globalPos);
 
-    bool isEditMode() const;
-    void setEditMode(bool edit);
-
-    static ContainmentInterface *qmlAttachedProperties(QObject *object)
-    {
-        return qobject_cast<ContainmentInterface *>(AppletQuickItem::qmlAttachedProperties(object));
-    }
-
 protected:
     void init() override;
+    void loadWallpaper();
     void mousePressEvent(QMouseEvent *event) override;
     void mouseReleaseEvent(QMouseEvent *event) override;
     void wheelEvent(QWheelEvent *event) override;
@@ -176,25 +123,10 @@ protected:
     void addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event);
     void addContainmentActions(QMenu *desktopMenu, QEvent *event);
 
-    virtual bool isLoading() const override;
+    bool isLoading() const;
     void itemChange(ItemChange change, const ItemChangeData &value) override;
 
 Q_SIGNALS:
-    /**
-     * Emitted when an applet is added
-     * @param applet the applet object: it's a qml graphical object and an instance of AppletInterface
-     * @param x coordinate containment relative
-     * @param y coordinate containment relative
-     */
-    void appletAdded(QObject *applet, int x, int y);
-
-    /**
-     * Emitted when an applet is removed
-     * @param applet the applet object: it's a qml graphical object and an instance of AppletInterface.
-     *               It's still valid, even if it will be deleted shortly
-     */
-    void appletRemoved(QObject *applet);
-
     // Property notifiers
     void activityChanged();
     void activityNameChanged();
@@ -203,19 +135,17 @@ Q_SIGNALS:
     void actionsChanged();
     void editModeChanged();
     void wallpaperInterfaceChanged();
-
-protected Q_SLOTS:
-    void appletAddedForward(Plasma::Applet *applet);
-    void appletRemovedForward(Plasma::Applet *applet);
-    void loadWallpaper();
-    void dropJobResult(KJob *job);
-    void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
+    void isLoadingChanged();
 
 private Q_SLOTS:
-    Plasma::Applet *createApplet(const QString &plugin, const QVariantList &args, const QPoint &pos);
+    // Used only internally by a metaObject()->invokeMethod
     Plasma::Applet *createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom);
 
 private:
+    void dropJobResult(KJob *job);
+    void mimeTypeRetrieved(KIO::Job *job, const QString &mimetype);
+    void appletAddedForward(Plasma::Applet *applet, const QRectF &geometryHint);
+    void appletRemovedForward(Plasma::Applet *applet);
     void clearDataForMimeJob(KIO::Job *job);
     void setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QVariant &data);
     void deleteWallpaperInterface();
@@ -229,7 +159,5 @@ private:
     int m_wheelDelta;
     friend class AppletInterface;
 };
-
-QML_DECLARE_TYPEINFO(ContainmentInterface, QML_HAS_ATTACHED_PROPERTIES)
 
 #endif

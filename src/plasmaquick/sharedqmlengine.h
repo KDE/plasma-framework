@@ -20,6 +20,11 @@ class QQmlComponent;
 class QQmlEngine;
 class KLocalizedContext;
 
+namespace Plasma
+{
+class Applet;
+}
+
 namespace PlasmaQuick
 {
 class SharedQmlEnginePrivate;
@@ -51,6 +56,7 @@ public:
      * @param parent The QObject parent for this object.
      */
     explicit SharedQmlEngine(QObject *parent = nullptr);
+    explicit SharedQmlEngine(Plasma::Applet *applet, QObject *parent = nullptr);
 
     ~SharedQmlEngine() override;
 
@@ -180,7 +186,6 @@ private:
     const std::unique_ptr<SharedQmlEnginePrivate> d;
 
     Q_PRIVATE_SLOT(d, void scheduleExecutionEnd())
-    Q_PRIVATE_SLOT(d, void checkInitializationCompleted())
 };
 
 }

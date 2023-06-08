@@ -19,12 +19,15 @@
 #include <QMimeData>
 #include <QMimeDatabase>
 #include <QPainter>
+#include <QQuickItem>
 #include <QTemporaryFile>
 
 #include <KAuthorized>
 #include <KConfigLoader>
 #include <KConfigSkeleton>
 #include <KLocalizedString>
+
+#include <kactivities/info.h>
 
 #include "containmentactions.h"
 #include "corona.h"
@@ -64,6 +67,22 @@ Containment::~Containment()
 void Containment::init()
 {
     Applet::init();
+
+    connect(corona(), &Plasma::Corona::availableScreenRectChanged, this, [this](int screenId) {
+        if (screenId == screen() || screenId == lastScreen()) {
+            Q_EMIT availableRelativeScreenRectChanged(availableRelativeScreenRect());
+        }
+    });
+    connect(corona(), &Plasma::Corona::availableScreenRegionChanged, this, [this](int screenId) {
+        if (screenId == screen() || screenId == lastScreen()) {
+            Q_EMIT availableRelativeScreenRegionChanged(availableRelativeScreenRegion());
+        }
+    });
+    connect(corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int screenId) {
+        if (screenId == screen() || screenId == lastScreen()) {
+            Q_EMIT screenGeometryChanged(screenGeometry());
+        }
+    });
 
     // connect actions
     ContainmentPrivate::addDefaultActions(actions(), this);
@@ -328,16 +347,16 @@ void Containment::setLocation(Types::Location location)
     Q_EMIT locationChanged(location);
 }
 
-Applet *Containment::createApplet(const QString &name, const QVariantList &args)
+Applet *Containment::createApplet(const QString &name, const QVariantList &args, const QRectF &geometryHint)
 {
-    Plasma::Applet *applet = d->createApplet(name, args);
+    Plasma::Applet *applet = d->createApplet(name, args, 0, geometryHint);
     if (applet) {
-        Q_EMIT appletCreated(applet);
+        Q_EMIT appletCreated(applet, geometryHint);
     }
     return applet;
 }
 
-void Containment::addApplet(Applet *applet)
+void Containment::addApplet(Applet *applet, const QRectF &geometryHint)
 {
     if (!applet) {
 #ifndef NDEBUG
@@ -359,7 +378,9 @@ void Containment::addApplet(Applet *applet)
     Containment *currentContainment = applet->containment();
 
     if (currentContainment && currentContainment != this) {
+        Q_EMIT currentContainment->appletAboutToBeRemoved(applet);
         Q_EMIT currentContainment->appletRemoved(applet);
+        Q_EMIT appletsChanged();
 
         disconnect(applet, nullptr, currentContainment, nullptr);
         connect(currentContainment, nullptr, applet, nullptr);
@@ -395,6 +416,7 @@ void Containment::addApplet(Applet *applet)
     auto position = std::lower_bound(d->applets.begin(), d->applets.end(), applet, [](Plasma::Applet *a1, Plasma::Applet *a2) {
         return a1->id() < a2->id();
     });
+    Q_EMIT appletAboutToBeAdded(applet, geometryHint);
     d->applets.insert(position, applet);
 
     if (!d->uiReady) {
@@ -426,7 +448,9 @@ void Containment::addApplet(Applet *applet)
     applet->updateConstraints(Plasma::Types::AllConstraints);
     applet->flushPendingConstraintsEvents();
 
-    Q_EMIT appletAdded(applet);
+    Q_EMIT appletAdded(applet, geometryHint);
+    Q_EMIT appletsChanged();
+    Q_EMIT applet->containmentChanged(this);
 
     if (!currentContainment) {
         applet->updateConstraints(Plasma::Types::StartupCompletedConstraint);
@@ -454,6 +478,69 @@ int Containment::screen() const
 int Containment::lastScreen() const
 {
     return d->lastScreen;
+}
+
+QRectF Containment::availableRelativeScreenRect() const
+{
+    if (!corona()) {
+        return {};
+    }
+
+    int screenId = screen();
+
+    // If corona returned an invalid screenId, try to use lastScreen value if it is valid
+    if (screenId == -1 && lastScreen() > -1) {
+        screenId = lastScreen();
+        // Is this a screen not actually valid?
+        if (screenId >= corona()->numScreens()) {
+            screenId = -1;
+        }
+    }
+
+    if (screenId > -1) {
+        QRectF rect = corona()->availableScreenRect(screenId);
+        // make it relative
+        QRectF geometry = corona()->screenGeometry(screenId);
+        rect.moveTo(rect.topLeft() - geometry.topLeft());
+        return rect;
+    }
+
+    return {};
+}
+
+QList<QRectF> Containment::availableRelativeScreenRegion() const
+{
+    QList<QRectF> regVal;
+
+    if (!containment() || !containment()->corona()) {
+        return regVal;
+    }
+
+    QRegion reg = QRect(QPoint(0, 0), screenGeometry().size().toSize());
+    int screenId = screen();
+    if (screenId > -1) {
+        reg = containment()->corona()->availableScreenRegion(screenId);
+    }
+
+    auto it = reg.begin();
+    const auto itEnd = reg.end();
+    QRect geometry = containment()->corona()->screenGeometry(screenId);
+    for (; it != itEnd; ++it) {
+        QRect rect = *it;
+        // make it relative
+        rect.moveTo(rect.topLeft() - geometry.topLeft());
+        regVal << QRectF(rect);
+    }
+    return regVal;
+}
+
+QRectF Containment::screenGeometry() const
+{
+    if (!corona() || screen() < 0) {
+        return {};
+    }
+
+    return corona()->screenGeometry(screen());
 }
 
 void Containment::setWallpaper(const QString &pluginName)
@@ -539,6 +626,14 @@ void Containment::setActivity(const QString &activityId)
 QString Containment::activity() const
 {
     return d->activityId;
+}
+
+QString Containment::activityName() const
+{
+    if (!d->activityInfo) {
+        return QString();
+    }
+    return d->activityInfo->name();
 }
 
 void Containment::reactToScreenChange()

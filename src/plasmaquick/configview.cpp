@@ -7,6 +7,7 @@
 #include "configview.h"
 #include "Plasma/Applet"
 #include "Plasma/Containment"
+#include "appletcontext_p.h"
 #include "appletquickitem.h"
 #include "configmodel.h"
 #include "private/configcategory_p.h"
@@ -27,6 +28,7 @@
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
+#include <qqmlengine.h>
 
 // Unfortunately QWINDOWSIZE_MAX is not exported
 #define DIALOGSIZE_MAX ((1 << 24) - 1)
@@ -54,6 +56,9 @@ public:
     ConfigModel *configModel;
     ConfigModel *kcmConfigModel;
     Plasma::Corona *corona;
+    AppletContext *rootContext;
+    QQmlEngine *engine = nullptr;
+    QQuickItem *rootItem = nullptr;
 
     // Attached Layout property of mainItem, if any
     QPointer<QObject> mainItemLayout;
@@ -64,6 +69,7 @@ ConfigViewPrivate::ConfigViewPrivate(Plasma::Applet *appl, ConfigView *view)
     , applet(appl)
     , corona(nullptr)
 {
+    engine = new QQmlEngine(q);
 }
 
 void ConfigViewPrivate::init()
@@ -77,6 +83,9 @@ void ConfigViewPrivate::init()
         return;
     }
 
+    rootContext = new AppletContext(q->engine(), applet, nullptr);
+    rootContext->setParent(q->engine());
+
     applet.data()->setUserConfiguring(true);
 
     KLocalizedContext *localizedContextObject = new KLocalizedContext(q->engine());
@@ -86,7 +95,7 @@ void ConfigViewPrivate::init()
     } else {
         localizedContextObject->setTranslationDomain(QStringLiteral("plasma_applet_") + applet.data()->pluginMetaData().pluginId());
     }
-    q->engine()->rootContext()->setContextObject(localizedContextObject);
+    rootContext->setContextObject(localizedContextObject);
 
     // FIXME: problem on nvidia, all windows should be transparent or won't show
     q->setColor(Qt::transparent);
@@ -116,18 +125,14 @@ void ConfigViewPrivate::init()
         new QQmlFileSelector(q->engine(), q->engine());
     }
 
-    q->setResizeMode(QQuickView::SizeViewToRootObject);
-
-    auto plasmoid = AppletQuickItem::itemForApplet(applet);
-    q->engine()->rootContext()->setProperty("_plasmoid_property", QVariant::fromValue(plasmoid));
     if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
-        q->engine()->rootContext()->setContextProperties({QQmlContext::PropertyPair{QStringLiteral("plasmoid"), QVariant::fromValue(plasmoid)},
-                                                          QQmlContext::PropertyPair{QStringLiteral("configDialog"), QVariant::fromValue(q)}});
+        rootContext->setContextProperties({QQmlContext::PropertyPair{QStringLiteral("plasmoid"), QVariant::fromValue(applet.data())},
+                                           QQmlContext::PropertyPair{QStringLiteral("configDialog"), QVariant::fromValue(q)}});
     }
 
     // config model local of the applet
     QQmlComponent component(q->engine(), applet.data()->kPackage().fileUrl("configmodel"));
-    QObject *object = component.create(q->engine()->rootContext());
+    QObject *object = component.create(rootContext);
     configModel = qobject_cast<ConfigModel *>(object);
 
     if (configModel) {
@@ -237,7 +242,7 @@ void ConfigViewPrivate::mainItemLoaded()
 
     // Search a child that has the needed Layout properties
     // HACK: here we are not type safe, but is the only way to access to a pointer of Layout
-    const auto children = q->rootObject()->children();
+    const auto children = rootItem->children();
     for (QObject *child : children) {
         // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         if (child->property("minimumWidth").isValid() && child->property("minimumHeight").isValid() && child->property("preferredWidth").isValid()
@@ -263,22 +268,15 @@ void ConfigViewPrivate::mainItemLoaded()
 }
 
 ConfigView::ConfigView(Plasma::Applet *applet, QWindow *parent)
-    : QQuickView(parent)
+    : QQuickWindow(parent)
     , d(new ConfigViewPrivate(applet, this))
 {
-    // See https://bugreports.qt.io/browse/QTBUG-112376 the workaround should be removed when the bug is fixed
-    setInitialProperties({{QStringLiteral("parent"), QVariant::fromValue(contentItem())}});
     setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     // Only register types once
     [[maybe_unused]] static int configModelRegisterResult = qmlRegisterType<ConfigModel>("org.kde.plasma.configuration", 2, 0, "ConfigModel");
     [[maybe_unused]] static int configCategoryRegisterResult = qmlRegisterType<ConfigCategory>("org.kde.plasma.configuration", 2, 0, "ConfigCategory");
     d->init();
     connect(applet, &QObject::destroyed, this, &ConfigView::close);
-    connect(this, &QQuickView::statusChanged, [=](QQuickView::Status status) {
-        if (status == QQuickView::Ready) {
-            d->mainItemLoaded();
-        }
-    });
 }
 
 ConfigView::~ConfigView()
@@ -289,6 +287,46 @@ ConfigView::~ConfigView()
             d->applet.data()->containment()->corona()->requestConfigSync();
         }
     }
+    delete d->rootItem;
+}
+
+QQmlEngine *ConfigView::engine()
+{
+    return d->engine;
+}
+
+QQmlContext *ConfigView::rootContext()
+{
+    return d->rootContext;
+}
+
+void ConfigView::setSource(const QUrl &src)
+{
+    QQmlComponent uiComponent(engine(), src);
+    QObject *object = uiComponent.createWithInitialProperties({{QStringLiteral("parent"), QVariant::fromValue(contentItem())}}, d->rootContext);
+
+    d->rootItem = qobject_cast<QQuickItem *>(object);
+    if (!d->rootItem) {
+        return;
+    }
+    d->mainItemLoaded();
+
+    if (d->rootItem->implicitHeight() > 0 || d->rootItem->implicitWidth() > 0) {
+        resize(QSize(d->rootItem->implicitWidth(), d->rootItem->implicitHeight()));
+    }
+    d->rootItem->setSize(QSizeF(width(), height()));
+
+    connect(d->rootItem, &QQuickItem::implicitWidthChanged, this, [this]() {
+        setWidth(d->rootItem->implicitWidth());
+    });
+    connect(d->rootItem, &QQuickItem::implicitHeightChanged, this, [this]() {
+        setWidth(d->rootItem->implicitHeight());
+    });
+}
+
+QQuickItem *ConfigView::rootObject()
+{
+    return d->rootItem;
 }
 
 void ConfigView::init()
@@ -334,10 +372,11 @@ void ConfigView::hideEvent(QHideEvent *ev)
 
 void ConfigView::resizeEvent(QResizeEvent *re)
 {
-    if (!rootObject()) {
+    if (!d->rootItem) {
         return;
     }
-    rootObject()->setSize(re->size());
+
+    d->rootItem->setSize(re->size());
 
     if (d->applet) {
         KConfigGroup cg = d->applet.data()->config();

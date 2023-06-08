@@ -277,8 +277,10 @@ void AppletPrivate::askDestroy()
                     std::lower_bound(q->containment()->d->applets.begin(), q->containment()->d->applets.end(), q, [](Plasma::Applet *a1, Plasma::Applet *a2) {
                         return a1->id() < a2->id();
                     });
+                Q_EMIT q->containment()->appletAboutToBeAdded(q, QRectF());
                 q->containment()->d->applets.insert(position, q);
-                Q_EMIT q->containment()->appletAdded(q);
+                Q_EMIT q->containment()->appletAdded(q, QRectF());
+                Q_EMIT q->containment()->appletsChanged();
             }
             if (deleteNotification) {
                 deleteNotification->close();
@@ -318,8 +320,10 @@ void AppletPrivate::askDestroy()
             deleteNotificationTimer->start();
         }
         if (!q->isContainment() && q->containment()) {
+            Q_EMIT q->containment()->appletAboutToBeRemoved(q);
             q->containment()->d->applets.removeAll(q);
             Q_EMIT q->containment()->appletRemoved(q);
+            Q_EMIT q->containment()->appletsChanged();
         }
     }
 }

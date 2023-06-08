@@ -5,11 +5,16 @@
 */
 
 #include "appletquickitem.h"
+#include "applet.h"
+#include "appletcontext_p.h"
+#include "configview.h"
+#include "containment.h"
 #include "debug_p.h"
 #include "plasmoid/appletinterface.h"
 #include "plasmoid/containmentinterface.h"
 #include "plasmoid/wallpaperinterface.h"
 #include "private/appletquickitem_p.h"
+#include "private/plasmoidattached_p.h"
 #include "sharedqmlengine.h"
 
 #include <QJsonArray>
@@ -29,19 +34,18 @@
 
 #include <packageurlinterceptor.h>
 #include <qloggingcategory.h>
+#include <qstringliteral.h>
 
 namespace PlasmaQuick
 {
+
 QHash<Plasma::Applet *, AppletQuickItem *> AppletQuickItemPrivate::s_itemsForApplet = QHash<Plasma::Applet *, AppletQuickItem *>();
 AppletQuickItemPrivate::PreloadPolicy AppletQuickItemPrivate::s_preloadPolicy = AppletQuickItemPrivate::Uninitialized;
 
-AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickItem *item)
+AppletQuickItemPrivate::AppletQuickItemPrivate(AppletQuickItem *item)
     : q(item)
     , switchWidth(-1)
     , switchHeight(-1)
-    , applet(a)
-    , expanded(false)
-    , activationTogglesExpanded(true)
     , initComplete(false)
     , compactRepresentationCheckGuard(false)
 {
@@ -59,16 +63,6 @@ AppletQuickItemPrivate::AppletQuickItemPrivate(Plasma::Applet *a, AppletQuickIte
         }
 
         qCInfo(LOG_PLASMAQUICK) << "Applet preload policy set to" << s_preloadPolicy;
-    }
-}
-
-void AppletQuickItemPrivate::init()
-{
-    qmlObject = new PlasmaQuick::SharedQmlEngine(q);
-    if (qmlObject->engine()->urlInterceptors().isEmpty()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine().get(), KPackage::Package());
-        interceptor->setForcePlasmaStyle(true);
-        qmlObject->engine()->addUrlInterceptor(interceptor);
     }
 }
 
@@ -90,19 +84,12 @@ int AppletQuickItemPrivate::preloadWeight() const
                   100);
 }
 
-void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
+QObject *AppletQuickItemPrivate::searchLayoutAttached(QObject *parent)
 {
     QObject *layout = nullptr;
-
-    // Extract the representation's Layout, if any
-    // No Item?
-    if (!item) {
-        return;
-    }
-
     // Search a child that has the needed Layout properties
     // HACK: here we are not type safe, but is the only way to access to a pointer of Layout
-    const auto lstChildren = item->children();
+    const auto lstChildren = parent->children();
     for (QObject *child : lstChildren) {
         // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
         /* clang-format off */
@@ -118,6 +105,17 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
             break;
         }
     }
+    return layout;
+}
+
+void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
+{
+    // Extract the representation's Layout, if any
+    if (!item) {
+        return;
+    }
+
+    QObject *layout = searchLayoutAttached(item);
 
     // if the compact repr doesn't export a Layout.* attached property,
     // reset our own with default values
@@ -145,24 +143,7 @@ void AppletQuickItemPrivate::connectLayoutAttached(QObject *item)
     propagateSizeHint("fillWidth");
     propagateSizeHint("fillHeight");
 
-    QObject *newOwnLayout = nullptr;
-
-    const auto children = q->children();
-    for (QObject *child : children) {
-        // find for the needed property of Layout: minimum/maximum/preferred sizes and fillWidth/fillHeight
-        /* clang-format off */
-        if (child->property("minimumWidth").isValid()
-            && child->property("minimumHeight").isValid()
-            && child->property("preferredWidth").isValid()
-            && child->property("preferredHeight").isValid()
-            && child->property("maximumWidth").isValid()
-            && child->property("maximumHeight").isValid()
-            && child->property("fillWidth").isValid()
-            && child->property("fillHeight").isValid()) { /* clang-format on */
-            newOwnLayout = child;
-            break;
-        }
-    }
+    QObject *newOwnLayout = searchLayoutAttached(q);
 
     // this should never happen, since we ask to create it if doesn't exists
     if (!newOwnLayout) {
@@ -223,9 +204,9 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationItem()
 
     QVariantHash initialProperties;
     initialProperties[QStringLiteral("parent")] = QVariant::fromValue(q);
+    initialProperties[QStringLiteral("plasmoidItem")] = QVariant::fromValue(q);
 
-    compactRepresentationItem =
-        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentation, qmlContext(qmlObject->rootObject()), initialProperties));
+    compactRepresentationItem = qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentation, qmlContext(q), initialProperties));
 
     Q_EMIT q->compactRepresentationItemChanged(compactRepresentationItem);
 
@@ -241,12 +222,7 @@ QQuickItem *AppletQuickItemPrivate::createFullRepresentationItem()
     if (fullRepresentation && fullRepresentation != qmlObject->mainComponent()) {
         QVariantHash initialProperties;
         initialProperties[QStringLiteral("parent")] = QVariant();
-        fullRepresentationItem =
-            qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(fullRepresentation, qmlContext(qmlObject->rootObject()), initialProperties));
-    } else {
-        fullRepresentation = qmlObject->mainComponent();
-        fullRepresentationItem = qobject_cast<QQuickItem *>(qmlObject->rootObject());
-        Q_EMIT q->fullRepresentationChanged(fullRepresentation);
+        fullRepresentationItem = qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(fullRepresentation, qmlContext(q), initialProperties));
     }
 
     if (!fullRepresentationItem) {
@@ -268,14 +244,14 @@ QQuickItem *AppletQuickItemPrivate::createCompactRepresentationExpanderItem()
         return compactRepresentationExpanderItem;
     }
 
-    compactRepresentationExpanderItem =
-        qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentationExpander, qmlContext(qmlObject->rootObject())));
+    compactRepresentationExpanderItem = qobject_cast<QQuickItem *>(qmlObject->createObjectFromComponent(compactRepresentationExpander, qmlContext(q)));
 
     if (!compactRepresentationExpanderItem) {
         return nullptr;
     }
 
     compactRepresentationExpanderItem->setProperty("compactRepresentation", QVariant::fromValue<QObject *>(createCompactRepresentationItem()));
+    compactRepresentationExpanderItem->setProperty("plasmoidItem", QVariant::fromValue(q));
 
     return compactRepresentationExpanderItem;
 }
@@ -286,6 +262,11 @@ bool AppletQuickItemPrivate::appletShouldBeExpanded() const
         return true;
 
     } else {
+        if (!fullRepresentation) {
+            // If a full representation wasn't specified, the onle and only representation of the plasmoid are our
+            // direct contents, so we consider it always expanded
+            return true;
+        }
         if (switchWidth > 0 && switchHeight > 0) {
             return q->width() > switchWidth && q->height() > switchHeight;
 
@@ -308,10 +289,13 @@ void AppletQuickItemPrivate::preloadForExpansion()
     if (QLoggingCategory::defaultCategory()->isInfoEnabled()) {
         time = QDateTime::currentMSecsSinceEpoch();
     }
-    createFullRepresentationItem();
+
+    if (!createFullRepresentationItem()) {
+        return;
+    }
 
     // When not already expanded, also preload the expander
-    if (!expanded && !applet->isContainment() && (!preferredRepresentation || preferredRepresentation != fullRepresentation)) {
+    if (!appletShouldBeExpanded() && !applet->isContainment() && (!preferredRepresentation || preferredRepresentation != fullRepresentation)) {
         createCompactRepresentationExpanderItem();
     }
 
@@ -331,6 +315,9 @@ void AppletQuickItemPrivate::preloadForExpansion()
 
 void AppletQuickItemPrivate::anchorsFillParent(QQuickItem *item, QQuickItem *parent)
 {
+    if (item->parentItem() != parent) {
+        return;
+    }
     // just set once, don't bind
     QQmlProperty::write(item, QStringLiteral("anchors.fill"), QVariant::fromValue<QObject *>(parent));
 }
@@ -338,10 +325,6 @@ void AppletQuickItemPrivate::anchorsFillParent(QQuickItem *item, QQuickItem *par
 void AppletQuickItemPrivate::compactRepresentationCheck()
 {
     if (!initComplete) {
-        return;
-    }
-
-    if (!qmlObject->rootObject()) {
         return;
     }
 
@@ -376,8 +359,12 @@ void AppletQuickItemPrivate::compactRepresentationCheck()
                 compactRepresentationExpanderItem->setVisible(false);
             }
 
-            item->setParentItem(q);
-            anchorsFillParent(item, q);
+            // the fullrepresentation being the complete AppletItem is actually allowed when the main ui
+            // is child of the root item (like many panel applets)
+            if (item != q) {
+                item->setParentItem(q);
+                anchorsFillParent(item, q);
+            }
 
             if (compactRepresentationItem) {
                 compactRepresentationItem->setVisible(false);
@@ -461,36 +448,10 @@ void AppletQuickItemPrivate::fillHeightChanged()
     propagateSizeHint("fillHeight");
 }
 
-AppletQuickItem::AppletQuickItem(Plasma::Applet *applet, QQuickItem *parent)
+AppletQuickItem::AppletQuickItem(QQuickItem *parent)
     : QQuickItem(parent)
-    , d(new AppletQuickItemPrivate(applet, this))
+    , d(new AppletQuickItemPrivate(this))
 {
-    d->init();
-
-    if (d->applet) {
-        d->appletPackage = d->applet->kPackage();
-
-        if (d->applet->containment()) {
-            if (d->applet->containment()->corona()) {
-                d->coronaPackage = d->applet->containment()->corona()->kPackage();
-            }
-
-            d->containmentPackage = d->applet->containment()->kPackage();
-        }
-
-        if (d->applet->pluginMetaData().isValid()) {
-            const QString rootPath = d->applet->pluginMetaData().value(QStringLiteral("X-Plasma-RootPath"));
-            if (!rootPath.isEmpty()) {
-                d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + rootPath);
-            } else {
-                d->qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + d->applet->pluginMetaData().pluginId());
-            }
-        }
-    }
-
-    d->qmlObject->setInitializationDelayed(true);
-
-    setProperty("_plasma_applet", QVariant::fromValue(d->applet));
 }
 
 AppletQuickItem::~AppletQuickItem()
@@ -508,73 +469,134 @@ AppletQuickItem::~AppletQuickItem()
     delete d;
 }
 
-AppletQuickItem *AppletQuickItem::qmlAttachedProperties(QObject *object)
+bool AppletQuickItem::hasItemForApplet(Plasma::Applet *applet)
 {
-    QQmlContext *context;
-    // Special case: we are asking the attached Plasmoid property of an AppletItem itself, which in this case is itself
-    if (auto *appletItem = qobject_cast<AppletQuickItem *>(object)) {
-        return appletItem;
-    }
-
-    // is it using shared engine mode?
-    if (!qmlEngine(object)->parent()) {
-        context = qmlContext(object);
-        // search the root context of the applet in which the object is in
-        while (context) {
-            // the rootcontext of an applet is a child of the engine root context
-            if (context->parentContext() == qmlEngine(object)->rootContext()) {
-                break;
-            }
-
-            context = context->parentContext();
-        }
-        // otherwise index by root context
-    } else {
-        context = qmlEngine(object)->rootContext();
-    }
-    // at the moment of the attached object creation, the root item is the only one that hasn't a parent
-    // only way to avoid creation of this attached for everybody but the root item
-    AppletQuickItem *ret = qobject_cast<AppletQuickItem *>(context->property("_plasmoid_property").value<QObject *>());
-    if (!ret) {
-        qWarning() << "Could not find the Plasmoid for" << object << context << context->baseUrl();
-    }
-    return ret;
+    return AppletQuickItemPrivate::s_itemsForApplet.contains(applet);
 }
 
 AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
 {
-    if (!applet) {
+    // Don't try to create applet items when the app is closing
+    if (!applet || qApp->closingDown()) {
         return nullptr;
     }
 
     // TODO: move somewhere else? in plasmacore import?
     if (AppletQuickItemPrivate::s_itemsForApplet.isEmpty()) {
         const char *uri = "org.kde.plasma.plasmoid";
-        qmlRegisterUncreatableType<AppletInterface>(uri, 2, 0, "Plasmoid", QStringLiteral("Do not create objects of type Plasmoid"));
-        qmlRegisterUncreatableType<ContainmentInterface>(uri, 2, 0, "Containment", QStringLiteral("Do not create objects of type Containment"));
+        qmlRegisterUncreatableType<PlasmoidAttached>(uri, 2, 0, "Plasmoid", QStringLiteral("Do not create objects of type Plasmoid"));
+        qmlRegisterUncreatableType<ContainmentAttached>(uri, 2, 0, "Containment", QStringLiteral("Do not create objects of type Containment"));
         qmlRegisterUncreatableType<WallpaperInterface>(uri, 2, 0, "Wallpaper", QStringLiteral("Do not create objects of type Wallpaper"));
+
+        qmlRegisterType<AppletInterface>(uri, 2, 0, "PlasmoidItem");
+        qmlRegisterType<ContainmentInterface>(uri, 2, 0, "ContainmentItem");
+        qmlRegisterAnonymousType<Plasma::Applet>("org.kde.plasma.plasmoid", 1);
+        qmlRegisterAnonymousType<Plasma::Containment>("org.kde.plasma.plasmoid", 1);
+        qmlRegisterAnonymousType<Plasma::Corona>("org.kde.plasma.plasmoid", 1);
     }
     auto it = AppletQuickItemPrivate::s_itemsForApplet.constFind(applet);
     if (it != AppletQuickItemPrivate::s_itemsForApplet.constEnd()) {
         return it.value();
     }
+
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet);
 
-    AppletQuickItem *item = nullptr;
-    if (pc && pc->isContainment()) {
-        // TODO: creation parameters
-        item = new ContainmentInterface(applet, applet->startupArguments());
-    } else {
-        // fail? so it's a normal Applet
-        item = new AppletInterface(applet, applet->startupArguments());
+    // TODO: kill packageurlinterceptor
+    auto *qmlObject = new PlasmaQuick::SharedQmlEngine(applet);
+    qmlObject->setInitializationDelayed(true);
+    if (qmlObject->engine()->urlInterceptors().isEmpty()) {
+        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine().get(), KPackage::Package());
+        interceptor->setForcePlasmaStyle(true);
+        qmlObject->engine()->addUrlInterceptor(interceptor);
     }
+    if (applet->pluginMetaData().isValid()) {
+        const QString rootPath = applet->pluginMetaData().value(QStringLiteral("X-Plasma-RootPath"));
+        if (!rootPath.isEmpty()) {
+            qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + rootPath);
+        } else {
+            qmlObject->setTranslationDomain(QLatin1String("plasma_applet_") + applet->pluginMetaData().pluginId());
+        }
+    }
+
+    AppletQuickItem *item = nullptr;
+    qmlObject->setSource(applet->kPackage().fileUrl("mainscript"));
+    if (pc && pc->isContainment()) {
+        item = qobject_cast<ContainmentInterface *>(qmlObject->rootObject());
+        if (!item && qmlObject->mainComponent() && !qmlObject->mainComponent()->isError()) {
+            applet->setLaunchErrorMessage(i18n("The root item of %1 must be of type ContaimentItem", applet->kPackage().fileUrl("mainscript").toString()));
+        }
+    } else {
+        item = qobject_cast<AppletInterface *>(qmlObject->rootObject());
+        if (!item && qmlObject->mainComponent() && !qmlObject->mainComponent()->isError()) {
+            applet->setLaunchErrorMessage(i18n("The root item of %1 must be of type PlasmoidItem", applet->kPackage().fileUrl("mainscript").toString()));
+        }
+    }
+
+    if (!item || !qmlObject->mainComponent() || qmlObject->mainComponent()->isError() || applet->failedToLaunch()) {
+        QString reason;
+        QJsonObject errorData;
+        errorData[QStringLiteral("appletName")] = i18n("Unknown Applet");
+        errorData[QStringLiteral("isDebugMode")] = qEnvironmentVariableIntValue("PLASMA_ENABLE_QML_DEBUG") != 0;
+
+        if (applet->failedToLaunch()) {
+            reason = applet->launchErrorMessage();
+            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
+        }
+        if (applet->kPackage().isValid()) {
+            const auto errors = qmlObject->mainComponent()->errors();
+            QStringList errorList;
+            for (const QQmlError &error : errors) {
+                reason += error.toString() + QLatin1Char('\n');
+                errorList << error.toString();
+            }
+            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList(errorList);
+            errorData[QStringLiteral("appletName")] = applet->pluginMetaData().name();
+            reason = i18n("Error loading QML file: %1 %2", qmlObject->mainComponent()->url().toString(), reason);
+        } else {
+            reason = i18n("Error loading Applet: package inexistent. %1", applet->launchErrorMessage());
+            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
+        }
+
+        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("appletName")];
+        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("errors")];
+
+        qmlObject->setSource(applet->containment()->corona()->kPackage().fileUrl("appleterror"));
+
+        // even the error message QML may fail
+        if (qmlObject->mainComponent()->isError()) {
+            return nullptr;
+        }
+
+        item = qobject_cast<AppletInterface *>(qmlObject->rootObject());
+        item->setProperty("errorInformation", errorData);
+        applet->setLaunchErrorMessage(reason);
+    }
+
     AppletQuickItemPrivate::s_itemsForApplet[applet] = item;
-    applet->connect(applet, &QObject::destroyed, applet, [applet]() {
+    qmlObject->setInitializationDelayed(false);
+    qmlObject->completeInitialization();
+
+    // A normal applet has UI ready as soon as is loaded, a containment, only when also the wallpaper is loaded
+    if (!pc || !pc->isContainment()) {
+        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+        applet->flushPendingConstraintsEvents();
+    }
+
+    item->setProperty("_plasma_applet", QVariant::fromValue(applet));
+    qmlObject->setParent(item);
+    item->d->applet = applet;
+    item->d->qmlObject = qmlObject;
+
+    if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
+        qmlObject->rootContext()->setContextProperty(QStringLiteral("plasmoid"), applet);
+    }
+
+    applet->connect(applet, &Plasma::Applet::appletDeleted, applet, [](Plasma::Applet *applet) {
         delete AppletQuickItemPrivate::s_itemsForApplet[applet];
         AppletQuickItemPrivate::s_itemsForApplet.remove(applet);
     });
-    item->init();
 
+    applet->setProperty("_plasmoid", QVariant::fromValue(item));
     return item;
 }
 
@@ -585,14 +607,17 @@ Plasma::Applet *AppletQuickItem::applet() const
 
 void AppletQuickItem::init()
 {
-    // FIXME: Plasmoid attached property should be fixed since can't be indexed by engine anymore
-    if (!d->qmlObject->rootContext()->property("_plasmoid_property").isNull()) {
-        return;
-    }
-
-    d->qmlObject->rootContext()->setProperty("_plasmoid_property", QVariant::fromValue<QObject *>(this));
-
     Q_ASSERT(d->applet);
+
+    d->appletPackage = d->applet->kPackage();
+
+    if (d->applet->containment()) {
+        if (d->applet->containment()->corona()) {
+            d->coronaPackage = d->applet->containment()->corona()->kPackage();
+        }
+
+        d->containmentPackage = d->applet->containment()->kPackage();
+    }
 
     // Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine().get();
@@ -625,90 +650,17 @@ void AppletQuickItem::init()
         engine->setProperty(("_plasma_qqc_style_set"), true);
     }
 
-    d->qmlObject->setSource(d->applet->kPackage().fileUrl("mainscript"));
-    if (!engine || !engine->rootContext() || !engine->rootContext()->isValid() || !d->qmlObject->mainComponent() || d->qmlObject->mainComponent()->isError()
-        || d->applet->failedToLaunch()) {
-        QString reason;
-        QJsonObject errorData;
-        errorData[QStringLiteral("appletName")] = i18n("Unknown Applet");
-        errorData[QStringLiteral("isDebugMode")] = qEnvironmentVariableIntValue("PLASMA_ENABLE_QML_DEBUG") != 0;
-
-        if (d->applet->failedToLaunch()) {
-            reason = d->applet->launchErrorMessage();
-            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
-        } else if (d->applet->kPackage().isValid()) {
-            const auto errors = d->qmlObject->mainComponent()->errors();
-            QStringList errorList;
-            for (const QQmlError &error : errors) {
-                reason += error.toString() + QLatin1Char('\n');
-                errorList << error.toString();
-            }
-            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList(errorList);
-            errorData[QStringLiteral("appletName")] = d->applet->pluginMetaData().name();
-            reason = i18n("Error loading QML file: %1 %2", d->qmlObject->mainComponent()->url().toString(), reason);
-        } else {
-            reason = i18n("Error loading Applet: package inexistent. %1", applet()->launchErrorMessage());
-            errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
-        }
-
-        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("appletName")];
-        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("errors")];
-
-        d->qmlObject->setSource(d->coronaPackage.fileUrl("appleterror"));
-        d->qmlObject->completeInitialization();
-
-        // even the error message QML may fail
-        if (d->qmlObject->mainComponent()->isError()) {
-            return;
-        } else {
-            d->qmlObject->rootObject()->setProperty("errorInformation", errorData);
-            // TODO KF6: remove in favour of newer errorInformation
-            d->qmlObject->rootObject()->setProperty("reason", reason);
-        }
-
-        d->applet->setLaunchErrorMessage(reason);
-    }
-
-    if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
-        d->qmlObject->rootContext()->setContextProperty(QStringLiteral("plasmoid"), this);
-    }
-
-    // initialize size, so an useless resize less
-    QVariantHash initialProperties;
-    // initialize with our size only if valid
-    if (width() > 0 && height() > 0) {
-        const qreal w = parentItem() ? std::min(parentItem()->width(), width()) : width();
-        const qreal h = parentItem() ? std::min(parentItem()->height(), height()) : height();
-        initialProperties[QStringLiteral("width")] = w;
-        initialProperties[QStringLiteral("height")] = h;
-    }
-    d->qmlObject->setInitializationDelayed(false);
-    d->qmlObject->completeInitialization(initialProperties);
-
-    // otherwise, initialize our size to root object's size
-    if (d->qmlObject->rootObject() && (width() <= 0 || height() <= 0)) {
-        const qreal w = d->qmlObject->rootObject()->property("width").value<qreal>();
-        const qreal h = d->qmlObject->rootObject()->property("height").value<qreal>();
-        setSize(parentItem() ? QSizeF(std::min(parentItem()->width(), w), std::min(parentItem()->height(), h)) : QSizeF(w, h));
-    }
-
-    // default fullrepresentation is our root main component, if none specified
-    if (!d->fullRepresentation) {
-        d->fullRepresentation = d->qmlObject->mainComponent();
-        d->fullRepresentationItem = qobject_cast<QQuickItem *>(d->qmlObject->rootObject());
-
-        Q_EMIT fullRepresentationChanged(d->fullRepresentation);
-    }
-
+    // If no fullRepresentation was defined, we won't create compact and expander either.
+    // The only representation available are whatever items defined directly inside PlasmoidItem {}
     // default compactRepresentation is a simple icon provided by the shell package
-    if (!d->compactRepresentation) {
+    if (!d->compactRepresentation && d->fullRepresentation) {
         d->compactRepresentation = new QQmlComponent(engine, this);
         d->compactRepresentation->loadUrl(d->coronaPackage.fileUrl("defaultcompactrepresentation"));
         Q_EMIT compactRepresentationChanged(d->compactRepresentation);
     }
 
     // default compactRepresentationExpander is the popup in which fullRepresentation goes
-    if (!d->compactRepresentationExpander) {
+    if (!d->compactRepresentationExpander && d->fullRepresentation) {
         d->compactRepresentationExpander = new QQmlComponent(engine, this);
         QUrl compactExpanderUrl = d->containmentPackage.fileUrl("compactapplet");
         if (compactExpanderUrl.isEmpty()) {
@@ -721,7 +673,6 @@ void AppletQuickItem::init()
     d->initComplete = true;
     d->compactRepresentationCheck();
     qmlObject()->engine()->rootContext()->setBaseUrl(qmlObject()->source());
-    qmlObject()->engine()->setContextForObject(this, qmlObject()->engine()->rootContext());
 
     // if we're expanded we don't care about preloading because it will already be the case
     // as well as for containments
@@ -752,6 +703,15 @@ void AppletQuickItem::init()
             }
         });
     }
+}
+
+void AppletQuickItem::classBegin()
+{
+    QQuickItem::classBegin();
+    AppletContext *ac = qobject_cast<AppletContext *>(QQmlEngine::contextForObject(this)->parentContext());
+    Q_ASSERT(ac);
+    d->applet = ac->applet();
+    d->qmlObject = ac->sharedQmlEngine();
 }
 
 int AppletQuickItem::switchWidth() const
@@ -814,7 +774,7 @@ QObject *AppletQuickItem::testItem()
             return nullptr;
         }
 
-        d->testItem = d->qmlObject->createObjectFromSource(url, qmlContext(rootItem()));
+        d->testItem = d->qmlObject->createObjectFromSource(url, qmlContext(this));
         if (d->testItem) {
             d->testItem->setProperty("plasmoidItem", QVariant::fromValue<QObject *>(this));
         }
@@ -851,7 +811,7 @@ void AppletQuickItem::setPreferredRepresentation(QQmlComponent *component)
 
 bool AppletQuickItem::isExpanded() const
 {
-    return d->expanded;
+    return d->applet->isContainment() || !d->fullRepresentation || d->expanded;
 }
 
 void AppletQuickItem::setExpanded(bool expanded)
@@ -871,6 +831,7 @@ void AppletQuickItem::setExpanded(bool expanded)
     }
 
     d->expanded = expanded;
+
     Q_EMIT expandedChanged(expanded);
 }
 
@@ -888,6 +849,37 @@ void AppletQuickItem::setActivationTogglesExpanded(bool activationTogglesExpande
     Q_EMIT activationTogglesExpandedChanged(activationTogglesExpanded);
 }
 
+bool AppletQuickItem::hideOnWindowDeactivate() const
+{
+    return d->hideOnWindowDeactivate;
+}
+
+void AppletQuickItem::setHideOnWindowDeactivate(bool hide)
+{
+    if (d->hideOnWindowDeactivate == hide) {
+        return;
+    }
+    d->hideOnWindowDeactivate = hide;
+    Q_EMIT hideOnWindowDeactivateChanged(hide);
+}
+
+bool AppletQuickItem::preloadFullRepresentation() const
+{
+    return d->preloadFullRepresentation;
+}
+
+void AppletQuickItem::setPreloadFullRepresentation(bool preload)
+{
+    if (d->preloadFullRepresentation == preload) {
+        return;
+    }
+
+    d->preloadFullRepresentation = preload;
+    d->createFullRepresentationItem();
+
+    Q_EMIT preloadFullRepresentationChanged(preload);
+}
+
 ////////////Internals
 
 PlasmaQuick::SharedQmlEngine *AppletQuickItem::qmlObject()
@@ -903,11 +895,6 @@ QQuickItem *AppletQuickItem::compactRepresentationItem()
 QQuickItem *AppletQuickItem::fullRepresentationItem()
 {
     return d->fullRepresentationItem;
-}
-
-QObject *AppletQuickItem::rootItem()
-{
-    return d->qmlObject->rootObject();
 }
 
 void AppletQuickItem::childEvent(QChildEvent *event)

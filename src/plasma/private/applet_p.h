@@ -14,6 +14,7 @@
 #include <QPointer>
 
 #include <KActionCollection>
+#include <KConfigPropertyMap>
 #include <KConfigSkeleton>
 #include <KNotification>
 
@@ -78,11 +79,13 @@ public:
 
     // config and package stuff
     KPackage::Package package;
-    KConfigLoader *configLoader;
+    KConfigLoader *configLoader = nullptr;
+    KConfigPropertyMap *configPropertyMap = nullptr;
 
     // actions stuff; put activationAction into actions?
-    KActionCollection *actions;
+    KActionCollection *actions; // TODO: can KACtionCollection usage be removed and just be QHash<QString, QAction*>?
     QAction *activationAction;
+    QHash<QString, QActionGroup *> actionGroups;
 
     Types::ItemStatus itemStatus;
 
@@ -97,6 +100,7 @@ public:
 
     Types::BackgroundHints backgroundHints = Types::DefaultBackground;
     Types::BackgroundHints userBackgroundHints = Types::DefaultBackground;
+    Types::ConstraintHints constraintHints = Types::NoHint;
 
     // a great green field of booleans :)
     bool userBackgroundHintsInitialized = false;

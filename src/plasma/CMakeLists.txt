@@ -78,6 +78,8 @@ PUBLIC
     KF6::CoreAddons
 PRIVATE
     Qt6::Svg
+    Qt6::Quick
+    KF6::ConfigQml
     KF6::Archive
     KF6::GuiAddons #kimagecache
     KF6::I18n
@@ -86,6 +88,7 @@ PRIVATE
     KF6::GlobalAccel #Applet::setGlobalShortcut
     KF6::Notifications
     KF6::IconThemes
+    KF6::Activities
     ${PLASMA_EXTRA_LIBS}
 )
 

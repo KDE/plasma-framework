@@ -169,6 +169,11 @@ public:
     KActionCollection *actions() const;
 
     /**
+     * @returns The action with the given name, if any
+     */
+    Q_INVOKABLE QAction *action(const QString &name) const;
+
+    /**
      * Imports an applet layout from a config file. The results will be added to the
      * current set of Containments.
      *
@@ -214,6 +219,7 @@ public:
      */
     bool isEditMode() const;
 
+    // TODO: make them not slots anymore
 public Q_SLOTS:
     /**
      * Load applet layout from a config file. The results will be added to the
@@ -285,12 +291,12 @@ Q_SIGNALS:
     /**
      * This signal indicates that a change in available screen geometry occurred.
      */
-    void availableScreenRegionChanged();
+    void availableScreenRegionChanged(int id);
 
     /**
      * This signal indicates that a change in available screen geometry occurred.
      */
-    void availableScreenRectChanged();
+    void availableScreenRectChanged(int id);
 
     /**
      * This signal indicates that a change in geometry for the screen occurred.

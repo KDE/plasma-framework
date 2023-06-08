@@ -526,11 +526,11 @@ void DialogPrivate::getSizeHints(QSize &min, QSize &max) const
 
     int minimumHeight = mainItemLayout->property("minimumHeight").toInt();
     int maximumHeight = mainItemLayout->property("maximumHeight").toInt();
-    maximumHeight = maximumHeight ? maximumHeight : DIALOGSIZE_MAX;
+    maximumHeight = maximumHeight > 0 ? qMax(minimumHeight, maximumHeight) : DIALOGSIZE_MAX;
 
     int minimumWidth = mainItemLayout->property("minimumWidth").toInt();
     int maximumWidth = mainItemLayout->property("maximumWidth").toInt();
-    maximumWidth = maximumWidth ? maximumWidth : DIALOGSIZE_MAX;
+    maximumWidth = maximumWidth > 0 ? qMax(minimumWidth, maximumWidth) : DIALOGSIZE_MAX;
 
     minimumHeight += margin->top() + margin->bottom();
     maximumHeight += margin->top() + margin->bottom();

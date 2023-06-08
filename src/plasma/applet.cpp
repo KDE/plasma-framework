@@ -13,6 +13,7 @@
 #include "config-plasma.h"
 
 #include <QAbstractButton>
+#include <QActionGroup>
 #include <QDebug>
 #include <QFile>
 #include <QList>
@@ -23,6 +24,7 @@
 #include <KAuthorized>
 #include <KColorScheme>
 #include <KConfigLoader>
+#include <KConfigPropertyMap>
 #include <KDesktopFile>
 #include <KGlobalAccel>
 #include <KLocalizedString>
@@ -251,6 +253,14 @@ KConfigLoader *Applet::configScheme() const
     return d->configLoader;
 }
 
+KConfigPropertyMap *Applet::configuration()
+{
+    if (!d->configPropertyMap) {
+        d->configPropertyMap = new KConfigPropertyMap(configScheme(), this);
+    }
+    return d->configPropertyMap;
+}
+
 KPackage::Package Applet::kPackage() const
 {
     return d->package;
@@ -386,6 +396,11 @@ KPluginMetaData Applet::pluginMetaData() const
     return d->appletDescription;
 }
 
+QString Applet::pluginName() const
+{
+    return d->appletDescription.isValid() ? d->appletDescription.pluginId() : QString();
+}
+
 Types::ImmutabilityType Applet::immutability() const
 {
     // if this object is itself system immutable, then just return that; it's the most
@@ -467,6 +482,21 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     d->configurationRequiredReason = reason;
 
     Q_EMIT configurationRequiredChanged(needsConfig, reason);
+}
+
+void Applet::setConstraintHints(Plasma::Types::ConstraintHints constraintHints)
+{
+    if (d->constraintHints == constraintHints) {
+        return;
+    }
+
+    d->constraintHints = constraintHints;
+    Q_EMIT constraintHintsChanged(constraintHints);
+}
+
+Plasma::Types::ConstraintHints Applet::constraintHints() const
+{
+    return d->constraintHints;
 }
 
 bool Applet::isUserConfiguring() const
@@ -592,17 +622,99 @@ void Applet::flushPendingConstraintsEvents()
 
 QList<QAction *> Applet::contextualActions()
 {
-    QList<QAction *> contextActions = d->actions->actions();
-    std::remove_if(contextActions.begin(), contextActions.end(), [](QAction *a) {
-        return !a->property("_contextualAction").toBool();
+    // NOTE: KActionCollection can contain duplicates in actions(); once we ported away from it we can remove this hack
+    QSet<QAction *> contextActions;
+
+    std::copy_if(d->actions->actions().constBegin(), d->actions->actions().constEnd(), std::inserter(contextActions, contextActions.begin()), [](QAction *a) {
+        return a->property("_contextualAction").toBool();
     });
 
-    return contextActions;
+    return contextActions.values();
 }
 
 KActionCollection *Applet::actions() const
 {
     return d->actions;
+}
+
+void Applet::setActionSeparator(const QString &name)
+{
+    QAction *action = d->actions->action(name);
+
+    if (action) {
+        action->setSeparator(true);
+    } else {
+        action = new QAction(this);
+        action->setSeparator(true);
+        d->actions->addAction(name, action);
+        Q_EMIT contextualActionsChanged();
+    }
+}
+
+void Applet::setActionGroup(const QString &actionName, const QString &group)
+{
+    QAction *action = d->actions->action(actionName);
+
+    if (!action) {
+        return;
+    }
+
+    if (!d->actionGroups.contains(group)) {
+        d->actionGroups[group] = new QActionGroup(this);
+    }
+
+    action->setActionGroup(d->actionGroups[group]);
+}
+
+void Applet::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
+{
+    QAction *action = d->actions->action(name);
+
+    if (action) {
+        action->setText(text);
+        action->setProperty("_contextualAction", true);
+    } else {
+        action = new QAction(text, this);
+        d->actions->addAction(name, action);
+
+        action->setProperty("_contextualAction", true);
+        Q_EMIT contextualActionsChanged();
+    }
+
+    if (!icon.isEmpty()) {
+        action->setIcon(QIcon::fromTheme(icon));
+    }
+
+    if (!shortcut.isEmpty()) {
+        action->setShortcut(shortcut);
+    }
+
+    action->setObjectName(name);
+}
+
+void Applet::removeAction(const QString &name)
+{
+    QAction *action = d->actions->action(name);
+    d->actions->removeAction(action);
+
+    Q_EMIT contextualActionsChanged();
+}
+
+void Applet::clearActions()
+{
+    // FIXME: Now it removes only contextualactions for compatibility
+    //  This needs to be revised in the actions API ovehaul
+    for (auto a : d->actions->actions()) {
+        if (a->property("_contextualAction").toBool()) {
+            d->actions->removeAction(a);
+        }
+    }
+    Q_EMIT contextualActionsChanged();
+}
+
+QAction *Applet::action(const QString &name) const
+{
+    return d->actions->action(name);
 }
 
 Types::FormFactor Applet::formFactor() const

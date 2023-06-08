@@ -23,6 +23,11 @@ namespace KIO
 class Job;
 }
 
+namespace KActivities
+{
+class Info;
+}
+
 namespace Plasma
 {
 class Containment;
@@ -47,7 +52,7 @@ public:
     void appletDeleted(Applet *);
     void configChanged();
 
-    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0);
+    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0, const QRectF &geometryHint = QRectF());
 
     /**
      * FIXME: this should completely go from here
@@ -70,6 +75,7 @@ public:
     Types::Location location;
     Types::ContainmentDisplayHints containmentDisplayHints = Types::NoContainmentDisplayHint;
 
+    KActivities::Info *activityInfo;
     QList<Applet *> applets;
     // Applets still considered not ready
     QSet<Applet *> loadingApplets;
