@@ -11,7 +11,8 @@
 #include <QQuickItem>
 #include <QQuickItemGrabResult>
 #include <QQuickView>
-#include <QtTest>
+#include <QSignalSpy>
+#include <QTest>
 
 #include <KIconEngine>
 #include <KIconLoader>
