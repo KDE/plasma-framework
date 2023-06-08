@@ -1,6 +1,7 @@
 /*
     SPDX-FileCopyrightText: 2011 Daker Fernandes Pinheiro <dakerfp@gmail.com>
     SPDX-FileCopyrightText: 2022 Carl Schwan <carl@carlschwan.eu>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -57,7 +58,7 @@ Item {
 	 */
     property alias marginHints: background.margins
 
-    width: ListView.view !== null ? ListView.view.width : undefined
+    width: ListView.view?.width ?? undefined
 
     Connections {
         target: highlight.ListView.view
