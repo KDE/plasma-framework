@@ -44,8 +44,6 @@ Plasma::Applet *PlasmoidAttached::qmlAttachedProperties(QObject *object)
         context = context->parentContext();
     }
 
-    qWarning() << "Could not find the Plasmoid for" << object;
-
     return nullptr;
 }
 
