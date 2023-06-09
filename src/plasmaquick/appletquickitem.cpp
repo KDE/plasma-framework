@@ -631,25 +631,6 @@ void AppletQuickItem::init()
         engine->addUrlInterceptor(interceptor);
     }
 
-    // Force QtQuickControls to use the "Plasma" style for this engine.
-    // this way is possible to mix QtQuickControls and plasma components in applets
-    // while still having the desktop style in configuration dialogs
-    if (!engine->property("_plasma_qqc_style_set").toBool()) {
-        QQmlComponent c(engine);
-        c.setData(QByteArrayLiteral("import QtQuick 2.1\n\
-            import QtQuick.Controls 1.0\n\
-            import QtQuick.Controls.Private 1.0\n \
-            QtObject {\
-              Component.onCompleted: {\
-                Settings.styleName = \"Plasma\";\
-              }\
-            }"),
-                  QUrl());
-        QObject *o = c.create();
-        o->deleteLater();
-        engine->setProperty(("_plasma_qqc_style_set"), true);
-    }
-
     // If no fullRepresentation was defined, we won't create compact and expander either.
     // The only representation available are whatever items defined directly inside PlasmoidItem {}
     // default compactRepresentation is a simple icon provided by the shell package
