@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-30 02:41+0000\n"
+"POT-Creation-Date: 2023-06-09 02:13+0000\n"
 "PO-Revision-Date: 2022-07-25 09:37+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -47,34 +47,34 @@ msgstr "Procurar…"
 msgid "Search"
 msgstr "Procurar"
 
-#: plasma/applet.cpp:285
+#: plasma/applet.cpp:295
 #, kde-format
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: plasma/applet.cpp:657
+#: plasma/applet.cpp:769
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Activar o Elemento %1"
 
-#: plasma/containment.cpp:76 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Remover o %1"
 
-#: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
+#: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Entrar no Modo de Edição"
 
-#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Configurar o %1..."
 
-#: plasma/corona.cpp:315 plasma/corona.cpp:442
+#: plasma/corona.cpp:315 plasma/corona.cpp:447
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Bloquear os Elementos"
@@ -164,37 +164,37 @@ msgstr "Foi removido um ecrã."
 msgid "Undo"
 msgstr "Desfazer"
 
-#: plasma/private/applet_p.cpp:349
+#: plasma/private/applet_p.cpp:353
 #, kde-format
 msgid "Widget Settings"
 msgstr "Configuração do Elemento"
 
-#: plasma/private/applet_p.cpp:355
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Remover este Elemento"
 
-#: plasma/private/containment_p.cpp:57
+#: plasma/private/containment_p.cpp:61
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Remover este Painel"
 
-#: plasma/private/containment_p.cpp:59
+#: plasma/private/containment_p.cpp:63
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Remover esta Actividade"
 
-#: plasma/private/containment_p.cpp:65
+#: plasma/private/containment_p.cpp:69
 #, kde-format
 msgid "Activity Settings"
 msgstr "Configuração da Actividade"
 
-#: plasma/private/containment_p.cpp:71
+#: plasma/private/containment_p.cpp:75
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Adicionar Elementos..."
 
-#: plasma/private/containment_p.cpp:186
+#: plasma/private/containment_p.cpp:190
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Não foi possível encontrar o componente pedido: %1"
@@ -227,71 +227,81 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Serviço inválido (nulo); não é possível efectuar nenhuma operação."
 
-#: plasmaquick/appletquickitem.cpp:633
+#: plasmaquick/appletquickitem.cpp:526
+#, kde-format
+msgid "The root item of %1 must be of type ContaimentItem"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:531
+#, kde-format
+msgid "The root item of %1 must be of type PlasmoidItem"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:538
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Elemento Desconhecido"
 
-#: plasmaquick/appletquickitem.cpp:648
+#: plasmaquick/appletquickitem.cpp:554
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Erro ao carregar o ficheiro QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:650
+#: plasmaquick/appletquickitem.cpp:556
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Erro ao carregar a 'applet': o pacote é inexistente. %1"
 
-#: plasmaquick/configview.cpp:93
+#: plasmaquick/configview.cpp:102
 #, kde-format
 msgid "%1 Settings"
 msgstr "Configuração do %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:614
+#: plasmaquick/plasmoid/containmentinterface.cpp:546
 #, kde-format
 msgid "Plasma Package"
 msgstr "Pacote do Plasma"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:550
 #, kde-format
 msgid "Install"
 msgstr "Instalar"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:629
+#: plasmaquick/plasmoid/containmentinterface.cpp:561
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Falhou a Instalação do Pacote"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:646
+#: plasmaquick/plasmoid/containmentinterface.cpp:578
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "O pacote que acabou de largar é inválido."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:655
-#: plasmaquick/plasmoid/containmentinterface.cpp:724
+#: plasmaquick/plasmoid/containmentinterface.cpp:587
+#: plasmaquick/plasmoid/containmentinterface.cpp:656
 #, kde-format
 msgid "Widgets"
 msgstr "Elementos"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:592
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Adicionar um %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:674
-#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#: plasmaquick/plasmoid/containmentinterface.cpp:606
+#: plasmaquick/plasmoid/containmentinterface.cpp:660
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Adicionar um Ícone"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:686
+#: plasmaquick/plasmoid/containmentinterface.cpp:618
 #, kde-format
 msgid "Wallpaper"
 msgstr "Papel de Parede"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:696
+#: plasmaquick/plasmoid/containmentinterface.cpp:628
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

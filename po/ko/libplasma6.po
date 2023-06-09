@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-30 02:41+0000\n"
+"POT-Creation-Date: 2023-06-09 02:13+0000\n"
 "PO-Revision-Date: 2022-10-03 16:23+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-i18n-doc@kde.org>\n"
@@ -50,34 +50,34 @@ msgstr "검색…"
 msgid "Search"
 msgstr "검색"
 
-#: plasma/applet.cpp:285
+#: plasma/applet.cpp:295
 #, kde-format
 msgid "Unknown"
 msgstr "알 수 없음"
 
-#: plasma/applet.cpp:657
+#: plasma/applet.cpp:769
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 위젯 활성화하기"
 
-#: plasma/containment.cpp:76 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1 삭제"
 
-#: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
+#: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "편집 모드 들어가기"
 
-#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1 설정..."
 
-#: plasma/corona.cpp:315 plasma/corona.cpp:442
+#: plasma/corona.cpp:315 plasma/corona.cpp:447
 #, kde-format
 msgid "Lock Widgets"
 msgstr "위젯 잠금"
@@ -166,37 +166,37 @@ msgstr "바탕 화면이 삭제되었습니다."
 msgid "Undo"
 msgstr "실행 취소"
 
-#: plasma/private/applet_p.cpp:349
+#: plasma/private/applet_p.cpp:353
 #, kde-format
 msgid "Widget Settings"
 msgstr "위젯 설정"
 
-#: plasma/private/applet_p.cpp:355
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Remove this Widget"
 msgstr "이 위젯 삭제하기"
 
-#: plasma/private/containment_p.cpp:57
+#: plasma/private/containment_p.cpp:61
 #, kde-format
 msgid "Remove this Panel"
 msgstr "이 패널 삭제하기"
 
-#: plasma/private/containment_p.cpp:59
+#: plasma/private/containment_p.cpp:63
 #, kde-format
 msgid "Remove this Activity"
 msgstr "이 활동 삭제하기"
 
-#: plasma/private/containment_p.cpp:65
+#: plasma/private/containment_p.cpp:69
 #, kde-format
 msgid "Activity Settings"
 msgstr "활동 설정"
 
-#: plasma/private/containment_p.cpp:71
+#: plasma/private/containment_p.cpp:75
 #, kde-format
 msgid "Add Widgets..."
 msgstr "위젯 추가..."
 
-#: plasma/private/containment_p.cpp:186
+#: plasma/private/containment_p.cpp:190
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "요청한 구성 요소를 찾을 수 없습니다: %1"
@@ -229,71 +229,81 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "잘못된(빈) 서비스, 작업을 수행할 수 없습니다."
 
-#: plasmaquick/appletquickitem.cpp:633
+#: plasmaquick/appletquickitem.cpp:526
+#, kde-format
+msgid "The root item of %1 must be of type ContaimentItem"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:531
+#, kde-format
+msgid "The root item of %1 must be of type PlasmoidItem"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:538
 #, kde-format
 msgid "Unknown Applet"
 msgstr "알 수 없는 애플릿"
 
-#: plasmaquick/appletquickitem.cpp:648
+#: plasmaquick/appletquickitem.cpp:554
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "QML 파일을 불러오는 중 오류 발생: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:650
+#: plasmaquick/appletquickitem.cpp:556
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "애플릿을 불러오는 중 오류 발생: 패키지가 없음. %1"
 
-#: plasmaquick/configview.cpp:93
+#: plasmaquick/configview.cpp:102
 #, kde-format
 msgid "%1 Settings"
 msgstr "%1 설정"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:614
+#: plasmaquick/plasmoid/containmentinterface.cpp:546
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma 패키지"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:550
 #, kde-format
 msgid "Install"
 msgstr "설치"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:629
+#: plasmaquick/plasmoid/containmentinterface.cpp:561
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "패키지 설치 실패"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:646
+#: plasmaquick/plasmoid/containmentinterface.cpp:578
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "끌어다 놓은 패키지가 잘못되었습니다."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:655
-#: plasmaquick/plasmoid/containmentinterface.cpp:724
+#: plasmaquick/plasmoid/containmentinterface.cpp:587
+#: plasmaquick/plasmoid/containmentinterface.cpp:656
 #, kde-format
 msgid "Widgets"
 msgstr "위젯"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:592
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1 추가"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:674
-#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#: plasmaquick/plasmoid/containmentinterface.cpp:606
+#: plasmaquick/plasmoid/containmentinterface.cpp:660
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "아이콘 추가"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:686
+#: plasmaquick/plasmoid/containmentinterface.cpp:618
 #, kde-format
 msgid "Wallpaper"
 msgstr "배경 그림"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:696
+#: plasmaquick/plasmoid/containmentinterface.cpp:628
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

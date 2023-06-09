@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-05-30 02:41+0000\n"
+"POT-Creation-Date: 2023-06-09 02:13+0000\n"
 "PO-Revision-Date: 2022-08-17 10:42+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -46,34 +46,34 @@ msgstr "Търсене..."
 msgid "Search"
 msgstr "Търсене"
 
-#: plasma/applet.cpp:285
+#: plasma/applet.cpp:295
 #, kde-format
 msgid "Unknown"
 msgstr "Неизвестно"
 
-#: plasma/applet.cpp:657
+#: plasma/applet.cpp:769
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Активиране на %1 Widget"
 
-#: plasma/containment.cpp:76 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:100
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Премахване на %1"
 
-#: plasma/containment.cpp:82 plasma/corona.cpp:366 plasma/corona.cpp:455
+#: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Влизане в режим на редактиране"
 
-#: plasma/containment.cpp:85 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Конфигуриране на %1..."
 
-#: plasma/corona.cpp:315 plasma/corona.cpp:442
+#: plasma/corona.cpp:315 plasma/corona.cpp:447
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Заключване на уиджети"
@@ -163,37 +163,37 @@ msgstr "Работният плот е премахнат."
 msgid "Undo"
 msgstr "Отмяна"
 
-#: plasma/private/applet_p.cpp:349
+#: plasma/private/applet_p.cpp:353
 #, kde-format
 msgid "Widget Settings"
 msgstr "Настройки на уиджет"
 
-#: plasma/private/applet_p.cpp:355
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Премахване на този уиджет"
 
-#: plasma/private/containment_p.cpp:57
+#: plasma/private/containment_p.cpp:61
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Премахване на този панел"
 
-#: plasma/private/containment_p.cpp:59
+#: plasma/private/containment_p.cpp:63
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Премахване на тази дейност"
 
-#: plasma/private/containment_p.cpp:65
+#: plasma/private/containment_p.cpp:69
 #, kde-format
 msgid "Activity Settings"
 msgstr "Настройки на дейност"
 
-#: plasma/private/containment_p.cpp:71
+#: plasma/private/containment_p.cpp:75
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Добавяне на уиджети..."
 
-#: plasma/private/containment_p.cpp:186
+#: plasma/private/containment_p.cpp:190
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Не можа да се намери заявения компонент:%1"
@@ -226,71 +226,81 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Невалидна (нулева) услуга, не може да извършва никакви операции."
 
-#: plasmaquick/appletquickitem.cpp:633
+#: plasmaquick/appletquickitem.cpp:526
+#, kde-format
+msgid "The root item of %1 must be of type ContaimentItem"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:531
+#, kde-format
+msgid "The root item of %1 must be of type PlasmoidItem"
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:538
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Неизвестна приставка"
 
-#: plasmaquick/appletquickitem.cpp:648
+#: plasmaquick/appletquickitem.cpp:554
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Грешка при зареждането на QML файл: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:650
+#: plasmaquick/appletquickitem.cpp:556
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Грешка при зареждането на аплета: пакетът не съществува. %1"
 
-#: plasmaquick/configview.cpp:93
+#: plasmaquick/configview.cpp:102
 #, kde-format
 msgid "%1 Settings"
 msgstr "%1 Настройки"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:614
+#: plasmaquick/plasmoid/containmentinterface.cpp:546
 #, kde-format
 msgid "Plasma Package"
 msgstr "Пакет на Plasma"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:550
 #, kde-format
 msgid "Install"
 msgstr "Инсталиране"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:629
+#: plasmaquick/plasmoid/containmentinterface.cpp:561
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Инсталацията на пакета е неуспешна"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:646
+#: plasmaquick/plasmoid/containmentinterface.cpp:578
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Пакетът, който току-що пуснахте, е невалиден."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:655
-#: plasmaquick/plasmoid/containmentinterface.cpp:724
+#: plasmaquick/plasmoid/containmentinterface.cpp:587
+#: plasmaquick/plasmoid/containmentinterface.cpp:656
 #, kde-format
 msgid "Widgets"
 msgstr "Уиджети"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:592
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Добавяне %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:674
-#: plasmaquick/plasmoid/containmentinterface.cpp:728
+#: plasmaquick/plasmoid/containmentinterface.cpp:606
+#: plasmaquick/plasmoid/containmentinterface.cpp:660
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Добавяне на икона"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:686
+#: plasmaquick/plasmoid/containmentinterface.cpp:618
 #, kde-format
 msgid "Wallpaper"
 msgstr "Тапет"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:696
+#: plasmaquick/plasmoid/containmentinterface.cpp:628
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
