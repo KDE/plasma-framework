@@ -71,7 +71,11 @@ void ContainmentInterface::init()
     AppletInterface::init();
 
     for (auto *applet : m_containment->applets()) {
-        m_appletInterfaces.append(AppletQuickItem::itemForApplet(applet));
+        auto appletGraphicObject = AppletQuickItem::itemForApplet(applet);
+        m_appletInterfaces.append(appletGraphicObject);
+        connect(appletGraphicObject, &QObject::destroyed, this, [this, appletGraphicObject]() {
+            m_appletInterfaces.removeAll(appletGraphicObject);
+        });
     }
     if (!m_appletInterfaces.isEmpty()) {
         Q_EMIT appletsChanged();
@@ -679,6 +683,9 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QRec
     qWarning() << "ContainmentInterface::appletAddedForward" << applet << geometryHint;
     AppletInterface *appletGraphicObject = qobject_cast<AppletInterface *>(AppletQuickItem::itemForApplet(applet));
     m_appletInterfaces.append(appletGraphicObject);
+    connect(appletGraphicObject, &QObject::destroyed, this, [this, appletGraphicObject]() {
+        m_appletInterfaces.removeAll(appletGraphicObject);
+    });
 
     QPointF removalPosition = appletGraphicObject->m_positionBeforeRemoval;
     QPointF position = appletGraphicObject->position();
