@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-09 02:13+0000\n"
+"POT-Creation-Date: 2023-06-10 02:08+0000\n"
 "PO-Revision-Date: 2022-12-12 08:47+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -260,51 +260,51 @@ msgstr "აპლეტის ჩატვირთვის შეცდომ�
 msgid "%1 Settings"
 msgstr "%1-ის მორგება"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:546
+#: plasmaquick/plasmoid/containmentinterface.cpp:550
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma-ის პაკეტი"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:550
+#: plasmaquick/plasmoid/containmentinterface.cpp:554
 #, kde-format
 msgid "Install"
 msgstr "დაყენება"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:561
+#: plasmaquick/plasmoid/containmentinterface.cpp:565
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "პაკეტის დაყენების შეცდომა"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:578
+#: plasmaquick/plasmoid/containmentinterface.cpp:582
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "მითითებული პაკეტი არასწორია."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:587
-#: plasmaquick/plasmoid/containmentinterface.cpp:656
+#: plasmaquick/plasmoid/containmentinterface.cpp:591
+#: plasmaquick/plasmoid/containmentinterface.cpp:660
 #, kde-format
 msgid "Widgets"
 msgstr "ვიჯეტები"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:592
+#: plasmaquick/plasmoid/containmentinterface.cpp:596
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1-ის დამატება"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:606
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:610
+#: plasmaquick/plasmoid/containmentinterface.cpp:664
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "ხატულის დამატება"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:622
 #, kde-format
 msgid "Wallpaper"
 msgstr "ფონური სურათი"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:628
+#: plasmaquick/plasmoid/containmentinterface.cpp:632
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

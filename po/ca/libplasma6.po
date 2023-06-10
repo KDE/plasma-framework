@@ -1,17 +1,17 @@
 # Translation of libplasma6.po to Catalan
-# Copyright (C) 2014-2022 This_file_is_part_of_KDE
+# Copyright (C) 2014-2023 This_file_is_part_of_KDE
 # This file is distributed under the license LGPL version 2.1 or
 # version 3 or later versions approved by the membership of KDE e.V.
 #
-# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2018, 2019, 2020, 2021, 2022.
+# Josep M. Ferrer <txemaq@gmail.com>, 2014, 2015, 2016, 2018, 2019, 2020, 2021, 2022, 2023.
 # Antoni Bella Pérez <antonibella5@yahoo.com>, 2014, 2018, 2019, 2020, 2022.
 # Empar Montoro Martín <montoro_mde@gva.es>, 2019.
 msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-09 02:13+0000\n"
-"PO-Revision-Date: 2022-07-25 13:03+0200\n"
+"POT-Creation-Date: 2023-06-10 02:08+0000\n"
+"PO-Revision-Date: 2023-06-09 08:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -237,12 +237,12 @@ msgstr "Servei no vàlid (nul), no pot executar cap operació."
 #: plasmaquick/appletquickitem.cpp:526
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
-msgstr ""
+msgstr "L'element arrel de %1 cal que sigui del tipus ContaimentItem"
 
 #: plasmaquick/appletquickitem.cpp:531
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
-msgstr ""
+msgstr "L'element arrel de %1 cal que sigui del tipus PlasmoidItem"
 
 #: plasmaquick/appletquickitem.cpp:538
 #, kde-format
@@ -264,51 +264,51 @@ msgstr "Error en carregar la miniaplicació: Paquet inexistent. %1"
 msgid "%1 Settings"
 msgstr "Configuració de %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:546
+#: plasmaquick/plasmoid/containmentinterface.cpp:550
 #, kde-format
 msgid "Plasma Package"
 msgstr "Paquet del Plasma"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:550
+#: plasmaquick/plasmoid/containmentinterface.cpp:554
 #, kde-format
 msgid "Install"
 msgstr "Instal·la"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:561
+#: plasmaquick/plasmoid/containmentinterface.cpp:565
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "La instal·lació del paquet ha fallat"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:578
+#: plasmaquick/plasmoid/containmentinterface.cpp:582
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "El paquet que acabeu de deixar no és vàlid."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:587
-#: plasmaquick/plasmoid/containmentinterface.cpp:656
+#: plasmaquick/plasmoid/containmentinterface.cpp:591
+#: plasmaquick/plasmoid/containmentinterface.cpp:660
 #, kde-format
 msgid "Widgets"
 msgstr "Ginys"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:592
+#: plasmaquick/plasmoid/containmentinterface.cpp:596
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Afegeix el %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:606
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:610
+#: plasmaquick/plasmoid/containmentinterface.cpp:664
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Afegeix una icona"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:618
+#: plasmaquick/plasmoid/containmentinterface.cpp:622
 #, kde-format
 msgid "Wallpaper"
 msgstr "Fons de pantalla"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:628
+#: plasmaquick/plasmoid/containmentinterface.cpp:632
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
@@ -318,93 +318,3 @@ msgstr "Estableix el %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contingut descartat"
-
-#~ msgid "Main Script File"
-#~ msgstr "Fitxer principal de script"
-
-#~ msgid "Tests"
-#~ msgstr "Proves"
-
-#~ msgid "Images"
-#~ msgstr "Imatges"
-
-#~ msgid "Themed Images"
-#~ msgstr "Imatges temàtiques"
-
-#~ msgid "Configuration Definitions"
-#~ msgstr "Definicions de la configuració"
-
-#~ msgid "User Interface"
-#~ msgstr "Interfície d'usuari"
-
-#~ msgid "Data Files"
-#~ msgstr "Fitxers de dades"
-
-#~ msgid "Executable Scripts"
-#~ msgstr "Scripts executables"
-
-#~ msgid "Screenshot"
-#~ msgstr "Captura de pantalla"
-
-#~ msgid "Translations"
-#~ msgstr "Traduccions"
-
-#~ msgid "Configuration UI pages model"
-#~ msgstr "Model de pàgines IU de configuració"
-
-#~ msgid "Configuration XML file"
-#~ msgstr "Fitxer XML de configuració"
-
-#~ msgid "Custom expander for compact applets"
-#~ msgstr "Expansió personalitzada per a les miniaplicacions compactes"
-
-#~ msgid "Images for dialogs"
-#~ msgstr "Imatges per als diàlegs"
-
-#~ msgid "Generic dialog background"
-#~ msgstr "Fons de diàleg genèric"
-
-#~ msgid "Theme for the logout dialog"
-#~ msgstr "Tema per al diàleg de desconnexió"
-
-#~ msgid "Wallpaper packages"
-#~ msgstr "Paquets de fons de pantalla"
-
-#~ msgid "Images for widgets"
-#~ msgstr "Imatges per als ginys"
-
-#~ msgid "Background image for widgets"
-#~ msgstr "Imatge de fons per als ginys"
-
-#~ msgid "Analog clock face"
-#~ msgstr "Esfera de rellotge analògic"
-
-#~ msgid "Background image for panels"
-#~ msgstr "Imatge de fons per als plafons"
-
-#~ msgid "Background for graphing widgets"
-#~ msgstr "Fons per als ginys gràfics"
-
-#~ msgid "Background image for tooltips"
-#~ msgstr "Imatge de fons per als consells"
-
-#~ msgid "Opaque images for dialogs"
-#~ msgstr "Imatges opaques per als diàlegs"
-
-#~ msgid "Opaque generic dialog background"
-#~ msgstr "Fons opac de diàleg genèric"
-
-#~ msgid "Opaque theme for the logout dialog"
-#~ msgstr "Tema opac per al diàleg de desconnexió"
-
-#~ msgid "Opaque images for widgets"
-#~ msgstr "Imatges opaques per als ginys"
-
-#~ msgid "Opaque background image for panels"
-#~ msgstr "Imatge de fons opaca per als plafons"
-
-#~ msgid "Opaque background image for tooltips"
-#~ msgstr "Imatge de fons opaca per als consells"
-
-#~ msgid "KColorScheme configuration file"
-#~ msgstr "Fitxer de configuració del KColorScheme"
