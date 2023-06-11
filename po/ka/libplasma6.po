@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-10 02:08+0000\n"
-"PO-Revision-Date: 2022-12-12 08:47+0100\n"
+"PO-Revision-Date: 2023-06-10 06:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 3.2.2\n"
+"X-Generator: Poedit 3.3.1\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
@@ -233,12 +233,12 @@ msgstr "არასწორ (ცარიელ) სერვისს ოპ�
 #: plasmaquick/appletquickitem.cpp:526
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
-msgstr ""
+msgstr "%1-ის ძირეული ელემენტის ტიპი ContaimentItem უნდა იყოს"
 
 #: plasmaquick/appletquickitem.cpp:531
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
-msgstr ""
+msgstr "%1-ის ძირეული ელემენტის ტიპი PlasmoidItem უნდა იყოს"
 
 #: plasmaquick/appletquickitem.cpp:538
 #, kde-format
