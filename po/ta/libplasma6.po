@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-10 02:08+0000\n"
-"PO-Revision-Date: 2023-03-26 12:30+0530\n"
+"PO-Revision-Date: 2023-06-11 18:51+0530\n"
 "Last-Translator: Kishore G <kishore96@gmail.com>\n"
 "Language-Team: Tamil <kde-i18n-doc@kde.org>\n"
 "Language: ta\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.03.80\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
@@ -229,12 +229,12 @@ msgstr "செல்லுபடியாகாத (null) சேவை, எந�
 #: plasmaquick/appletquickitem.cpp:526
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
-msgstr ""
+msgstr "%1 தனின் தாய் உருப்படி ContaimentItem வகையாக இருக்க வேண்டும்"
 
 #: plasmaquick/appletquickitem.cpp:531
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
-msgstr ""
+msgstr "%1 தனின் தாய் உருப்படி PlasmoidItem வகையாக இருக்க வேண்டும்"
 
 #: plasmaquick/appletquickitem.cpp:538
 #, kde-format

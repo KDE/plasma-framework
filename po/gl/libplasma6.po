@@ -1,15 +1,15 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
-#
 # Marce Villarino <mvillarino@kde-espana.es>, 2013, 2014.
 # Adrián Chaves Fernández <adriyetichaves@gmail.com>, 2015, 2016, 2017.
-# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019.
+# Adrián Chaves (Gallaecio) <adrian@chaves.io>, 2017, 2018, 2019, 2023.
+#
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-06-10 02:08+0000\n"
-"PO-Revision-Date: 2019-10-26 13:57+0200\n"
+"PO-Revision-Date: 2023-06-11 13:16+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -17,39 +17,39 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 19.08.2\n"
+"X-Generator: Lokalize 23.04.2\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
 #, kde-format
 msgid "More actions"
-msgstr ""
+msgstr "Máis accións"
 
 #: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
-msgstr ""
+msgstr "Pregar"
 
 #: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
-msgstr ""
+msgstr "Expandir"
 
 #: declarativeimports/plasmaextracomponents/qml/PasswordField.qml:46
 #, kde-format
 msgid "Password"
-msgstr ""
+msgstr "Contrasinal"
 
 #: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
 #, kde-format
 msgid "Search…"
-msgstr ""
+msgstr "Buscar…"
 
 #: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search"
-msgstr ""
+msgstr "Buscar"
 
 #: plasma/applet.cpp:295
 #, kde-format
@@ -70,7 +70,7 @@ msgstr "Retirar %1"
 #: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
-msgstr ""
+msgstr "Activar o modo de edición"
 
 #: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
 #, kde-format
@@ -91,7 +91,7 @@ msgstr "Desatrancar os trebellos"
 #: plasma/corona.cpp:364
 #, kde-format
 msgid "Exit Edit Mode"
-msgstr ""
+msgstr "Desactivar o modo de edición"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
@@ -235,24 +235,22 @@ msgstr ""
 #: plasmaquick/appletquickitem.cpp:526
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
-msgstr ""
+msgstr "O elemento raíz de %1 debe ser de tipo «ContaimentItem»."
 
 #: plasmaquick/appletquickitem.cpp:531
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
-msgstr ""
+msgstr "O elemento raíz de %1 debe ser de tipo «PlasmoidItem»."
 
 #: plasmaquick/appletquickitem.cpp:538
-#, fuzzy, kde-format
-#| msgid "Unknown"
+#, kde-format
 msgid "Unknown Applet"
-msgstr "Descoñecido"
+msgstr "Trebello descoñecido"
 
 #: plasmaquick/appletquickitem.cpp:554
-#, fuzzy, kde-format
-#| msgid "Error loading QML file: %1"
+#, kde-format
 msgid "Error loading QML file: %1 %2"
-msgstr "Produciuse un erro ao cargar o ficheiro QML: %1"
+msgstr "Produciuse un erro ao cargar o ficheiro QML: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:556
 #, kde-format
