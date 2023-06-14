@@ -4,6 +4,7 @@ add_library(KirigamiPlasmaStyle MODULE ${org.kde.desktop_SRCS})
 target_sources(KirigamiPlasmaStyle PRIVATE
     plugin.cpp
     units.cpp
+    plasmatheme.cpp
 )
 
 target_link_libraries(KirigamiPlasmaStyle
@@ -15,6 +16,7 @@ target_link_libraries(KirigamiPlasmaStyle
         Qt6::Quick
         KF6::ConfigWidgets
         KF6::IconThemes
+        KF6::Plasma
 )
 
 install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/kirigami)

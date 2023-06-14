@@ -6,6 +6,7 @@
 */
 
 #include "plugin.h"
+#include "plasmatheme.h"
 #include "units.h"
 
 Plugin::Plugin(QObject *parent)
@@ -20,7 +21,7 @@ Kirigami::PlatformTheme *Plugin::createPlatformTheme(QObject *parent)
     Q_UNUSED(parent);
     // TODO: Implement a proper C++ version of PlatformTheme. This relies on fallback
     // behaviour in Kirigami to load the Theme.qml file.
-    return nullptr;
+    return new PlasmaTheme(parent);
 }
 
 Kirigami::Units *Plugin::createUnits(QObject *parent)

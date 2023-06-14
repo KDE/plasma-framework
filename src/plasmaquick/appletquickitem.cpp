@@ -503,6 +503,7 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
 
     // TODO: kill packageurlinterceptor
     auto *qmlObject = new PlasmaQuick::SharedQmlEngine(applet);
+    qmlObject->engine()->setProperty("_kirigamiTheme", QStringLiteral("KirigamiPlasmaStyle"));
     qmlObject->setInitializationDelayed(true);
     if (qmlObject->engine()->urlInterceptors().isEmpty()) {
         PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine().get(), KPackage::Package());
