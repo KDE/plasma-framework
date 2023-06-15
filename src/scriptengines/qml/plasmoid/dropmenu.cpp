@@ -26,6 +26,11 @@ DropMenu::DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentIn
 {
     if (!dropJob) {
         m_menu = new QMenu(i18n("Content dropped"));
+
+        // Polish before creating a native window below. The style could want change the surface format
+        // of the window which will have no effect when the native window has already been created.
+        m_menu->ensurePolished();
+
         if (m_menu->winId()) {
             m_menu->windowHandle()->setTransientParent(parent->window());
         }
