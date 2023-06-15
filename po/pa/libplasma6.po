@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-10 02:08+0000\n"
+"POT-Creation-Date: 2023-06-15 02:12+0000\n"
 "PO-Revision-Date: 2022-11-19 05:34-0800\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -227,27 +227,27 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "ਗਲਤ (ਨਲ) ਸਰਵਿਸ, ਕੋਈ ਵੀ ਓਪਰੇਸ਼ਨ ਨਹੀਂ ਕੀਤਾ ਜਾ ਸਕਦਾ।"
 
-#: plasmaquick/appletquickitem.cpp:526
+#: plasmaquick/appletquickitem.cpp:527
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
 msgstr ""
 
-#: plasmaquick/appletquickitem.cpp:531
+#: plasmaquick/appletquickitem.cpp:532
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr ""
 
-#: plasmaquick/appletquickitem.cpp:538
+#: plasmaquick/appletquickitem.cpp:539
 #, kde-format
 msgid "Unknown Applet"
 msgstr "ਅਣਪਛਾਤਾ ਐਪਲਿਟ"
 
-#: plasmaquick/appletquickitem.cpp:554
+#: plasmaquick/appletquickitem.cpp:555
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "QML ਫਾਈਲ ਲੋਡ ਕਰਨ ਵਿੱਚ ਗਲਤੀ: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:556
+#: plasmaquick/appletquickitem.cpp:557
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr ""

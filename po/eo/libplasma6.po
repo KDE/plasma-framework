@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-10 02:08+0000\n"
+"POT-Creation-Date: 2023-06-15 02:12+0000\n"
 "PO-Revision-Date: 2023-06-11 06:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -230,27 +230,27 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Nevalida (nula) servo, ne povas fari ajnajn operaciojn."
 
-#: plasmaquick/appletquickitem.cpp:526
+#: plasmaquick/appletquickitem.cpp:527
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
 msgstr "La radika objekto de %1 devas esti de tipo ContaimentItem"
 
-#: plasmaquick/appletquickitem.cpp:531
+#: plasmaquick/appletquickitem.cpp:532
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr "La radika objekto de %1 devas esti de tipo PlasmoidItem"
 
-#: plasmaquick/appletquickitem.cpp:538
+#: plasmaquick/appletquickitem.cpp:539
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Nekonata Apleto"
 
-#: plasmaquick/appletquickitem.cpp:554
+#: plasmaquick/appletquickitem.cpp:555
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Eraro dum ŝarĝo de QML-dosiero: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:556
+#: plasmaquick/appletquickitem.cpp:557
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Eraro dum ŝarĝo de apleto: pako neekzistanta. %1"
