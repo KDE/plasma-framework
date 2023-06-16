@@ -452,6 +452,11 @@ void Applet::setImmutability(const Types::ImmutabilityType immutable)
     updateConstraints(Types::ImmutableConstraint);
 }
 
+bool Applet::immutable() const
+{
+    return immutability() != Types::Mutable;
+}
+
 QString Applet::launchErrorMessage() const
 {
     return d->launchErrorMessage;
