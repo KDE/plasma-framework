@@ -10,7 +10,6 @@
 #include "fallbackcomponent.h"
 
 #include <QQmlEngine>
-#include <QtQml>
 
 // #include <KSharedConfig>
 // #include <KConfigGroup>

@@ -5,8 +5,8 @@
 */
 
 #include <QDebug>
+#include <QQmlEngine>
 #include <QQmlExtensionPlugin>
-#include <QtQml>
 
 #include "application.h"
 #include "icondialog.h"

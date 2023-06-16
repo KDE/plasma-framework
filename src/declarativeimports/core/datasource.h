@@ -13,7 +13,6 @@
 #include <QObject>
 #include <QQmlParserStatus>
 #include <QQmlPropertyMap>
-#include <QtQml>
 
 #include <Plasma/DataEngine>
 #include <Plasma/DataEngineConsumer>

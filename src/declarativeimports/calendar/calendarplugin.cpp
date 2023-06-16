@@ -12,7 +12,6 @@
 
 #include <QAbstractListModel>
 #include <QQmlEngine>
-#include <QtQml>
 
 static QObject *event_plugins_manager_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {

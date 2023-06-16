@@ -9,6 +9,8 @@
 
 #include "datasource.h"
 
+#include <QAbstractItemModel>
+
 namespace Plasma
 {
 DataSource::DataSource(QObject *parent)
