@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-15 02:12+0000\n"
+"POT-Creation-Date: 2023-06-17 02:06+0000\n"
 "PO-Revision-Date: 2023-05-22 13:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -54,7 +54,7 @@ msgstr "搜索"
 msgid "Unknown"
 msgstr "未知"
 
-#: plasma/applet.cpp:769
+#: plasma/applet.cpp:774
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "激活 %1 挂件"
