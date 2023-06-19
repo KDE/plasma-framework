@@ -95,6 +95,7 @@
         "Name[pl]": "Tlen",
         "Name[pt]": "Oxygen",
         "Name[pt_BR]": "Oxygen",
+        "Name[ro]": "Oxygen",
         "Name[ru]": "Oxygen",
         "Name[sl]": "Kisik",
         "Name[sv]": "Oxygen",
