@@ -875,7 +875,7 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
     if (auto topInset = q->elementRect(createName(u"hint-top-inset")); topInset.isValid()) {
         frame->insetTopMargin = topInset.height();
     } else {
-        frame->insetTopMargin = -1;
+        frame->insetTopMargin = 0;
     }
 
     frame->fixedLeftWidth = q->elementSize(createName(u"left")).width();
@@ -896,7 +896,7 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
     if (auto leftInset = q->elementRect(createName(u"hint-left-inset")); leftInset.isValid()) {
         frame->insetLeftMargin = leftInset.width();
     } else {
-        frame->insetLeftMargin = -1;
+        frame->insetLeftMargin = 0;
     }
 
     frame->fixedRightWidth = q->elementSize(createName(u"right")).width();
@@ -917,7 +917,7 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
     if (auto rightInset = q->elementRect(createName(u"hint-right-inset")); rightInset.isValid()) {
         frame->insetRightMargin = rightInset.width();
     } else {
-        frame->insetRightMargin = -1;
+        frame->insetRightMargin = 0;
     }
 
     frame->fixedBottomHeight = q->elementSize(createName(u"bottom")).height();
@@ -938,7 +938,7 @@ void FrameSvgPrivate::updateSizes(FrameData *frame) const
     if (auto bottomInset = q->elementRect(createName(u"hint-bottom-inset")); bottomInset.isValid()) {
         frame->insetBottomMargin = bottomInset.height();
     } else {
-        frame->insetBottomMargin = -1;
+        frame->insetBottomMargin = 0;
     }
 
     static const QString maskPrefix = QStringLiteral("mask-");
