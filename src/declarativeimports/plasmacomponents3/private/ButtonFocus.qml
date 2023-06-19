@@ -5,8 +5,9 @@
 
 import QtQuick 2.12
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
-PlasmaCore.FrameSvgItem {
+KSvg.FrameSvgItem {
     anchors {
         fill: parent
         leftMargin: -margins.left

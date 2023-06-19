@@ -26,6 +26,8 @@
 
 #include "libplasma-theme-global.h"
 
+#include <KSvg/ImageSet>
+
 namespace Plasma
 {
 class Theme;
@@ -95,6 +97,7 @@ public:
     static ThemePrivate *globalTheme;
     static QHash<QString, ThemePrivate *> themes;
 
+    std::unique_ptr<KSvg::ImageSet> kSvgImageSet;
     QString themeName;
     KPluginMetaData pluginMetaData;
     QList<QString> fallbackThemes;

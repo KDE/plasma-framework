@@ -89,6 +89,7 @@ PRIVATE
     KF6::Notifications
     KF6::IconThemes
     KF6::Activities
+    KF6::Svg
     ${PLASMA_EXTRA_LIBS}
 )
 

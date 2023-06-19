@@ -9,6 +9,7 @@ import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQuick.Controls @QQC2_VERSION@ as Controls
 import Qt5Compat.GraphicalEffects
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 import "mobiletextselection" as MobileTextSelection
@@ -41,7 +42,7 @@ T.ComboBox {
         property bool separatorVisible: false
     }
 
-    indicator: PlasmaCore.SvgItem {
+    indicator: KSvg.SvgItem {
         implicitWidth: PlasmaCore.Units.iconSizes.small
         implicitHeight: implicitWidth
         anchors {
@@ -49,7 +50,7 @@ T.ComboBox {
             rightMargin: surfaceNormal.margins.right
             verticalCenter: parent.verticalCenter
         }
-        svg: PlasmaCore.Svg {
+        svg: KSvg.Svg {
             imagePath: "widgets/arrows"
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
         }
@@ -116,7 +117,7 @@ T.ComboBox {
         y: rect.y + 6
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         id: surfaceNormal
         anchors.fill: parent
         readonly property bool editable: control.hasOwnProperty("editable") && control.editable

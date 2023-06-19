@@ -8,6 +8,7 @@
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import "private" as P
 
 Item {
@@ -24,14 +25,14 @@ Item {
     opacity: control.enabled ? 1 : 0.5
     layer.enabled: opacity < 1
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: radioButtonSvg
         imagePath: "widgets/radiobutton"
     }
 
     Loader {
         anchors.fill: parent
-        sourceComponent: radioButtonSvg.fromCurrentTheme
+        sourceComponent: radioButtonSvg.fromCurrentImageSet
             // Hardcode breeze-light and breeze-dark because fromCurrentTheme is
             // false for them. This is because they don't contain any SVGs and
             // inherit all of them from the default theme.
@@ -43,13 +44,13 @@ Item {
     // Uses newer radiobutton.svg
     Component {
         id: radiobuttonComponent
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             svg: radioButtonSvg
             elementId: "normal"
             anchors.centerIn: parent
             implicitWidth: naturalSize.width
             implicitHeight: naturalSize.height
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 z: -1
                 svg: radioButtonSvg
                 elementId: "shadow"
@@ -66,7 +67,7 @@ Item {
                     }
                 }
             }
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 svg: radioButtonSvg
                 elementId: "checked"
                 anchors.centerIn: parent
@@ -83,7 +84,7 @@ Item {
                     }
                 }
             }
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 svg: radioButtonSvg
                 elementId: "focus"
                 anchors.centerIn: parent
@@ -98,7 +99,7 @@ Item {
                     }
                 }
             }
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 svg: radioButtonSvg
                 elementId: "hover"
                 anchors.centerIn: parent
@@ -114,7 +115,7 @@ Item {
                     }
                 }
             }
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 svg: radioButtonSvg
                 elementId: "symbol"
                 anchors.centerIn: parent
@@ -136,8 +137,8 @@ Item {
     // NOTE: Do not touch this except to fix bugs. This is for compatibility.
     Component {
         id: compatibilityComponent
-        PlasmaCore.SvgItem {
-            svg: PlasmaCore.Svg {
+        KSvg.SvgItem {
+            svg: KSvg.Svg {
                 id: buttonSvg
                 imagePath: "widgets/actionbutton"
             }
@@ -147,9 +148,9 @@ Item {
             implicitWidth: implicitHeight
             implicitHeight: PlasmaCore.Units.iconSizes.small
 
-            PlasmaCore.SvgItem {
+            KSvg.SvgItem {
                 id: checkmark
-                svg: PlasmaCore.Svg {
+                svg: KSvg.Svg {
                     id: checkmarksSvg
                     imagePath: "widgets/checkmarks"
                 }

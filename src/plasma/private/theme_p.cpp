@@ -102,6 +102,8 @@ ThemePrivate::ThemePrivate(QObject *parent)
 {
     ThemeConfig config;
     cacheTheme = config.cacheTheme();
+    kSvgImageSet = std::unique_ptr<KSvg::ImageSet>(new KSvg::ImageSet);
+    kSvgImageSet->setBasePath(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/desktoptheme/"));
 
     pixmapSaveTimer = new QTimer(this);
     pixmapSaveTimer->setSingleShot(true);
@@ -124,6 +126,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
             if (backgroundContrastActive != active) {
                 backgroundContrastActive = active;
                 scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
+                kSvgImageSet->setSelectors({QStringLiteral("translucent")});
             }
         });
 #endif
@@ -333,6 +336,7 @@ void ThemePrivate::compositingChanged(bool active)
         compositingActive = active;
         // qCDebug(LOG_PLASMA) << QTime::currentTime();
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
+        kSvgImageSet->setSelectors({QStringLiteral("opaque")});
     }
 #endif
 }
@@ -823,6 +827,7 @@ void ThemePrivate::processBlurBehindSettings(const KSharedConfigPtr &metadata)
 
 void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings, bool emitChanged)
 {
+    kSvgImageSet->setImageSetName(tempThemeName);
     QString theme = tempThemeName;
     if (theme.isEmpty() || theme == themeName) {
         // let's try and get the default theme at least

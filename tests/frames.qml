@@ -9,6 +9,7 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 Item
 {
@@ -29,7 +30,7 @@ Item
                         "opaque/widgets/tooltip"
                         ]
 
-            delegate: PlasmaCore.FrameSvgItem {
+            delegate: KSvg.FrameSvgItem {
                 width: 100
                 height: 100
                 imagePath: modelData

@@ -8,6 +8,7 @@ import QtQuick 2.12
 import QtQuick.Layouts 1.12
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import "../" as PlasmaComponents
 
 GridLayout {
@@ -44,7 +45,7 @@ GridLayout {
         colorGroup: parent.PlasmaCore.ColorScope.colorGroup
         visible: source.length > 0 && root.parent.display !== T.Button.TextOnly
         source: root.parent.icon ? (root.parent.icon.name || root.parent.icon.source) : ""
-        status: root.usingFocusBackground ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+        status: root.usingFocusBackground ? KSvg.Svg.Selected : KSvg.Svg.Normal
     }
     PlasmaComponents.Label {
         id: label
@@ -58,7 +59,7 @@ GridLayout {
         verticalAlignment: Text.AlignVCenter
         elide: Text.ElideRight
     }
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: buttonSvg
         imagePath: "widgets/button"
     }

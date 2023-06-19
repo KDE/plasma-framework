@@ -7,6 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 T.Popup {
     id: control
@@ -46,7 +47,7 @@ T.Popup {
 
     contentItem: Item { }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         implicitWidth: PlasmaCore.Units.gridUnit * 12
         imagePath: "widgets/background"
     }

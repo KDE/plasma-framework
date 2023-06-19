@@ -9,6 +9,7 @@ import QtQuick.Window 2.15
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.5 as Kirigami
 
 T.Menu {
@@ -87,7 +88,7 @@ T.Menu {
         }
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         imagePath: "widgets/background"
         implicitWidth: PlasmaCore.Units.gridUnit * 8
         implicitHeight: PlasmaCore.Units.gridUnit * 2

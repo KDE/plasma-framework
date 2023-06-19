@@ -5,6 +5,7 @@
 
 import QtQuick 2.6
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 Item {
     id: root
@@ -28,7 +29,7 @@ Item {
         showShadow: enabled && !root.checked && !root.pressed
     }
 
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: surfaceNormal
         anchors.fill: parent
         imagePath: "widgets/button"
@@ -47,7 +48,7 @@ Item {
         showHover: root.hovered && !root.pressed
     }
 
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: surfacePressed
         anchors.fill: parent
         imagePath: "widgets/button"
@@ -56,7 +57,7 @@ Item {
         Behavior on opacity { OpacityAnimator { duration: PlasmaCore.Units.shortDuration; easing.type: Easing.OutQuad } }
     }
 
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: surfaceFocused
         anchors.fill: parent
         imagePath: "widgets/button"

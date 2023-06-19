@@ -7,6 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import "private" as Private
 
 T.RangeSlider {
@@ -15,7 +16,7 @@ T.RangeSlider {
     implicitWidth: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 12 : PlasmaCore.Units.gridUnit * 1.6
     implicitHeight: control.orientation === Qt.Horizontal ? PlasmaCore.Units.gridUnit * 1.6 : PlasmaCore.Units.gridUnit * 12
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: grooveSvg
         imagePath: "widgets/slider"
         colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -37,7 +38,7 @@ T.RangeSlider {
             shadowElement: parent.horizontal ? "horizontal-slider-shadow" : "vertical-slider-shadow"
             state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             id: firstHandle
             anchors.centerIn: parent
             width: naturalSize.width
@@ -63,7 +64,7 @@ T.RangeSlider {
             shadowElement: parent.horizontal ? "horizontal-slider-shadow" : "vertical-slider-shadow"
             state: control.activeFocus ? "focus" : (control.hovered ? "hover" : "shadow")
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             id: secondHandle
             anchors.centerIn: parent
             width: naturalSize.width
@@ -73,7 +74,7 @@ T.RangeSlider {
         }
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         imagePath: "widgets/slider"
         prefix: "groove"
         colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -86,7 +87,7 @@ T.RangeSlider {
         scale: horizontal && control.mirrored ? -1 : 1
         opacity: control.enabled ? 1 : 0.6
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             imagePath: "widgets/slider"
             prefix: "groove-highlight"
             colorGroup: PlasmaCore.ColorScope.colorGroup

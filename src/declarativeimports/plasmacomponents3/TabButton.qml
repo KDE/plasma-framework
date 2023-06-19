@@ -11,6 +11,7 @@ import QtQuick.Controls @QQC2_VERSION@
 import QtQml.Models 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 
@@ -79,18 +80,18 @@ T.TabButton {
         }
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         visible: !control.ListView.view || !control.ListView.view.highlightItem
         imagePath: "widgets/tabbar"
         prefix: control.T.TabBar.position === T.TabBar.Footer ? "south-active-tab" : "north-active-tab"
         enabledBorders: {
-            const borders = PlasmaCore.FrameSvgItem.LeftBorder | PlasmaCore.FrameSvgItem.RightBorder
+            const borders = KSvg.FrameSvgItem.LeftBorder | KSvg.FrameSvgItem.RightBorder
             if (!visible || control.checked) {
-                return borders | PlasmaCore.FrameSvgItem.TopBorder | PlasmaCore.FrameSvgItem.BottomBorder
+                return borders | KSvg.FrameSvgItem.TopBorder | KSvg.FrameSvgItem.BottomBorder
             } else if (control.T.TabBar.position === T.TabBar.Footer) {
-                return borders | PlasmaCore.FrameSvgItem.BottomBorder
+                return borders | KSvg.FrameSvgItem.BottomBorder
             } else {
-                return borders | PlasmaCore.FrameSvgItem.TopBorder
+                return borders | KSvg.FrameSvgItem.TopBorder
             }
         }
     }

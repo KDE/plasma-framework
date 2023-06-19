@@ -8,6 +8,7 @@
 
 import QtQuick 2.15
 import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 /**
  * @brief Highlight for a list or grid item.
@@ -78,7 +79,7 @@ Item {
         }
     }
 
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: background
 
         anchors.fill: parent

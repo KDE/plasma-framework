@@ -8,6 +8,7 @@ import QtQuick 2.12
 import QtQuick.Controls @QQC2_VERSION@ 
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import "private" as P
 
@@ -42,7 +43,7 @@ T.SpinBox {
     wheelEnabled: true
     hoverEnabled: Qt.styleHints.useHoverEffects
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: lineSvg
         imagePath: "widgets/line"
     }
@@ -63,7 +64,7 @@ T.SpinBox {
             colorGroup: PlasmaCore.ColorScope.colorGroup
             source: "list-add"
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             x: control.mirrored ? parent.width - width : 0
             z: -1
             anchors {
@@ -95,7 +96,7 @@ T.SpinBox {
             colorGroup: PlasmaCore.ColorScope.colorGroup
             source: "list-remove"
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             x: control.mirrored ? 0 : parent.width - width
             z: -1
             anchors {
@@ -153,14 +154,14 @@ T.SpinBox {
         }
         Component {
             id: editableBg
-            PlasmaCore.FrameSvgItem {
+            KSvg.FrameSvgItem {
                 readonly property real leftMargin: margins.left
                 readonly property real rightMargin: margins.right
                 readonly property real topMargin: margins.top
                 readonly property real bottomMargin: margins.bottom
                 imagePath: "widgets/lineedit"
                 prefix: "base"
-                PlasmaCore.FrameSvgItem {
+                KSvg.FrameSvgItem {
                     anchors {
                         fill: parent
                         leftMargin: -margins.left
@@ -180,7 +181,7 @@ T.SpinBox {
                         }
                     }
                 }
-                PlasmaCore.FrameSvgItem {
+                KSvg.FrameSvgItem {
                     property bool visualFocus: control.visualFocus || (control.contentItem.activeFocus
                         && (control.contentItem.focusReason == Qt.TabFocusReason ||
                             control.contentItem.focusReason == Qt.BacktabFocusReason ||
@@ -205,7 +206,7 @@ T.SpinBox {
                         }
                     }
                 }
-                PlasmaCore.Svg {
+                KSvg.Svg {
                     id: lineEditSvg
                     imagePath: "widgets/lineedit"
                 }

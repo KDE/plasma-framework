@@ -9,6 +9,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.5 as Kirigami
 
 T.ToolTip {
@@ -73,7 +74,7 @@ T.ToolTip {
         implicitHeight: PlasmaCore.Units.gridUnit + backgroundItem.margins.top + backgroundItem.margins.bottom
         implicitWidth: PlasmaCore.Units.gridUnit + backgroundItem.margins.left + backgroundItem.margins.right
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             anchors.fill: parent
             anchors.leftMargin: -margins.left
             anchors.rightMargin: -margins.right
@@ -85,7 +86,7 @@ T.ToolTip {
             PlasmaCore.ColorScope.inherit: false
         }
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             id: backgroundItem
             anchors.fill: parent
             // Because the transparent one doesn't match the appearance of all

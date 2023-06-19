@@ -8,6 +8,7 @@ import QtQuick 2.6
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.config
 import "private" as Private
 import org.kde.kirigami 2.5 as Kirigami
@@ -211,13 +212,13 @@ T.TextField {
         }
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         implicitWidth: PlasmaCore.Units.gridUnit * 8 + margins.left + margins.right
         implicitHeight: PlasmaCore.Units.gridUnit + margins.top + margins.bottom
         imagePath: "widgets/lineedit"
         prefix: "base"
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             anchors {
                 fill: parent
                 leftMargin: -margins.left
@@ -237,7 +238,7 @@ T.TextField {
                 }
             }
         }
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             z: hasElement("hint-focus-over-base") ? 0 : -1
             anchors {
                 fill: parent

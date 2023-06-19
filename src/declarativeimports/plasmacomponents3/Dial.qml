@@ -7,6 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import "private" as Private
 
 T.Dial {
@@ -44,7 +45,7 @@ T.Dial {
         }
     }
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: grooveSvg
         imagePath: "widgets/slider"
         colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -72,8 +73,8 @@ T.Dial {
             }
         }
 
-        PlasmaCore.SvgItem {
-            svg: PlasmaCore.Svg {
+        KSvg.SvgItem {
+            svg: KSvg.Svg {
                 id: buttonSvg
                 imagePath: "widgets/actionbutton"
             }

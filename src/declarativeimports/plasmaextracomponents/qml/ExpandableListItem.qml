@@ -7,6 +7,7 @@
 import QtQuick 2.14
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
@@ -664,13 +665,13 @@ Item {
                     }
 
                     // Separator between the two items when both are shown
-                    PlasmaCore.SvgItem {
+                    KSvg.SvgItem {
                         visible: actionsListLoader.active && customContentLoader.active
 
                         Layout.fillWidth: true
 
                         elementId: "horizontal-line"
-                        svg: PlasmaCore.Svg {
+                        svg: KSvg.Svg {
                             imagePath: "widgets/line"
                         }
                     }

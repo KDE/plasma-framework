@@ -8,8 +8,9 @@ import QtQuick.Window 2.2
 
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
-PlasmaCore.FrameSvgItem {
+KSvg.FrameSvgItem {
     id: backgroundMetrics
     visible: false
     imagePath: {

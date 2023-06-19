@@ -8,6 +8,7 @@
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import "private" as Private
 
 Item {
@@ -19,13 +20,13 @@ Item {
     implicitHeight: Math.max(inactive.implicitHeight, button.implicitHeight)
     opacity: control.enabled ? 1 : 0.6
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: switchSvg
         imagePath: "widgets/switch"
         colorGroup: PlasmaCore.ColorScope.colorGroup
     }
 
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: inactive
         anchors {
             left: parent.left
@@ -44,7 +45,7 @@ Item {
         colorGroup: PlasmaCore.ColorScope.colorGroup
         prefix: "inactive"
     }
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         anchors.fill: inactive
         imagePath: "widgets/switch"
         prefix: "active"
@@ -57,7 +58,7 @@ Item {
             }
         }
     }
-    PlasmaCore.SvgItem {
+    KSvg.SvgItem {
         id: button
         x: root.control.mirrored ? (root.control.checked ? 0 : parent.width - width) : (root.control.checked ? parent.width - width : 0)
         anchors.verticalCenter: parent.verticalCenter
@@ -72,7 +73,7 @@ Item {
                 easing.type: Easing.InOutQuad
             }
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             svg: switchSvg
             z: -1
             anchors.centerIn: parent
@@ -81,7 +82,7 @@ Item {
             elementId: "handle-shadow"
             visible: enabled && !control.pressed
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             anchors.centerIn: parent
             implicitWidth: naturalSize.width
             implicitHeight: naturalSize.height

@@ -7,6 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 T.TabBar {
     id: control
@@ -36,7 +37,7 @@ T.TabBar {
         preferredHighlightBegin: 40
         preferredHighlightEnd: width - 40
         highlightResizeDuration: 0
-        highlight: PlasmaCore.FrameSvgItem {
+        highlight: KSvg.FrameSvgItem {
             imagePath: "widgets/tabbar"
             prefix: control.position == T.TabBar.Header ? "north-active-tab" : "south-active-tab"
             colorGroup: PlasmaCore.ColorScope.colorGroup

@@ -9,9 +9,10 @@ import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 
 import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import "private" as Private
 
-PlasmaCore.FrameSvgItem {
+KSvg.FrameSvgItem {
     id: root
 
     required property T.AbstractButton control
@@ -27,9 +28,9 @@ PlasmaCore.FrameSvgItem {
         showShadow: !control.pressed
     }
 
-    PlasmaCore.SvgItem {
+    KSvg.SvgItem {
         anchors.fill: parent
-        svg: PlasmaCore.Svg {
+        svg: KSvg.Svg {
             id: checkmarkSvg
             imagePath: "widgets/checkmarks"
         }

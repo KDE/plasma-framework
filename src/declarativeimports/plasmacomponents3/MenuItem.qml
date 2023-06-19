@@ -8,6 +8,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.5 as Kirigami
 
 T.MenuItem {
@@ -73,7 +74,7 @@ T.MenuItem {
         x: controlRoot.mirrored ? controlRoot.padding : controlRoot.width - width - controlRoot.padding
         y: controlRoot.topPadding + (controlRoot.availableHeight - height) / 2
         source: controlRoot.mirrored ? "go-next-symbolic-rtl" : "go-next-symbolic"
-        status: controlRoot.highlighted ? PlasmaCore.Svg.Selected : PlasmaCore.Svg.Normal
+        status: controlRoot.highlighted ? KSvg.Svg.Selected : KSvg.Svg.Normal
         width: Math.max(label.height, Kirigami.Units.iconSizes.small)
         height: width
         visible: controlRoot.subMenu
@@ -86,7 +87,7 @@ T.MenuItem {
         visible: controlRoot.checkable
         sourceComponent: controlRoot.autoExclusive ? radioComponent : checkComponent
     }
-    
+
     Component {
         id: radioComponent
         RadioIndicator {
@@ -103,7 +104,7 @@ T.MenuItem {
     background: Item {
         implicitWidth: PlasmaCore.Units.gridUnit * 8
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             id: highlight
             imagePath: "widgets/viewitem"
             prefix: "hover"

@@ -8,6 +8,7 @@
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import "private" as P
 
 T.Slider {
@@ -25,7 +26,7 @@ T.Slider {
     layer.enabled: opacity < 1
     opacity: control.enabled ? 1 : 0.5
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: sliderSvg
         imagePath: "widgets/slider"
         colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -39,7 +40,7 @@ T.Slider {
         implicitWidth: sliderSvg.hasElement("hint-handle-size") ? sliderSvg.elementSize("hint-handle-size").width : firstHandle.implicitWidth
         implicitHeight: sliderSvg.hasElement("hint-handle-size") ? sliderSvg.elementSize("hint-handle-size").height : firstHandle.implicitHeight
 
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             id: shadow
             z: -1
             anchors.centerIn: parent
@@ -49,7 +50,7 @@ T.Slider {
             elementId: control.horizontal ? "horizontal-slider-shadow" : "vertical-slider-shadow"
             visible: enabled && !control.pressed
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             id: firstHandle
             anchors.centerIn: parent
             implicitWidth: naturalSize.width
@@ -57,7 +58,7 @@ T.Slider {
             svg: sliderSvg
             elementId: control.horizontal ? "horizontal-slider-handle" : "vertical-slider-handle"
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             anchors.centerIn: parent
             implicitWidth: naturalSize.width
             implicitHeight: naturalSize.height
@@ -72,7 +73,7 @@ T.Slider {
                 }
             }
         }
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             anchors.centerIn: parent
             implicitWidth: naturalSize.width
             implicitHeight: naturalSize.height
@@ -90,7 +91,7 @@ T.Slider {
         }
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         imagePath: "widgets/slider"
         prefix: "groove"
         colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -102,7 +103,7 @@ T.Slider {
         x: control.leftPadding + (control.horizontal ? 0 : Math.round((control.availableWidth - width) / 2))
         y: control.topPadding + (control.vertical ? 0 : Math.round((control.availableHeight - height) / 2))
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             id: grooveFill
             imagePath: "widgets/slider"
             prefix: "groove-highlight"

@@ -8,6 +8,7 @@ import QtQuick.Controls 2.15 as QQC2
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 /**
  * This is a standard textfield following KDE HIG. Using Ctrl+F as focus
@@ -53,7 +54,7 @@ PlasmaExtras.ActionTextField {
         anchors.verticalCenterOffset: Math.round((root.topPadding - root.bottomPadding) / 2)
         implicitHeight: PlasmaCore.Units.iconSizes.sizeForLabels
         implicitWidth: PlasmaCore.Units.iconSizes.sizeForLabels
-        status: PlasmaCore.Svg.Inactive
+        status: KSvg.Svg.Inactive
 
         source: "search"
 

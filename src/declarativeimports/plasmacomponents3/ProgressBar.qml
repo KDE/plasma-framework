@@ -7,6 +7,7 @@
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 T.ProgressBar {
     id: control
@@ -18,7 +19,7 @@ T.ProgressBar {
 
     hoverEnabled: false
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: barSvg
         imagePath: "widgets/bar_meter_horizontal"
         colorGroup: PlasmaCore.ColorScope.colorGroup
@@ -28,7 +29,7 @@ T.ProgressBar {
         implicitWidth: PlasmaCore.Units.gridUnit * 8
         implicitHeight: children[0].height
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             readonly property real indeterminateWidth: Math.round(control.availableWidth / 4)
             property real indeterminateProgress: 0
 
@@ -71,7 +72,7 @@ T.ProgressBar {
         implicitWidth: PlasmaCore.Units.gridUnit * 8
         implicitHeight: children[0].height
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-inactive"
             colorGroup: PlasmaCore.ColorScope.colorGroup

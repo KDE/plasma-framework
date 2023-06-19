@@ -8,6 +8,7 @@ import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
 
@@ -56,7 +57,7 @@ T.RoundButton {
 
         // Round Button
 
-        PlasmaCore.Svg {
+        KSvg.Svg {
             id: buttonSvg
             imagePath: "widgets/actionbutton"
             colorGroup: PlasmaCore.Theme.ButtonColorGroup
@@ -79,7 +80,7 @@ T.RoundButton {
             }
         }
 
-        PlasmaCore.SvgItem {
+        KSvg.SvgItem {
             id: buttonItem
             svg: buttonSvg
             elementId: (control.pressed || control.checked) ? "pressed" : "normal"
@@ -101,7 +102,7 @@ T.RoundButton {
             showShadow: background.useNormalButton && !control.flat && (!control.pressed || !control.checked)
         }
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             id: surfaceNormal
             anchors.fill: parent
             imagePath: "widgets/button"
@@ -125,7 +126,7 @@ T.RoundButton {
             showHover: background.useNormalButton && control.hovered && !control.pressed
         }
 
-        PlasmaCore.FrameSvgItem {
+        KSvg.FrameSvgItem {
             anchors.fill: parent
             imagePath: "widgets/button"
             prefix: "pressed"

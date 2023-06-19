@@ -6,7 +6,7 @@
 
 import QtQuick 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-
+import org.kde.ksvg 1.0 as KSvg
 
 PlasmaCore.IconItem {
     property bool selected: false
@@ -17,9 +17,9 @@ PlasmaCore.IconItem {
     colorGroup: PlasmaCore.ColorScope.colorGroup
     onSelectedChanged: {
         if (selected) {
-            status = PlasmaCore.Svg.Selected;
+            status = KSvg.Svg.Selected;
         } else {
-            status = PlasmaCore.Svg.Normal;
+            status = KSvg.Svg.Normal;
         }
     }
 }

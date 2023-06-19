@@ -5,6 +5,7 @@
 
 import QtQuick 2.6
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 Item {
     id: root
@@ -33,7 +34,7 @@ Item {
     // TODO: Maybe add a way to customize the look of normal state flat buttons with "toolbutton-normal"? 
     // TODO: Maybe add a way to customize the background of focused flat buttons with "toolbutton-focus-background"? 
     // TODO KF6: "flat" would be a more logical name than "toolbutton" since toolbuttons can be non-flat.
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: surfaceHover
         anchors.fill: parent
         imagePath: "widgets/button"
@@ -46,7 +47,7 @@ Item {
         visible: root.hovered
     }
 
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: surfacePressed
         anchors.fill: parent
         imagePath: "widgets/button"

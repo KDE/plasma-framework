@@ -7,6 +7,7 @@
 import QtQuick 2.12
 import org.kde.kirigami 2.12 as Kirigami
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 Kirigami.AbstractListItem {
     id: __listItem
@@ -55,7 +56,7 @@ Kirigami.AbstractListItem {
         id: __innerItem
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         id: __background
         imagePath: "widgets/listitem"
         prefix: (__listItem.sectionDelegate ? "section" :
@@ -64,8 +65,8 @@ Kirigami.AbstractListItem {
         anchors.fill: parent
         visible: __listItem.ListView.view ? __listItem.ListView.view.highlight === null : true
 
-        PlasmaCore.SvgItem {
-            svg: PlasmaCore.Svg {
+        KSvg.SvgItem {
+            svg: KSvg.Svg {
                 imagePath: "widgets/listitem"
             }
             elementId: "separator"

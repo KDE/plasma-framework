@@ -7,6 +7,7 @@
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.15 as Kirigami
 
 T.ScrollBar {
@@ -52,7 +53,7 @@ T.ScrollBar {
         opacity: 0.1
     }
 
-    background: PlasmaCore.FrameSvgItem {
+    background: KSvg.FrameSvgItem {
         id: bgFrame
         implicitWidth: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").width, fixedMargins.left + fixedMargins.right)
         implicitHeight: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").height, fixedMargins.top + fixedMargins.bottom)
@@ -69,7 +70,7 @@ T.ScrollBar {
         }
     }
 
-    contentItem: PlasmaCore.FrameSvgItem {
+    contentItem: KSvg.FrameSvgItem {
         id: handle
         imagePath:"widgets/scrollbar"
         implicitWidth: Math.max(scrollbarSvg.elementSize("hint-scrollbar-size").width, fixedMargins.left + fixedMargins.right)
@@ -79,7 +80,7 @@ T.ScrollBar {
         opacity: enabled ? 1 : 0.5
     }
 
-    PlasmaCore.Svg {
+    KSvg.Svg {
         id: scrollbarSvg
         imagePath: "widgets/scrollbar"
         //TODO: support arrows?

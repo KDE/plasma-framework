@@ -10,13 +10,14 @@ import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.15
 
 import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.ksvg 1.0 as KSvg
 
 Item
 {
     width: 500
     height: 500
 
-    PlasmaCore.FrameSvgItem {
+    KSvg.FrameSvgItem {
         id: theItem
 
         imagePath: "widgets/background"
