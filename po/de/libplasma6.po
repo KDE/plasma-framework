@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 02:06+0000\n"
+"POT-Creation-Date: 2023-06-20 02:57+0000\n"
 "PO-Revision-Date: 2023-03-21 20:07+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -20,13 +20,13 @@ msgstr ""
 msgid "More actions"
 msgstr "Weitere Aktionen"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Einklappen"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -37,12 +37,12 @@ msgstr "Ausklappen"
 msgid "Password"
 msgstr "Passwort"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
 #, kde-format
 msgid "Search…"
 msgstr "Suchen ..."
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search"
 msgstr "Suchen"

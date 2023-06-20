@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 02:06+0000\n"
+"POT-Creation-Date: 2023-06-20 02:57+0000\n"
 "PO-Revision-Date: 2023-06-09 08:05+0200\n"
 "Last-Translator: Matjaž Jeran <matjaz.jeran@amis.net>\n"
 "Language-Team: Slovenian <lugos-slo@lugos.si>\n"
@@ -27,13 +27,13 @@ msgstr ""
 msgid "More actions"
 msgstr "Več dejavnosti"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Podri"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -44,12 +44,12 @@ msgstr "Razširi"
 msgid "Password"
 msgstr "Geslo"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
 #, kde-format
 msgid "Search…"
 msgstr "Poišči …"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search"
 msgstr "Poišči"

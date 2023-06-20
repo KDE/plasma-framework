@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 02:06+0000\n"
+"POT-Creation-Date: 2023-06-20 02:57+0000\n"
 "PO-Revision-Date: 2023-06-10 06:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -23,13 +23,13 @@ msgstr ""
 msgid "More actions"
 msgstr "დამატებითი მოქმედებები"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "აკეცვა"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -40,12 +40,12 @@ msgstr "გაფართოება"
 msgid "Password"
 msgstr "პაროლი"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
 #, kde-format
 msgid "Search…"
 msgstr "ძებნა…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search"
 msgstr "ძებნა"

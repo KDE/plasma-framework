@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-17 02:06+0000\n"
+"POT-Creation-Date: 2023-06-20 02:57+0000\n"
 "PO-Revision-Date: 2022-11-19 05:34-0800\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -23,13 +23,13 @@ msgstr ""
 msgid "More actions"
 msgstr "ਹੋਰ ਕਾਰਵਾਈਆਂ"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "ਸਮੇਟੋ"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -40,12 +40,12 @@ msgstr "ਫੈਲਾਓ"
 msgid "Password"
 msgstr "ਪਾਸਵਰਡ"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:68
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
 #, kde-format
 msgid "Search…"
 msgstr "…ਖੋਜੋ"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
 #, kde-format
 msgid "Search"
 msgstr "ਖੋਜੋ"
