@@ -20,7 +20,7 @@ Dependencies:
     'frameworks/kxmlgui' : '@same'
     'frameworks/kirigami' : '@same'
     'frameworks/kcmutils' : '@same'
-    'libraries/ksvg' : '@same'
+    'frameworks/ksvg' : '@same'
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
