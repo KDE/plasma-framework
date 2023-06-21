@@ -609,7 +609,7 @@ QSGNode *IconItem::createSubtree(qreal initialOpacity)
 
     auto imageNode = window()->createImageNode();
     imageNode->setFlag(QSGNode::OwnedByParent, true);
-    imageNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage()));
+    imageNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas));
     imageNode->setOwnsTexture(true);
     imageNode->setFiltering(smooth() ? QSGTexture::Linear : QSGTexture::Nearest);
     opacityNode->appendChildNode(imageNode);
@@ -669,7 +669,7 @@ QSGNode *IconItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *update
     if (m_textureChanged) {
         auto child = oldNode->lastChild();
         auto imageNode = static_cast<QSGImageNode *>(child->firstChild());
-        imageNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage()));
+        imageNode->setTexture(window()->createTextureFromImage(m_iconPixmap.toImage(), QQuickWindow::TextureCanUseAtlas));
         m_textureChanged = false;
         m_sizeChanged = true;
     }
