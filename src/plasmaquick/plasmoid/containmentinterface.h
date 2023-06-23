@@ -83,7 +83,6 @@ public:
     /**
      * Search for a containment at those coordinates.
      * the coordinates are passed as local coordinates of *this* containment
-     * TODO: this should be contaimentItemAt() but needs further client code adaptations
      */
     Q_INVOKABLE QObject *containmentItemAt(int x, int y);
 
