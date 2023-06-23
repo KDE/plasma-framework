@@ -9,6 +9,7 @@ configure_file(config-x11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x11.h)
 ecm_add_qml_module(corebindingsplugin URI "org.kde.plasma.core")
 
 target_sources(corebindingsplugin PRIVATE
+    action.cpp
     corebindingsplugin.cpp
     colorscope.cpp
     datamodel.cpp
