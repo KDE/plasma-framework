@@ -1,9 +1,3 @@
-# find_package(KActivities QUIET CONFIG)
-# set_package_properties(KActivities PROPERTIES DESCRIPTION "Library and infrastructure for using Activities from applications"
-#                        URL "https://commits.kde.org/kactivities"
-#                        TYPE REQUIRED
-#                        PURPOSE "Provides the ability to access activities from QML."
-#                       )
 add_library(plasmaextracomponentsplugin SHARED)
 
 target_sources(plasmaextracomponentsplugin PRIVATE
@@ -17,7 +11,6 @@ target_link_libraries(plasmaextracomponentsplugin
         Qt6::Quick
         Qt6::Qml
         Qt6::Widgets
-        ${KACTIVITIES_LIBRARY}
         KF6::ConfigWidgets
         KF6::Plasma)
 
