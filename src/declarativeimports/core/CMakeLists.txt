@@ -13,7 +13,6 @@ qt_add_resources(RESOURCES private/resources.qrc)
 target_sources(corebindingsplugin PRIVATE
     action.cpp
     corebindingsplugin.cpp
-    datamodel.cpp
     quicktheme.cpp
     tooltip.cpp
     tooltipdialog.cpp

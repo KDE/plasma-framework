@@ -15,10 +15,6 @@ Types:
 
 - \link ColorScope ColorScope \endlink
 
-- \link Plasma::DataSource DataSource \endlink
-- \link Plasma::DataModel DataModel \endlink
-- \link Plasma::SortFilterModel SortFilterModel \endlink
-
 - \link PlasmaQuick::Dialog Dialog \endlink
 - \link ToolTip ToolTipArea \endlink
 
