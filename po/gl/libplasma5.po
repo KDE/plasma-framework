@@ -211,7 +211,7 @@ msgstr ""
 #: plasma/packagestructure/packages.cpp:47
 #, kde-format
 msgid "Main Script File"
-msgstr "Ficheiro de script principal"
+msgstr "Ficheiro de guión principal"
 
 #: plasma/packagestructure/packages.cpp:29
 #, kde-format
@@ -462,7 +462,7 @@ msgstr "Executar a aplicación asociada"
 #: plasma/private/applet_p.cpp:480
 #, kde-format
 msgid "Script initialization failed"
-msgstr "Fallou a inicialización do script"
+msgstr "Fallou a inicialización do guión"
 
 #: plasma/private/associatedapplicationmanager.cpp:62
 #: plasma/private/associatedapplicationmanager.cpp:163
