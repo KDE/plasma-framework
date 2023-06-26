@@ -13,7 +13,6 @@
 #include <KPackage/Package>
 
 class KConfigLoader;
-class KActionCollection;
 class KConfigPropertyMap;
 
 class ContainmentInterface;
@@ -92,7 +91,7 @@ private:
     KPackage::Package m_pkg;
     KConfigPropertyMap *m_configuration;
     KConfigLoader *m_configLoader;
-    KActionCollection *m_actions;
+    QHash<QString, QAction *> m_actions;
     bool m_loading = false;
 
     static QHash<QObject *, WallpaperInterface *> s_rootObjects;

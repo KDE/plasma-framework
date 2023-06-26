@@ -305,7 +305,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     Q_EMIT immutabilityChanged(immutable);
 
     // update our actions
-    QAction *action = d->actions.action(QStringLiteral("lock widgets"));
+    QAction *action = Corona::action(QStringLiteral("lock widgets"));
     if (action) {
         if (d->immutability == Types::SystemImmutable) {
             action->setEnabled(false);
@@ -319,7 +319,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
         }
     }
 
-    action = d->actions.action(QStringLiteral("edit mode"));
+    action = Corona::action(QStringLiteral("edit mode"));
     if (action) {
         switch (d->immutability) {
         case Types::UserImmutable:
@@ -358,7 +358,7 @@ void Corona::setEditMode(bool edit)
         return;
     }
 
-    QAction *editAction = d->actions.action(QStringLiteral("edit mode"));
+    QAction *editAction = action(QStringLiteral("edit mode"));
     if (editAction) {
         if (edit) {
             editAction->setText(i18n("Exit Edit Mode"));
@@ -400,14 +400,36 @@ QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
     return freeEdges;
 }
 
-KActionCollection *Corona::actions() const
+QAction *Corona::addAction(const QString &name, QAction *action)
 {
-    return &d->actions;
+    QAction *act = action;
+    auto it = d->actions.constFind(name);
+    if (it != d->actions.constEnd()) {
+        if (!action) {
+            return *it;
+        } else {
+            delete *it;
+            act = new QAction(this);
+            d->actions[name] = act;
+            return act;
+        }
+    }
+    if (!act) {
+        act = new QAction(this);
+    }
+    act->setObjectName(name);
+    d->actions[name] = act;
+    return act;
+}
+
+QList<QAction *> Corona::actions() const
+{
+    return d->actions.values();
 }
 
 QAction *Corona::action(const QString &name) const
 {
-    return d->actions.action(name);
+    return d->actions.value(name);
 }
 
 CoronaPrivate::CoronaPrivate(Corona *corona)
@@ -415,7 +437,7 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
     , immutability(Types::Mutable)
     , config(nullptr)
     , configSyncTimer(new QTimer(corona))
-    , actions(corona)
+    //, actions(corona) TODO
     , containmentsStarting(0)
 {
     // TODO: make Package path configurable
@@ -440,9 +462,10 @@ void CoronaPrivate::init()
     QObject::connect(configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
     // some common actions
-    actions.setConfigGroup(QStringLiteral("Shortcuts"));
+    //    actions.setConfigGroup(QStringLiteral("Shortcuts"));
 
-    QAction *lockAction = actions.add<QAction>(QStringLiteral("lock widgets"));
+    QAction *lockAction = new QAction(q);
+    actions[QStringLiteral("lock widgets")] = lockAction;
     QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
@@ -450,10 +473,11 @@ void CoronaPrivate::init()
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
     // fake containment/applet actions
-    KActionCollection *containmentActions = AppletPrivate::defaultActions(q); // containment has to start with applet stuff
-    ContainmentPrivate::addDefaultActions(containmentActions); // now it's really containment
+    // QHash<QString, QAction *> containmentActions = AppletPrivate::defaultActions(q); // containment has to start with applet stuff
+    // ContainmentPrivate::addDefaultActions(containmentActions); // now it's really containment
 
-    QAction *editAction = actions.add<QAction>(QStringLiteral("edit mode"));
+    QAction *editAction = new QAction(q);
+    actions[QStringLiteral("edit mode")] = editAction;
     QObject::connect(editAction, &QAction::triggered, q, [this]() {
         q->setEditMode(!q->isEditMode());
     });

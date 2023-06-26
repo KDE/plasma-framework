@@ -8,7 +8,6 @@
 #ifndef CONTAINMENT_P_H
 #define CONTAINMENT_P_H
 
-#include <KActionCollection>
 #include <QSet>
 
 #include "applet.h"
@@ -64,7 +63,7 @@ public:
     /**
      * add the regular actions & keyboard shortcuts onto Applet's collection
      */
-    static void addDefaultActions(KActionCollection *actions, Containment *c = nullptr);
+    static void addDefaultActions(Containment *c);
 
     void setUiReady();
     void setStarted();

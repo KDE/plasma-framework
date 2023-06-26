@@ -163,10 +163,11 @@ public:
      */
     QList<Plasma::Types::Location> freeEdges(int screen) const;
 
+    QAction *addAction(const QString &name, QAction *action = nullptr);
     /**
      * The actions associated with this Corona
      */
-    KActionCollection *actions() const;
+    QList<QAction *> actions() const;
 
     /**
      * @returns The action with the given name, if any

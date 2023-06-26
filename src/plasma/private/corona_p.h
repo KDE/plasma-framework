@@ -9,8 +9,6 @@
 
 #include <QTimer>
 
-#include <KActionCollection>
-
 #include <KPackage/Package>
 
 namespace Plasma
@@ -42,7 +40,7 @@ public:
     KSharedConfigPtr config;
     QTimer *configSyncTimer;
     QList<Containment *> containments;
-    KActionCollection actions;
+    QHash<QString, QAction *> actions;
     int containmentsStarting;
     bool editMode = false;
 };

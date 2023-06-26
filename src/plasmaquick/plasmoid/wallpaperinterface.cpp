@@ -9,9 +9,8 @@
 #include "containmentinterface.h"
 #include "sharedqmlengine.h"
 
-#include <KConfigPropertyMap>
-#include <KActionCollection>
 #include <KConfigLoader>
+#include <KConfigPropertyMap>
 #include <KDesktopFile>
 
 #include <QDebug>
@@ -33,8 +32,6 @@ WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
     , m_configuration(nullptr)
     , m_configLoader(nullptr)
 {
-    m_actions = new KActionCollection(this);
-
     // resize at the beginning to avoid as much resize events as possible
     if (parent) {
         setSize(QSizeF(parent->width(), parent->height()));
@@ -120,7 +117,8 @@ void WallpaperInterface::syncWallpaperPackage()
         connect(m_qmlObject, &PlasmaQuick::SharedQmlEngine::finished, this, &WallpaperInterface::loadFinished);
     }
 
-    m_actions->clear();
+    qDeleteAll(m_actions);
+    m_actions.clear();
     setProperty("contextualActions", QVariant::fromValue(contextualActions()));
     m_pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
     m_pkg.setPath(m_wallpaperPlugin);
@@ -195,7 +193,7 @@ void WallpaperInterface::loadFinished()
 
 QList<QAction *> WallpaperInterface::contextualActions() const
 {
-    return m_actions->actions();
+    return m_actions.values();
 }
 
 bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
@@ -212,14 +210,14 @@ void WallpaperInterface::setUrl(const QUrl &url)
 
 void WallpaperInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
 {
-    QAction *action = m_actions->action(name);
+    QAction *action = m_actions.value(name);
 
     if (action) {
         action->setText(text);
     } else {
-        Q_ASSERT(!m_actions->action(name));
+        Q_ASSERT(!m_actions.contains(name));
         action = new QAction(text, this);
-        m_actions->addAction(name, action);
+        m_actions[name] = action;
 
         connect(action, &QAction::triggered, this, [this, name] {
             executeAction(name);
@@ -240,17 +238,18 @@ void WallpaperInterface::setAction(const QString &name, const QString &text, con
 
 void WallpaperInterface::removeAction(const QString &name)
 {
-    QAction *action = m_actions->action(name);
+    QAction *action = m_actions.value(name);
 
     if (action) {
-        m_actions->removeAction(action);
+        m_actions.remove(name);
     }
+    delete action;
     setProperty("contextualActions", QVariant::fromValue(contextualActions()));
 }
 
 QAction *WallpaperInterface::action(QString name) const
 {
-    return m_actions->action(name);
+    return m_actions.value(name);
 }
 
 void WallpaperInterface::executeAction(const QString &name)

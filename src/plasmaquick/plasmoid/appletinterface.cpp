@@ -16,7 +16,6 @@
 #include <QIcon>
 #include <QTimer>
 
-#include <KActionCollection>
 #include <KConfigLoader>
 #include <KLocalizedString>
 #include <QDebug>
@@ -362,7 +361,7 @@ bool AppletInterface::event(QEvent *event)
         QKeyEvent *ke = static_cast<QKeyEvent *>(event);
         QKeySequence seq(ke->key() | ke->modifiers());
 
-        QList<QAction *> actions = applet()->actions()->actions();
+        QList<QAction *> actions = applet()->actions();
         // find the wallpaper action if we are a containment
         ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(this);
         if (ci) {
@@ -374,7 +373,7 @@ bool AppletInterface::event(QEvent *event)
 
         // add any actions of the corona
         if (applet()->containment() && applet()->containment()->corona()) {
-            actions << applet()->containment()->corona()->actions()->actions();
+            actions << applet()->containment()->corona()->actions();
         }
 
         bool keySequenceUsed = false;

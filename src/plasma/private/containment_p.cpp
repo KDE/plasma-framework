@@ -50,12 +50,13 @@ Plasma::ContainmentPrivate::~ContainmentPrivate()
     applets.clear();
 }
 
-void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containment *c)
+void ContainmentPrivate::addDefaultActions(Containment *c)
 {
-    actions->setConfigGroup(QStringLiteral("Shortcuts-Containment"));
+    // actions->setConfigGroup(QStringLiteral("Shortcuts-Containment"));
 
     // adjust applet actions
-    QAction *appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("remove")));
+    c->setAction(QStringLiteral("remove"), QString());
+    QAction *appAction = qobject_cast<QAction *>(c->action(QStringLiteral("remove")));
     appAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_D, Qt::ALT | Qt::Key_R));
     if (c && c->d->isPanelContainment()) {
         appAction->setText(i18n("Remove this Panel"));
@@ -63,14 +64,16 @@ void ContainmentPrivate::addDefaultActions(KActionCollection *actions, Containme
         appAction->setText(i18n("Remove this Activity"));
     }
 
-    appAction = qobject_cast<QAction *>(actions->action(QStringLiteral("configure")));
+    c->setAction(QStringLiteral("configure"), QString());
+    appAction = qobject_cast<QAction *>(c->action(QStringLiteral("configure")));
     if (appAction) {
         appAction->setShortcut(QKeySequence(Qt::ALT | Qt::Key_D, Qt::ALT | Qt::Key_S));
         appAction->setText(i18n("Activity Settings"));
     }
 
     // add our own actions
-    QAction *appletBrowserAction = actions->add<QAction>(QStringLiteral("add widgets"));
+    c->setAction(QStringLiteral("add widgets"), QString());
+    QAction *appletBrowserAction = c->action(QStringLiteral("add widgets"));
     appletBrowserAction->setAutoRepeat(false);
     appletBrowserAction->setText(i18n("Add Widgets..."));
     appletBrowserAction->setIcon(QIcon::fromTheme(QStringLiteral("list-add")));
@@ -127,13 +130,13 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
         // update actions
         const bool unlocked = q->immutability() == Types::Mutable;
 
-        QAction *action = q->actions()->action(QStringLiteral("remove"));
+        QAction *action = q->action(QStringLiteral("remove"));
         if (action) {
             action->setEnabled(unlocked);
             action->setVisible(unlocked);
         }
 
-        action = q->actions()->action(QStringLiteral("add widgets"));
+        action = q->action(QStringLiteral("add widgets"));
         if (action) {
             action->setEnabled(unlocked);
             action->setVisible(unlocked);

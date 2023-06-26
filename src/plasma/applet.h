@@ -35,7 +35,6 @@ class ConfigView;
 class DeclarativeAppletScript;
 #include <KPluginFactory>
 
-class KActionCollection;
 class KConfigLoader;
 class KConfigPropertyMap;
 
@@ -524,13 +523,16 @@ public:
     /**
      * Returns the collection of actions for this Applet
      */
-    KActionCollection *actions() const;
+    QList<QAction *> actions() const;
 
     // BEGIN TODO
     // TODO: this whole actions api is there for temporary compatibility buy we need a declarative one before the KF6 API freeze
     Q_INVOKABLE void setActionSeparator(const QString &name);
 
     Q_INVOKABLE void setActionGroup(const QString &action, const QString &group);
+
+    void addAction(const QString &name, QAction *action);
+
     /**
      * Add an action to the Plasmoid contextual menu.
      * When the action is triggered a function called action_<name> will be called, if there is no function with that name actionTriggered(name) will be called

@@ -5,7 +5,6 @@
 */
 
 #include "customcorona.h"
-#include <KActionCollection>
 #include <QAction>
 #include <QDebug>
 

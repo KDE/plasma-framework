@@ -6,7 +6,6 @@
 
 #include "test.h"
 
-#include <KActionCollection>
 #include <QDebug>
 
 #include <Plasma/Containment>

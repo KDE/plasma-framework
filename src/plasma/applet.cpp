@@ -20,7 +20,6 @@
 #include <QMessageBox>
 #include <QMetaEnum>
 
-#include <KActionCollection>
 #include <KAuthorized>
 #include <KColorScheme>
 #include <KConfigLoader>
@@ -554,14 +553,14 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::Types::StartupCompletedConstraint) {
         // common actions
         bool unlocked = immutability() == Types::Mutable;
-        QAction *closeApplet = d->actions->action(QStringLiteral("remove"));
+        QAction *closeApplet = action(QStringLiteral("remove"));
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
             closeApplet->setVisible(unlocked);
             connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(askDestroy()), Qt::UniqueConnection);
         }
 
-        QAction *configAction = d->actions->action(QStringLiteral("configure"));
+        QAction *configAction = action(QStringLiteral("configure"));
         if (configAction) {
             if (d->hasConfigurationInterface) {
                 bool canConfig = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
@@ -575,13 +574,13 @@ void Applet::flushPendingConstraintsEvents()
 
     if (c & Plasma::Types::ImmutableConstraint) {
         bool unlocked = immutability() == Types::Mutable;
-        QAction *action = d->actions->action(QStringLiteral("remove"));
+        QAction *action = Applet::action(QStringLiteral("remove"));
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }
 
-        action = d->actions->action(QStringLiteral("configure"));
+        action = Applet::action(QStringLiteral("configure"));
         if (action && d->hasConfigurationInterface) {
             bool canConfig = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
             action->setVisible(canConfig);
@@ -627,38 +626,37 @@ void Applet::flushPendingConstraintsEvents()
 
 QList<QAction *> Applet::contextualActions()
 {
-    // NOTE: KActionCollection can contain duplicates in actions(); once we ported away from it we can remove this hack
     QSet<QAction *> contextActions;
 
-    std::copy_if(d->actions->actions().constBegin(), d->actions->actions().constEnd(), std::inserter(contextActions, contextActions.begin()), [](QAction *a) {
+    std::copy_if(d->actions.constBegin(), d->actions.constEnd(), std::inserter(contextActions, contextActions.begin()), [](QAction *a) {
         return a->property("_contextualAction").toBool();
     });
 
     return contextActions.values();
 }
 
-KActionCollection *Applet::actions() const
+QList<QAction *> Applet::actions() const
 {
-    return d->actions;
+    return d->actions.values();
 }
 
 void Applet::setActionSeparator(const QString &name)
 {
-    QAction *action = d->actions->action(name);
+    QAction *action = Applet::action(name);
 
     if (action) {
         action->setSeparator(true);
     } else {
         action = new QAction(this);
         action->setSeparator(true);
-        d->actions->addAction(name, action);
+        d->actions[name] = action;
         Q_EMIT contextualActionsChanged();
     }
 }
 
 void Applet::setActionGroup(const QString &actionName, const QString &group)
 {
-    QAction *action = d->actions->action(actionName);
+    QAction *action = Applet::action(actionName);
 
     if (!action) {
         return;
@@ -671,16 +669,24 @@ void Applet::setActionGroup(const QString &actionName, const QString &group)
     action->setActionGroup(d->actionGroups[group]);
 }
 
+void Applet::addAction(const QString &name, QAction *action)
+{
+    if (d->actions.contains(name)) {
+        delete d->actions[name];
+    }
+    d->actions[name] = action;
+}
+
 void Applet::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
 {
-    QAction *action = d->actions->action(name);
+    QAction *action = Applet::action(name);
 
     if (action) {
         action->setText(text);
         action->setProperty("_contextualAction", true);
     } else {
         action = new QAction(text, this);
-        d->actions->addAction(name, action);
+        d->actions[name] = action;
 
         action->setProperty("_contextualAction", true);
         Q_EMIT contextualActionsChanged();
@@ -699,8 +705,9 @@ void Applet::setAction(const QString &name, const QString &text, const QString &
 
 void Applet::removeAction(const QString &name)
 {
-    QAction *action = d->actions->action(name);
-    d->actions->removeAction(action);
+    QAction *action = d->actions.value(name);
+    d->actions.remove(name);
+    delete action;
 
     Q_EMIT contextualActionsChanged();
 }
@@ -709,9 +716,10 @@ void Applet::clearActions()
 {
     // FIXME: Now it removes only contextualactions for compatibility
     //  This needs to be revised in the actions API ovehaul
-    for (auto a : d->actions->actions()) {
+    for (auto a : d->actions.values()) {
         if (a->property("_contextualAction").toBool()) {
-            d->actions->removeAction(a);
+            d->actions.remove(a->objectName());
+            delete a;
         }
     }
     Q_EMIT contextualActionsChanged();
@@ -719,7 +727,7 @@ void Applet::clearActions()
 
 QAction *Applet::action(const QString &name) const
 {
-    return d->actions->action(name);
+    return d->actions.value(name);
 }
 
 Types::FormFactor Applet::formFactor() const
@@ -822,7 +830,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
         return;
     }
 
-    QAction *configAction = d->actions->action(QStringLiteral("configure"));
+    QAction *configAction = action(QStringLiteral("configure"));
     if (configAction) {
         bool enable = hasInterface;
         if (enable) {

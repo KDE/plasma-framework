@@ -5,7 +5,6 @@
 */
 
 #include "coronatest.h"
-#include <KActionCollection>
 
 #include <QAction>
 #include <QApplication>
@@ -137,7 +136,7 @@ void CoronaTest::addRemoveApplets()
     QCOMPARE(m_corona->containments().at(0)->applets().count(), 3);
 
     // remove action present
-    QVERIFY(m_corona->containments().at(0)->applets().at(0)->actions()->action(QStringLiteral("remove")));
+    QVERIFY(m_corona->containments().at(0)->applets().at(0)->action(QStringLiteral("remove")));
     // kill an applet
     m_corona->containments().at(0)->applets().at(0)->destroy();
 

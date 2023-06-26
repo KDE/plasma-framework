@@ -23,7 +23,6 @@
 
 #include <KConfigLoader>
 #include <KGlobalAccel>
-#include <KKeySequenceWidget>
 #include <KLocalizedString>
 #include <kpackage/packageloader.h>
 
@@ -66,7 +65,8 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
     } else if (appletId > s_maxAppletId) {
         s_maxAppletId = appletId;
     }
-    QObject::connect(actions->action(QStringLiteral("configure")), SIGNAL(triggered()), q, SLOT(requestConfiguration()));
+    actions[QStringLiteral("configure")] = new QAction(q);
+    QObject::connect(actions[QStringLiteral("configure")], SIGNAL(triggered()), q, SLOT(requestConfiguration()));
 #ifndef NDEBUG
     if (qEnvironmentVariableIsSet("PLASMA_TRACK_STARTUP")) {
         new TimeTracker(q);
@@ -95,12 +95,12 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     //          that requires a Corona, which is not available at this point
     q->setHasConfigurationInterface(true);
 
-    QAction *closeApplet = actions->action(QStringLiteral("remove"));
+    QAction *closeApplet = q->action(QStringLiteral("remove"));
     if (closeApplet) {
         closeApplet->setText(i18nc("%1 is the name of the applet", "Remove %1", q->title()));
     }
 
-    QAction *configAction = actions->action(QStringLiteral("configure"));
+    QAction *configAction = q->action(QStringLiteral("configure"));
     if (configAction) {
         configAction->setText(i18nc("%1 is the name of the applet", "Configure %1...", q->title().replace(QLatin1Char('&'), QStringLiteral("&&"))));
     }
@@ -145,7 +145,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     if (!q->isContainment()) {
         QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("widget-alternatives")), i18n("Show Alternatives..."), q);
         a->setVisible(false);
-        q->actions()->addAction(QStringLiteral("alternatives"), a);
+        actions[QStringLiteral("alternatives")] = a;
         QObject::connect(a, &QAction::triggered, q, [this] {
             if (q->containment()) {
                 Q_EMIT q->containment()->appletAlternativesRequested(q);
@@ -343,22 +343,24 @@ void AppletPrivate::globalShortcutChanged()
     // qCDebug(LOG_PLASMA) << "after" << shortcut.primary() << d->activationAction->globalShortcut().primary();
 }
 
-KActionCollection *AppletPrivate::defaultActions(QObject *parent)
+QHash<QString, QAction *> AppletPrivate::defaultActions(QObject *parent)
 {
-    KActionCollection *actions = new KActionCollection(parent);
-    actions->setConfigGroup(QStringLiteral("Shortcuts-Applet"));
+    QHash<QString, QAction *> actions;
+    // actions->setConfigGroup(QStringLiteral("Shortcuts-Applet"));
 
-    QAction *configAction = actions->add<QAction>(QStringLiteral("configure"));
+    QAction *configAction = new QAction(parent);
     configAction->setAutoRepeat(false);
     configAction->setText(i18n("Widget Settings"));
     configAction->setIcon(QIcon::fromTheme(QStringLiteral("configure")));
     configAction->setShortcut(QKeySequence(QStringLiteral("alt+d, s")));
+    actions[QStringLiteral("configure")] = configAction;
 
-    QAction *closeApplet = actions->add<QAction>(QStringLiteral("remove"));
+    QAction *closeApplet = new QAction(parent);
     closeApplet->setAutoRepeat(false);
     closeApplet->setText(i18n("Remove this Widget"));
     closeApplet->setIcon(QIcon::fromTheme(QStringLiteral("edit-delete")));
     closeApplet->setShortcut(QKeySequence(QStringLiteral("alt+d, r")));
+    actions[QStringLiteral("remove")] = closeApplet;
 
     return actions;
 }
@@ -378,21 +380,20 @@ void AppletPrivate::updateShortcuts()
         QList<QAction *> qactions;
         const QList<QString> names = {QStringLiteral("add sibling containment"), QStringLiteral("configure shortcuts"), QStringLiteral("lock widgets")};
         for (const QString &name : names) {
-            QAction *a = actions->action(name);
-            actions->takeAction(a); // FIXME this is stupid, KActionCollection needs a takeAction(QString) method
+            QAction *a = actions.take(name);
             qactions << a;
         }
 
-        actions->readSettings();
+        // actions->readSettings(); TODO
 
         for (int i = 0; i < names.size(); ++i) {
             QAction *a = qactions.at(i);
             if (a) {
-                actions->addAction(names.at(i), a);
+                actions[names.at(i)] = a;
             }
         }
     } else {
-        actions->readSettings();
+        //  actions->readSettings();
     }
 }
 
