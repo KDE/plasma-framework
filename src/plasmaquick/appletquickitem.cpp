@@ -484,14 +484,12 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     // TODO: move somewhere else? in plasmacore import?
     if (AppletQuickItemPrivate::s_itemsForApplet.isEmpty()) {
         const char *uri = "org.kde.plasma.plasmoid";
-        qmlRegisterUncreatableType<PlasmoidAttached>(uri, 2, 0, "Plasmoid", QStringLiteral("Do not create objects of type Plasmoid"));
-        qmlRegisterUncreatableType<ContainmentAttached>(uri, 2, 0, "Containment", QStringLiteral("Do not create objects of type Containment"));
+        qmlRegisterExtendedType<Plasma::Applet, PlasmoidAttached>(uri, 2, 0, "Plasmoid");
+        qmlRegisterExtendedType<Plasma::Containment, ContainmentAttached>(uri, 2, 0, "Containment");
         qmlRegisterUncreatableType<WallpaperInterface>(uri, 2, 0, "Wallpaper", QStringLiteral("Do not create objects of type Wallpaper"));
 
         qmlRegisterType<AppletInterface>(uri, 2, 0, "PlasmoidItem");
         qmlRegisterType<ContainmentInterface>(uri, 2, 0, "ContainmentItem");
-        qmlRegisterAnonymousType<Plasma::Applet>("org.kde.plasma.plasmoid", 1);
-        qmlRegisterAnonymousType<Plasma::Containment>("org.kde.plasma.plasmoid", 1);
         qmlRegisterAnonymousType<Plasma::Corona>("org.kde.plasma.plasmoid", 1);
     }
     auto it = AppletQuickItemPrivate::s_itemsForApplet.constFind(applet);
