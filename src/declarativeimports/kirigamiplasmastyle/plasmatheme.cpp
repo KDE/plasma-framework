@@ -136,4 +136,4 @@ bool PlasmaTheme::event(QEvent *event)
     return PlatformTheme::event(event);
 }
 
-#include "plasmatheme.moc"
+#include "moc_plasmatheme.cpp"

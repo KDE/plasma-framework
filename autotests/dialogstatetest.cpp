@@ -93,3 +93,5 @@ bool DialogStateTest::verifyState(PlasmaQuick::Dialog *dialog) const
 }
 
 QTEST_MAIN(DialogStateTest)
+
+#include "moc_dialogstatetest.cpp"

@@ -155,3 +155,5 @@ QMargins PlasmaWindow::margins() const
                     d->frameSvgItem->fixedMargins()->bottom());
 }
 }
+
+#include "moc_plasmawindow.cpp"

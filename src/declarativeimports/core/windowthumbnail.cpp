@@ -23,6 +23,7 @@
 #include <GL/glx.h>
 typedef void (*glXBindTexImageEXT_func)(Display *dpy, GLXDrawable drawable, int buffer, const int *attrib_list);
 typedef void (*glXReleaseTexImageEXT_func)(Display *dpy, GLXDrawable drawable, int buffer);
+#include <fixx11h.h> // glx.h could include XLib.h
 #endif
 #if HAVE_EGL
 typedef EGLImageKHR (*eglCreateImageKHR_func)(EGLDisplay, EGLContext, EGLenum, EGLClientBuffer, const EGLint *);
@@ -966,3 +967,5 @@ QSGTextureProvider *WindowThumbnail::textureProvider() const
 }
 
 } // namespace
+
+#include "moc_windowthumbnail.cpp"

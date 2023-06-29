@@ -89,3 +89,5 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
 }
+
+#include "moc_corebindingsplugin.cpp"

@@ -141,3 +141,5 @@ void QMenuItem::updateAction()
     m_action->setVisible(isVisible());
     m_action->setEnabled(isEnabled());
 }
+
+#include "moc_qmenuitem.cpp"

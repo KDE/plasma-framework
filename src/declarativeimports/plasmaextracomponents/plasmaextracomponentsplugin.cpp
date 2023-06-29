@@ -21,3 +21,5 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
     qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", {});
 }
+
+#include "moc_plasmaextracomponentsplugin.cpp"

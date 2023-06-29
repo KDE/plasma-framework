@@ -288,3 +288,5 @@ void ModelResetCommandFixed::emitPostSignal()
 {
     m_model->endResetModel();
 }
+
+#include "moc_dynamictreemodel.cpp"

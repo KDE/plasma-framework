@@ -28,3 +28,5 @@ void %{APPNAME}Plugin::registerTypes(const char* uri)
 
     qmlRegisterSingletonType(uri, 1, 0, "HelloWorld", singletonTypeExampleProvider);
 }
+
+#include "moc_%{APPNAMELC}plugin.cpp"

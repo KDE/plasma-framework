@@ -217,3 +217,5 @@ int SortFilterModel::mapRowFromSource(int row) const
 }
 
 }
+
+#include "moc_datamodel.cpp"

@@ -203,3 +203,5 @@ void CoronaTest::immutability()
 }
 
 QTEST_MAIN(CoronaTest)
+
+#include "moc_coronatest.cpp"

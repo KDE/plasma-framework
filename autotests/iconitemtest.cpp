@@ -560,3 +560,5 @@ void IconItemTest::roundToIconSize()
 }
 
 QTEST_MAIN(IconItemTest)
+
+#include "moc_iconitemtest.cpp"

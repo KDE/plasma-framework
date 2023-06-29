@@ -67,3 +67,5 @@ void ContextTest::save(KConfigGroup &config)
 K_PLUGIN_CLASS_WITH_JSON(ContextTest, "plasma-containmentactions-test.desktop")
 
 #include "test.moc"
+
+#include "moc_test.cpp"

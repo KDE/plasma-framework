@@ -74,3 +74,5 @@ void WaylandIntegration::setupKWaylandIntegration()
 
     connection->roundtrip();
 }
+
+#include "moc_waylandintegration_p.cpp"

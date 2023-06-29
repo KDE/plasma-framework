@@ -129,4 +129,5 @@ void TimeTracker::propertyChanged()
     }
 }
 
+#include "moc_timetracker.cpp"
 #include "timetracker.moc"
