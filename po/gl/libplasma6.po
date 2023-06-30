@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-20 02:57+0000\n"
+"POT-Creation-Date: 2023-06-30 02:08+0000\n"
 "PO-Revision-Date: 2023-06-11 13:16+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -232,27 +232,27 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr ""
 "O servizo é incorrecto (nulo); non se pode realizar ningunha operación."
 
-#: plasmaquick/appletquickitem.cpp:527
+#: plasmaquick/appletquickitem.cpp:525
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
 msgstr "O elemento raíz de %1 debe ser de tipo «ContaimentItem»."
 
-#: plasmaquick/appletquickitem.cpp:532
+#: plasmaquick/appletquickitem.cpp:530
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr "O elemento raíz de %1 debe ser de tipo «PlasmoidItem»."
 
-#: plasmaquick/appletquickitem.cpp:539
+#: plasmaquick/appletquickitem.cpp:537
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Trebello descoñecido"
 
-#: plasmaquick/appletquickitem.cpp:555
+#: plasmaquick/appletquickitem.cpp:553
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Produciuse un erro ao cargar o ficheiro QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:557
+#: plasmaquick/appletquickitem.cpp:555
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Produciuse un erro ao cargar o miniaplicativo: paquete inexistente. %1"
