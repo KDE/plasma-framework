@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2006-2007 Aaron Seigo <aseigo@kde.org>
+    SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -291,11 +292,14 @@ void DataEngine::setPollingInterval(uint frequency)
 
 void DataEngine::removeSource(const QString &source)
 {
+    // Do not emit signals mid-removal, it may prompt calls into us that cause the iterator to become invalid.
+    // https://bugs.kde.org/show_bug.cgi?id=446531
+    Q_EMIT sourceRemoved(source);
+
     QHash<QString, DataContainer *>::iterator it = d->sources.find(source);
     if (it != d->sources.end()) {
         DataContainer *s = it.value();
         s->d->store();
-        Q_EMIT sourceRemoved(source);
         d->sources.erase(it);
         s->disconnect(this);
         s->deleteLater();
@@ -304,12 +308,17 @@ void DataEngine::removeSource(const QString &source)
 
 void DataEngine::removeAllSources()
 {
+    // Do not emit signals mid-removal, it may prompt calls into us that cause the iterator to become invalid.
+    // https://bugs.kde.org/show_bug.cgi?id=446531
+    const auto sourceNames = d->sources.keys();
+    for (const auto &source : sourceNames) {
+        Q_EMIT sourceRemoved(source);
+    }
+
     QMutableHashIterator<QString, Plasma::DataContainer *> it(d->sources);
     while (it.hasNext()) {
         it.next();
         Plasma::DataContainer *s = it.value();
-        const QString source = it.key();
-        Q_EMIT sourceRemoved(source);
         it.remove();
         s->disconnect(this);
         s->deleteLater();
