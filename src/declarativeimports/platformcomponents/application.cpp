@@ -102,3 +102,6 @@ void Application::terminate()
 {
     d->process.terminate();
 }
+
+#include "moc_application.cpp"
+#include "moc_application_p.cpp"

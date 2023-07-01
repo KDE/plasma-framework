@@ -69,3 +69,5 @@ void DialogQmlTest::loadAndShow()
 }
 
 QTEST_MAIN(DialogQmlTest)
+
+#include "moc_dialogqmltest.cpp"

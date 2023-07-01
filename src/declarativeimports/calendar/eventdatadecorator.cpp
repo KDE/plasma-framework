@@ -61,3 +61,5 @@ QString EventDataDecorator::eventColor() const
 {
     return m_data.eventColor();
 }
+
+#include "moc_eventdatadecorator.cpp"

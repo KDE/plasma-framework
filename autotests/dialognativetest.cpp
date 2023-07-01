@@ -104,3 +104,5 @@ void DialogNativeTest::position()
 }
 
 QTEST_MAIN(DialogNativeTest)
+
+#include "moc_dialognativetest.cpp"

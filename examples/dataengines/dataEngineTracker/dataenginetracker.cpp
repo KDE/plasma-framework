@@ -39,4 +39,5 @@ void DataEngineTracker::sourceRemoved(const QString &source)
     qDebug() << QTime::currentTime() << source;
 }
 
+#include "moc_dataenginetracker.cpp"
 #include <dataenginetracker.moc>

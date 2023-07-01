@@ -485,3 +485,5 @@ void QMenuProxy::close()
 {
     m_menu->hide();
 }
+
+#include "moc_qmenu.cpp"

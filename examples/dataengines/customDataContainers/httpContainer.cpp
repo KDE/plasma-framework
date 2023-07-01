@@ -75,3 +75,5 @@ void HttpContainer::fetchFinished(KJob *job)
         m_data.clear();
     }
 }
+
+#include "moc_httpContainer.cpp"

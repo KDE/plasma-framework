@@ -58,3 +58,5 @@ K_PLUGIN_CLASS_WITH_JSON(SimpleEngine, "plasma-dataengine-example-simpleEngine.j
 
 // include the moc file so the build system makes it for us
 #include "simpleEngine.moc"
+
+#include "moc_simpleEngine.cpp"

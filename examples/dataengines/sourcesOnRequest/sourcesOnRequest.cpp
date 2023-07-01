@@ -94,3 +94,5 @@ K_PLUGIN_CLASS_WITH_JSON(SourcesOnRequestEngine, "plasma-dataengine-example-sour
 
 // include the moc file so the build system makes it for us
 #include "sourcesOnRequest.moc"
+
+#include "moc_sourcesOnRequest.cpp"

@@ -25,3 +25,4 @@ QString %{APPNAME}::nativeText() const
 K_PLUGIN_CLASS(%{APPNAME})
 
 #include "%{APPNAMELC}.moc"
+#include "moc_%{APPNAMELC}.cpp"

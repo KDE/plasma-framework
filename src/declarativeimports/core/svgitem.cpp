@@ -206,3 +206,5 @@ void SvgItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometr
 }
 
 } // Plasma namespace
+
+#include "moc_svgitem.cpp"

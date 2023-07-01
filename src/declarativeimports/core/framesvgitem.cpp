@@ -753,3 +753,5 @@ void FrameSvgItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::I
 }
 
 } // Plasma namespace
+
+#include "moc_framesvgitem.cpp"

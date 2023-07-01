@@ -57,3 +57,5 @@ void IconDialog::closeDialog()
 IconDialog::~IconDialog()
 {
 }
+
+#include "moc_icondialog.cpp"

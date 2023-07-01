@@ -78,3 +78,5 @@ void FrameSvgTest::setTheme()
 }
 
 QTEST_MAIN(FrameSvgTest)
+
+#include "moc_framesvgtest.cpp"

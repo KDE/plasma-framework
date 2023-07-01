@@ -101,3 +101,5 @@ bool EffectWatcher::isEffectActive() const
 }
 
 } // namespace Plasma
+
+#include "moc_effectwatcher_p.cpp"

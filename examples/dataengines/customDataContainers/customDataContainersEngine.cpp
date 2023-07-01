@@ -68,3 +68,5 @@ K_PLUGIN_CLASS_WITH_JSON(DataContainersEngine, "plasma-dataengine-example-custom
 
 // include the moc file so the build system makes it for us
 #include "customDataContainersEngine.moc"
+
+#include "moc_customDataContainersEngine.cpp"

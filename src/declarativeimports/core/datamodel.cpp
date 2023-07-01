@@ -549,3 +549,5 @@ QVariantMap DataModel::get(int row) const
 }
 
 }
+
+#include "moc_datamodel.cpp"

@@ -72,3 +72,5 @@ QString FallbackComponent::filePath(const QString &key)
 
     return resolved;
 }
+
+#include "moc_fallbackcomponent.cpp"

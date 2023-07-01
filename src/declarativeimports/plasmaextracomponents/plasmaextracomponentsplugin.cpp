@@ -25,3 +25,5 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QByteArray("org.kde.plasma.extras"));
     qmlRegisterType<FallbackComponent>(uri, 2, 0, "FallbackComponent");
 }
+
+#include "moc_plasmaextracomponentsplugin.cpp"

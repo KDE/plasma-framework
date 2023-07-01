@@ -97,3 +97,5 @@ Types::PopupPlacement visualPopupPlacement(Types::PopupPlacement placement, Qt::
 }
 
 } // Plasma namespace
+
+#include "moc_plasma.cpp"

@@ -74,3 +74,5 @@ bool CalendarData::loading() const
 {
     return false;
 }
+
+#include "moc_calendardata.cpp"

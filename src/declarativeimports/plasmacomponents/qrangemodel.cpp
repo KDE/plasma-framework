@@ -519,3 +519,5 @@ void QRangeModel::toMaximum()
 }
 
 } // Plasma namespace
+
+#include "moc_qrangemodel.cpp"

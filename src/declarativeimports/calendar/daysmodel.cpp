@@ -353,3 +353,5 @@ QModelIndex DaysModel::parent(const QModelIndex &child) const
 }
 
 Q_DECLARE_METATYPE(CalendarEvents::EventData)
+
+#include "moc_daysmodel.cpp"

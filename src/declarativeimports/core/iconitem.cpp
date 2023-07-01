@@ -856,3 +856,5 @@ void IconItem::componentComplete()
     QQuickItem::componentComplete();
     schedulePixmapUpdate();
 }
+
+#include "moc_iconitem.cpp"

@@ -369,3 +369,5 @@ bool ToolTip::isValid() const
 {
     return m_mainItem || !mainText().isEmpty() || !subText().isEmpty();
 }
+
+#include "moc_tooltip.cpp"

@@ -250,3 +250,4 @@ QAbstractListModel *EventPluginsManager::pluginsModel() const
 }
 
 #include "eventpluginsmanager.moc"
+#include "moc_eventpluginsmanager.cpp"

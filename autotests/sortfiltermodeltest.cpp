@@ -102,3 +102,5 @@ void SortFilterModelTest::mapRowFromSource()
     QCOMPARE(filterModel.mapRowFromSource(2), 1);
     QCOMPARE(filterModel.mapRowFromSource(-1), -1);
 }
+
+#include "moc_sortfiltermodeltest.cpp"

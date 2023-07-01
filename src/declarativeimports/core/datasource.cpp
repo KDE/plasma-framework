@@ -253,3 +253,5 @@ void DataSource::updateSources()
 }
 
 }
+
+#include "moc_datasource.cpp"

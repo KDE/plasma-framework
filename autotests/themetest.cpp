@@ -234,3 +234,5 @@ void ThemeTest::testCompositingChange()
 }
 
 QTEST_MAIN(ThemeTest)
+
+#include "moc_themetest.cpp"

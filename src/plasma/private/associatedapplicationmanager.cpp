@@ -206,4 +206,4 @@ bool AssociatedApplicationManager::appletHasValidAssociatedApplication(const Pla
 
 } // namespace Plasma
 
-#include <moc_associatedapplicationmanager_p.cpp>
+#include "moc_associatedapplicationmanager_p.cpp"

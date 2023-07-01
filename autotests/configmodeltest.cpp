@@ -108,3 +108,5 @@ void ConfigModelTest::notEmptySourceWithApplet()
 }
 
 QTEST_MAIN(ConfigModelTest)
+
+#include "moc_configmodeltest.cpp"

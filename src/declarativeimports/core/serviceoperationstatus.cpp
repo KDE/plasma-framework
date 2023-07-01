@@ -83,3 +83,5 @@ void ServiceOperationStatus::updateStatus()
         Q_EMIT enabledChanged();
     }
 }
+
+#include "moc_serviceoperationstatus.cpp"
