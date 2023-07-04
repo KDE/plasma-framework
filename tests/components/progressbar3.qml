@@ -144,6 +144,36 @@ ComponentBase {
             PlasmaComponents.ProgressBar {
                 indeterminate: indeterminateCheckBox.checked
                 value: 0.5
+                SequentialAnimation on value {
+                    id: valueAnimation
+                    running: !indeterminateCheckBox.checked
+                    PropertyAction {
+                        value: 0.05
+                    }
+                    PauseAnimation {
+                        duration: PlasmaCore.Units.veryLongDuration
+                    }
+                    // NumberAnimation {
+                    //     to: 0
+                    //     duration: PlasmaCore.Units.shortDuration
+                    //     easing.type: Easing.OutCubic
+                    // }
+                    NumberAnimation {
+                        to: 0.3
+                        duration: PlasmaCore.Units.veryLongDuration
+                        easing.type: Easing.OutCubic
+                    }
+                    NumberAnimation {
+                        to: 0.7
+                        duration: PlasmaCore.Units.veryLongDuration
+                        easing.type: Easing.OutCubic
+                    }
+                    NumberAnimation {
+                        to: 1.0
+                        duration: PlasmaCore.Units.veryLongDuration
+                        easing.type: Easing.OutCubic
+                    }
+                }
             }
         }
 
