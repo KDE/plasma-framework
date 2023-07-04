@@ -24,6 +24,5 @@ install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/kir
 install(FILES
     AbstractApplicationHeader.qml
     Icon.qml
-    Theme.qml
     DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/kirigami/styles/Plasma
 )
