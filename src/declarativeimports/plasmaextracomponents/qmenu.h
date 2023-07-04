@@ -17,6 +17,7 @@
 #include <QWindow>
 
 class QDeclarativeItem;
+class QQuickItem;
 
 /**
  * @class Menu

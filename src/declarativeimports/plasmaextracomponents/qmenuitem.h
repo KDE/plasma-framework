@@ -9,9 +9,9 @@
 #define QMENUITEM_H
 
 #include <QAction>
-#include <QQuickItem>
+#include <QObject>
 
-class QMenuItem : public QQuickItem
+class QMenuItem : public QObject
 {
     Q_OBJECT
 
@@ -33,9 +33,11 @@ class QMenuItem : public QQuickItem
     Q_PROPERTY(QAction *action READ action WRITE setAction NOTIFY actionChanged)
     Q_PROPERTY(bool checkable READ checkable WRITE setCheckable NOTIFY checkableChanged)
     Q_PROPERTY(bool checked READ checked WRITE setChecked NOTIFY toggled)
+    Q_PROPERTY(bool enabled READ isEnabled WRITE setEnabled NOTIFY enabledChanged)
+    Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChanged)
 
 public:
-    explicit QMenuItem(QQuickItem *parent = nullptr);
+    explicit QMenuItem(QObject *parent = nullptr);
 
     QAction *action() const;
     void setAction(QAction *a);
@@ -54,6 +56,12 @@ public:
     bool checked() const;
     void setChecked(bool checked);
 
+    bool isEnabled() const;
+    void setEnabled(bool enabled);
+
+    bool isVisible() const;
+    void setVisible(bool visible);
+
 Q_SIGNALS:
     void clicked();
 
@@ -64,9 +72,10 @@ Q_SIGNALS:
     void textChanged();
     void toggled(bool checked);
     void checkableChanged();
+    void enabledChanged();
+    void visibleChanged();
 
 private:
-    void updateAction();
     QAction *m_action;
     QVariant m_icon;
     bool m_section;
