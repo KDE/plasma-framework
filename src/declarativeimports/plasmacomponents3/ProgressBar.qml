@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2016 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -30,8 +31,34 @@ T.ProgressBar {
         implicitHeight: children[0].height
 
         KSvg.FrameSvgItem {
-            readonly property real indeterminateWidth: Math.round(control.availableWidth / 4)
-            property real indeterminateProgress: 0
+            // Indeterminate progress bar is a 1/4 chunk of available control
+            // width, bouncing from half of its width to the left and up to
+            // the other half of its width to the right. So it travels the
+            // across full availableWidth, partially clipping at the ends.
+
+            property real indeterminateProgress: 0 // Range: [0..1]
+
+            readonly property real indeterminateNormalWidth: 1 / 4
+            readonly property real indeterminateNormalPosition: indeterminateProgress - indeterminateNormalWidth / 2
+            readonly property int indeterminateClippedPosition: {
+                const normalClippedPosition = Math.max(0, indeterminateNormalPosition);
+                return Math.round(control.availableWidth * normalClippedPosition);
+            }
+
+            function indeterminateClippedWidth(): int {
+                // Convert to pixels first, so we don't get rounding errors at the right edge.
+                const defaultWidth = Math.round(control.availableWidth * indeterminateNormalWidth);
+                const unclippedPosition = Math.round(control.availableWidth * indeterminateNormalPosition)
+                const availableWidth = control.availableWidth - indeterminateClippedPosition;
+
+                if (unclippedPosition < 0) {
+                    return defaultWidth + unclippedPosition;
+                } else if (defaultWidth > availableWidth) {
+                    return availableWidth;
+                } else {
+                    return defaultWidth;
+                }
+            }
 
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-active"
@@ -39,11 +66,11 @@ T.ProgressBar {
 
             LayoutMirroring.enabled: control.mirrored
             anchors.left: parent.left
-            anchors.leftMargin: control.indeterminate ? indeterminateProgress * (control.availableWidth - indeterminateWidth) : 0
+            anchors.leftMargin: control.indeterminate ? indeterminateClippedPosition : 0
             anchors.verticalCenter: parent.verticalCenter
 
             // unlike Slider, this width is allowed to be less than its minimum (margins) size, in which case it would not render at all.
-            width: control.indeterminate ? indeterminateWidth : Math.round(control.position * control.availableWidth)
+            width: control.indeterminate ? indeterminateClippedWidth() : Math.round(control.position * control.availableWidth)
             height: barSvg.hasElement("hint-bar-size")
                 ? barSvg.elementSize("hint-bar-size").height
                 : fixedMargins.top + fixedMargins.bottom
