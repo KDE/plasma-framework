@@ -44,7 +44,7 @@ void QMenuItem::setAction(QAction *a)
         setEnabled(m_action->isEnabled());
 
         connect(m_action, &QAction::changed, this, &QMenuItem::textChanged);
-        connect(m_action, &QAction::changed, this, &QMenuItem::checkableChanged);
+        connect(m_action, &QAction::checkableChanged, this, &QMenuItem::checkableChanged);
         connect(m_action, &QAction::toggled, this, &QMenuItem::toggled);
         connect(m_action, &QAction::triggered, this, &QMenuItem::clicked);
         // HACK QMenuItem doesn't delete other people's QAction (see m_action->parent() check above)
