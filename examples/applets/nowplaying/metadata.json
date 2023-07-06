@@ -60,6 +60,7 @@
         "Description[nn]": "Ein enkel QML-basert eksempel-mediespelarkontrollar",
         "Description[pl]": "Przykładowy sterownik odtwarzacza multimediów w qml",
         "Description[pt]": "Um QML de controlo de leitores multimédia como prova de conceito",
+        "Description[pt_BR]": "Uma prova de conceito em QML do controlador de reprodutor de mídia",
         "Description[ru]": "Пример интерфейса управления медиапроигрывателем на QML",
         "Description[sl]": "Dokaz koncepta krmilnika medijskega predvajalnika qml",
         "Description[sv]": "Ett koncept för styrning av mediaspelare i QML",
