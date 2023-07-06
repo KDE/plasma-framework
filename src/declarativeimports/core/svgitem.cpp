@@ -25,7 +25,6 @@ SvgItem::SvgItem(QQuickItem *parent)
     , m_textureChanged(false)
 {
     setFlag(QQuickItem::ItemHasContents, true);
-    connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &SvgItem::updateDevicePixelRatio);
 }
 
 SvgItem::~SvgItem()
@@ -186,6 +185,15 @@ void SvgItem::updatePolish()
         m_svg.data()->setContainsMultipleImages(!m_elementID.isEmpty());
         m_image = m_svg.data()->image(QSize(width(), height()), m_elementID);
     }
+}
+
+void SvgItem::itemChange(ItemChange change, const ItemChangeData &data)
+{
+    if (change == ItemChange::ItemDevicePixelRatioHasChanged) {
+        updateDevicePixelRatio();
+    }
+
+    return QQuickItem::itemChange(change, data);
 }
 
 void SvgItem::geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry)

@@ -286,7 +286,6 @@ FrameSvgItem::FrameSvgItem(QQuickItem *parent)
     m_frameSvg = new Plasma::FrameSvg(this);
     setFlag(ItemHasContents, true);
     connect(m_frameSvg, &FrameSvg::repaintNeeded, this, &FrameSvgItem::doUpdate);
-    connect(&Units::instance(), &Units::devicePixelRatioChanged, this, &FrameSvgItem::updateDevicePixelRatio);
     connect(m_frameSvg, &Svg::fromCurrentThemeChanged, this, &FrameSvgItem::fromCurrentThemeChanged);
     connect(m_frameSvg, &Svg::statusChanged, this, &FrameSvgItem::statusChanged);
 }
@@ -737,6 +736,8 @@ void FrameSvgItem::applyPrefixes()
 void FrameSvgItem::itemChange(QQuickItem::ItemChange change, const QQuickItem::ItemChangeData &value)
 {
     if (change == ItemSceneChange && value.window) {
+        updateDevicePixelRatio();
+    } else if (change == ItemDevicePixelRatioHasChanged) {
         updateDevicePixelRatio();
     }
 

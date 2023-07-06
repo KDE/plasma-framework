@@ -820,6 +820,8 @@ void IconItem::itemChange(ItemChange change, const ItemChangeData &value)
             connect(m_window.data(), &QWindow::visibleChanged, this, &IconItem::windowVisibleChanged);
         }
         schedulePixmapUpdate();
+    } else if (change == ItemDevicePixelRatioHasChanged) {
+        schedulePixmapUpdate();
     }
 
     QQuickItem::itemChange(change, value);

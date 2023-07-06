@@ -80,6 +80,7 @@ protected Q_SLOTS:
 private:
     void scheduleImageUpdate();
     void updatePolish() override;
+    void itemChange(ItemChange change, const ItemChangeData &data) override;
     void geometryChange(const QRectF &newGeometry, const QRectF &oldGeometry) override;
 
     QPointer<Plasma::Svg> m_svg;
