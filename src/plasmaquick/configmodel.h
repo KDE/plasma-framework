@@ -60,6 +60,7 @@ public:
         IconRole,
         SourceRole,
         PluginNameRole,
+        IncludeMarginsRole,
         VisibleRole,
         KCMRole,
     };

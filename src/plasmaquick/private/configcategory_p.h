@@ -32,6 +32,7 @@ class ConfigCategory : public QObject
     Q_PROPERTY(QString icon READ icon WRITE setIcon NOTIFY iconChanged)
     Q_PROPERTY(QString source READ source WRITE setSource NOTIFY sourceChanged)
     Q_PROPERTY(QString pluginName READ pluginName WRITE setPluginName NOTIFY pluginNameChanged)
+    Q_PROPERTY(bool includeMargins READ includeMargins WRITE setIncludeMargins NOTIFY includeMarginsChanged)
     Q_PROPERTY(bool visible READ visible WRITE setVisible NOTIFY visibleChanged)
 
 public:
@@ -50,6 +51,9 @@ public:
     QString pluginName() const;
     void setPluginName(const QString &pluginName);
 
+    bool includeMargins() const;
+    void setIncludeMargins(bool includeMargins);
+
     bool visible() const;
     void setVisible(bool visible);
 
@@ -58,6 +62,7 @@ Q_SIGNALS:
     void iconChanged();
     void sourceChanged();
     void pluginNameChanged();
+    void includeMarginsChanged();
     void visibleChanged();
 
 private:
@@ -65,6 +70,7 @@ private:
     QString m_icon;
     QString m_source;
     QString m_pluginName;
+    bool m_includeMargins;
     bool m_visible;
 };
 
