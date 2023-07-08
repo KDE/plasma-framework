@@ -64,7 +64,7 @@ class PLASMAQUICK_EXPORT AppletQuickItem : public QQuickItem
     Q_PROPERTY(QQmlComponent *preferredRepresentation READ preferredRepresentation WRITE setPreferredRepresentation NOTIFY preferredRepresentationChanged)
 
     /**
-     * Hint set to true if the applet should be siplayed as expanded, such as the main popup open
+     * Hint set to true if the applet should be displayed as expanded, such as the main popup open
      */
     Q_PROPERTY(bool expanded READ isExpanded WRITE setExpanded NOTIFY expandedChanged)
 
