@@ -11,6 +11,7 @@ import QtQuick.Controls 2.12 as QQC2
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.kirigami 2.20 as Kirigami
 
 /**
  * A placeholder message indicating that a list view is empty. The message
@@ -36,7 +37,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
+ *         width: parent.width - (Kirigami.Units.gridUnit * 4)
  *
  *         visible: listView.count == 0
  *
@@ -58,7 +59,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
+ *         width: parent.width - (Kirigami.Units.gridUnit * 4)
  *
  *         visible: listView.count == 0
  *
@@ -87,7 +88,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
+ *         width: parent.width - (Kirigami.Units.gridUnit * 4)
  *
  *         visible: root.networkConnected
  *
@@ -110,7 +111,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
+ *         width: parent.width - (Kirigami.Units.gridUnit * 4)
  *
  *         visible: root.loading
  *
@@ -118,7 +119,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *         text: "Loading this awesome app"
  *
  *         PlasmaComponents3.ProgressBar {
- *             Layout.preferredWidth: PlasmaCore.Units.gridUnit * 20
+ *             Layout.preferredWidth: Kirigami.Units.gridUnit * 20
  *             value: root.completionStatus
  *             from: 0
  *             to: 100
@@ -138,7 +139,7 @@ import org.kde.plasma.extras 2.0 as PlasmaExtras
  *
  *     PlasmaExtras.PlaceholderMessage {
  *         anchors.centerIn: parent
- *         width: parent.width - (PlasmaCore.Units.largeSpacing * 4)
+ *         width: parent.width - (Kirigami.Units.largeSpacing * 4)
  *
  *         visible: root.loading
  *
@@ -222,15 +223,15 @@ ColumnLayout {
      */
     property QQC2.Action helpfulAction
 
-    spacing: PlasmaCore.Units.largeSpacing
+    spacing: Kirigami.Units.gridUnit
 
     PlasmaCore.IconItem {
         visible: source !== undefined
         opacity: 0.5
 
         Layout.alignment: Qt.AlignHCenter
-        Layout.preferredWidth: Math.round(PlasmaCore.Units.iconSizes.huge * 1.5)
-        Layout.preferredHeight: Math.round(PlasmaCore.Units.iconSizes.huge * 1.5)
+        Layout.preferredWidth: Math.round(Kirigami.Units.iconSizes.huge * 1.5)
+        Layout.preferredHeight: Math.round(Kirigami.Units.iconSizes.huge * 1.5)
 
         source: root.iconName || null
     }
@@ -262,7 +263,7 @@ ColumnLayout {
     Loader {
         active: root.helpfulAction && root.helpfulAction.enabled
         Layout.alignment: Qt.AlignHCenter
-        Layout.topMargin: PlasmaCore.Units.gridUnit
+        Layout.topMargin: Kirigami.Units.gridUnit
 
         sourceComponent: PlasmaComponents3.Button {
             action: root.helpfulAction

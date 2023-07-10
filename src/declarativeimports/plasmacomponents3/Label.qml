@@ -6,7 +6,7 @@
 
 import QtQuick 2.1
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 
 T.Label {
     id: control
@@ -20,8 +20,8 @@ T.Label {
     activeFocusOnTab: false
 
     //font data is the system one by default
-    color: PlasmaCore.ColorScope.textColor
-    linkColor: PlasmaCore.Theme.linkColor
+    color: Kirigami.Theme.textColor
+    linkColor: Kirigami.Theme.linkColor
 
     opacity: enabled ? 1 : 0.6
 

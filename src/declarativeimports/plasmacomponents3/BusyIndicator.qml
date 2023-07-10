@@ -8,7 +8,7 @@
 
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 import org.kde.ksvg 1.0 as KSvg
 
 T.BusyIndicator {
@@ -31,13 +31,13 @@ T.BusyIndicator {
          * `control.running` and `opacity > 0` at once.
          * Also, don't animate at all if the user has disabled animations.
          */
-        property bool animationRunning: visible && PlasmaCore.Units.longDuration > 1
+        property bool animationRunning: visible && Kirigami.Units.longDuration > 1
 
         /* implicitWidth and implicitHeight won't work unless they come
          * from a child of the contentItem. No idea why.
          */
-        implicitWidth: PlasmaCore.Units.gridUnit * 2
-        implicitHeight: PlasmaCore.Units.gridUnit * 2
+        implicitWidth: Kirigami.Units.gridUnit * 2
+        implicitHeight: Kirigami.Units.gridUnit * 2
 
         // We can't bind directly to opacity, as Animator won't update its value immediately.
         visible: control.running || opacityAnimator.running
@@ -45,7 +45,7 @@ T.BusyIndicator {
         Behavior on opacity {
             OpacityAnimator {
                 id: opacityAnimator
-                duration: PlasmaCore.Units.shortDuration
+                duration: Kirigami.Units.shortDuration
                 easing.type: Easing.OutCubic
             }
         }
@@ -75,10 +75,7 @@ T.BusyIndicator {
             width: Math.min(parent.width, parent.height)
             height: width
 
-            svg: KSvg.Svg {
-                imagePath: "widgets/busywidget"
-                colorGroup: PlasmaCore.ColorScope.colorGroup
-            }
+            imagePath: "widgets/busywidget"
             elementId: "busywidget"
 
             RotationAnimator on rotation {

@@ -4,8 +4,8 @@
  */
 
 import QtQuick 2.6
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     id: root
@@ -54,7 +54,7 @@ Item {
         imagePath: "widgets/button"
         prefix: "pressed"
         opacity: root.showPressed ? 1 : 0
-        Behavior on opacity { OpacityAnimator { duration: PlasmaCore.Units.shortDuration; easing.type: Easing.OutQuad } }
+        Behavior on opacity { OpacityAnimator { duration: Kirigami.Units.shortDuration; easing.type: Easing.OutQuad } }
     }
 
     KSvg.FrameSvgItem {
@@ -63,7 +63,7 @@ Item {
         imagePath: "widgets/button"
         prefix: ["focus-background", "normal"]
         opacity: root.showFocused ? 1 : 0
-        Behavior on opacity { OpacityAnimator { duration: PlasmaCore.Units.shortDuration; easing.type: Easing.OutQuad } }
+        Behavior on opacity { OpacityAnimator { duration: Kirigami.Units.shortDuration; easing.type: Easing.OutQuad } }
     }
 
 }

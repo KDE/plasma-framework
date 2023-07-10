@@ -10,15 +10,16 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
 
     property int cheight: 48
     property int cwidth: themePage.width / 1.2
-    property int _m: PlasmaCore.Units.gridUnit / 2 * PlasmaCore.Units.devicePixelRatio
+    property int _m: Kirigami.Units.largeSpacing
 
     anchors {
-        margins: PlasmaCore.Units.largeSpacing
+        margins: Kirigami.Units.gridUnit
     }
     Column {
         id: col
@@ -42,7 +43,7 @@ Item {
     PlasmaComponents.Label {
         id: cheatLabel
         text: "Cheating with the font size. This label scales with the devicePixelRatio <b>on top of</b> font rendering. Just to show how text scaling can work dynamically. Normal labels scale with the font size. For demonstration purposes we're faking scaled fonts here, to show how layouts' flows change."
-        font.pointSize: PlasmaCore.Theme.defaultFont.pointSize * PlasmaCore.Units.devicePixelRatio / 1.8
+        font.pointSize: Kirigami.Theme.defaultFont.pointSize / 1.8
         wrapMode: Text.WordWrap
         anchors {
             margins: _m
@@ -54,8 +55,7 @@ Item {
     Image {
         id: apeImage
         objectName: "apeImage"
-        height: parent.height / 6 * PlasmaCore.Units.devicePixelRatio
-        //width: height
+        height: parent.height / 6
         anchors {
             top: cheatLabel.top
             right: parent.right
@@ -68,43 +68,35 @@ Item {
         anchors {
             left: parent.left
             top: cheatLabel.height > apeImage.height ?  cheatLabel.bottom : apeImage.bottom
-            topMargin: PlasmaCore.Units.largeSpacing
+            topMargin: Kirigami.Units.gridUnit
             right: parent.right
         }
-        //height: _h
-        //width: parent.width
-        spacing: PlasmaCore.Units.smallSpacing
+        spacing: Kirigami.Units.smallSpacing
 
         PlasmaCore.IconItem {
             source: "configure"
-            width: PlasmaCore.Units.iconSizes.small
+            width: Kirigami.Units.iconSizes.small
             height: width
         }
         PlasmaCore.IconItem {
             source: "dialog-ok"
-            width: PlasmaCore.Units.iconSizes.smallMedium
+            width: Kirigami.Units.iconSizes.smallMedium
             height: width
         }
         PlasmaCore.IconItem {
             source: "resize-tr2bl"
-            width: PlasmaCore.Units.iconSizes.medium
+            width: Kirigami.Units.iconSizes.medium
             height: width
         }
         PlasmaCore.IconItem {
             source: "akonadi"
-            width: PlasmaCore.Units.iconSizes.large
+            width: Kirigami.Units.iconSizes.large
             height: width
         }
         PlasmaCore.IconItem {
             source: "clock"
-            width: PlasmaCore.Units.iconSizes.huge
+            width: Kirigami.Units.iconSizes.huge
             height: width
         }
-//         KQuickControlsAddons.QIconItem {
-//             icon: "preferences-desktop-icons"
-//             width: PlasmaCore.Units.iconSizes.enormous
-//             height: width
-//         }
-
     }
 }

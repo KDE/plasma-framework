@@ -6,7 +6,7 @@
 
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 import org.kde.ksvg 1.0 as KSvg
 
 T.Dialog {
@@ -31,7 +31,7 @@ T.Dialog {
             from: 0
             to: 1
             easing.type: Easing.InOutQuad
-            duration: PlasmaCore.Units.longDuration
+            duration: Kirigami.Units.longDuration
         }
     }
 
@@ -41,14 +41,14 @@ T.Dialog {
             from: 1
             to: 0
             easing.type: Easing.InOutQuad
-            duration: PlasmaCore.Units.longDuration
+            duration: Kirigami.Units.longDuration
         }
     }
 
     contentItem: Item { }
 
     background: KSvg.FrameSvgItem {
-        implicitWidth: PlasmaCore.Units.gridUnit * 12
+        implicitWidth: Kirigami.Units.gridUnit * 12
         imagePath: "widgets/background"
     }
 

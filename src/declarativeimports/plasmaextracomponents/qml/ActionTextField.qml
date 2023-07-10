@@ -96,14 +96,14 @@ PlasmaComponents3.TextField {
 
     Behavior on leftPadding {
         NumberAnimation {
-            duration: PlasmaCore.Units.longDuration
+            duration: Kirigami.Units.longDuration
             easing.type: Easing.InOutQuad
         }
     }
 
     Behavior on rightPadding {
         NumberAnimation {
-            duration: PlasmaCore.Units.longDuration
+            duration: Kirigami.Units.longDuration
             easing.type: Easing.InOutQuad
         }
     }
@@ -117,8 +117,8 @@ PlasmaComponents3.TextField {
 
         // here to make it private
         component ActionIcon: PlasmaCore.IconItem {
-            implicitWidth: PlasmaCore.Units.iconSizes.small
-            implicitHeight: PlasmaCore.Units.iconSizes.small
+            implicitWidth: Kirigami.Units.iconSizes.small
+            implicitHeight: Kirigami.Units.iconSizes.small
 
             anchors.verticalCenter: parent.verticalCenter
 
@@ -138,12 +138,12 @@ PlasmaComponents3.TextField {
 
     Row {
         id: leftActionsRow
-        padding: visible ? PlasmaCore.Units.smallSpacing : 0
+        padding: visible ? Kirigami.Units.smallSpacing : 0
         LayoutMirroring.enabled: root.effectiveHorizontalAlignment === TextInput.AlignRight
         anchors.left: parent.left
-        anchors.leftMargin: PlasmaCore.Units.smallSpacing
+        anchors.leftMargin: Kirigami.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
-        height: root.implicitHeight - 2 * PlasmaCore.Units.smallSpacing
+        height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
         visible: root.leftActions.length > 0
         Repeater {
             model: root.leftActions
@@ -153,13 +153,13 @@ PlasmaComponents3.TextField {
 
     Row {
         id: rightActionsRow
-        padding: visible ? PlasmaCore.Units.smallSpacing : 0
+        padding: visible ? Kirigami.Units.smallSpacing : 0
         layoutDirection: Qt.RightToLeft
         LayoutMirroring.enabled: root.effectiveHorizontalAlignment === TextInput.AlignRight
         anchors.right: parent.right
-        anchors.rightMargin: PlasmaCore.Units.smallSpacing
+        anchors.rightMargin: Kirigami.Units.smallSpacing
         anchors.verticalCenter: parent.verticalCenter
-        height: root.implicitHeight - 2 * PlasmaCore.Units.smallSpacing
+        height: root.implicitHeight - 2 * Kirigami.Units.smallSpacing
         visible: root.rightActions.length > 0
         Repeater {
             model: root.rightActions

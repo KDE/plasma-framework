@@ -5,14 +5,14 @@
  */
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0
+import org.kde.kirigami 2.20 as Kirigami
 
 ComponentBase {
     id: root
     title: "Plasma Components 3 ComboBox"
     contentItem: ColumnLayout {
-        spacing: PlasmaCore.Units.largeSpacing
+        spacing: Kirigami.Units.gridUnit
         ListModel {
             id: demoModel
             ListElement { text: "Banana"; color: "Yellow" }

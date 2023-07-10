@@ -8,14 +8,14 @@ import QtQuick 2.1
 import QtQuick.Layouts 1.0
 
 import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PC3
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     id: root
     width: 100
     height: 100
-    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 20
+    Layout.minimumWidth: Kirigami.Units.gridUnit * 20
     Layout.minimumHeight: column.implicitHeight
 
 

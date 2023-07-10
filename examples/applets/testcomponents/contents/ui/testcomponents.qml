@@ -8,23 +8,24 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
 import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.plasma.plasma5support 2.0 as P5Support
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     id: root
     width: 100
     height: 100
     clip: true
-    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 20
-    Layout.minimumHeight: PlasmaCore.Units.gridUnit * 30
+    Layout.minimumWidth: Kirigami.Units.gridUnit * 20
+    Layout.minimumHeight: Kirigami.Units.gridUnit * 30
 
-    property int _s: PlasmaCore.Units.iconSizes.small
-    property int _h: PlasmaCore.Units.iconSizes.desktop
+    property int _s: Kirigami.Units.iconSizes.small
+    property int _h: Kirigami.Units.iconSizes.desktop
 
-    PlasmaCore.DataSource {
+    P5Support.DataSource {
         id: dataSource
     }
 

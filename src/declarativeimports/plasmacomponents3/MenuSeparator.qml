@@ -9,7 +9,7 @@
 
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 
 T.MenuSeparator {
     id: controlRoot
@@ -17,14 +17,14 @@ T.MenuSeparator {
                             implicitContentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
                              implicitContentHeight + topPadding + bottomPadding)
-    verticalPadding: Math.round(PlasmaCore.Units.smallSpacing/2)
+    verticalPadding: Math.round(Kirigami.Units.smallSpacing / 2)
     hoverEnabled: false
     focusPolicy: Qt.NoFocus
     contentItem: Rectangle {
         // same as MenuItem background
-        implicitWidth: PlasmaCore.Units.gridUnit * 8
-        implicitHeight: PlasmaCore.Units.devicePixelRatio
-        color: PlasmaCore.ColorScope.textColor
+        implicitWidth: Kirigami.Units.gridUnit * 8
+        implicitHeight: 1
+        color: Kirigami.Theme.textColor
         opacity: 0.2
     }
 }

@@ -4,8 +4,8 @@
  */
 
 import QtQuick 2.12
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 
 KSvg.FrameSvgItem {
     anchors {
@@ -23,5 +23,5 @@ KSvg.FrameSvgItem {
     prefix: flat ? ["toolbutton-focus", "focus"] : "focus"
 
     opacity: showFocus ? 1 : 0
-    Behavior on opacity { OpacityAnimator { duration: PlasmaCore.Units.shortDuration; easing.type: Easing.OutQuad } }
+    Behavior on opacity { OpacityAnimator { duration: Kirigami.Units.shortDuration; easing.type: Easing.OutQuad } }
 }

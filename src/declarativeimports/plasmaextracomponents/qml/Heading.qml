@@ -5,9 +5,8 @@
 */
 
 import QtQuick 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0
-
+import org.kde.kirigami 2.20 as Kirigami
 
 /**
  * A heading label used for subsections of texts.
@@ -92,7 +91,7 @@ Label {
     // We mean it.
     //
     function __headerPointSize(level) {
-        const n = PlasmaCore.Theme.defaultFont.pointSize;
+        const n = Kirigami.Theme.defaultFont.pointSize;
         switch (level) {
         case 1:
             return n * 1.35 + step;

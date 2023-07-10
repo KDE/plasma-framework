@@ -6,13 +6,14 @@
 */
 
 import QtQuick 2.2
+import org.kde.kirigami 2.20 as Kirigami
 
 SequentialAnimation {
     id: disappearAnimation
     objectName: "disappearAnimation"
 
     property Item targetItem
-    property int duration: PlasmaCore.Units.longDuration
+    property int duration: Kirigami.Units.longDuration
 
     ParallelAnimation {
         OpacityAnimator {

@@ -9,7 +9,6 @@ import QtQuick 2.0
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 2.15
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
 
 Item
@@ -36,9 +35,9 @@ Item
             }
             onClicked: {
                 if (checked)
-                    theItem.enabledBorders |= PlasmaCore.FrameSvg.LeftBorder;
+                    theItem.enabledBorders |= KSvg.FrameSvg.LeftBorder;
                 else
-                    theItem.enabledBorders &=~PlasmaCore.FrameSvg.LeftBorder;
+                    theItem.enabledBorders &=~KSvg.FrameSvg.LeftBorder;
             }
         }
         Button {
@@ -52,9 +51,9 @@ Item
             }
             onClicked: {
                 if (checked)
-                    theItem.enabledBorders |= PlasmaCore.FrameSvg.RightBorder;
+                    theItem.enabledBorders |= KSvg.FrameSvg.RightBorder;
                 else
-                    theItem.enabledBorders &=~PlasmaCore.FrameSvg.RightBorder;
+                    theItem.enabledBorders &=~KSvg.FrameSvg.RightBorder;
             }
         }
         Button {
@@ -68,9 +67,9 @@ Item
             }
             onClicked: {
                 if (checked)
-                    theItem.enabledBorders |= PlasmaCore.FrameSvg.TopBorder;
+                    theItem.enabledBorders |= KSvg.FrameSvg.TopBorder;
                 else
-                    theItem.enabledBorders &=~PlasmaCore.FrameSvg.TopBorder;
+                    theItem.enabledBorders &=~KSvg.FrameSvg.TopBorder;
             }
         }
         Button {
@@ -84,9 +83,9 @@ Item
             }
             onClicked: {
                 if (checked)
-                    theItem.enabledBorders |= PlasmaCore.FrameSvg.BottomBorder;
+                    theItem.enabledBorders |= KSvg.FrameSvg.BottomBorder;
                 else
-                    theItem.enabledBorders &=~PlasmaCore.FrameSvg.BottomBorder;
+                    theItem.enabledBorders &=~KSvg.FrameSvg.BottomBorder;
             }
         }
     }

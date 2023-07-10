@@ -7,7 +7,6 @@
 import QtQuick 2.6
 import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.config
 import "private" as Private
@@ -69,13 +68,13 @@ T.TextField {
     rightPadding: (__hasBackgroundAndMargins ? background.margins.right : 0) + (control.effectiveHorizontalAlignment === TextInput.AlignRight ? 0 : inlineButtonRow.width)
     bottomPadding: __hasBackgroundAndMargins ? background.margins.bottom : 0
 
-    PlasmaCore.ColorScope.inherit: !background || !background.visible
-    PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ViewColorGroup
+    Kirigami.Theme.inherit: !background || !background.visible
+    Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-    color: control.backgroundVisible ? PlasmaCore.Theme.viewTextColor : PlasmaCore.ColorScope.textColor
-    selectionColor: control.backgroundVisible ? PlasmaCore.Theme.viewFocusColor : PlasmaCore.ColorScope.highlightColor
-    selectedTextColor: control.backgroundVisible ? PlasmaCore.Theme.viewHighlightedTextColor : PlasmaCore.ColorScope.highlightedTextColor
-    placeholderTextColor: PlasmaCore.Theme.disabledTextColor
+    color:  Kirigami.Theme.textColor
+    selectionColor: Kirigami.Theme.highlightColor
+    selectedTextColor: Kirigami.Theme.highlightedTextColor
+    placeholderTextColor: Kirigami.Theme.disabledTextColor
 
     verticalAlignment: TextInput.AlignVCenter
     // Manually setting this fixes alignment in RTL layouts
@@ -165,16 +164,16 @@ T.TextField {
         anchors.verticalCenter: control.verticalCenter
         LayoutMirroring.enabled: control.effectiveHorizontalAlignment === TextInput.AlignRight
 
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             id: showPasswordButton
             source: __effectiveRevealPasswordButtonShown ? (control.echoMode === TextInput.Normal ? "visibility": "hint") : ""
-            height: PlasmaCore.Units.iconSizes.small
+            height: Kirigami.Units.iconSizes.small
             width: height
             opacity: (__effectiveRevealPasswordButtonShown && control.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: PlasmaCore.Units.longDuration
+                    duration: Kirigami.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -188,17 +187,17 @@ T.TextField {
             }
         }
 
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             id: clearButton
             //ltr confusingly refers to the direction of the arrow in the icon, not the text direction which it should be used in
             source: clearButtonShown ? (control.effectiveHorizontalAlignment === TextInput.AlignRight ? "edit-clear-locationbar-ltr" : "edit-clear-locationbar-rtl") : ""
-            height: PlasmaCore.Units.iconSizes.small
+            height: Kirigami.Units.iconSizes.small
             width: height
             opacity: (control.length > 0 && clearButtonShown && control.enabled) ? 1 : 0
             visible: opacity > 0
             Behavior on opacity {
                 NumberAnimation {
-                    duration: PlasmaCore.Units.longDuration
+                    duration: Kirigami.Units.longDuration
                     easing.type: Easing.InOutQuad
                 }
             }
@@ -213,8 +212,8 @@ T.TextField {
     }
 
     background: KSvg.FrameSvgItem {
-        implicitWidth: PlasmaCore.Units.gridUnit * 8 + margins.left + margins.right
-        implicitHeight: PlasmaCore.Units.gridUnit + margins.top + margins.bottom
+        implicitWidth: Kirigami.Units.gridUnit * 8 + margins.left + margins.right
+        implicitHeight: Kirigami.Units.gridUnit + margins.top + margins.bottom
         imagePath: "widgets/lineedit"
         prefix: "base"
 
@@ -233,7 +232,7 @@ T.TextField {
             Behavior on opacity {
                 enabled: control.hovered
                 NumberAnimation {
-                    duration: PlasmaCore.Units.longDuration
+                    duration: Kirigami.Units.longDuration
                     easing.type: Easing.OutCubic
                 }
             }
@@ -253,7 +252,7 @@ T.TextField {
             opacity: control.visualFocus || control.activeFocus
             Behavior on opacity {
                 NumberAnimation {
-                    duration: PlasmaCore.Units.longDuration
+                    duration: Kirigami.Units.longDuration
                     easing.type: Easing.OutCubic
                 }
             }

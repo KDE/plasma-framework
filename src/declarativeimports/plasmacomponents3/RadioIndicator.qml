@@ -7,8 +7,8 @@
 
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 import "private" as P
 
 Item {
@@ -18,7 +18,7 @@ Item {
 
     property size hintSize: radioButtonSvg.fromCurrentTheme && radioButtonSvg.hasElement("hint-size")
         ? radioButtonSvg.elementSize("hint-size")
-        : Qt.size(PlasmaCore.Units.iconSizes.small, PlasmaCore.Units.iconSizes.small)
+        : Qt.size(Kirigami.Units.iconSizes.small, Kirigami.Units.iconSizes.small)
 
     implicitWidth: hintSize.width
     implicitHeight: hintSize.height
@@ -36,8 +36,8 @@ Item {
             // Hardcode breeze-light and breeze-dark because fromCurrentTheme is
             // false for them. This is because they don't contain any SVGs and
             // inherit all of them from the default theme.
-            || PlasmaCore.Theme.themeName === "breeze-light"
-            || PlasmaCore.Theme.themeName === "breeze-dark"
+            || KSvg.ImageSet.imageSetName === "breeze-light"
+            || KSvg.ImageSet.imageSetName === "breeze-dark"
             ? radiobuttonComponent : compatibilityComponent
     }
 
@@ -62,7 +62,7 @@ Item {
                 Behavior on opacity {
                     enabled: root.control.down
                     NumberAnimation {
-                        duration: PlasmaCore.Units.longDuration
+                        duration: Kirigami.Units.longDuration
                         easing.type: Easing.OutCubic
                     }
                 }
@@ -79,7 +79,7 @@ Item {
                 Behavior on opacity {
                     enabled: root.control.checked || root.control.down
                     NumberAnimation {
-                        duration: PlasmaCore.Units.longDuration
+                        duration: Kirigami.Units.longDuration
                         easing.type: Easing.OutCubic
                     }
                 }
@@ -94,7 +94,7 @@ Item {
                 opacity: root.control.visualFocus
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: PlasmaCore.Units.longDuration
+                        duration: Kirigami.Units.longDuration
                         easing.type: Easing.OutCubic
                     }
                 }
@@ -110,7 +110,7 @@ Item {
                 Behavior on opacity {
                     enabled: root.control.hovered
                     NumberAnimation {
-                        duration: PlasmaCore.Units.longDuration
+                        duration: Kirigami.Units.longDuration
                         easing.type: Easing.OutCubic
                     }
                 }
@@ -125,7 +125,7 @@ Item {
                 scale: root.control.checked
                 Behavior on scale {
                     NumberAnimation {
-                        duration: PlasmaCore.Units.longDuration
+                        duration: Kirigami.Units.longDuration
                         easing.type: Easing.OutCubic
                     }
                 }
@@ -146,7 +146,7 @@ Item {
 
             anchors.centerIn: parent
             implicitWidth: implicitHeight
-            implicitHeight: PlasmaCore.Units.iconSizes.small
+            implicitHeight: Kirigami.Units.iconSizes.small
 
             KSvg.SvgItem {
                 id: checkmark
@@ -161,7 +161,7 @@ Item {
                 }
                 Behavior on opacity {
                     NumberAnimation {
-                        duration: PlasmaCore.Units.longDuration
+                        duration: Kirigami.Units.longDuration
                         easing.type: Easing.InOutQuad
                     }
                 }

@@ -7,20 +7,20 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.1
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     id: root
     width: 400
     height: 400
 
-    Layout.minimumWidth: PlasmaCore.Units.gridUnit * 20
-    Layout.minimumHeight: PlasmaCore.Units.gridUnit * 30
-    property int _s: PlasmaCore.Units.iconSizes.small
-    property int _h: PlasmaCore.Units.iconSizes.desktop
+    Layout.minimumWidth: Kirigami.Units.gridUnit * 20
+    Layout.minimumHeight: Kirigami.Units.gridUnit * 30
+    property int _s: Kirigami.Units.iconSizes.small
+    property int _h: Kirigami.Units.iconSizes.desktop
     property int _m: 12
 
     Item {
@@ -35,7 +35,7 @@ Item {
                 right: parent.right
                 top: parent.top
             }
-            height: PlasmaCore.Units.iconSizes.toolbar * 1.5
+            height: Kirigami.Units.iconSizes.toolbar * 1.5
 
             PlasmaComponents.TabButton { tab: colorShower; text: tab.pageName; }
             PlasmaComponents.TabButton { tab: wobbleExample; text: tab.pageName; }

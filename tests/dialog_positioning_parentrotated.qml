@@ -13,10 +13,11 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.kirigami 2.20 as Kirigami
 
 ColumnLayout
 {
-    height: PlasmaCore.Units.gridUnit * 20
+    height: Kirigami.Units.gridUnit * 20
     Controls.Label {
         id: label
         text: "Press the button and make sure the popup is on the correct place"
@@ -46,7 +47,7 @@ ColumnLayout
             id: menuColumn
             Layout.minimumWidth: menuColumn.implicitWidth
             Layout.minimumHeight: menuColumn.implicitHeight
-            spacing: PlasmaCore.Units.smallSpacing
+            spacing: Kirigami.Units.smallSpacing
 
             PlasmaExtras.Heading {
                 level: 3

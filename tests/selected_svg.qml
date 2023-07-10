@@ -12,7 +12,7 @@ import org.kde.ksvg 1.0 as KSvg
 KSvg.FrameSvgItem {
     id: root
     imagePath: "widgets/background"
-    state: PlasmaCore.Svg.Normal
+    state: KSvg.Svg.Normal
     width: 600
     height: 800
 
@@ -22,7 +22,7 @@ KSvg.FrameSvgItem {
 
         Controls.Button {
             text: "Switch Selected State"
-            onClicked: root.state = (root.state == PlasmaCore.Svg.Selected ? PlasmaCore.Svg.Normal : PlasmaCore.Svg.Selected)
+            onClicked: root.state = (root.state == KSvg.Svg.Selected ? KSvg.Svg.Normal : KSvg.Svg.Selected)
         }
 
         KSvg.SvgItem {

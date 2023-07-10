@@ -4,7 +4,7 @@
  */
 
 import QtQuick 2.6
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     id: root
@@ -14,8 +14,8 @@ Item {
     property real rightMargin: loader.item.rightMargin
     property real bottomMargin: loader.item.bottomMargin
 
-    implicitWidth: PlasmaCore.Units.gridUnit + root.leftMargin + root.rightMargin
-    implicitHeight: PlasmaCore.Units.gridUnit + root.topMargin + root.bottomMargin
+    implicitWidth: Kirigami.Units.gridUnit + root.leftMargin + root.rightMargin
+    implicitHeight: Kirigami.Units.gridUnit + root.topMargin + root.bottomMargin
 
     opacity: enabled ? 1 : 0.5
     layer.enabled: opacity < 1

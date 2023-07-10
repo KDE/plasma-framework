@@ -7,8 +7,6 @@
 import QtQuick 2.0
 import QtQuick.Controls 2.15 as QQC2
 
-import org.kde.plasma.core 2.0 as PlasmaCore
-
 Item {
     id: iconsPage
     width: childrenRect.width

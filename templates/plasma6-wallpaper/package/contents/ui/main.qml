@@ -5,18 +5,17 @@
 
 import QtQuick 2.1
 
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     id: root
 
     Rectangle {
         anchors.fill: parent
-        color: PlasmaCore.Theme.backgroundColor
+        color: Kirigami.Theme.backgroundColor
     }
 
-    PlasmaExtras.Heading {
+    Kirigami.Heading {
         anchors.centerIn: parent
         level: 1
         text: wallpaper.configuration.DisplayText ||

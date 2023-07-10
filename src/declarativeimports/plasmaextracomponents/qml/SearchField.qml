@@ -9,6 +9,7 @@ import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 
 /**
  * This is a standard textfield following KDE HIG. Using Ctrl+F as focus
@@ -49,18 +50,18 @@ PlasmaExtras.ActionTextField {
         opacity: root.activeFocus || text.length > 0 ? 0 : 1
         LayoutMirroring.enabled: root.effectiveHorizontalAlignment === TextInput.AlignRight
         anchors.left: root.left
-        anchors.leftMargin: PlasmaCore.Units.smallSpacing * 2
+        anchors.leftMargin: Kirigami.Units.smallSpacing * 2
         anchors.verticalCenter: root.verticalCenter
         anchors.verticalCenterOffset: Math.round((root.topPadding - root.bottomPadding) / 2)
-        implicitHeight: PlasmaCore.Units.iconSizes.sizeForLabels
-        implicitWidth: PlasmaCore.Units.iconSizes.sizeForLabels
+        implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
+        implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
         status: KSvg.Svg.Inactive
 
         source: "search"
 
         Behavior on opacity {
             NumberAnimation {
-                duration: PlasmaCore.Units.longDuration
+                duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

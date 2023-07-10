@@ -6,8 +6,8 @@
  */
 import QtQuick 2.0
 import QtQuick.Layouts 1.4
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.kirigami 2.20 as Kirigami
 
 ComponentBase {
     id: root
@@ -17,7 +17,7 @@ ComponentBase {
         Flow {
             Layout.fillWidth: true
             Layout.fillHeight: true
-            spacing: PlasmaCore.Units.gridUnit
+            spacing: Kirigami.Units.gridUnit
 
             PlasmaComponents.ToolButton {
                 icon.name: "start-here-kde-plasma"
@@ -104,8 +104,8 @@ ComponentBase {
                 icon.name: "window-close"
                 Layout.fillWidth: true
                 Layout.fillHeight: true
-                icon.width: PlasmaCore.Units.iconSizes.small
-                icon.height: PlasmaCore.Units.iconSizes.small
+                icon.width: Kirigami.Units.iconSizes.small
+                icon.height: Kirigami.Units.iconSizes.small
                 text: "Text"
             }
             PlasmaComponents.ToolButton {

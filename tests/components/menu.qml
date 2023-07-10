@@ -6,15 +6,15 @@
  */
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.components 3.0 as PC3
+import org.kde.kirigami 2.20 as Kirigami
 
 ComponentBase {
     id: root
     title: "Plasma Extras Menu"
     contentItem: ColumnLayout {
-        spacing: PlasmaCore.Units.largeSpacing
+        spacing: Kirigami.Units.gridUnit
 
         PC3.Button {
             text: "Simple menu"
@@ -75,7 +75,7 @@ ComponentBase {
         }
 
         RowLayout {
-            spacing: PlasmaCore.Units.smallSpacing
+            spacing: Kirigami.Units.smallSpacing
 
             PC3.Button {
                 id: minMaxButton

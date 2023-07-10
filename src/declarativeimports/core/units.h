@@ -97,7 +97,7 @@ class Units : public QObject
     /**
      * The ratio between physical and device-independent pixels. This value does not depend on the \
      * size of the configured font. If you want to take font sizes into account when scaling elements,
-     * use PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont), PlasmaCore.Units.smallSpacing and PlasmaCore.Units.largeSpacing.
+     * use PlasmaCore.Theme.mSize(PlasmaCore.Theme.defaultFont), Kirigami.Units.smallSpacing and Kirigami.Units.largeSpacing.
      * The devicePixelRatio follows the definition of "device independent pixel" by Microsoft.
      */
     Q_PROPERTY(qreal devicePixelRatio READ devicePixelRatio NOTIFY devicePixelRatioChanged)

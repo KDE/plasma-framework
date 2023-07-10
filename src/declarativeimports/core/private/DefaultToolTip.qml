@@ -9,33 +9,34 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.kirigami 2.20 as Kirigami
 
-PlasmaCore.ColorScope {
+Item {
     property Item toolTip
-    property int preferredTextWidth: PlasmaCore.Units.gridUnit * 20
+    property int preferredTextWidth: Kirigami.Units.gridUnit * 20
 
-    // gridUnit is effectively equal to `PlasmaCore.Units.smallSpacing * 4`
+    // gridUnit is effectively equal to `Kirigami.Units.smallSpacing * 4`
     // which is a double (both sides) of RowLayout's `anchors.margins`.
-    Layout.minimumWidth: childrenRect.width + PlasmaCore.Units.gridUnit
-    Layout.minimumHeight: childrenRect.height + PlasmaCore.Units.gridUnit
-    Layout.maximumWidth: childrenRect.width + PlasmaCore.Units.gridUnit
-    Layout.maximumHeight: childrenRect.height + PlasmaCore.Units.gridUnit
+    Layout.minimumWidth: childrenRect.width + Kirigami.Units.gridUnit
+    Layout.minimumHeight: childrenRect.height + Kirigami.Units.gridUnit
+    Layout.maximumWidth: childrenRect.width + Kirigami.Units.gridUnit
+    Layout.maximumHeight: childrenRect.height + Kirigami.Units.gridUnit
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
 
-    colorGroup: PlasmaCore.Theme.NormalColorGroup
-    inherit: false
+    Kirigami.Theme.colorSet: Kirigami.Theme.Window
+    Kirigami.Theme.inherit: false
 
     RowLayout {
 
         anchors {
             left: parent.left
             top: parent.top
-            margins: PlasmaCore.Units.smallSpacing * 2
+            margins: Kirigami.Units.largeSpacing
         }
 
-        spacing: PlasmaCore.Units.gridUnit
+        spacing: Kirigami.Units.gridUnit
 
         Image {
             source: toolTip ? toolTip.image : ""
@@ -48,8 +49,8 @@ PlasmaCore.ColorScope {
             source: toolTip ? toolTip.icon : ""
             Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
             visible: toolTip !== null && toolTip.icon !== "" && toolTip.image === "" && valid
-            Layout.preferredWidth: PlasmaCore.Units.iconSizes.medium
-            Layout.preferredHeight: PlasmaCore.Units.iconSizes.medium
+            Layout.preferredWidth: Kirigami.Units.iconSizes.medium
+            Layout.preferredHeight: Kirigami.Units.iconSizes.medium
         }
 
         ColumnLayout {

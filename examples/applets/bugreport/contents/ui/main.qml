@@ -11,6 +11,7 @@ import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.components 3.0 as PC3
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     Layout.minimumWidth: 200
@@ -18,7 +19,7 @@ Item {
 
     PlasmaCore.IconItem {
         source: "kbugbuster"
-        width: PlasmaCore.Units.iconSizes.large
+        width: Kirigami.Units.iconSizes.large
         height: width
         anchors {
             right: col.right
@@ -30,10 +31,10 @@ Item {
     Column {
         id: col
 
-        spacing: PlasmaCore.Units.largeSpacing /2
+        spacing: Kirigami.Units.largeSpacing
         anchors {
             fill: parent
-            margins: PlasmaCore.Units.largeSpacing
+            margins: Kirigami.Units.gridUnit
         }
 
         PlasmaExtras.Heading {

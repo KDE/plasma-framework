@@ -6,8 +6,8 @@
 
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 
 T.ProgressBar {
     id: control
@@ -22,11 +22,12 @@ T.ProgressBar {
     KSvg.Svg {
         id: barSvg
         imagePath: "widgets/bar_meter_horizontal"
-        colorGroup: PlasmaCore.ColorScope.colorGroup
+        // FIXME
+        colorSet: control.Kirigami.Theme.colorSet
     }
 
     contentItem: Item {
-        implicitWidth: PlasmaCore.Units.gridUnit * 8
+        implicitWidth: Kirigami.Units.gridUnit * 8
         implicitHeight: children[0].height
 
         KSvg.FrameSvgItem {
@@ -35,7 +36,6 @@ T.ProgressBar {
 
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-active"
-            colorGroup: PlasmaCore.ColorScope.colorGroup
 
             LayoutMirroring.enabled: control.mirrored
             anchors.left: parent.left
@@ -55,12 +55,12 @@ T.ProgressBar {
                 running: control.indeterminate && control.contentItem.visible
 
                 NumberAnimation {
-                    duration: PlasmaCore.Units.humanMoment / 2
+                    duration: Kirigami.Units.humanMoment / 2
                     easing.type: Easing.InOutSine
                     to: 1
                 }
                 NumberAnimation {
-                    duration: PlasmaCore.Units.humanMoment / 2
+                    duration: Kirigami.Units.humanMoment / 2
                     easing.type: Easing.InOutSine
                     to: 0
                 }
@@ -69,13 +69,12 @@ T.ProgressBar {
     }
 
     background: Item {
-        implicitWidth: PlasmaCore.Units.gridUnit * 8
+        implicitWidth: Kirigami.Units.gridUnit * 8
         implicitHeight: children[0].height
 
         KSvg.FrameSvgItem {
             imagePath: "widgets/bar_meter_horizontal"
             prefix: "bar-inactive"
-            colorGroup: PlasmaCore.ColorScope.colorGroup
 
             anchors.centerIn: parent
             width: Math.max(parent.width, fixedMargins.left + fixedMargins.right)

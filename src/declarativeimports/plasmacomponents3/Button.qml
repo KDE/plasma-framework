@@ -7,8 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2.20 as Kirigami
 import "private" as Private
 
 T.Button {
@@ -24,7 +23,7 @@ T.Button {
     rightPadding: background.rightMargin
     bottomPadding: background.bottomMargin
 
-    spacing: PlasmaCore.Units.smallSpacing
+    spacing: Kirigami.Units.smallSpacing
 
     hoverEnabled: !Kirigami.Settings.tabletMode
 
@@ -39,8 +38,8 @@ T.Button {
         onActivated: control.clicked()
     }
 
-    PlasmaCore.ColorScope.inherit: flat
-    PlasmaCore.ColorScope.colorGroup: flat && parent ? parent.PlasmaCore.ColorScope.colorGroup : PlasmaCore.Theme.ButtonColorGroup
+    Kirigami.Theme.inherit: flat
+    Kirigami.Theme.colorSet: Kirigami.Theme.Button
 
     contentItem: Private.ButtonContent {
         labelText: control.Kirigami.MnemonicData.richTextLabel

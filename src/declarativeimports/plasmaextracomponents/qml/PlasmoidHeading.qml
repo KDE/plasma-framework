@@ -11,6 +11,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.plasma.plasmoid 2.0
 import QtQuick.Templates 2.12 as T
+import org.kde.kirigami 2.20 as Kirigami
 import "private" as Private
 
 /**
@@ -60,8 +61,8 @@ T.ToolBar {
     topInset: position === T.ToolBar.Footer ? 0 : backgroundMetrics.getMargin("top")
     bottomInset: position === T.ToolBar.Footer ? backgroundMetrics.getMargin("bottom") : 0
 
-    PlasmaCore.ColorScope.colorGroup: position === T.ToolBar.Header ? PlasmaCore.Theme.HeaderColorGroup : PlasmaCore.Theme.NormalColorGroup
-    PlasmaCore.ColorScope.inherit: false
+    Kirigami.Theme.colorSet: position === T.ToolBar.Header ? Kirigami.Theme.Header : Kirigami.Theme.Window
+    Kirigami.Theme.inherit: false
 
     background: KSvg.FrameSvgItem {
         id: headingSvg
@@ -75,9 +76,6 @@ T.ToolBar {
             id: backgroundSvg
             imagePath: "dialogs/background"
         }
-
-        colorGroup: control.PlasmaCore.ColorScope.colorGroup
-        PlasmaCore.ColorScope.inherit: false
 
         enabledBorders: {
             let borders = KSvg.FrameSvg.LeftBorder | KSvg.FrameSvg.RightBorder;

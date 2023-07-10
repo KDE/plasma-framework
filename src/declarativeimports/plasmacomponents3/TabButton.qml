@@ -10,7 +10,6 @@ import QtQuick.Layouts 1.15
 import QtQuick.Controls @QQC2_VERSION@
 import QtQml.Models 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2.5 as Kirigami
 import "private" as Private
@@ -32,10 +31,10 @@ T.TabButton {
     leftPadding: background.margins.left
     rightPadding: background.margins.right
     bottomPadding: background.margins.bottom
-    spacing: PlasmaCore.Units.smallSpacing
+    spacing: Kirigami.Units.smallSpacing
 
-    icon.width: PlasmaCore.Units.iconSizes.smallMedium
-    icon.height: PlasmaCore.Units.iconSizes.smallMedium
+    icon.width: Kirigami.Units.iconSizes.smallMedium
+    icon.height: Kirigami.Units.iconSizes.smallMedium
 
     Kirigami.MnemonicData.enabled: control.enabled && control.visible
     Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
@@ -68,14 +67,14 @@ T.TabButton {
         iconItem.source: control.icon.name || control.icon.source
         iconItem.active: control.visualFocus
         label.text: control.Kirigami.MnemonicData.richTextLabel
-        label.color: control.visualFocus ? PlasmaCore.ColorScope.highlightColor : PlasmaCore.ColorScope.textColor
+        label.color: control.visualFocus ? Kirigami.Theme.highlightColor : Kirigami.ThemetextColor
         Rectangle { // As long as we don't enable antialiasing, not rounding should be fine
             parent: control.contentItem.label
             width: Math.min(parent.width, parent.contentWidth)
-            height: PlasmaCore.Units.devicePixelRatio
+            height: 1
             anchors.left: parent.left
             anchors.top: parent.bottom
-            color: PlasmaCore.ColorScope.highlightColor
+            color: Kirigami.Theme.highlightColor
             visible: control.visualFocus
         }
     }

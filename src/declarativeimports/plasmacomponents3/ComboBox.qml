@@ -8,9 +8,8 @@ import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQuick.Controls @QQC2_VERSION@ as Controls
 import Qt5Compat.GraphicalEffects
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2.20 as Kirigami
 import "private" as Private
 import "mobiletextselection" as MobileTextSelection
 
@@ -33,7 +32,7 @@ T.ComboBox {
     leftPadding: surfaceNormal.margins.left + (!control.mirrored ? 0 : __indicatorMargin)
     rightPadding: surfaceNormal.margins.right + (control.mirrored ? 0 : __indicatorMargin)
     bottomPadding: surfaceNormal.margins.bottom
-    spacing: PlasmaCore.Units.smallSpacing
+    spacing: Kirigami.Units.smallSpacing
 
     delegate: ItemDelegate {
         width: control.popup.width
@@ -43,7 +42,7 @@ T.ComboBox {
     }
 
     indicator: KSvg.SvgItem {
-        implicitWidth: PlasmaCore.Units.iconSizes.small
+        implicitWidth: Kirigami.Units.iconSizes.small
         implicitHeight: implicitWidth
         anchors {
             right: parent.right
@@ -52,7 +51,7 @@ T.ComboBox {
         }
         svg: KSvg.Svg {
             imagePath: "widgets/arrows"
-            colorGroup: PlasmaCore.Theme.ButtonColorGroup
+            colorSet: KSvg.Svg.Button
         }
         elementId: "down-arrow"
     }
@@ -71,7 +70,7 @@ T.ComboBox {
         readOnly: control.down || !control.editable
         inputMethodHints: control.inputMethodHints
         validator: control.validator
-        color: PlasmaCore.ColorScope.textColor
+        color: Kirigami.Theme.textColor
         selectionColor: Kirigami.Theme.highlightColor
         selectedTextColor: Kirigami.Theme.highlightedTextColor
 
@@ -196,8 +195,10 @@ T.ComboBox {
                 margins: -1
             }
             radius: 2
-            color: PlasmaCore.Theme.viewBackgroundColor
-            border.color: Qt.rgba(PlasmaCore.ColorScope.textColor.r, PlasmaCore.ColorScope.textColor.g, PlasmaCore.ColorScope.textColor.b, 0.3)
+            Kirigami.Theme.colorSet: Kirigami.Theme.View
+            Kirigami.Theme.inherit: false
+            color: Kirigami.Theme.backgroundColor
+            border.color: Qt.rgba(Kirigami.Theme.textColor.r, Kirigami.Theme.textColor.g, Kirigami.Theme.textColor.b, 0.3)
             layer.enabled: true
 
             layer.effect: DropShadow {

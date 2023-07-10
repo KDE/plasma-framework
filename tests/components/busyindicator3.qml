@@ -5,14 +5,14 @@
  */
 import QtQuick 2.0
 import QtQuick.Layouts 1.12
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents
+import org.kde.kirigami 2.20 as Kirigami
 
 ComponentBase {
     id: root
     title: "Plasma Components 3 BusyIndicator"
     contentItem: ColumnLayout {
-        spacing: PlasmaCore.Units.gridUnit
+        spacing: Kirigami.Units.gridUnit
 
         PlasmaComponents.Label {
             wrapMode: Text.WordWrap
@@ -38,7 +38,7 @@ ComponentBase {
 
         RowLayout {
             id: busyIndicatorLayout
-            spacing: PlasmaCore.Units.gridUnit
+            spacing: Kirigami.Units.gridUnit
 
             PlasmaComponents.BusyIndicator {
                 Layout.fillWidth: true

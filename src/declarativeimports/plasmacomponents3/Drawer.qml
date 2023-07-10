@@ -6,7 +6,7 @@
 
 import QtQuick 2.6
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 import org.kde.ksvg 1.0 as KSvg
 
 T.Drawer {
@@ -20,10 +20,10 @@ T.Drawer {
     contentWidth: contentItem.implicitWidth || (contentChildren.length === 1 ? contentChildren[0].implicitWidth : 0)
     contentHeight: contentItem.implicitHeight || (contentChildren.length === 1 ? contentChildren[0].implicitHeight : 0)
 
-    topPadding: control.edge === Qt.BottomEdge ? Math.round(PlasmaCore.Units.devicePixelRatio) : 0
-    leftPadding: control.edge === Qt.RightEdge ? Math.round(PlasmaCore.Units.devicePixelRatio) : 0
-    rightPadding: control.edge === Qt.LeftEdge ? Math.round(PlasmaCore.Units.devicePixelRatio) : 0
-    bottomPadding: control.edge === Qt.TopEdge ? Math.round(PlasmaCore.Units.devicePixelRatio) : 0
+    topPadding: control.edge === Qt.BottomEdge ? 1 : 0
+    leftPadding: control.edge === Qt.RightEdge ? 1 : 0
+    rightPadding: control.edge === Qt.LeftEdge ? 1 : 0
+    bottomPadding: control.edge === Qt.TopEdge ? 1 : 0
 
     background: KSvg.FrameSvgItem {
         anchors {
@@ -33,7 +33,7 @@ T.Drawer {
             rightMargin: -margins.right
             bottomMargin: -margins.bottom
         }
-        implicitWidth: PlasmaCore.Units.gridUnit * 12
+        implicitWidth: Kirigami.Units.gridUnit * 12
         imagePath: "widgets/background"
         enabledBorders: {
             switch (control.edge) {

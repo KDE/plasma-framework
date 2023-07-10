@@ -7,7 +7,7 @@
 
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 import "private" as Private
 
 T.RadioButton {
@@ -21,11 +21,11 @@ T.RadioButton {
                              implicitIndicatorHeight + topPadding + bottomPadding)
 
     baselineOffset: contentItem.y + contentItem.baselineOffset
-    spacing: PlasmaCore.Units.smallSpacing
+    spacing: Kirigami.Units.smallSpacing
     hoverEnabled: true
 
-    icon.width: PlasmaCore.Units.iconSizes.sizeForLabels
-    icon.height: PlasmaCore.Units.iconSizes.sizeForLabels
+    icon.width: Kirigami.Units.iconSizes.sizeForLabels
+    icon.height: Kirigami.Units.iconSizes.sizeForLabels
 
     indicator: RadioIndicator {
         x: (control.text || control.icon.name || control.icon.source)
@@ -57,10 +57,10 @@ T.RadioButton {
         Rectangle { // As long as we don't enable antialiasing, not rounding should be fine
             parent: control.contentItem.label
             width: Math.min(parent.width, parent.contentWidth)
-            height: PlasmaCore.Units.devicePixelRatio
+            height: 1
             anchors.left: parent.left
             anchors.top: parent.bottom
-            color: PlasmaCore.ColorScope.highlightColor
+            color: Kirigami.Theme.highlightColor
             visible: control.visualFocus
         }
     }

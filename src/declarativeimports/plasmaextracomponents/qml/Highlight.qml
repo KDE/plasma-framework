@@ -7,8 +7,8 @@
 */
 
 import QtQuick 2.15
-import org.kde.plasma.core 2.1 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 
 /**
  * @brief Highlight for a list or grid item.
@@ -19,7 +19,7 @@ import org.kde.ksvg 1.0 as KSvg
  * @sa QtQuick.GridView::highlight properties.
  *
  * Provides built-in animation of Behavior on opacity Easing.OutQuad for a
- * duration of 50ms (defined in PlasmaCore.Units.veryShortDuration).
+ * duration of 50ms (defined in Kirigami.Units.veryShortDuration).
  *
  * @code{.qml}
  * import QtQuick 2.15
@@ -74,7 +74,7 @@ Item {
 
     Behavior on opacity {
         NumberAnimation {
-            duration: PlasmaCore.Units.veryShortDuration
+            duration: Kirigami.Units.veryShortDuration
             easing.type: Easing.OutQuad
         }
     }
@@ -94,7 +94,7 @@ Item {
 
         Behavior on opacity {
             NumberAnimation {
-                duration: PlasmaCore.Units.veryShortDuration
+                duration: Kirigami.Units.veryShortDuration
                 easing.type: Easing.OutQuad
             }
         }

@@ -6,10 +6,10 @@
 
 import QtQuick 2.1
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
+import org.kde.kirigami 2.20 as Kirigami
 
 // IconTab
 
@@ -18,15 +18,15 @@ Column {
     width: 400
     height: 400
 
-    spacing: PlasmaCore.Units.gridUnit
+    spacing: Kirigami.Units.gridUnit
 
     id: themePage
     anchors {
-        margins: PlasmaCore.Units.largeSpacing
+        margins: Kirigami.Units.gridUnit
     }
 
     Row {
-        spacing: PlasmaCore.Units.gridUnit/2
+        spacing: Kirigami.Units.largeSpacing
         PlasmaComponents.CheckBox {
             id: boxesCheck
             text: "Show Boxes"
@@ -50,30 +50,30 @@ Column {
 
     FontGizmo {
         id: giz1
-        font: PlasmaCore.Theme.smallestFont
+        font: Kirigami.Theme.smallFont
         //font.family: "Oxygen-Sans"
     }
 
     FontGizmo {
         id: giz2
-        font.pixelSize: PlasmaCore.Units.gridUnit * 1
+        font.pixelSize: Kirigami.Units.gridUnit * 1
     }
 
     FontGizmo {
         id: giz3
-        font.pixelSize: PlasmaCore.Units.gridUnit * 2
+        font.pixelSize: Kirigami.Units.gridUnit * 2
     }
 
     FontGizmo {
         id: giz4
-        font.pixelSize: PlasmaCore.Units.gridUnit * 2
+        font.pixelSize: Kirigami.Units.gridUnit * 2
         text: "AlignTop"
         verticalAlignment: Text.AlignTop
     }
 
     FontGizmo {
         id: giz5
-        font.pixelSize: PlasmaCore.Units.gridUnit * 2
+        font.pixelSize: Kirigami.Units.gridUnit * 2
         text: "AlignVCenter"
         verticalAlignment: Text.AlignVCenter
     }
@@ -86,7 +86,7 @@ Column {
 //
     Rectangle {
         width: parent.width
-        height: PlasmaCore.Units.gridUnit * 6
+        height: Kirigami.Units.gridUnit * 6
 
         color: "transparent"
         border.width: boxesCheck.checked ? 1 : 0
@@ -95,7 +95,7 @@ Column {
         Rectangle {
             id: img
             color: "orange"
-            height: PlasmaCore.Units.gridUnit * 2
+            height: Kirigami.Units.gridUnit * 2
             width: height
             anchors {
                 top: parent.top
@@ -113,11 +113,11 @@ Column {
             text: "That's a Headline"
 
             //height: paintedHeight
-            height: PlasmaCore.Units.gridUnit
+            height: Kirigami.Units.gridUnit
             font.pixelSize: height
             anchors {
                 left: img.right
-                leftMargin: PlasmaCore.Units.gridUnit / 2
+                leftMargin: Kirigami.Units.largeSpacing
                 top: img.top
             }
         }

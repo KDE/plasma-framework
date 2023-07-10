@@ -7,7 +7,7 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 
 T.PageIndicator {
     id: control
@@ -15,20 +15,20 @@ T.PageIndicator {
     implicitWidth: contentItem.implicitWidth + leftPadding + rightPadding
     implicitHeight: contentItem.implicitHeight + topPadding + bottomPadding
 
-    padding: PlasmaCore.Units.smallSpacing
-    spacing: PlasmaCore.Units.smallSpacing
+    padding: Kirigami.Units.smallSpacing
+    spacing: Kirigami.Units.smallSpacing
 
     delegate: Rectangle {
-        implicitWidth: PlasmaCore.Units.gridUnit/2
+        implicitWidth: Kirigami.Units.largeSpacing
         implicitHeight: implicitWidth
 
         radius: width
-        color: PlasmaCore.ColorScope.textColor
+        color: Kirigami.Theme.textColor
 
         opacity: index === currentIndex ? 0.9 : pressed ? 0.7 : 0.5
         Behavior on opacity {
             OpacityAnimator {
-                duration: PlasmaCore.Units.longDuration
+                duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

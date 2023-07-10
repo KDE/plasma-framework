@@ -8,8 +8,8 @@
 import QtQuick 2.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 
-import org.kde.plasma.core 2.1 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 import "private" as Private
 
 KSvg.FrameSvgItem {
@@ -19,8 +19,8 @@ KSvg.FrameSvgItem {
 
     imagePath: "widgets/button"
     prefix: "normal"
-    implicitWidth: PlasmaCore.Units.iconSizes.small
-    implicitHeight: PlasmaCore.Units.iconSizes.small
+    implicitWidth: Kirigami.Units.iconSizes.small
+    implicitHeight: Kirigami.Units.iconSizes.small
     opacity: control.enabled ? 1 : 0.6
 
     Private.ButtonShadow {
@@ -51,7 +51,7 @@ KSvg.FrameSvgItem {
         }
         Behavior on opacity {
             NumberAnimation {
-                duration: PlasmaCore.Units.longDuration
+                duration: Kirigami.Units.longDuration
                 easing.type: Easing.InOutQuad
             }
         }

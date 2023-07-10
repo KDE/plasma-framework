@@ -8,9 +8,8 @@
 import QtQuick 2.6
 import QtQuick.Layouts 1.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2.20 as Kirigami
 
 T.ToolTip {
     id: control
@@ -26,7 +25,7 @@ T.ToolTip {
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset, contentHeight + topPadding + bottomPadding)
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset, contentWidth + leftPadding + rightPadding)
 
-    margins: PlasmaCore.Units.smallSpacing
+    margins: Kirigami.Units.smallSpacing
     leftPadding: backgroundItem.margins.left
     topPadding: backgroundItem.margins.top
     rightPadding: backgroundItem.margins.right
@@ -62,17 +61,17 @@ T.ToolTip {
             wrapMode: Text.WordWrap
             font: control.font
 
-            PlasmaCore.ColorScope.colorGroup: PlasmaCore.Theme.ToolTipColorGroup
-            PlasmaCore.ColorScope.inherit: false
+            Kirigami.Theme.colorGroup: Kirigami.Theme.Tooltip
+            Kirigami.Theme.inherit: false
             Layout.fillWidth: true
             // This value is basically arbitrary. It just looks nice.
-            Layout.maximumWidth: PlasmaCore.Units.gridUnit * 14
+            Layout.maximumWidth: Kirigami.Units.gridUnit * 14
         }
     }
 
     background: Item {
-        implicitHeight: PlasmaCore.Units.gridUnit + backgroundItem.margins.top + backgroundItem.margins.bottom
-        implicitWidth: PlasmaCore.Units.gridUnit + backgroundItem.margins.left + backgroundItem.margins.right
+        implicitHeight: Kirigami.Units.gridUnit + backgroundItem.margins.top + backgroundItem.margins.bottom
+        implicitWidth: Kirigami.Units.gridUnit + backgroundItem.margins.left + backgroundItem.margins.right
 
         KSvg.FrameSvgItem {
             anchors.fill: parent
@@ -82,8 +81,8 @@ T.ToolTip {
             anchors.bottomMargin: -margins.bottom
             imagePath: "solid/widgets/tooltip"
             prefix: "shadow"
-            colorGroup: PlasmaCore.Theme.ToolTipColorGroup
-            PlasmaCore.ColorScope.inherit: false
+            Kirigami.Theme.colorGroup: Kirigami.Theme.Tooltip
+            Kirigami.Theme.inherit: false
         }
 
         KSvg.FrameSvgItem {
@@ -92,8 +91,8 @@ T.ToolTip {
             // Because the transparent one doesn't match the appearance of all
             // other ones
             imagePath: "solid/widgets/tooltip"
-            colorGroup: PlasmaCore.Theme.ToolTipColorGroup
-            PlasmaCore.ColorScope.inherit: false
+            Kirigami.Theme.colorGroup: Kirigami.Theme.Tooltip
+            Kirigami.Theme.inherit: false
         }
     }
 }

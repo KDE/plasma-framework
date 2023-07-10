@@ -6,14 +6,14 @@
 */
 
 import QtQuick 2.0
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 
 SequentialAnimation {
     id: pressedAnimation
     objectName: "pressedAnimation"
 
     property Item targetItem
-    property int duration: PlasmaCore.Units.shortDuration
+    property int duration: Kirigami.Units.shortDuration
 
     // Fast scaling while we're animation == more FPS
     ScriptAction { script: targetItem.smooth = false }

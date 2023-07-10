@@ -8,7 +8,7 @@
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.1 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
     id: root
@@ -47,8 +47,6 @@ Item {
     // Fixed in Qt 6.2, see QTBUG-91227
     property bool mirrored: false
 
-    PlasmaCore.ColorScope.inherit: true
-
     implicitWidth: gridLayout.implicitWidth + leftPadding + rightPadding
     implicitHeight: gridLayout.implicitHeight + topPadding + bottomPadding
 
@@ -84,12 +82,11 @@ Item {
         width: Math.min(root.availableWidth, implicitWidth)
         height: Math.min(root.availableHeight, implicitHeight)
 
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             id: iconItem
             visible: valid && width > 0 && height > 0 && root.display !== T.AbstractButton.TextOnly
-            colorGroup: root.PlasmaCore.ColorScope.colorGroup
-            implicitWidth: PlasmaCore.Units.iconSizes.sizeForLabels
-            implicitHeight: PlasmaCore.Units.iconSizes.sizeForLabels
+            implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
+            implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
             Layout.alignment: Qt.AlignCenter
             Layout.maximumWidth: implicitWidth > 0 ? implicitWidth : Number.POSITIVE_INFINITY
             Layout.maximumHeight: implicitHeight > 0 ? implicitHeight : Number.POSITIVE_INFINITY
@@ -100,8 +97,8 @@ Item {
             visible: text.length > 0 && root.display !== T.AbstractButton.IconOnly
             palette: root.palette
             font: root.font
-            color: PlasmaCore.ColorScope.textColor
-            linkColor: PlasmaCore.Theme.linkColor
+            color: Kirigami.Theme.textColor
+            linkColor: Kirigami.Theme.linkColor
             elide: Text.ElideRight
             Layout.alignment: Qt.AlignCenter
             Layout.fillWidth: true

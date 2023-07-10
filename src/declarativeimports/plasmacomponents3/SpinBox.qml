@@ -7,9 +7,9 @@
 import QtQuick 2.12
 import QtQuick.Controls @QQC2_VERSION@ 
 import QtQuick.Templates @QQC2_VERSION@ as T
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.plasma.components 3.0 as PlasmaComponents3
+import org.kde.kirigami 2.20 as Kirigami
 import "private" as P
 
 T.SpinBox {
@@ -17,7 +17,7 @@ T.SpinBox {
 
     implicitWidth: Math.max(
         implicitBackgroundWidth + leftInset + rightInset,
-        Math.max(implicitContentWidth, PlasmaCore.Units.gridUnit)
+        Math.max(implicitContentWidth, Kirigami.Units.gridUnit)
             + spacing * 2 + leftPadding + rightPadding,
         up.implicitIndicatorWidth + down.implicitIndicatorWidth
     )
@@ -50,18 +50,17 @@ T.SpinBox {
 
     up.indicator: P.FlatButtonBackground {
         x: control.mirrored ? 0 : parent.width - width
-        implicitHeight: PlasmaCore.Units.gridUnit + bgLoader.topMargin + bgLoader.bottomMargin
-        implicitWidth: PlasmaCore.Units.gridUnit + bgLoader.leftMargin + bgLoader.rightMargin
+        implicitHeight: Kirigami.Units.gridUnit + bgLoader.topMargin + bgLoader.bottomMargin
+        implicitWidth: Kirigami.Units.gridUnit + bgLoader.leftMargin + bgLoader.rightMargin
         height: parent.height
         hovered: control.up.hovered
         pressed: control.up.pressed
         focused: false
         checked: false
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             anchors.centerIn: parent
-            implicitWidth: PlasmaCore.Units.iconSizes.sizeForLabels
-            implicitHeight: PlasmaCore.Units.iconSizes.sizeForLabels
-            colorGroup: PlasmaCore.ColorScope.colorGroup
+            implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
+            implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
             source: "list-add"
         }
         KSvg.SvgItem {
@@ -82,18 +81,17 @@ T.SpinBox {
 
     down.indicator: P.FlatButtonBackground {
         x: control.mirrored ? parent.width - width : 0
-        implicitHeight: PlasmaCore.Units.gridUnit + bgLoader.topMargin + bgLoader.bottomMargin
-        implicitWidth: PlasmaCore.Units.gridUnit + bgLoader.leftMargin + bgLoader.rightMargin
+        implicitHeight: Kirigami.Units.gridUnit + bgLoader.topMargin + bgLoader.bottomMargin
+        implicitWidth: Kirigami.Units.gridUnit + bgLoader.leftMargin + bgLoader.rightMargin
         height: parent.height
         hovered: control.down.hovered
         pressed: control.down.pressed
         focused: false
         checked: false
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             anchors.centerIn: parent
-            implicitWidth: PlasmaCore.Units.iconSizes.sizeForLabels
-            implicitHeight: PlasmaCore.Units.iconSizes.sizeForLabels
-            colorGroup: PlasmaCore.ColorScope.colorGroup
+            implicitWidth: Kirigami.Units.iconSizes.sizeForLabels
+            implicitHeight: Kirigami.Units.iconSizes.sizeForLabels
             source: "list-remove"
         }
         KSvg.SvgItem {
@@ -120,9 +118,11 @@ T.SpinBox {
         palette: control.palette
         text: control.displayText
         font: control.font
-        color: PlasmaCore.Theme.viewTextColor
-        selectionColor: PlasmaCore.Theme.highlightColor
-        selectedTextColor: PlasmaCore.Theme.highlightedTextColor
+        Kirigami.Theme.colorSet: Kirigami.Theme.View
+        Kirigami.Theme.inherit: false
+        color: Kirigami.Theme.textColor
+        selectionColor: Kirigami.Theme.highlightColor
+        selectedTextColor: Kirigami.Theme.highlightedTextColor
         horizontalAlignment: Qt.AlignHCenter
         verticalAlignment: Qt.AlignVCenter
         readOnly: !control.editable
@@ -176,7 +176,7 @@ T.SpinBox {
                     Behavior on opacity {
                         enabled: control.hovered
                         NumberAnimation {
-                            duration: PlasmaCore.Units.longDuration
+                            duration: Kirigami.Units.longDuration
                             easing.type: Easing.OutCubic
                         }
                     }
@@ -201,7 +201,7 @@ T.SpinBox {
                     opacity: visualFocus || control.activeFocus || control.contentItem.activeFocus
                     Behavior on opacity {
                         NumberAnimation {
-                            duration: PlasmaCore.Units.longDuration
+                            duration: Kirigami.Units.longDuration
                             easing.type: Easing.OutCubic
                         }
                     }

@@ -10,6 +10,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
+import org.kde.kirigami 2.20 as Kirigami
 
 // IconTab
 
@@ -30,10 +31,10 @@ PlasmaComponents.Page {
             text: "Icons"
         }
         PlasmaComponents.Label {
-            text: "iconSizes.small  : " + PlasmaCore.Units.iconSizes.small +
-                    ", iconSizes.desktop: " + PlasmaCore.Units.iconSizes.desktop +
-                    ",<br />iconSizes.toolbar: " + PlasmaCore.Units.iconSizes.toolbar +
-                    ", iconSizes.dialog : " + PlasmaCore.Units.iconSizes.dialog
+            text: "iconSizes.small  : " + Kirigami.Units.iconSizes.small +
+                    ", iconSizes.desktop: " + Kirigami.Units.iconSizes.desktop +
+                    ",<br />iconSizes.toolbar: " + Kirigami.Units.iconSizes.toolbar +
+                    ", iconSizes.dialog : " + Kirigami.Units.iconSizes.dialog
 
         }
         Flow {

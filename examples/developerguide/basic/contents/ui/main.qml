@@ -10,12 +10,13 @@ import QtQuick.Controls 1.0 as QtControls
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.kirigami 2.20 as Kirigami
 
 Item {
 
     // Initial size of the window in gridUnits
-    width: PlasmaCore.Units.gridUnit * 28
-    height: PlasmaCore.Units.gridUnit * 20
+    width: Kirigami.Units.gridUnit * 28
+    height: Kirigami.Units.gridUnit * 20
 
     // We use a ColumnLayout to position and size the individual items
     ColumnLayout {
@@ -23,10 +24,10 @@ Item {
         // Our ColumnLayout is fills the parent item with a bit of margin
         anchors {
             fill: parent
-            margins: PlasmaCore.Units.largeSpacing
+            margins: Kirigami.Units.gridUnit
         }
 
-        spacing: PlasmaCore.Units.gridUnit
+        spacing: Kirigami.Units.gridUnit
 
         // A title on top
         PlasmaExtras.Heading {
@@ -71,7 +72,7 @@ Item {
     PlasmaCore.IconItem {
 
         // We use an anchor layout and dpi-corrected sizing
-        width: PlasmaCore.Units.iconSizes.large * 4
+        width: Kirigami.Units.iconSizes.large * 4
         height: width
         anchors {
             left: parent.left
