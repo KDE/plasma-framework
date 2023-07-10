@@ -19,6 +19,8 @@
 #include <KNotification>
 
 #include <KPackage/Package>
+#include <qaction.h>
+#include <qtypes.h>
 
 #include "plasma/applet.h"
 
@@ -54,6 +56,13 @@ public:
 
     static KActionCollection *defaultActions(QObject *parent);
 
+    static void contextualActions_append(QQmlListProperty<QAction> *prop, QAction *action);
+    static qsizetype contextualActions_count(QQmlListProperty<QAction> *prop);
+    static QAction *contextualActions_at(QQmlListProperty<QAction> *prop, qsizetype idx);
+    static void contextualActions_clear(QQmlListProperty<QAction> *prop);
+    static void contextualActions_replace(QQmlListProperty<QAction> *prop, qsizetype idx, QAction *action);
+    static void contextualActions_removeLast(QQmlListProperty<QAction> *prop);
+
     void requestConfiguration();
 
     static uint s_maxAppletId;
@@ -84,6 +93,7 @@ public:
 
     // actions stuff; put activationAction into actions?
     KActionCollection *actions; // TODO: can KACtionCollection usage be removed and just be QHash<QString, QAction*>?
+    QList<QAction *> contextualActions;
     QAction *activationAction;
     QHash<QString, QActionGroup *> actionGroups;
 

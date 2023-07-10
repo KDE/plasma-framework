@@ -36,10 +36,7 @@ class PlasmoidAttached : public QObject
     Q_OBJECT
 
 public:
-    /** TODO: revise this
-     * Expose the QAction::Priority values which cannot be directly accessed from plasmoids
-     * even if Plasmoid is an Applet, Plasmoid.LowPriorityAction will search
-     * for an enum in AppletInterface
+    /** TODO: When the migration to the new action api is done, remove this enum
      */
     enum ActionPriority {
         LowPriorityAction = QAction::LowPriority,

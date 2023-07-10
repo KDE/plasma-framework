@@ -9,6 +9,7 @@
 
 #include "corebindingsplugin.h"
 
+#include <QActionGroup>
 #include <QQmlContext>
 
 #include <KLocalizedContext>
@@ -16,6 +17,7 @@
 #include <plasma/framesvg.h>
 #include <plasma/svg.h>
 
+#include "action.h"
 #include "colorscope.h"
 #include "datamodel.h"
 #include "dialog.h"
@@ -31,6 +33,7 @@
 
 #include <QDebug>
 #include <QWindow>
+#include <qqml.h>
 
 void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
 {
@@ -88,6 +91,10 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     qmlRegisterType<IconItem>(uri, 2, 0, "IconItem");
 
     qmlRegisterType<Plasma::WindowThumbnail>(uri, 2, 0, "WindowThumbnail");
+
+    qmlRegisterAnonymousType<IconGroup>(uri, 2);
+    qmlRegisterExtendedType<QAction, ActionExtension>(uri, 2, 0, "Action");
+    qmlRegisterType<ActionGroup>(uri, 2, 0, "ActionGroup");
 }
 
 #include "moc_corebindingsplugin.cpp"

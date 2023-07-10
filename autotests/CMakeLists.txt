@@ -63,7 +63,7 @@ ecm_add_test(
     coronatest.cpp
     coronatestresources.qrc
     TEST_NAME coronatest
-    LINK_LIBRARIES Qt6::Gui Qt6::Widgets Qt6::Test KF6::Plasma KF6::CoreAddons KF6::XmlGui
+    LINK_LIBRARIES Qt6::Gui Qt6::Qml Qt6::Widgets Qt6::Test KF6::Plasma KF6::CoreAddons KF6::XmlGui
 )
 
 ecm_add_test(

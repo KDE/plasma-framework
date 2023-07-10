@@ -12,6 +12,7 @@
 #include <QAction>
 #include <QKeySequence>
 #include <QObject>
+#include <QQmlListProperty>
 #include <QUrl>
 
 #include <KConfigGroup>
@@ -184,8 +185,11 @@ class PLASMA_EXPORT Applet : public QObject
      */
     Q_PROPERTY(Plasma::Containment *containment READ containment NOTIFY containmentChanged)
 
-    // TODO KF6: contextualActions along with AppletInterface::setAction etc, alsongside a declarative way?
-    Q_PROPERTY(QList<QAction *> contextualActions READ contextualActions NOTIFY contextualActionsChanged)
+    /**
+     * Actions to be added in the plasmoid context menu. To instantiate QActions in a declarative way,
+     * PlasmaCore.Action {} can be used
+     */
+    Q_PROPERTY(QQmlListProperty<QAction> contextualActions READ qmlContextualActions NOTIFY contextualActionsChanged)
 
     /**
      * True if this applet is a Containment and is acting as one, such as a desktop or a panel
@@ -521,13 +525,39 @@ public:
      **/
     virtual QList<QAction *> contextualActions();
 
+    QML_LIST_PROPERTY_ASSIGN_BEHAVIOR_REPLACE
+    QQmlListProperty<QAction> qmlContextualActions();
+
+    // This is the new api which will replace all of what's comprised in the TODO block
+    /**
+     * Add a new internal action. if an internal action with the same name already exists, it
+     * will be replaced with this new one.
+     * Those are usually actions defined by the system, such as "configure" and "remove"
+     *
+     * @param name The unique name for the action
+     * @param action The new QAction to be added
+     */
+    Q_INVOKABLE void setInternalAction(const QString &name, QAction *action);
+
+    /**
+     * @returns the internal action with the given name if available
+     * @param name the unique name of the action we want
+     */
+    Q_INVOKABLE QAction *internalAction(const QString &name) const;
+
+    /**
+     * Removes an action from the internal actions
+     * @param name the action to be removed
+     */
+    Q_INVOKABLE void removeInternalAction(const QString &name);
+
+    // BEGIN TODO Remove this block once all plasmoids are ported to the new API
     /**
      * Returns the collection of actions for this Applet
+     * TODO: remove
      */
     KActionCollection *actions() const;
 
-    // BEGIN TODO
-    // TODO: this whole actions api is there for temporary compatibility buy we need a declarative one before the KF6 API freeze
     Q_INVOKABLE void setActionSeparator(const QString &name);
 
     Q_INVOKABLE void setActionGroup(const QString &action, const QString &group);
@@ -544,10 +574,10 @@ public:
 
     Q_INVOKABLE QAction *action(const QString &name) const;
     Q_INVOKABLE void removeAction(const QString &name);
-
     Q_INVOKABLE void clearActions();
 
     // END TODO
+
     /**
      * Sets the global shortcut to associate with this widget.
      */
@@ -704,8 +734,10 @@ Q_SIGNALS:
      */
     void containmentChanged(Plasma::Containment *containment);
 
-    // TODO temporary api it should be removed
-    void contextualActionsChanged();
+    /**
+     * Emitted when the list of contextual actions has changed
+     */
+    void contextualActionsChanged(const QList<QAction *> &actions);
 
     // TODO KF6 keep as Q_SLOT only stuff that needsto be manually invokable from qml
 public Q_SLOTS:

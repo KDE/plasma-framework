@@ -40,6 +40,7 @@
 
 #include <cmath>
 #include <limits>
+#include <qaction.h>
 
 namespace Plasma
 {
@@ -627,14 +628,19 @@ void Applet::flushPendingConstraintsEvents()
 
 QList<QAction *> Applet::contextualActions()
 {
-    // NOTE: KActionCollection can contain duplicates in actions(); once we ported away from it we can remove this hack
-    QSet<QAction *> contextActions;
+    return d->contextualActions;
+}
 
-    std::copy_if(d->actions->actions().constBegin(), d->actions->actions().constEnd(), std::inserter(contextActions, contextActions.begin()), [](QAction *a) {
-        return a->property("_contextualAction").toBool();
-    });
-
-    return contextActions.values();
+QQmlListProperty<QAction> Applet::qmlContextualActions()
+{
+    return QQmlListProperty<QAction>(this,
+                                     nullptr,
+                                     AppletPrivate::contextualActions_append,
+                                     AppletPrivate::contextualActions_count,
+                                     AppletPrivate::contextualActions_at,
+                                     AppletPrivate::contextualActions_clear,
+                                     AppletPrivate::contextualActions_replace,
+                                     AppletPrivate::contextualActions_removeLast);
 }
 
 KActionCollection *Applet::actions() const
@@ -652,7 +658,8 @@ void Applet::setActionSeparator(const QString &name)
         action = new QAction(this);
         action->setSeparator(true);
         d->actions->addAction(name, action);
-        Q_EMIT contextualActionsChanged();
+        d->contextualActions.append(action);
+        Q_EMIT contextualActionsChanged(d->contextualActions);
     }
 }
 
@@ -671,6 +678,30 @@ void Applet::setActionGroup(const QString &actionName, const QString &group)
     action->setActionGroup(d->actionGroups[group]);
 }
 
+void Applet::setInternalAction(const QString &name, QAction *action)
+{
+    if (name.isEmpty()) {
+        return;
+    }
+    action->setObjectName(name);
+    QAction *oldAction = d->actions->action(name);
+    d->actions->removeAction(oldAction);
+    d->actions->addAction(name, action);
+}
+
+QAction *Applet::internalAction(const QString &name) const
+{
+    return d->actions->action(name);
+}
+
+void Applet::removeInternalAction(const QString &name)
+{
+    QAction *action = d->actions->action(name);
+    // TODO: when porting to QHash<QString, QAction> we will have to check the object
+    // ownership and delete only if C++ owned
+    d->actions->removeAction(action);
+}
+
 void Applet::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
 {
     QAction *action = d->actions->action(name);
@@ -683,7 +714,8 @@ void Applet::setAction(const QString &name, const QString &text, const QString &
         d->actions->addAction(name, action);
 
         action->setProperty("_contextualAction", true);
-        Q_EMIT contextualActionsChanged();
+        d->contextualActions.append(action);
+        Q_EMIT contextualActionsChanged(d->contextualActions);
     }
 
     if (!icon.isEmpty()) {
@@ -700,9 +732,10 @@ void Applet::setAction(const QString &name, const QString &text, const QString &
 void Applet::removeAction(const QString &name)
 {
     QAction *action = d->actions->action(name);
+    d->contextualActions.removeAll(action);
     d->actions->removeAction(action);
 
-    Q_EMIT contextualActionsChanged();
+    Q_EMIT contextualActionsChanged(d->contextualActions);
 }
 
 void Applet::clearActions()
@@ -712,9 +745,10 @@ void Applet::clearActions()
     for (auto a : d->actions->actions()) {
         if (a->property("_contextualAction").toBool()) {
             d->actions->removeAction(a);
+            d->contextualActions.removeAll(a);
         }
     }
-    Q_EMIT contextualActionsChanged();
+    Q_EMIT contextualActionsChanged(d->contextualActions);
 }
 
 QAction *Applet::action(const QString &name) const

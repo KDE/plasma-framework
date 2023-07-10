@@ -363,6 +363,46 @@ KActionCollection *AppletPrivate::defaultActions(QObject *parent)
     return actions;
 }
 
+void AppletPrivate::contextualActions_append(QQmlListProperty<QAction> *prop, QAction *action)
+{
+    Applet *a = static_cast<Plasma::Applet *>(prop->object);
+    a->d->contextualActions.append(action);
+    Q_EMIT a->contextualActionsChanged(a->d->contextualActions);
+};
+
+qsizetype AppletPrivate::contextualActions_count(QQmlListProperty<QAction> *prop)
+{
+    Applet *a = static_cast<Plasma::Applet *>(prop->object);
+    return a->d->contextualActions.count();
+}
+
+QAction *AppletPrivate::contextualActions_at(QQmlListProperty<QAction> *prop, qsizetype idx)
+{
+    Applet *a = static_cast<Plasma::Applet *>(prop->object);
+    return a->d->contextualActions.value(idx);
+}
+
+void AppletPrivate::contextualActions_clear(QQmlListProperty<QAction> *prop)
+{
+    Applet *a = static_cast<Plasma::Applet *>(prop->object);
+    a->d->contextualActions.clear();
+    Q_EMIT a->contextualActionsChanged(a->d->contextualActions);
+}
+
+void AppletPrivate::contextualActions_replace(QQmlListProperty<QAction> *prop, qsizetype idx, QAction *action)
+{
+    Applet *a = static_cast<Plasma::Applet *>(prop->object);
+    a->d->contextualActions.replace(idx, action);
+    Q_EMIT a->contextualActionsChanged(a->d->contextualActions);
+}
+
+void AppletPrivate::contextualActions_removeLast(QQmlListProperty<QAction> *prop)
+{
+    Applet *a = static_cast<Plasma::Applet *>(prop->object);
+    a->d->contextualActions.pop_back();
+    Q_EMIT a->contextualActionsChanged(a->d->contextualActions);
+}
+
 void AppletPrivate::requestConfiguration()
 {
     if (q->containment()) {

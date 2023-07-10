@@ -76,6 +76,7 @@ PUBLIC
     Qt6::Gui
     KF6::ConfigCore
     KF6::CoreAddons
+    Qt6::Qml
 PRIVATE
     Qt6::Svg
     Qt6::Quick
