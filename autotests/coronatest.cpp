@@ -5,7 +5,6 @@
 */
 
 #include "coronatest.h"
-#include <KActionCollection>
 
 #include <QAction>
 #include <QApplication>

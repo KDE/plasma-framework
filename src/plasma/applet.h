@@ -36,7 +36,6 @@ class ConfigView;
 class DeclarativeAppletScript;
 #include <KPluginFactory>
 
-class KActionCollection;
 class KConfigLoader;
 class KConfigPropertyMap;
 
