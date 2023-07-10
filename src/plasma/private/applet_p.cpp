@@ -72,6 +72,10 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
         new TimeTracker(q);
     }
 #endif
+
+    QObject::connect(actions, &KActionCollection::changed, q, [this]() {
+        Q_EMIT q->internalActionsChanged(actions->actions());
+    });
 }
 
 AppletPrivate::~AppletPrivate()
@@ -145,7 +149,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     if (!q->isContainment()) {
         QAction *a = new QAction(QIcon::fromTheme(QStringLiteral("widget-alternatives")), i18n("Show Alternatives..."), q);
         a->setVisible(false);
-        q->actions()->addAction(QStringLiteral("alternatives"), a);
+        actions->addAction(QStringLiteral("alternatives"), a);
         QObject::connect(a, &QAction::triggered, q, [this] {
             if (q->containment()) {
                 Q_EMIT q->containment()->appletAlternativesRequested(q);

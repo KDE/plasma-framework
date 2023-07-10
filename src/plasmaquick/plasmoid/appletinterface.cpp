@@ -363,7 +363,8 @@ bool AppletInterface::event(QEvent *event)
         QKeyEvent *ke = static_cast<QKeyEvent *>(event);
         QKeySequence seq(ke->key() | ke->modifiers());
 
-        QList<QAction *> actions = applet()->actions()->actions();
+        QList<QAction *> actions = applet()->internalActions();
+        actions.append(applet()->contextualActions());
         // find the wallpaper action if we are a containment
         ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(this);
         if (ci) {

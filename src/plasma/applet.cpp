@@ -643,41 +643,6 @@ QQmlListProperty<QAction> Applet::qmlContextualActions()
                                      AppletPrivate::contextualActions_removeLast);
 }
 
-KActionCollection *Applet::actions() const
-{
-    return d->actions;
-}
-
-void Applet::setActionSeparator(const QString &name)
-{
-    QAction *action = d->actions->action(name);
-
-    if (action) {
-        action->setSeparator(true);
-    } else {
-        action = new QAction(this);
-        action->setSeparator(true);
-        d->actions->addAction(name, action);
-        d->contextualActions.append(action);
-        Q_EMIT contextualActionsChanged(d->contextualActions);
-    }
-}
-
-void Applet::setActionGroup(const QString &actionName, const QString &group)
-{
-    QAction *action = d->actions->action(actionName);
-
-    if (!action) {
-        return;
-    }
-
-    if (!d->actionGroups.contains(group)) {
-        d->actionGroups[group] = new QActionGroup(this);
-    }
-
-    action->setActionGroup(d->actionGroups[group]);
-}
-
 void Applet::setInternalAction(const QString &name, QAction *action)
 {
     if (name.isEmpty()) {
@@ -702,58 +667,9 @@ void Applet::removeInternalAction(const QString &name)
     d->actions->removeAction(action);
 }
 
-void Applet::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
+QList<QAction *> Applet::internalActions() const
 {
-    QAction *action = d->actions->action(name);
-
-    if (action) {
-        action->setText(text);
-        action->setProperty("_contextualAction", true);
-    } else {
-        action = new QAction(text, this);
-        d->actions->addAction(name, action);
-
-        action->setProperty("_contextualAction", true);
-        d->contextualActions.append(action);
-        Q_EMIT contextualActionsChanged(d->contextualActions);
-    }
-
-    if (!icon.isEmpty()) {
-        action->setIcon(QIcon::fromTheme(icon));
-    }
-
-    if (!shortcut.isEmpty()) {
-        action->setShortcut(shortcut);
-    }
-
-    action->setObjectName(name);
-}
-
-void Applet::removeAction(const QString &name)
-{
-    QAction *action = d->actions->action(name);
-    d->contextualActions.removeAll(action);
-    d->actions->removeAction(action);
-
-    Q_EMIT contextualActionsChanged(d->contextualActions);
-}
-
-void Applet::clearActions()
-{
-    // FIXME: Now it removes only contextualactions for compatibility
-    //  This needs to be revised in the actions API ovehaul
-    for (auto a : d->actions->actions()) {
-        if (a->property("_contextualAction").toBool()) {
-            d->actions->removeAction(a);
-            d->contextualActions.removeAll(a);
-        }
-    }
-    Q_EMIT contextualActionsChanged(d->contextualActions);
-}
-
-QAction *Applet::action(const QString &name) const
-{
-    return d->actions->action(name);
+    return d->actions->actions();
 }
 
 Types::FormFactor Applet::formFactor() const

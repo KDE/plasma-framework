@@ -141,7 +141,8 @@ void ContainmentInterface::init()
     });
     connect(m_containment.data(), &Plasma::Containment::wallpaperChanged, this, &ContainmentInterface::loadWallpaper);
 
-    connect(m_containment.data()->actions(), &KActionCollection::changed, this, &ContainmentInterface::actionsChanged);
+    connect(m_containment, &Plasma::Containment::internalActionsChanged, this, &ContainmentInterface::actionsChanged);
+    connect(m_containment, &Plasma::Containment::contextualActionsChanged, this, &ContainmentInterface::actionsChanged);
 }
 
 PlasmaQuick::AppletQuickItem *ContainmentInterface::itemFor(Plasma::Applet *applet) const
@@ -957,11 +958,11 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 
     if (!applet->failedToLaunch()) {
-        QAction *configureApplet = applet->actions()->action(QStringLiteral("configure"));
+        QAction *configureApplet = applet->internalAction(QStringLiteral("configure"));
         if (configureApplet && configureApplet->isEnabled()) {
             desktopMenu->addAction(configureApplet);
         }
-        QAction *appletAlternatives = applet->actions()->action(QStringLiteral("alternatives"));
+        QAction *appletAlternatives = applet->internalAction(QStringLiteral("alternatives"));
         if (appletAlternatives && appletAlternatives->isEnabled()) {
             desktopMenu->addAction(appletAlternatives);
         }
@@ -979,7 +980,7 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
 
     if (m_containment->immutability() == Plasma::Types::Mutable
         && (m_containment->containmentType() != Plasma::Containment::Type::Panel || m_containment->isUserConfiguring())) {
-        QAction *closeApplet = applet->actions()->action(QStringLiteral("remove"));
+        QAction *closeApplet = applet->internalAction(QStringLiteral("remove"));
         // qDebug() << "checking for removal" << closeApplet;
         if (closeApplet) {
             if (!desktopMenu->isEmpty()) {
@@ -1026,8 +1027,8 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
         /* clang-format off */
         if ((m_containment->containmentType() != Plasma::Containment::Type::Panel
                 && m_containment->containmentType() != Plasma::Containment::Type::CustomPanel)
-            && m_containment->actions()->action(QStringLiteral("configure"))) { /* clang-format on */
-            desktopMenu->addAction(m_containment->actions()->action(QStringLiteral("configure")));
+            && m_containment->internalAction(QStringLiteral("configure"))) { /* clang-format on */
+            desktopMenu->addAction(m_containment->internalAction(QStringLiteral("configure")));
         }
     } else {
         desktopMenu->addActions(actions);

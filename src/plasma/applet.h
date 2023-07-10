@@ -528,7 +528,6 @@ public:
     QML_LIST_PROPERTY_ASSIGN_BEHAVIOR_REPLACE
     QQmlListProperty<QAction> qmlContextualActions();
 
-    // This is the new api which will replace all of what's comprised in the TODO block
     /**
      * Add a new internal action. if an internal action with the same name already exists, it
      * will be replaced with this new one.
@@ -551,32 +550,10 @@ public:
      */
     Q_INVOKABLE void removeInternalAction(const QString &name);
 
-    // BEGIN TODO Remove this block once all plasmoids are ported to the new API
     /**
-     * Returns the collection of actions for this Applet
-     * TODO: remove
+     * @returns All the internal actions such as configure, remove, alternatives etc
      */
-    KActionCollection *actions() const;
-
-    Q_INVOKABLE void setActionSeparator(const QString &name);
-
-    Q_INVOKABLE void setActionGroup(const QString &action, const QString &group);
-    /**
-     * Add an action to the Plasmoid contextual menu.
-     * When the action is triggered a function called action_<name> will be called, if there is no function with that name actionTriggered(name) will be called
-     * instead.
-     * @param: action name
-     * @text: user visible displayed text
-     * @icon: user visible optional displayed icon
-     * @shortcut: shortcut to trigger this action
-     */
-    Q_INVOKABLE void setAction(const QString &name, const QString &text, const QString &icon = QString(), const QString &shortcut = QString());
-
-    Q_INVOKABLE QAction *action(const QString &name) const;
-    Q_INVOKABLE void removeAction(const QString &name);
-    Q_INVOKABLE void clearActions();
-
-    // END TODO
+    QList<QAction *> internalActions() const;
 
     /**
      * Sets the global shortcut to associate with this widget.
@@ -738,6 +715,11 @@ Q_SIGNALS:
      * Emitted when the list of contextual actions has changed
      */
     void contextualActionsChanged(const QList<QAction *> &actions);
+
+    /**
+     * Emitted when the list of internal actions has changed
+     */
+    void internalActionsChanged(const QList<QAction *> &actions);
 
     // TODO KF6 keep as Q_SLOT only stuff that needsto be manually invokable from qml
 public Q_SLOTS:
