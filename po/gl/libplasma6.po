@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-30 02:08+0000\n"
+"POT-Creation-Date: 2023-07-11 02:02+0000\n"
 "PO-Revision-Date: 2023-06-11 13:16+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -19,18 +19,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Lokalize 23.04.2\n"
 
-#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
 msgid "More actions"
 msgstr "Máis accións"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Pregar"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -41,38 +41,38 @@ msgstr "Expandir"
 msgid "Password"
 msgstr "Contrasinal"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search…"
 msgstr "Buscar…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:72
 #, kde-format
 msgid "Search"
 msgstr "Buscar"
 
-#: plasma/applet.cpp:295
+#: plasma/applet.cpp:296
 #, kde-format
 msgid "Unknown"
 msgstr "Descoñecido"
 
-#: plasma/applet.cpp:774
+#: plasma/applet.cpp:724
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Activar o trebello de %1"
 
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:104
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Retirar %1"
 
-#: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
+#: plasma/containment.cpp:103 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Activar o modo de edición"
 
-#: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:109
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -117,63 +117,63 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Diversos"
 
-#: plasma/private/applet_p.cpp:120
+#: plasma/private/applet_p.cpp:124
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "O trebello %1 non define que ScriptEngine usar."
 
-#: plasma/private/applet_p.cpp:138
+#: plasma/private/applet_p.cpp:142
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Non se puido abrir o paquete %1 requirido polo trebello %2."
 
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:150
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Amosar as alternativas…"
 
-#: plasma/private/applet_p.cpp:248
+#: plasma/private/applet_p.cpp:252
 #, kde-format
 msgid "Widget Removed"
 msgstr "Retirouse o trebello"
 
-#: plasma/private/applet_p.cpp:249
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Retirouse o trebello «%1»."
 
-#: plasma/private/applet_p.cpp:253
+#: plasma/private/applet_p.cpp:257
 #, kde-format
 msgid "Panel Removed"
 msgstr "Retirouse o panel"
 
-#: plasma/private/applet_p.cpp:254
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Retirouse un panel."
 
-#: plasma/private/applet_p.cpp:257
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Retirouse un escritorio"
 
-#: plasma/private/applet_p.cpp:258
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Retirouse un escritorio."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:265
 #, kde-format
 msgid "Undo"
 msgstr "Desfacer"
 
-#: plasma/private/applet_p.cpp:353
+#: plasma/private/applet_p.cpp:357
 #, kde-format
 msgid "Widget Settings"
 msgstr "Configuración do trebello"
 
-#: plasma/private/applet_p.cpp:359
+#: plasma/private/applet_p.cpp:363
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Retirar este trebello"
@@ -262,51 +262,51 @@ msgstr "Produciuse un erro ao cargar o miniaplicativo: paquete inexistente. %1"
 msgid "%1 Settings"
 msgstr "Configuración de %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:550
+#: plasmaquick/plasmoid/containmentinterface.cpp:551
 #, kde-format
 msgid "Plasma Package"
 msgstr "Paquete de Plasma"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:554
+#: plasmaquick/plasmoid/containmentinterface.cpp:555
 #, kde-format
 msgid "Install"
 msgstr "Instalar"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:565
+#: plasmaquick/plasmoid/containmentinterface.cpp:566
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "A instalación do paquete fallou"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:582
+#: plasmaquick/plasmoid/containmentinterface.cpp:583
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "O paquete que soltou é incorrecto."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:591
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:592
+#: plasmaquick/plasmoid/containmentinterface.cpp:661
 #, kde-format
 msgid "Widgets"
 msgstr "Trebellos"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:596
+#: plasmaquick/plasmoid/containmentinterface.cpp:597
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Engadir %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:610
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:611
+#: plasmaquick/plasmoid/containmentinterface.cpp:665
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Engadir unha icona"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:623
 #, kde-format
 msgid "Wallpaper"
 msgstr "Fondo de escritorio"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:632
+#: plasmaquick/plasmoid/containmentinterface.cpp:633
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

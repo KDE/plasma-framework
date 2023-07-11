@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-30 02:08+0000\n"
+"POT-Creation-Date: 2023-07-11 02:02+0000\n"
 "PO-Revision-Date: 2022-07-27 19:21+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -23,18 +23,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Lokalize 22.04.3\n"
 
-#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
 msgid "More actions"
 msgstr "Ekintza gehiago"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Tolestu"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -45,38 +45,38 @@ msgstr "Zabaldu"
 msgid "Password"
 msgstr "Pasahitza"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search…"
 msgstr "Bilatu..."
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:72
 #, kde-format
 msgid "Search"
 msgstr "Bilatu"
 
-#: plasma/applet.cpp:295
+#: plasma/applet.cpp:296
 #, kde-format
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: plasma/applet.cpp:774
+#: plasma/applet.cpp:724
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktibatu %1 trepeta"
 
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:104
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Kendu %1"
 
-#: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
+#: plasma/containment.cpp:103 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Sartu editatzeko modura"
 
-#: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:109
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -121,63 +121,63 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Beste zenbait"
 
-#: plasma/private/applet_p.cpp:120
+#: plasma/private/applet_p.cpp:124
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "%1 trepetak ez du zein ScriptEngine erabili zehaztu."
 
-#: plasma/private/applet_p.cpp:138
+#: plasma/private/applet_p.cpp:142
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Ezin izan da ireki %2 trepetak behar duen %1 paketea"
 
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:150
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Erakutsi ordezko aukerak..."
 
-#: plasma/private/applet_p.cpp:248
+#: plasma/private/applet_p.cpp:252
 #, kde-format
 msgid "Widget Removed"
 msgstr "Trepeta kendu da"
 
-#: plasma/private/applet_p.cpp:249
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "\"%1\" trepeta kendu da."
 
-#: plasma/private/applet_p.cpp:253
+#: plasma/private/applet_p.cpp:257
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panela kenduta"
 
-#: plasma/private/applet_p.cpp:254
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Panel bat kendu da."
 
-#: plasma/private/applet_p.cpp:257
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Mahaigaina kenduta"
 
-#: plasma/private/applet_p.cpp:258
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Mahaigain bat kendu da."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:265
 #, kde-format
 msgid "Undo"
 msgstr "Desegin"
 
-#: plasma/private/applet_p.cpp:353
+#: plasma/private/applet_p.cpp:357
 #, kde-format
 msgid "Widget Settings"
 msgstr "Trepetaren ezarpenak"
 
-#: plasma/private/applet_p.cpp:359
+#: plasma/private/applet_p.cpp:363
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Kendu trepeta hau"
@@ -265,51 +265,51 @@ msgstr "Errorea aplikaziotxoa kargatzean: paketea ez dago. %1"
 msgid "%1 Settings"
 msgstr "%1 ezarpenak"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:550
+#: plasmaquick/plasmoid/containmentinterface.cpp:551
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasmaren paketea"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:554
+#: plasmaquick/plasmoid/containmentinterface.cpp:555
 #, kde-format
 msgid "Install"
 msgstr "Instalatu"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:565
+#: plasmaquick/plasmoid/containmentinterface.cpp:566
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Paketearen instalazioak huts egin du"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:582
+#: plasmaquick/plasmoid/containmentinterface.cpp:583
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Jaregin duzun paketea baliogabea da."
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:591
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:592
+#: plasmaquick/plasmoid/containmentinterface.cpp:661
 #, kde-format
 msgid "Widgets"
 msgstr "Trepetak"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:596
+#: plasmaquick/plasmoid/containmentinterface.cpp:597
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Erantsi %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:610
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:611
+#: plasmaquick/plasmoid/containmentinterface.cpp:665
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Erantsi ikono bat"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:623
 #, kde-format
 msgid "Wallpaper"
 msgstr "Horma-papera"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:632
+#: plasmaquick/plasmoid/containmentinterface.cpp:633
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

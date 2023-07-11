@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-30 02:08+0000\n"
+"POT-Creation-Date: 2023-07-11 02:02+0000\n"
 "PO-Revision-Date: 2013-03-09 14:27+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -17,18 +17,18 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n!=1);\n"
 "X-Generator: Lokalize 1.5\n"
 
-#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
 msgid "More actions"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -39,38 +39,38 @@ msgstr ""
 msgid "Password"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search…"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:72
 #, kde-format
 msgid "Search"
 msgstr ""
 
-#: plasma/applet.cpp:295
+#: plasma/applet.cpp:296
 #, kde-format
 msgid "Unknown"
 msgstr "अपरिचीत"
 
-#: plasma/applet.cpp:774
+#: plasma/applet.cpp:724
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr ""
 
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:104
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr ""
 
-#: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
+#: plasma/containment.cpp:103 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr ""
 
-#: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:109
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -112,63 +112,63 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "किरकोळ"
 
-#: plasma/private/applet_p.cpp:120
+#: plasma/private/applet_p.cpp:124
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:138
+#: plasma/private/applet_p.cpp:142
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:150
 #, kde-format
 msgid "Show Alternatives..."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:248
+#: plasma/private/applet_p.cpp:252
 #, kde-format
 msgid "Widget Removed"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:249
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:253
+#: plasma/private/applet_p.cpp:257
 #, kde-format
 msgid "Panel Removed"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:254
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "A panel has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:257
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "Desktop Removed"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:258
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "A desktop has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:265
 #, kde-format
 msgid "Undo"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:353
+#: plasma/private/applet_p.cpp:357
 #, kde-format
 msgid "Widget Settings"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:359
+#: plasma/private/applet_p.cpp:363
 #, kde-format
 msgid "Remove this Widget"
 msgstr ""
@@ -258,53 +258,53 @@ msgstr ""
 msgid "%1 Settings"
 msgstr "%1 संयोजना"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:550
+#: plasmaquick/plasmoid/containmentinterface.cpp:551
 #, fuzzy, kde-format
 #| msgid "Plasma Package Manager"
 msgid "Plasma Package"
 msgstr "प्लाज्मा पॅकेज व्यवस्थापक"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:554
+#: plasmaquick/plasmoid/containmentinterface.cpp:555
 #, kde-format
 msgid "Install"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:565
+#: plasmaquick/plasmoid/containmentinterface.cpp:566
 #, fuzzy, kde-format
 #| msgid "Error: Installation of %1 failed: %2"
 msgid "Package Installation Failed"
 msgstr "त्रुटी : %1 ची प्रतिष्ठापना करण्यास अपयश: %2"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:582
+#: plasmaquick/plasmoid/containmentinterface.cpp:583
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:591
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:592
+#: plasmaquick/plasmoid/containmentinterface.cpp:661
 #, kde-format
 msgid "Widgets"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:596
+#: plasmaquick/plasmoid/containmentinterface.cpp:597
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:610
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:611
+#: plasmaquick/plasmoid/containmentinterface.cpp:665
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:623
 #, kde-format
 msgid "Wallpaper"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:632
+#: plasmaquick/plasmoid/containmentinterface.cpp:633
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

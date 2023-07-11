@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-06-30 02:08+0000\n"
+"POT-Creation-Date: 2023-07-11 02:02+0000\n"
 "PO-Revision-Date: 2023-07-03 11:36\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -17,18 +17,18 @@ msgstr ""
 "X-Crowdin-File: /kf6-trunk/messages/plasma-framework/libplasma6.pot\n"
 "X-Crowdin-File-ID: 43095\n"
 
-#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:80
+#: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
 msgid "More actions"
 msgstr "更多操作"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "折叠"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:569
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -39,38 +39,38 @@ msgstr "展开"
 msgid "Password"
 msgstr "密码"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:69
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:70
 #, kde-format
 msgid "Search…"
 msgstr "搜索…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:71
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:72
 #, kde-format
 msgid "Search"
 msgstr "搜索"
 
-#: plasma/applet.cpp:295
+#: plasma/applet.cpp:296
 #, kde-format
 msgid "Unknown"
 msgstr "未知"
 
-#: plasma/applet.cpp:774
+#: plasma/applet.cpp:724
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "激活 %1 挂件"
 
-#: plasma/containment.cpp:95 plasma/private/applet_p.cpp:100
+#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:104
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "移除 %1"
 
-#: plasma/containment.cpp:101 plasma/corona.cpp:366 plasma/corona.cpp:460
+#: plasma/containment.cpp:103 plasma/corona.cpp:366 plasma/corona.cpp:460
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "进入编辑模式"
 
-#: plasma/containment.cpp:104 plasma/private/applet_p.cpp:105
+#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:109
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -114,63 +114,63 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "其他"
 
-#: plasma/private/applet_p.cpp:120
+#: plasma/private/applet_p.cpp:124
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "挂件 %1 并未定义使用何种脚本引擎。"
 
-#: plasma/private/applet_p.cpp:138
+#: plasma/private/applet_p.cpp:142
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "无法打开 %2 挂件所需的 %1 软件包。"
 
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:150
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "显示替代部件..."
 
-#: plasma/private/applet_p.cpp:248
+#: plasma/private/applet_p.cpp:252
 #, kde-format
 msgid "Widget Removed"
 msgstr "挂件已移除"
 
-#: plasma/private/applet_p.cpp:249
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "已移除挂件“%1”。"
 
-#: plasma/private/applet_p.cpp:253
+#: plasma/private/applet_p.cpp:257
 #, kde-format
 msgid "Panel Removed"
 msgstr "面板已移除"
 
-#: plasma/private/applet_p.cpp:254
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "A panel has been removed."
 msgstr "已移除面板。"
 
-#: plasma/private/applet_p.cpp:257
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "Desktop Removed"
 msgstr "桌面已移除"
 
-#: plasma/private/applet_p.cpp:258
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "已移除桌面。"
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:265
 #, kde-format
 msgid "Undo"
 msgstr "撤销"
 
-#: plasma/private/applet_p.cpp:353
+#: plasma/private/applet_p.cpp:357
 #, kde-format
 msgid "Widget Settings"
 msgstr "挂件设置"
 
-#: plasma/private/applet_p.cpp:359
+#: plasma/private/applet_p.cpp:363
 #, kde-format
 msgid "Remove this Widget"
 msgstr "移除此挂件"
@@ -256,51 +256,51 @@ msgstr "加载小程序出错：软件包不存在。%1"
 msgid "%1 Settings"
 msgstr "%1 设置"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:550
+#: plasmaquick/plasmoid/containmentinterface.cpp:551
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma 软件包"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:554
+#: plasmaquick/plasmoid/containmentinterface.cpp:555
 #, kde-format
 msgid "Install"
 msgstr "安装"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:565
+#: plasmaquick/plasmoid/containmentinterface.cpp:566
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "软件包安装失败"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:582
+#: plasmaquick/plasmoid/containmentinterface.cpp:583
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "您刚刚拖放的软件包无效。"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:591
-#: plasmaquick/plasmoid/containmentinterface.cpp:660
+#: plasmaquick/plasmoid/containmentinterface.cpp:592
+#: plasmaquick/plasmoid/containmentinterface.cpp:661
 #, kde-format
 msgid "Widgets"
 msgstr "挂件"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:596
+#: plasmaquick/plasmoid/containmentinterface.cpp:597
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "添加 %1"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:610
-#: plasmaquick/plasmoid/containmentinterface.cpp:664
+#: plasmaquick/plasmoid/containmentinterface.cpp:611
+#: plasmaquick/plasmoid/containmentinterface.cpp:665
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "添加图标"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:622
+#: plasmaquick/plasmoid/containmentinterface.cpp:623
 #, kde-format
 msgid "Wallpaper"
 msgstr "壁纸"
 
-#: plasmaquick/plasmoid/containmentinterface.cpp:632
+#: plasmaquick/plasmoid/containmentinterface.cpp:633
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
