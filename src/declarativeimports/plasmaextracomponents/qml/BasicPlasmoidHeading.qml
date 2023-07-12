@@ -93,7 +93,7 @@ PlasmoidHeading {
                     let actions = [];
                     for (let i in Plasmoid.contextualActions) {
                         const action = Plasmoid.contextualActions[i];
-                        if (action.visible && action !== Plasmoid.action("configure")) {
+                        if (action.visible && action !== Plasmoid.internalAction("configure")) {
                             actions.push(action);
                         }
                     }
@@ -110,11 +110,11 @@ PlasmoidHeading {
         }
         PlasmaComponents.ToolButton {
             icon.name: "configure"
-            visible: plasmoid && Plasmoid.action("configure") && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+            visible: plasmoid && Plasmoid.internalAction("configure") && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
             PlasmaComponents.ToolTip {
-                text: parent.visible ? Plasmoid.action("configure").text : ""
+                text: parent.visible ? Plasmoid.internalAction("configure").text : ""
             }
-            onClicked: Plasmoid.action("configure").trigger();
+            onClicked: Plasmoid.internalAction("configure").trigger();
         }
     }
 }
