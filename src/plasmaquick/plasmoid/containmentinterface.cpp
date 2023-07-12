@@ -646,7 +646,7 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
                         // set wallpapery stuff
                         if (m_wallpaperInterface && url.isValid()) {
-                            m_wallpaperInterface->setUrl(url);
+                            m_wallpaperInterface->requestOpenUrl(url);
                         }
                     });
                 }
@@ -735,9 +735,13 @@ void ContainmentInterface::loadWallpaper()
         return;
     }
 
-    if (!m_wallpaperInterface && !m_containment->wallpaper().isEmpty()) {
-        m_wallpaperInterface = new WallpaperInterface(this);
+    auto *oldWallpaper = m_wallpaperInterface;
 
+    if (!m_containment->wallpaper().isEmpty()) {
+        m_wallpaperInterface = WallpaperInterface::loadWallpaper(this);
+    }
+
+    if (m_wallpaperInterface) {
         m_wallpaperInterface->setZ(-1000);
         // Qml seems happier if the parent gets set in this way
         m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
@@ -754,9 +758,8 @@ void ContainmentInterface::loadWallpaper()
         prop.write(expr.evaluate());
 
         m_containment->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
-    } else if (m_wallpaperInterface && m_containment->wallpaper().isEmpty()) {
-        deleteWallpaperInterface();
     }
+    delete oldWallpaper;
 
     Q_EMIT wallpaperInterfaceChanged();
 }

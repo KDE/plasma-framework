@@ -149,7 +149,7 @@ private:
     void setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QVariant &data);
     void deleteWallpaperInterface();
 
-    WallpaperInterface *m_wallpaperInterface;
+    WallpaperInterface *m_wallpaperInterface = nullptr;
     QList<QObject *> m_appletInterfaces;
     KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;

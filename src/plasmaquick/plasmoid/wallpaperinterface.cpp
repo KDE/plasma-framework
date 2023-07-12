@@ -5,6 +5,7 @@
 */
 
 #include "wallpaperinterface.h"
+#include "appletcontext_p.h"
 
 #include "containmentinterface.h"
 #include "sharedqmlengine.h"
@@ -23,38 +24,48 @@
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
 #include <kpackage/packageloader.h>
+#include <qabstractitemmodel.h>
+#include <qtmetamacros.h>
 
-QHash<QObject *, WallpaperInterface *> WallpaperInterface::s_rootObjects = QHash<QObject *, WallpaperInterface *>();
-
-WallpaperInterface::WallpaperInterface(ContainmentInterface *parent)
+WallpaperInterface::WallpaperInterface(QQuickItem *parent)
     : QQuickItem(parent)
-    , m_containmentInterface(parent)
-    , m_qmlObject(nullptr)
-    , m_configuration(nullptr)
-    , m_configLoader(nullptr)
 {
-    m_actions = new KActionCollection(this);
-
     // resize at the beginning to avoid as much resize events as possible
     if (parent) {
         setSize(QSizeF(parent->width(), parent->height()));
     }
-
-    if (!m_containmentInterface->containment()->wallpaper().isEmpty()) {
-        syncWallpaperPackage();
-    }
-    connect(m_containmentInterface->containment(), &Plasma::Containment::wallpaperChanged, this, &WallpaperInterface::syncWallpaperPackage);
-    connect(m_containmentInterface->containment()->corona(),
-            &Plasma::Corona::startupCompleted,
-            this,
-            std::bind(&WallpaperInterface::repaintNeeded, this, Qt::transparent));
 }
 
 WallpaperInterface::~WallpaperInterface()
 {
-    if (m_qmlObject) {
-        s_rootObjects.remove(m_qmlObject->engine().get());
+}
+
+void WallpaperInterface::classBegin()
+{
+    QQuickItem::classBegin();
+    PlasmaQuick::AppletContext *ac = qobject_cast<PlasmaQuick::AppletContext *>(QQmlEngine::contextForObject(this)->parentContext());
+    Q_ASSERT(ac);
+    m_containment = ac->applet()->containment();
+    m_wallpaperPlugin = m_containment->wallpaper();
+    m_qmlObject = ac->sharedQmlEngine();
+    m_qmlObject->setParent(this);
+
+    m_pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
+    m_pkg.setPath(m_wallpaperPlugin);
+
+    if (configScheme()) {
+        m_configuration = new KConfigPropertyMap(configScheme(), this);
     }
+
+    connect(m_containment->corona(), &Plasma::Corona::startupCompleted, this, std::bind(&WallpaperInterface::repaintNeeded, this, Qt::transparent));
+}
+
+void WallpaperInterface::componentComplete()
+{
+    QQuickItem::componentComplete();
+
+    m_loading = false;
+    Q_EMIT isLoadingChanged();
 }
 
 QList<KPluginMetaData> WallpaperInterface::listWallpaperMetadataForMimetype(const QString &mimetype, const QString &formFactor)
@@ -89,7 +100,7 @@ KConfigLoader *WallpaperInterface::configScheme()
         // FIXME: do we need "mainconfigxml" in wallpaper packagestructures?
         const QString xmlPath = m_pkg.filePath("config", QStringLiteral("main.xml"));
 
-        KConfigGroup cfg = m_containmentInterface->containment()->config();
+        KConfigGroup cfg = m_containment->config();
         cfg = KConfigGroup(&cfg, "Wallpaper");
         cfg = KConfigGroup(&cfg, m_wallpaperPlugin);
 
@@ -99,46 +110,36 @@ KConfigLoader *WallpaperInterface::configScheme()
             QFile file(xmlPath);
             m_configLoader = new KConfigLoader(cfg, &file, this);
         }
-        connect(m_configLoader, &KConfigLoader::configChanged, this, &WallpaperInterface::configurationChanged);
     }
 
     return m_configLoader;
 }
 
-void WallpaperInterface::syncWallpaperPackage()
+void WallpaperInterface::requestOpenUrl(const QUrl &url)
 {
-    if (m_wallpaperPlugin == m_containmentInterface->containment()->wallpaper() && m_qmlObject->rootObject()) {
-        return;
+    Q_EMIT openUrlRequested(url);
+}
+
+WallpaperInterface *WallpaperInterface::loadWallpaper(ContainmentInterface *containmentInterface)
+{
+    if (containmentInterface->containment()->wallpaper().isEmpty()) {
+        return nullptr;
     }
-
-    m_wallpaperPlugin = m_containmentInterface->containment()->wallpaper();
-
-    if (!m_qmlObject) {
-        m_qmlObject = new PlasmaQuick::SharedQmlEngine(this);
-        s_rootObjects[m_qmlObject->engine().get()] = this;
-        m_qmlObject->setInitializationDelayed(true);
-        connect(m_qmlObject, &PlasmaQuick::SharedQmlEngine::finished, this, &WallpaperInterface::loadFinished);
-    }
-
-    m_actions->clear();
-    setProperty("contextualActions", QVariant::fromValue(contextualActions()));
-    m_pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
-    m_pkg.setPath(m_wallpaperPlugin);
-    if (!m_pkg.isValid()) {
+    KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
+    pkg.setPath(containmentInterface->containment()->wallpaper());
+    if (!pkg.isValid()) {
         qWarning() << "Error loading the wallpaper, no valid package loaded";
-        return;
+        return nullptr;
     }
 
-    if (m_configLoader) {
-        m_configLoader->deleteLater();
-    }
-    if (m_configuration) {
-        m_configuration->deleteLater();
-    }
-    m_configLoader = nullptr;
-    m_configuration = nullptr;
-    if (configScheme()) {
-        m_configuration = new KConfigPropertyMap(configScheme(), this);
+    PlasmaQuick::SharedQmlEngine *qmlObject = new PlasmaQuick::SharedQmlEngine(containmentInterface->containment());
+    qmlObject->setInitializationDelayed(true);
+
+    const QString rootPath = pkg.metadata().value(QStringLiteral("X-Plasma-RootPath"));
+    if (!rootPath.isEmpty()) {
+        qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + rootPath);
+    } else {
+        qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + pkg.metadata().pluginId());
     }
 
     /*
@@ -146,56 +147,47 @@ void WallpaperInterface::syncWallpaperPackage()
      * This also prevents many undefined wallpaper warnings caused by "wallpaper" being set
      * when the old wallpaper plugin still exists.
      */
-    m_qmlObject->setSource(m_pkg.fileUrl("mainscript"));
-    if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
-        m_qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), this);
+    qmlObject->setSource(pkg.fileUrl("mainscript"));
+    WallpaperInterface *wallpaper = qobject_cast<WallpaperInterface *>(qmlObject->rootObject());
+    if (!wallpaper) {
+        if (qmlObject->mainComponent() && qmlObject->mainComponent()->isError()) {
+            qWarning() << "Error loading the wallpaper" << qmlObject->mainComponent()->errors();
+        } else if (qmlObject->rootObject()) {
+            qWarning() << "Root item of wallpaper" << containmentInterface->containment()->wallpaper() << "not a WallpaperInterface instance, instead is"
+                       << qmlObject->rootObject();
+        }
+        delete qmlObject->rootObject();
+        return nullptr;
     }
 
-    const QString rootPath = m_pkg.metadata().value(QStringLiteral("X-Plasma-RootPath"));
-    if (!rootPath.isEmpty()) {
-        m_qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + rootPath);
-    } else {
-        m_qmlObject->setTranslationDomain(QLatin1String("plasma_wallpaper_") + m_pkg.metadata().pluginId());
+    if (!qEnvironmentVariableIntValue("PLASMA_NO_CONTEXTPROPERTIES")) {
+        qmlObject->rootContext()->setContextProperty(QStringLiteral("wallpaper"), wallpaper);
     }
 
     // initialize with our size to avoid as much resize events as possible
     QVariantHash props;
-    props[QStringLiteral("width")] = width();
-    props[QStringLiteral("height")] = height();
-    m_qmlObject->completeInitialization(props);
-    Q_EMIT repaintNeeded();
-}
-
-void WallpaperInterface::loadFinished()
-{
-    if (m_qmlObject->mainComponent() //
-        && m_qmlObject->rootObject() //
-        && !m_qmlObject->mainComponent()->isError()) {
-        m_qmlObject->rootObject()->setProperty("z", -1000);
-        m_qmlObject->rootObject()->setProperty("parent", QVariant::fromValue(this));
-
-        // set anchors
-        QQmlExpression expr(m_qmlObject->engine()->rootContext(), m_qmlObject->rootObject(), QStringLiteral("parent"));
-        QQmlProperty prop(m_qmlObject->rootObject(), QStringLiteral("anchors.fill"));
-        prop.write(expr.evaluate());
-
-    } else if (m_qmlObject->mainComponent()) {
-        qWarning() << "Error loading the wallpaper" << m_qmlObject->mainComponent()->errors();
-        s_rootObjects.remove(m_qmlObject->engine().get());
-        m_qmlObject->deleteLater();
-        m_qmlObject = nullptr;
-
-    } else {
-        qWarning() << "Error loading the wallpaper, package not found";
-    }
-
-    Q_EMIT packageChanged();
-    Q_EMIT configurationChanged();
+    props[QStringLiteral("parent")] = QVariant::fromValue(containmentInterface);
+    props[QStringLiteral("width")] = containmentInterface->width();
+    props[QStringLiteral("height")] = containmentInterface->height();
+    qmlObject->completeInitialization(props);
+    return wallpaper;
 }
 
 QList<QAction *> WallpaperInterface::contextualActions() const
 {
-    return m_actions->actions();
+    return m_contextualActions;
+}
+
+QQmlListProperty<QAction> WallpaperInterface::qmlContextualActions()
+{
+    return QQmlListProperty<QAction>(this,
+                                     nullptr,
+                                     WallpaperInterface::contextualActions_append,
+                                     WallpaperInterface::contextualActions_count,
+                                     WallpaperInterface::contextualActions_at,
+                                     WallpaperInterface::contextualActions_clear,
+                                     WallpaperInterface::contextualActions_replace,
+                                     WallpaperInterface::contextualActions_removeLast);
 }
 
 bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
@@ -203,74 +195,49 @@ bool WallpaperInterface::supportsMimetype(const QString &mimetype) const
     return m_pkg.metadata().value(QStringLiteral("X-Plasma-DropMimeTypes"), QStringList()).contains(mimetype);
 }
 
-void WallpaperInterface::setUrl(const QUrl &url)
-{
-    if (m_qmlObject->rootObject()) {
-        QMetaObject::invokeMethod(m_qmlObject->rootObject(), "setUrl", Qt::DirectConnection, Q_ARG(QVariant, QVariant::fromValue(url)));
-    }
-}
-
-void WallpaperInterface::setAction(const QString &name, const QString &text, const QString &icon, const QString &shortcut)
-{
-    QAction *action = m_actions->action(name);
-
-    if (action) {
-        action->setText(text);
-    } else {
-        Q_ASSERT(!m_actions->action(name));
-        action = new QAction(text, this);
-        m_actions->addAction(name, action);
-
-        connect(action, &QAction::triggered, this, [this, name] {
-            executeAction(name);
-        });
-    }
-
-    if (!icon.isEmpty()) {
-        action->setIcon(QIcon::fromTheme(icon));
-    }
-
-    if (!shortcut.isEmpty()) {
-        action->setShortcut(shortcut);
-    }
-
-    action->setObjectName(name);
-    setProperty("contextualActions", QVariant::fromValue(contextualActions()));
-}
-
-void WallpaperInterface::removeAction(const QString &name)
-{
-    QAction *action = m_actions->action(name);
-
-    if (action) {
-        m_actions->removeAction(action);
-    }
-    setProperty("contextualActions", QVariant::fromValue(contextualActions()));
-}
-
-QAction *WallpaperInterface::action(QString name) const
-{
-    return m_actions->action(name);
-}
-
-void WallpaperInterface::executeAction(const QString &name)
-{
-    if (m_qmlObject->rootObject()) {
-        const QByteArray actionName("action_" + name.toUtf8());
-        QMetaObject::invokeMethod(m_qmlObject->rootObject(), actionName.constData(), Qt::DirectConnection);
-    }
-}
-
-WallpaperInterface *WallpaperInterface::qmlAttachedProperties(QObject *object)
-{
-    // at the moment of the attached object creation, the root item is the only one that hasn't a parent
-    // only way to avoid creation of this attached for everybody but the root item
-    return object->parent() ? nullptr : s_rootObjects.value(qmlEngine(object));
-}
-
 bool WallpaperInterface::isLoading() const
 {
     return m_loading;
+}
+
+void WallpaperInterface::contextualActions_append(QQmlListProperty<QAction> *prop, QAction *action)
+{
+    WallpaperInterface *w = static_cast<WallpaperInterface *>(prop->object);
+    w->m_contextualActions.append(action);
+    Q_EMIT w->contextualActionsChanged(w->m_contextualActions);
+};
+
+qsizetype WallpaperInterface::contextualActions_count(QQmlListProperty<QAction> *prop)
+{
+    WallpaperInterface *w = static_cast<WallpaperInterface *>(prop->object);
+    return w->m_contextualActions.count();
+}
+
+QAction *WallpaperInterface::contextualActions_at(QQmlListProperty<QAction> *prop, qsizetype idx)
+{
+    WallpaperInterface *w = static_cast<WallpaperInterface *>(prop->object);
+    return w->m_contextualActions.value(idx);
+}
+
+void WallpaperInterface::contextualActions_clear(QQmlListProperty<QAction> *prop)
+{
+    WallpaperInterface *w = static_cast<WallpaperInterface *>(prop->object);
+    w->m_contextualActions.clear();
+    Q_EMIT w->contextualActionsChanged(w->m_contextualActions);
+}
+
+void WallpaperInterface::contextualActions_replace(QQmlListProperty<QAction> *prop, qsizetype idx, QAction *action)
+{
+    WallpaperInterface *w = static_cast<WallpaperInterface *>(prop->object);
+    w->m_contextualActions.replace(idx, action);
+    Q_EMIT w->contextualActionsChanged(w->m_contextualActions);
+}
+
+void WallpaperInterface::contextualActions_removeLast(QQmlListProperty<QAction> *prop)
+{
+    WallpaperInterface *w = static_cast<WallpaperInterface *>(prop->object);
+    w->m_contextualActions.pop_back();
+    Q_EMIT w->contextualActionsChanged(w->m_contextualActions);
 }
 
 #include "moc_wallpaperinterface.cpp"
