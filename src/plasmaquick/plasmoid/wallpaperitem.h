@@ -4,8 +4,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef WALLPAPERINTERFACE_H
-#define WALLPAPERINTERFACE_H
+#ifndef WALLPAPERITEM_H
+#define WALLPAPERITEM_H
 
 #include <QQmlEngine>
 #include <QQuickItem>
@@ -16,7 +16,7 @@ class KConfigLoader;
 class KActionCollection;
 class KConfigPropertyMap;
 
-class ContainmentInterface;
+class ContainmentItem;
 
 namespace Plasma
 {
@@ -35,7 +35,7 @@ class SharedQmlEngine;
  * @code import org.kde.plasma.plasmoid @endcode
  * @version 2.0
  */
-class WallpaperInterface : public QQuickItem
+class WallpaperItem : public QQuickItem
 {
     Q_OBJECT
 
@@ -49,8 +49,8 @@ class WallpaperInterface : public QQuickItem
     Q_PROPERTY(bool loading MEMBER m_loading NOTIFY isLoadingChanged)
 
 public:
-    explicit WallpaperInterface(QQuickItem *parent = nullptr);
-    ~WallpaperInterface() override;
+    explicit WallpaperItem(QQuickItem *parent = nullptr);
+    ~WallpaperItem() override;
 
     void classBegin() override;
     void componentComplete() override;
@@ -64,9 +64,9 @@ public:
     static QList<KPluginMetaData> listWallpaperMetadataForMimetype(const QString &mimetype, const QString &formFactor = QString());
 
     /**
-     * Instantiate the WallpaperInterface for a given containment, using the proper plugin
+     * Instantiate the WallpaperItem for a given containment, using the proper plugin
      */
-    static WallpaperInterface *loadWallpaper(ContainmentInterface *ContainmentInterface);
+    static WallpaperItem *loadWallpaper(ContainmentItem *ContainmentItem);
 
     KPackage::Package kPackage() const;
 

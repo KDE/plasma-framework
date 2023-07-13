@@ -111,7 +111,7 @@ ColorScope *ColorScope::findParentScope()
 
         ColorScope *s = qobject_cast<ColorScope *>(candidate);
         if (!s) {
-            // Make sure AppletInterface always has a ColorScope
+            // Make sure PlasmoidItem always has a ColorScope
             s = static_cast<ColorScope *>(qmlAttachedPropertiesObject<ColorScope>(candidate, qobject_cast<PlasmaQuick::AppletQuickItem *>(candidate)));
         }
         if (s && !s->m_deleting) {

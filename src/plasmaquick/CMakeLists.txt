@@ -31,10 +31,10 @@ target_sources(KF6PlasmaQuick PRIVATE
     ../declarativeimports/core/imagetexturescache.cpp
     ../declarativeimports/core/managedtexturenode.cpp
     ../declarativeimports/core/units.cpp
-    plasmoid/appletinterface.cpp
-    plasmoid/containmentinterface.cpp
+    plasmoid/plasmoiditem.cpp
+    plasmoid/containmentitem.cpp
     plasmoid/dropmenu.cpp
-    plasmoid/wallpaperinterface.cpp
+    plasmoid/wallpaperitem.cpp
 )
 
 if(HAVE_KWAYLAND)

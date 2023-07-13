@@ -20,14 +20,14 @@ namespace KIO
 class DropJob;
 }
 
-class ContainmentInterface;
+class ContainmentItem;
 
 class DropMenu : public QObject
 {
     Q_OBJECT
 
 public:
-    DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentInterface *parent = nullptr);
+    DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentItem *parent = nullptr);
     ~DropMenu() override;
 
     QList<QUrl> urls() const;

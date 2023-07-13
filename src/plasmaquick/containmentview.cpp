@@ -6,7 +6,7 @@
 
 #include "containmentview.h"
 #include "configview.h"
-#include "plasmoid/containmentinterface.h"
+#include "plasmoid/containmentitem.h"
 
 #include <QDebug>
 #include <QQmlContext>

@@ -10,9 +10,9 @@
 #include "configview.h"
 #include "containment.h"
 #include "debug_p.h"
-#include "plasmoid/appletinterface.h"
-#include "plasmoid/containmentinterface.h"
-#include "plasmoid/wallpaperinterface.h"
+#include "plasmoid/containmentitem.h"
+#include "plasmoid/plasmoiditem.h"
+#include "plasmoid/wallpaperitem.h"
 #include "private/appletquickitem_p.h"
 #include "private/plasmoidattached_p.h"
 #include "sharedqmlengine.h"
@@ -487,9 +487,9 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
         qmlRegisterExtendedType<Plasma::Applet, PlasmoidAttached>(uri, 2, 0, "Plasmoid");
         qmlRegisterExtendedType<Plasma::Containment, ContainmentAttached>(uri, 2, 0, "Containment");
 
-        qmlRegisterType<AppletInterface>(uri, 2, 0, "PlasmoidItem");
-        qmlRegisterType<ContainmentInterface>(uri, 2, 0, "ContainmentItem");
-        qmlRegisterType<WallpaperInterface>(uri, 2, 0, "WallpaperItem");
+        qmlRegisterType<PlasmoidItem>(uri, 2, 0, "PlasmoidItem");
+        qmlRegisterType<ContainmentItem>(uri, 2, 0, "ContainmentItem");
+        qmlRegisterType<WallpaperItem>(uri, 2, 0, "WallpaperItem");
         qmlRegisterAnonymousType<Plasma::Corona>("org.kde.plasma.plasmoid", 1);
     }
     auto it = AppletQuickItemPrivate::s_itemsForApplet.constFind(applet);
@@ -520,12 +520,12 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     AppletQuickItem *item = nullptr;
     qmlObject->setSource(applet->kPackage().fileUrl("mainscript"));
     if (pc && pc->isContainment()) {
-        item = qobject_cast<ContainmentInterface *>(qmlObject->rootObject());
+        item = qobject_cast<ContainmentItem *>(qmlObject->rootObject());
         if (!item && qmlObject->mainComponent() && !qmlObject->mainComponent()->isError()) {
             applet->setLaunchErrorMessage(i18n("The root item of %1 must be of type ContaimentItem", applet->kPackage().fileUrl("mainscript").toString()));
         }
     } else {
-        item = qobject_cast<AppletInterface *>(qmlObject->rootObject());
+        item = qobject_cast<PlasmoidItem *>(qmlObject->rootObject());
         if (!item && qmlObject->mainComponent() && !qmlObject->mainComponent()->isError()) {
             applet->setLaunchErrorMessage(i18n("The root item of %1 must be of type PlasmoidItem", applet->kPackage().fileUrl("mainscript").toString()));
         }
@@ -566,7 +566,7 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
             return nullptr;
         }
 
-        item = qobject_cast<AppletInterface *>(qmlObject->rootObject());
+        item = qobject_cast<PlasmoidItem *>(qmlObject->rootObject());
         item->setProperty("errorInformation", errorData);
         applet->setLaunchErrorMessage(reason);
     }

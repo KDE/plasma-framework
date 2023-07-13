@@ -7,7 +7,7 @@
 */
 
 #include "dropmenu.h"
-#include "containmentinterface.h"
+#include "containmentitem.h"
 
 #include <QAction>
 #include <QApplication>
@@ -19,7 +19,7 @@
 #include <KIO/DropJob>
 #include <KLocalizedString>
 
-DropMenu::DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentInterface *parent)
+DropMenu::DropMenu(KIO::DropJob *dropJob, const QPoint &dropPoint, ContainmentItem *parent)
     : QObject(parent)
     , m_dropPoint(dropPoint)
     , m_dropJob(dropJob)

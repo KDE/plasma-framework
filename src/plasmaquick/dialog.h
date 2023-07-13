@@ -146,6 +146,7 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
      * This property holds a pointer to the AppletInterface used by an applet. It is
      * null when the dialog is not used for an applet.
      */
+    // TODO: plasmoidItem?
     Q_PROPERTY(QQuickItem *appletInterface READ appletInterface WRITE setAppletInterface NOTIFY appletInterfaceChanged)
 
     Q_CLASSINFO("DefaultProperty", "mainItem")

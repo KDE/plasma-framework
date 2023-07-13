@@ -20,7 +20,6 @@ Item {
         ToolBar {
             id: toolBar
             z: 10
-            //AppletInterface.title: "bah"
             anchors {
                 top: parent.top
                 left: parent.left

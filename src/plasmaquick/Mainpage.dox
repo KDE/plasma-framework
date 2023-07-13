@@ -5,14 +5,14 @@ libplasmaquick is an internal part of lib plasma.
 It should not be used directly, however some classes are exposed to Plasma as attached properties.
 
 Namely:
- - AppletInterface
- - ContainmentInterface
+ - PlasmoidItem
+ - ContainmentItem
 which are exposed as "Plasmoid" for applets and containments respectively.
 
 QML applets should import org.kde.plasma.plasmoid 2.0 in order to access this attached object
 
 
- - WallpaperInterface
+ - WallpaperItem
 which is exposed as to wallpapers as the attached property "wallpaper".
 It does not require any special imports
 

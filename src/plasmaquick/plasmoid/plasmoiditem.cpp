@@ -5,7 +5,7 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "appletinterface.h"
+#include "plasmoiditem.h"
 #include "appletcontext_p.h"
 #include "sharedqmlengine.h"
 
@@ -26,12 +26,12 @@
 #include <Plasma/Plasma>
 #include <Plasma/PluginLoader>
 
-#include "containmentinterface.h"
-#include "wallpaperinterface.h"
+#include "containmentitem.h"
+#include "wallpaperitem.h"
 
 #include <KConfigPropertyMap>
 
-AppletInterface::AppletInterface(QQuickItem *parent)
+PlasmoidItem::PlasmoidItem(QQuickItem *parent)
     : AppletQuickItem(parent)
     , m_toolTipTextFormat(0)
     , m_toolTipItem(nullptr)
@@ -42,15 +42,15 @@ AppletInterface::AppletInterface(QQuickItem *parent)
     qmlRegisterAnonymousType<QAction>("org.kde.plasma.plasmoid", 1);
 }
 
-AppletInterface::~AppletInterface()
+PlasmoidItem::~PlasmoidItem()
 {
 }
 
-void AppletInterface::init()
+void PlasmoidItem::init()
 {
     AppletQuickItem::init();
 
-    auto *applet = AppletInterface::applet();
+    auto *applet = PlasmoidItem::applet();
     auto connectActions = [this, applet]() {
         for (auto *a : applet->contextualActions()) {
             // TODO: when the old api goes, whole executeAction logic will be deleted
@@ -65,7 +65,7 @@ void AppletInterface::init()
             }
         }
     };
-    connect(applet, &Plasma::Applet::contextualActionsAboutToShow, this, &AppletInterface::contextualActionsAboutToShow);
+    connect(applet, &Plasma::Applet::contextualActionsAboutToShow, this, &PlasmoidItem::contextualActionsAboutToShow);
     // FIXME: temporary
     connect(applet, &Plasma::Applet::contextualActionsChanged, this, connectActions);
     connectActions();
@@ -77,10 +77,10 @@ void AppletInterface::init()
     });
 
     if (applet->containment()) {
-        connect(applet->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenChanged);
+        connect(applet->containment(), &Plasma::Containment::screenChanged, this, &PlasmoidItem::screenChanged);
 
         // Screen change implies geo change for good measure.
-        connect(applet->containment(), &Plasma::Containment::screenChanged, this, &AppletInterface::screenGeometryChanged);
+        connect(applet->containment(), &Plasma::Containment::screenChanged, this, &PlasmoidItem::screenGeometryChanged);
 
         connect(applet->containment()->corona(), &Plasma::Corona::screenGeometryChanged, this, [this](int id) {
             if (id == AppletQuickItem::applet()->containment()->screen()) {
@@ -88,11 +88,11 @@ void AppletInterface::init()
             }
         });
 
-        connect(applet->containment()->corona(), &Plasma::Corona::availableScreenRegionChanged, this, &ContainmentInterface::availableScreenRegionChanged);
-        connect(applet->containment()->corona(), &Plasma::Corona::availableScreenRectChanged, this, &ContainmentInterface::availableScreenRectChanged);
+        connect(applet->containment()->corona(), &Plasma::Corona::availableScreenRegionChanged, this, &ContainmentItem::availableScreenRegionChanged);
+        connect(applet->containment()->corona(), &Plasma::Corona::availableScreenRectChanged, this, &ContainmentItem::availableScreenRectChanged);
     }
 
-    connect(this, &AppletInterface::expandedChanged, [=](bool expanded) {
+    connect(this, &PlasmoidItem::expandedChanged, [=](bool expanded) {
         // if both compactRepresentationItem and fullRepresentationItem exist,
         // the applet is in a popup
         if (expanded) {
@@ -127,7 +127,7 @@ void AppletInterface::init()
         }
     });
 
-    connect(applet, &Plasma::Applet::destroyedChanged, this, &AppletInterface::destroyedChanged);
+    connect(applet, &Plasma::Applet::destroyedChanged, this, &PlasmoidItem::destroyedChanged);
 
     auto args = applet->startupArguments();
 
@@ -138,7 +138,7 @@ void AppletInterface::init()
     }
 }
 
-void AppletInterface::destroyedChanged(bool destroyed)
+void PlasmoidItem::destroyedChanged(bool destroyed)
 {
     // if an item loses its scene before losing the focus, will never
     // be able to gain focus again
@@ -170,7 +170,7 @@ void AppletInterface::destroyedChanged(bool destroyed)
     setVisible(!destroyed);
 }
 
-QString AppletInterface::toolTipMainText() const
+QString PlasmoidItem::toolTipMainText() const
 {
     if (m_toolTipMainText.isNull()) {
         return applet()->title();
@@ -179,7 +179,7 @@ QString AppletInterface::toolTipMainText() const
     }
 }
 
-void AppletInterface::setToolTipMainText(const QString &text)
+void PlasmoidItem::setToolTipMainText(const QString &text)
 {
     // Here we are abusing the difference between a null and an empty string.
     // by default is null so falls back to the name
@@ -197,7 +197,7 @@ void AppletInterface::setToolTipMainText(const QString &text)
     Q_EMIT toolTipMainTextChanged();
 }
 
-QString AppletInterface::toolTipSubText() const
+QString PlasmoidItem::toolTipSubText() const
 {
     if (m_toolTipSubText.isNull() && applet()->pluginMetaData().isValid()) {
         return applet()->pluginMetaData().description();
@@ -206,7 +206,7 @@ QString AppletInterface::toolTipSubText() const
     }
 }
 
-void AppletInterface::setToolTipSubText(const QString &text)
+void PlasmoidItem::setToolTipSubText(const QString &text)
 {
     // Also there the difference between null and empty gets exploited
     if (!m_toolTipSubText.isNull() && m_toolTipSubText == text) {
@@ -222,12 +222,12 @@ void AppletInterface::setToolTipSubText(const QString &text)
     Q_EMIT toolTipSubTextChanged();
 }
 
-int AppletInterface::toolTipTextFormat() const
+int PlasmoidItem::toolTipTextFormat() const
 {
     return m_toolTipTextFormat;
 }
 
-void AppletInterface::setToolTipTextFormat(int format)
+void PlasmoidItem::setToolTipTextFormat(int format)
 {
     if (m_toolTipTextFormat == format) {
         return;
@@ -237,24 +237,24 @@ void AppletInterface::setToolTipTextFormat(int format)
     Q_EMIT toolTipTextFormatChanged();
 }
 
-QQuickItem *AppletInterface::toolTipItem() const
+QQuickItem *PlasmoidItem::toolTipItem() const
 {
     return m_toolTipItem.data();
 }
 
-void AppletInterface::setToolTipItem(QQuickItem *toolTipItem)
+void PlasmoidItem::setToolTipItem(QQuickItem *toolTipItem)
 {
     if (m_toolTipItem.data() == toolTipItem) {
         return;
     }
 
     m_toolTipItem = toolTipItem;
-    connect(m_toolTipItem.data(), &QObject::destroyed, this, &AppletInterface::toolTipItemChanged);
+    connect(m_toolTipItem.data(), &QObject::destroyed, this, &PlasmoidItem::toolTipItemChanged);
 
     Q_EMIT toolTipItemChanged();
 }
 
-int AppletInterface::screen() const
+int PlasmoidItem::screen() const
 {
     if (Plasma::Containment *c = applet()->containment()) {
         return c->screen();
@@ -263,7 +263,7 @@ int AppletInterface::screen() const
     return -1;
 }
 
-void AppletInterface::setHideOnWindowDeactivate(bool hide)
+void PlasmoidItem::setHideOnWindowDeactivate(bool hide)
 {
     if (m_hideOnDeactivate != hide) {
         m_hideOnDeactivate = hide;
@@ -271,12 +271,12 @@ void AppletInterface::setHideOnWindowDeactivate(bool hide)
     }
 }
 
-bool AppletInterface::hideOnWindowDeactivate() const
+bool PlasmoidItem::hideOnWindowDeactivate() const
 {
     return m_hideOnDeactivate;
 }
 
-QRect AppletInterface::screenGeometry() const
+QRect PlasmoidItem::screenGeometry() const
 {
     if (!applet() || !applet()->containment() || !applet()->containment()->corona() || applet()->containment()->screen() < 0) {
         return QRect();
@@ -285,7 +285,7 @@ QRect AppletInterface::screenGeometry() const
     return applet()->containment()->corona()->screenGeometry(applet()->containment()->screen());
 }
 
-void AppletInterface::executeAction(QAction *action)
+void PlasmoidItem::executeAction(QAction *action)
 {
     // FIXME: this is an assumption on KActionCollection behavior which sets objectName to the name used in addAction
     QString name = action->objectName();
@@ -299,7 +299,7 @@ void AppletInterface::executeAction(QAction *action)
     }
 }
 
-QVariantList AppletInterface::availableScreenRegion() const
+QVariantList PlasmoidItem::availableScreenRegion() const
 {
     QVariantList regVal;
 
@@ -325,7 +325,7 @@ QVariantList AppletInterface::availableScreenRegion() const
     return regVal;
 }
 
-QRect AppletInterface::availableScreenRect() const
+QRect PlasmoidItem::availableScreenRect() const
 {
     if (!applet()->containment() || !applet()->containment()->corona()) {
         return QRect();
@@ -354,7 +354,7 @@ QRect AppletInterface::availableScreenRect() const
     return rect;
 }
 
-bool AppletInterface::event(QEvent *event)
+bool PlasmoidItem::event(QEvent *event)
 {
     // QAction keyboard shortcuts cannot work with QML2 (and probably newver will
     // since in Qt qtquick and qwidgets cannot depend from each other in any way)
@@ -366,9 +366,9 @@ bool AppletInterface::event(QEvent *event)
         QList<QAction *> actions = applet()->internalActions();
         actions.append(applet()->contextualActions());
         // find the wallpaper action if we are a containment
-        ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(this);
+        ContainmentItem *ci = qobject_cast<ContainmentItem *>(this);
         if (ci) {
-            WallpaperInterface *wi = ci->wallpaperInterface();
+            WallpaperItem *wi = ci->wallpaperItem();
             if (wi) {
                 actions << wi->contextualActions();
             }
@@ -422,12 +422,12 @@ bool AppletInterface::event(QEvent *event)
     return AppletQuickItem::event(event);
 }
 
-void AppletInterface::prepareContextualActions()
+void PlasmoidItem::prepareContextualActions()
 {
     Q_EMIT applet()->contextualActionsAboutToShow();
 }
 
-bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
+bool PlasmoidItem::eventFilter(QObject *watched, QEvent *event)
 {
     if (event->type() == QEvent::MouseButtonPress) {
         QMouseEvent *e = static_cast<QMouseEvent *>(event);
@@ -443,7 +443,7 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
                 return false;
             }
 
-            ContainmentInterface *ci = qobject_cast<ContainmentInterface *>(AppletQuickItem::itemForApplet(c));
+            ContainmentItem *ci = qobject_cast<ContainmentItem *>(AppletQuickItem::itemForApplet(c));
 
             if (!ci) {
                 return false;
@@ -486,4 +486,4 @@ bool AppletInterface::eventFilter(QObject *watched, QEvent *event)
     return AppletQuickItem::eventFilter(watched, event);
 }
 
-#include "moc_appletinterface.cpp"
+#include "moc_plasmoiditem.cpp"

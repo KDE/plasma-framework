@@ -5,17 +5,17 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef CONTAINMENTINTERFACE_H
-#define CONTAINMENTINTERFACE_H
+#ifndef CONTAINMENTITEM_H
+#define CONTAINMENTITEM_H
 
 #include <QMenu>
 
 #include <Plasma/Containment>
 
-#include "appletinterface.h"
+#include "plasmoiditem.h"
 
 class AppletQuickItem;
-class WallpaperInterface;
+class WallpaperItem;
 class DropMenu;
 class KJob;
 
@@ -37,11 +37,11 @@ class Info;
  * @code import org.kde.plasma.plasmoid @endcode
  * @version 2.0
  */
-class ContainmentInterface : public AppletInterface
+class ContainmentItem : public PlasmoidItem
 {
     Q_OBJECT
 
-    Q_PROPERTY(WallpaperInterface *wallpaper READ wallpaperInterface NOTIFY wallpaperInterfaceChanged)
+    Q_PROPERTY(WallpaperItem *wallpaper READ wallpaperItem NOTIFY wallpaperItemChanged)
 
     /**
      * True if the UI is still loading, for instance a desktop which doesn't have its wallpaper yet
@@ -49,7 +49,7 @@ class ContainmentInterface : public AppletInterface
     Q_PROPERTY(bool loading READ isLoading NOTIFY isLoadingChanged)
 
 public:
-    ContainmentInterface(QQuickItem *parent = nullptr);
+    ContainmentItem(QQuickItem *parent = nullptr);
 
     void classBegin() override;
 
@@ -59,14 +59,14 @@ public:
         return m_containment.data();
     }
 
-    inline WallpaperInterface *wallpaperInterface() const
+    inline WallpaperItem *wallpaperItem() const
     {
-        return m_wallpaperInterface;
+        return m_wallpaperItem;
     }
 
     // For QML use
     /**
-     * Returns the corresponding AppletInterface of one of its applets
+     * Returns the corresponding PlasmoidItem of one of its applets
      */
     Q_INVOKABLE AppletQuickItem *itemFor(Plasma::Applet *applet) const;
 
@@ -133,7 +133,7 @@ Q_SIGNALS:
     void drawWallpaperChanged();
     void actionsChanged();
     void editModeChanged();
-    void wallpaperInterfaceChanged();
+    void wallpaperItemChanged();
     void isLoadingChanged();
 
 private Q_SLOTS:
@@ -147,16 +147,16 @@ private:
     void appletRemovedForward(Plasma::Applet *applet);
     void clearDataForMimeJob(KIO::Job *job);
     void setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QVariant &data);
-    void deleteWallpaperInterface();
+    void deleteWallpaperItem();
 
-    WallpaperInterface *m_wallpaperInterface = nullptr;
-    QList<QObject *> m_appletInterfaces;
+    WallpaperItem *m_wallpaperItem = nullptr;
+    QList<QObject *> m_plasmoidItems;
     KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;
     QPointer<QMenu> m_contextMenu;
     QPointer<DropMenu> m_dropMenu;
     int m_wheelDelta;
-    friend class AppletInterface;
+    friend class PlasmoidItem;
 };
 
 #endif

@@ -11,7 +11,6 @@
 #include "appletquickitem.h"
 #include "configmodel.h"
 #include "private/configcategory_p.h"
-//#include "plasmoid/wallpaperinterface.h"
 
 #include <QDebug>
 #include <QDir>

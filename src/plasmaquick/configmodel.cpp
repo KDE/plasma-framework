@@ -11,7 +11,6 @@
 #include "configview.h"
 #include "private/configcategory_p.h"
 #include "sharedqmlengine.h"
-// #include "plasmoid/wallpaperinterface.h"
 
 #include <QDebug>
 #include <QDir>

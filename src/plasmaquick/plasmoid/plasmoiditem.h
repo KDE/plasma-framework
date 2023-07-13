@@ -6,8 +6,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#ifndef APPLETINTERFACE_H
-#define APPLETINTERFACE_H
+#ifndef PLASMOIDITEM_H
+#define PLASMOIDITEM_H
 
 #include <QAction>
 #include <QQuickItem>
@@ -31,7 +31,7 @@ class ConfigLoader;
 } // namespace Plasma
 
 /**
- * @class AppletInterface
+ * @class PlasmoidItem
  *
  * @short This class is exposed to applets in QML as the attached property Plasmoid
  *
@@ -39,12 +39,12 @@ class ConfigLoader;
  * @code import org.kde.plasma.plasmoid @endcode
  * @version 2.0
  */
-class AppletInterface : public PlasmaQuick::AppletQuickItem
+class PlasmoidItem : public PlasmaQuick::AppletQuickItem
 {
     Q_OBJECT
 
     /**
-     * The QML root object defined in the applet main.qml will be direct child of an AppletInterface instance
+     * The QML root object defined in the applet main.qml will be direct child of an PlasmoidItem instance
      */
 
     /**
@@ -77,7 +77,7 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
      */
     Q_PROPERTY(QQuickItem *toolTipItem READ toolTipItem WRITE setToolTipItem NOTIFY toolTipItemChanged)
 
-    // TODO: This was moved up from ContainmentInterface because it is required by the
+    // TODO: This was moved up from ContainmentItem because it is required by the
     // Task Manager applet (for "Show only tasks from this screen") and no Qt API exposes
     // screen numbering. An alternate solution that doesn't extend the applet interface
     // would be preferable if found.
@@ -111,8 +111,8 @@ class AppletInterface : public PlasmaQuick::AppletQuickItem
     Q_PROPERTY(QVariantList availableScreenRegion READ availableScreenRegion NOTIFY availableScreenRegionChanged)
 
 public:
-    AppletInterface(QQuickItem *parent = nullptr);
-    ~AppletInterface() override;
+    PlasmoidItem(QQuickItem *parent = nullptr);
+    ~PlasmoidItem() override;
 
     // API not intended for the QML part
 
@@ -199,8 +199,8 @@ private:
     bool m_hideOnDeactivate : 1;
     int m_oldKeyboardShortcut;
 
-    friend class ContainmentInterface;
-    // This is used by ContainmentInterface
+    friend class ContainmentItem;
+    // This is used by ContainmentItem
     QPointF m_positionBeforeRemoval;
 };
 

@@ -6,11 +6,11 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-#include "containmentinterface.h"
+#include "containmentitem.h"
 #include "dropmenu.h"
 #include "private/appletquickitem_p.h"
 #include "sharedqmlengine.h"
-#include "wallpaperinterface.h"
+#include "wallpaperitem.h"
 
 #include <QApplication>
 #include <QClipboard>
@@ -46,43 +46,43 @@
 
 #include <packageurlinterceptor.h>
 
-ContainmentInterface::ContainmentInterface(QQuickItem *parent)
-    : AppletInterface(parent)
-    , m_wallpaperInterface(nullptr)
+ContainmentItem::ContainmentItem(QQuickItem *parent)
+    : PlasmoidItem(parent)
+    , m_wallpaperItem(nullptr)
     , m_activityInfo(nullptr)
     , m_wheelDelta(0)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
 }
 
-void ContainmentInterface::classBegin()
+void ContainmentItem::classBegin()
 {
-    AppletInterface::classBegin();
+    PlasmoidItem::classBegin();
     m_containment = static_cast<Plasma::Containment *>(applet());
 
-    connect(m_containment.data(), &Plasma::Containment::appletAboutToBeRemoved, this, &ContainmentInterface::appletRemovedForward);
-    connect(m_containment.data(), &Plasma::Containment::appletAboutToBeAdded, this, &ContainmentInterface::appletAddedForward);
+    connect(m_containment.data(), &Plasma::Containment::appletAboutToBeRemoved, this, &ContainmentItem::appletRemovedForward);
+    connect(m_containment.data(), &Plasma::Containment::appletAboutToBeAdded, this, &ContainmentItem::appletAddedForward);
 
-    connect(m_containment->corona(), &Plasma::Corona::editModeChanged, this, &ContainmentInterface::editModeChanged);
+    connect(m_containment->corona(), &Plasma::Corona::editModeChanged, this, &ContainmentItem::editModeChanged);
 }
 
-void ContainmentInterface::init()
+void ContainmentItem::init()
 {
-    AppletInterface::init();
+    PlasmoidItem::init();
 
     for (auto *applet : m_containment->applets()) {
         auto appletGraphicObject = AppletQuickItem::itemForApplet(applet);
-        m_appletInterfaces.append(appletGraphicObject);
+        m_plasmoidItems.append(appletGraphicObject);
         connect(appletGraphicObject, &QObject::destroyed, this, [this, appletGraphicObject]() {
-            m_appletInterfaces.removeAll(appletGraphicObject);
+            m_plasmoidItems.removeAll(appletGraphicObject);
         });
     }
-    if (!m_appletInterfaces.isEmpty()) {
+    if (!m_plasmoidItems.isEmpty()) {
         Q_EMIT appletsChanged();
     }
 
     m_activityInfo = new KActivities::Info(m_containment->activity(), this);
-    connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentInterface::activityNameChanged);
+    connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentItem::activityNameChanged);
     Q_EMIT activityNameChanged();
 
     // Create the ToolBox
@@ -132,20 +132,20 @@ void ContainmentInterface::init()
         }
     }
 
-    connect(m_containment.data(), &Plasma::Containment::activityChanged, this, &ContainmentInterface::activityChanged);
+    connect(m_containment.data(), &Plasma::Containment::activityChanged, this, &ContainmentItem::activityChanged);
     connect(m_containment.data(), &Plasma::Containment::activityChanged, this, [=]() {
         delete m_activityInfo;
         m_activityInfo = new KActivities::Info(m_containment->activity(), this);
-        connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentInterface::activityNameChanged);
+        connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentItem::activityNameChanged);
         Q_EMIT activityNameChanged();
     });
-    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged, this, &ContainmentInterface::loadWallpaper);
+    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged, this, &ContainmentItem::loadWallpaper);
 
-    connect(m_containment, &Plasma::Containment::internalActionsChanged, this, &ContainmentInterface::actionsChanged);
-    connect(m_containment, &Plasma::Containment::contextualActionsChanged, this, &ContainmentInterface::actionsChanged);
+    connect(m_containment, &Plasma::Containment::internalActionsChanged, this, &ContainmentItem::actionsChanged);
+    connect(m_containment, &Plasma::Containment::contextualActionsChanged, this, &ContainmentItem::actionsChanged);
 }
 
-PlasmaQuick::AppletQuickItem *ContainmentInterface::itemFor(Plasma::Applet *applet) const
+PlasmaQuick::AppletQuickItem *ContainmentItem::itemFor(Plasma::Applet *applet) const
 {
     if (!applet) {
         return nullptr;
@@ -157,30 +157,30 @@ PlasmaQuick::AppletQuickItem *ContainmentInterface::itemFor(Plasma::Applet *appl
     }
 }
 
-Plasma::Applet *ContainmentInterface::createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom)
+Plasma::Applet *ContainmentItem::createApplet(const QString &plugin, const QVariantList &args, const QRectF &geom)
 {
     return m_containment->createApplet(plugin, args, geom);
 }
 
-void ContainmentInterface::setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QVariant &data)
+void ContainmentItem::setAppletArgs(Plasma::Applet *applet, const QString &mimetype, const QVariant &data)
 {
     if (!applet) {
         return;
     }
 
-    AppletInterface *appletInterface = qobject_cast<AppletInterface *>(AppletQuickItem::itemForApplet(applet));
+    PlasmoidItem *plasmoidItem = qobject_cast<PlasmoidItem *>(AppletQuickItem::itemForApplet(applet));
 
-    if (appletInterface) {
-        Q_EMIT appletInterface->externalData(mimetype, data);
+    if (plasmoidItem) {
+        Q_EMIT plasmoidItem->externalData(mimetype, data);
     }
 }
 
-QObject *ContainmentInterface::containmentItemAt(int x, int y)
+QObject *ContainmentItem::containmentItemAt(int x, int y)
 {
     QObject *desktop = nullptr;
     const auto lst = m_containment->corona()->containments();
     for (Plasma::Containment *c : lst) {
-        ContainmentInterface *contInterface = qobject_cast<ContainmentInterface *>(AppletQuickItem::itemForApplet(c));
+        ContainmentItem *contInterface = qobject_cast<ContainmentItem *>(AppletQuickItem::itemForApplet(c));
 
         if (contInterface && contInterface->isVisible()) {
             QWindow *w = contInterface->window();
@@ -199,9 +199,9 @@ QObject *ContainmentInterface::containmentItemAt(int x, int y)
     return desktop;
 }
 
-QPointF ContainmentInterface::mapFromApplet(Plasma::Applet *applet, int x, int y)
+QPointF ContainmentItem::mapFromApplet(Plasma::Applet *applet, int x, int y)
 {
-    AppletInterface *appletItem = qobject_cast<AppletInterface *>(AppletQuickItem::itemForApplet(applet));
+    PlasmoidItem *appletItem = qobject_cast<PlasmoidItem *>(AppletQuickItem::itemForApplet(applet));
     if (!appletItem || !appletItem->window() || !window()) {
         return QPointF();
     }
@@ -213,9 +213,9 @@ QPointF ContainmentInterface::mapFromApplet(Plasma::Applet *applet, int x, int y
     return pos - window()->geometry().topLeft();
 }
 
-QPointF ContainmentInterface::mapToApplet(Plasma::Applet *applet, int x, int y)
+QPointF ContainmentItem::mapToApplet(Plasma::Applet *applet, int x, int y)
 {
-    AppletInterface *appletItem = qobject_cast<AppletInterface *>(AppletQuickItem::itemForApplet(applet));
+    PlasmoidItem *appletItem = qobject_cast<PlasmoidItem *>(AppletQuickItem::itemForApplet(applet));
     if (!appletItem || !appletItem->window() || !window()) {
         return QPointF();
     }
@@ -229,7 +229,7 @@ QPointF ContainmentInterface::mapToApplet(Plasma::Applet *applet, int x, int y)
     return pos - appletItem->mapToScene(QPointF(0, 0));
 }
 
-QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w, int h) const
+QPointF ContainmentItem::adjustToAvailableScreenRegion(int x, int y, int w, int h) const
 {
     QRegion reg;
     int screenId = screen();
@@ -340,7 +340,7 @@ QPointF ContainmentInterface::adjustToAvailableScreenRegion(int x, int y, int w,
     return rect.topLeft();
 }
 
-void ContainmentInterface::openContextMenu(const QPointF &globalPos)
+void ContainmentItem::openContextMenu(const QPointF &globalPos)
 {
     if (globalPos.isNull()) {
         return;
@@ -350,7 +350,7 @@ void ContainmentInterface::openContextMenu(const QPointF &globalPos)
     mousePressEvent(&me);
 }
 
-void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y, KIO::DropJob *dropJob)
+void ContainmentItem::processMimeData(QObject *mimeDataProxy, int x, int y, KIO::DropJob *dropJob)
 {
     QMimeData *mime = qobject_cast<QMimeData *>(mimeDataProxy);
     if (mime) {
@@ -360,7 +360,7 @@ void ContainmentInterface::processMimeData(QObject *mimeDataProxy, int x, int y,
     }
 }
 
-void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KIO::DropJob *dropJob)
+void ContainmentItem::processMimeData(QMimeData *mimeData, int x, int y, KIO::DropJob *dropJob)
 {
     if (!mimeData) {
         return;
@@ -424,8 +424,8 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
         KIO::MimetypeJob *job = KIO::mimetype(m_dropMenu->urls().at(0), flags);
         job->setParent(m_dropMenu.data());
 
-        QObject::connect(job, &KJob::result, this, &ContainmentInterface::dropJobResult);
-        QObject::connect(job, &KIO::MimetypeJob::mimeTypeFound, this, &ContainmentInterface::mimeTypeRetrieved);
+        QObject::connect(job, &KJob::result, this, &ContainmentItem::dropJobResult);
+        QObject::connect(job, &KIO::MimetypeJob::mimeTypeFound, this, &ContainmentItem::mimeTypeRetrieved);
 
     } else {
         bool deleteDropMenu = true;
@@ -488,7 +488,7 @@ void ContainmentInterface::processMimeData(QMimeData *mimeData, int x, int y, KI
     }
 }
 
-void ContainmentInterface::clearDataForMimeJob(KIO::Job *job)
+void ContainmentItem::clearDataForMimeJob(KIO::Job *job)
 {
     QObject::disconnect(job, nullptr, this, nullptr);
     job->kill();
@@ -500,7 +500,7 @@ void ContainmentInterface::clearDataForMimeJob(KIO::Job *job)
     }
 }
 
-void ContainmentInterface::dropJobResult(KJob *job)
+void ContainmentItem::dropJobResult(KJob *job)
 {
     if (job->error()) {
         qDebug() << "ERROR" << job->error() << ' ' << job->errorString();
@@ -508,7 +508,7 @@ void ContainmentInterface::dropJobResult(KJob *job)
     }
 }
 
-void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
+void ContainmentItem::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
 {
     qDebug() << "Mimetype Job returns." << mimetype;
 
@@ -536,10 +536,10 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
 
         if (m_containment->containmentType() != Plasma::Containment::Type::Panel
             && m_containment->containmentType() != Plasma::Containment::Type::CustomPanel) {
-            if (m_wallpaperInterface && m_wallpaperInterface->supportsMimetype(mimetype)) {
-                wallpaperList << m_wallpaperInterface->kPackage().metadata();
+            if (m_wallpaperItem && m_wallpaperItem->supportsMimetype(mimetype)) {
+                wallpaperList << m_wallpaperItem->kPackage().metadata();
             } else {
-                wallpaperList = WallpaperInterface::listWallpaperMetadataForMimetype(mimetype);
+                wallpaperList = WallpaperItem::listWallpaperMetadataForMimetype(mimetype);
             }
         }
 
@@ -645,8 +645,8 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
                         }
 
                         // set wallpapery stuff
-                        if (m_wallpaperInterface && url.isValid()) {
-                            m_wallpaperInterface->requestOpenUrl(url);
+                        if (m_wallpaperItem && url.isValid()) {
+                            m_wallpaperItem->requestOpenUrl(url);
                         }
                     });
                 }
@@ -676,16 +676,16 @@ void ContainmentInterface::mimeTypeRetrieved(KIO::Job *job, const QString &mimet
     }
 }
 
-void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QRectF &geometryHint)
+void ContainmentItem::appletAddedForward(Plasma::Applet *applet, const QRectF &geometryHint)
 {
     if (!applet) {
         return;
     }
-    qWarning() << "ContainmentInterface::appletAddedForward" << applet << geometryHint;
-    AppletInterface *appletGraphicObject = qobject_cast<AppletInterface *>(AppletQuickItem::itemForApplet(applet));
-    m_appletInterfaces.append(appletGraphicObject);
+    qWarning() << "ContainmentItem::appletAddedForward" << applet << geometryHint;
+    PlasmoidItem *appletGraphicObject = qobject_cast<PlasmoidItem *>(AppletQuickItem::itemForApplet(applet));
+    m_plasmoidItems.append(appletGraphicObject);
     connect(appletGraphicObject, &QObject::destroyed, this, [this, appletGraphicObject]() {
-        m_appletInterfaces.removeAll(appletGraphicObject);
+        m_plasmoidItems.removeAll(appletGraphicObject);
     });
 
     QPointF removalPosition = appletGraphicObject->m_positionBeforeRemoval;
@@ -710,19 +710,19 @@ void ContainmentInterface::appletAddedForward(Plasma::Applet *applet, const QRec
     appletGraphicObject->setY(position.y());
 }
 
-void ContainmentInterface::appletRemovedForward(Plasma::Applet *applet)
+void ContainmentItem::appletRemovedForward(Plasma::Applet *applet)
 {
     if (!AppletQuickItem::hasItemForApplet(applet)) {
         return;
     }
-    AppletInterface *appletGraphicObject = qobject_cast<AppletInterface *>(AppletQuickItem::itemForApplet(applet));
+    PlasmoidItem *appletGraphicObject = qobject_cast<PlasmoidItem *>(AppletQuickItem::itemForApplet(applet));
     if (appletGraphicObject) {
-        m_appletInterfaces.removeAll(appletGraphicObject);
+        m_plasmoidItems.removeAll(appletGraphicObject);
         appletGraphicObject->m_positionBeforeRemoval = appletGraphicObject->mapToItem(this, QPointF());
     }
 }
 
-void ContainmentInterface::loadWallpaper()
+void ContainmentItem::loadWallpaper()
 {
     if (!m_containment->isContainment()) {
         return;
@@ -735,43 +735,43 @@ void ContainmentInterface::loadWallpaper()
         return;
     }
 
-    auto *oldWallpaper = m_wallpaperInterface;
+    auto *oldWallpaper = m_wallpaperItem;
 
     if (!m_containment->wallpaper().isEmpty()) {
-        m_wallpaperInterface = WallpaperInterface::loadWallpaper(this);
+        m_wallpaperItem = WallpaperItem::loadWallpaper(this);
     }
 
-    if (m_wallpaperInterface) {
-        m_wallpaperInterface->setZ(-1000);
+    if (m_wallpaperItem) {
+        m_wallpaperItem->setZ(-1000);
         // Qml seems happier if the parent gets set in this way
-        m_wallpaperInterface->setProperty("parent", QVariant::fromValue(this));
+        m_wallpaperItem->setProperty("parent", QVariant::fromValue(this));
 
-        connect(m_wallpaperInterface, &WallpaperInterface::isLoadingChanged, this, [this]() {
+        connect(m_wallpaperItem, &WallpaperItem::isLoadingChanged, this, [this]() {
             if (!isLoading()) {
                 applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
             }
         });
 
         // set anchors
-        QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperInterface, QStringLiteral("parent"));
-        QQmlProperty prop(m_wallpaperInterface, QStringLiteral("anchors.fill"));
+        QQmlExpression expr(qmlObject()->engine()->rootContext(), m_wallpaperItem, QStringLiteral("parent"));
+        QQmlProperty prop(m_wallpaperItem, QStringLiteral("anchors.fill"));
         prop.write(expr.evaluate());
 
-        m_containment->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperInterface));
+        m_containment->setProperty("wallpaperGraphicsObject", QVariant::fromValue(m_wallpaperItem));
     }
     delete oldWallpaper;
 
-    Q_EMIT wallpaperInterfaceChanged();
+    Q_EMIT wallpaperItemChanged();
 }
 
 // PROTECTED--------------------
 
-void ContainmentInterface::mouseReleaseEvent(QMouseEvent *event)
+void ContainmentItem::mouseReleaseEvent(QMouseEvent *event)
 {
     event->setAccepted(m_containment->containmentActions().contains(Plasma::ContainmentActions::eventToString(event)));
 }
 
-void ContainmentInterface::mousePressEvent(QMouseEvent *event)
+void ContainmentItem::mousePressEvent(QMouseEvent *event)
 
 {
     // even if the menu is executed synchronously, other events may be processed
@@ -802,8 +802,8 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
 
     // FIXME: very inefficient appletAt() implementation
     Plasma::Applet *applet = nullptr;
-    for (QObject *appletObject : std::as_const(m_appletInterfaces)) {
-        if (AppletInterface *ai = qobject_cast<AppletInterface *>(appletObject)) {
+    for (QObject *appletObject : std::as_const(m_plasmoidItems)) {
+        if (PlasmoidItem *ai = qobject_cast<PlasmoidItem *>(appletObject)) {
             if (ai->isVisible() && ai->contains(ai->mapFromItem(this, event->position()))) {
                 applet = ai->applet();
                 break;
@@ -903,7 +903,7 @@ void ContainmentInterface::mousePressEvent(QMouseEvent *event)
     event->setAccepted(true);
 }
 
-void ContainmentInterface::wheelEvent(QWheelEvent *event)
+void ContainmentItem::wheelEvent(QWheelEvent *event)
 {
     const QString trigger = Plasma::ContainmentActions::eventToString(event);
     Plasma::ContainmentActions *plugin = m_containment->containmentActions().value(trigger);
@@ -931,9 +931,9 @@ void ContainmentInterface::wheelEvent(QWheelEvent *event)
     }
 }
 
-void ContainmentInterface::keyPressEvent(QKeyEvent *event)
+void ContainmentItem::keyPressEvent(QKeyEvent *event)
 {
-    AppletInterface::keyPressEvent(event);
+    PlasmoidItem::keyPressEvent(event);
     if (event->isAccepted()) {
         return;
     }
@@ -951,7 +951,7 @@ void ContainmentInterface::keyPressEvent(QKeyEvent *event)
     }
 }
 
-void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event)
+void ContainmentItem::addAppletActions(QMenu *desktopMenu, Plasma::Applet *applet, QEvent *event)
 {
     const auto listActions = applet->contextualActions();
     for (QAction *action : listActions) {
@@ -996,7 +996,7 @@ void ContainmentInterface::addAppletActions(QMenu *desktopMenu, Plasma::Applet *
     }
 }
 
-void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *event)
+void ContainmentItem::addContainmentActions(QMenu *desktopMenu, QEvent *event)
 {
     if (m_containment->corona()->immutability() != Plasma::Types::Mutable //
         && !KAuthorized::authorizeAction(QStringLiteral("plasma/containment_actions"))) {
@@ -1040,32 +1040,32 @@ void ContainmentInterface::addContainmentActions(QMenu *desktopMenu, QEvent *eve
     return;
 }
 
-bool ContainmentInterface::isLoading() const
+bool ContainmentItem::isLoading() const
 {
     return false;
-    return m_wallpaperInterface && m_wallpaperInterface->isLoading();
+    return m_wallpaperItem && m_wallpaperItem->isLoading();
 }
 
-void ContainmentInterface::itemChange(ItemChange change, const ItemChangeData &value)
+void ContainmentItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         // we have a window: create the representations if needed
         if (value.window && !m_containment->wallpaper().isEmpty()) {
             loadWallpaper();
-        } else if (m_wallpaperInterface) {
-            deleteWallpaperInterface();
-            Q_EMIT wallpaperInterfaceChanged();
+        } else if (m_wallpaperItem) {
+            deleteWallpaperItem();
+            Q_EMIT wallpaperItemChanged();
         }
     }
 
-    AppletInterface::itemChange(change, value);
+    PlasmoidItem::itemChange(change, value);
 }
 
-void ContainmentInterface::deleteWallpaperInterface()
+void ContainmentItem::deleteWallpaperItem()
 {
     m_containment->setProperty("wallpaperGraphicsObject", QVariant());
-    m_wallpaperInterface->deleteLater();
-    m_wallpaperInterface = nullptr;
+    m_wallpaperItem->deleteLater();
+    m_wallpaperItem = nullptr;
 }
 
-#include "moc_containmentinterface.cpp"
+#include "moc_containmentitem.cpp"
