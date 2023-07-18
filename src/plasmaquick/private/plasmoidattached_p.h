@@ -43,7 +43,7 @@ public:
         NormalPriorityAction = QAction::NormalPriority,
         HighPriorityAction = QAction::HighPriority,
     };
-    Q_ENUM(ActionPriority);
+    Q_ENUM(ActionPriority)
 
     PlasmoidAttached(QObject *parent = nullptr);
     ~PlasmoidAttached() override;
