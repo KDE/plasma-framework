@@ -31,7 +31,7 @@ import org.kde.kirigami 2.20 as Kirigami
 PlasmaExtras.ActionTextField {
     id: root
 
-    property int _iconWidth: (activeFocus || root.text.length > 0 ? 0 : searchIcon.width + searchIcon.anchors.leftMargin)
+    property int _iconWidth: searchIcon.width + searchIcon.anchors.leftMargin
 
     // padding to accommodate search icon nicely
     leftPadding: if (root.effectiveHorizontalAlignment === TextInput.AlignRight) {
@@ -47,7 +47,6 @@ PlasmaExtras.ActionTextField {
 
     PlasmaCore.IconItem {
         id: searchIcon
-        opacity: root.activeFocus || text.length > 0 ? 0 : 1
         LayoutMirroring.enabled: root.effectiveHorizontalAlignment === TextInput.AlignRight
         anchors.left: root.left
         anchors.leftMargin: Kirigami.Units.smallSpacing * 2
@@ -58,13 +57,6 @@ PlasmaExtras.ActionTextField {
         status: KSvg.Svg.Inactive
 
         source: "search"
-
-        Behavior on opacity {
-            NumberAnimation {
-                duration: Kirigami.Units.longDuration
-                easing.type: Easing.InOutQuad
-            }
-        }
     }
 
     placeholderText: i18nd("libplasma6", "Search…")
