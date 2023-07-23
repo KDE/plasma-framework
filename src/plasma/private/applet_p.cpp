@@ -246,7 +246,6 @@ void AppletPrivate::askDestroy()
         deleteNotification->setFlags(KNotification::Persistent | KNotification::SkipGrouping);
 
         deleteNotification->setComponentName(QStringLiteral("plasma_workspace"));
-        QStringList actions;
         deleteNotification->setIconName(q->icon());
         Plasma::Containment *asContainment = qobject_cast<Plasma::Containment *>(q);
 
@@ -264,9 +263,8 @@ void AppletPrivate::askDestroy()
             deleteNotification->setText(i18n("A desktop has been removed."));
         }
 
-        actions.append(i18n("Undo"));
-        deleteNotification->setActions(actions);
-        QObject::connect(deleteNotification.data(), &KNotification::action1Activated, q, [=]() {
+        KNotificationAction *undoAction = deleteNotification->addAction(i18n("Undo"));
+        QObject::connect(undoAction, &KNotificationAction::activated, q, [=]() {
             setDestroyed(false);
             if (!q->isContainment() && q->containment()) {
                 Plasma::Applet *containmentApplet = static_cast<Plasma::Applet *>(q->containment());
