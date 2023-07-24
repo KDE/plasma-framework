@@ -455,7 +455,7 @@ msgstr "이 위젯 삭제하기"
 #: plasma/private/associatedapplicationmanager.cpp:166
 #, kde-format
 msgid "Run the Associated Application"
-msgstr "연결된 프로그램을 실행합니다"
+msgstr "연결된 앱을 실행합니다"
 
 #: plasma/private/applet_p.cpp:480
 #, kde-format
