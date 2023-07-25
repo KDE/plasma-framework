@@ -33,8 +33,6 @@ class ConfigLoader;
 /**
  * @class PlasmoidItem
  *
- * @short This class is exposed to applets in QML as the attached property Plasmoid
- *
  * <b>Import Statement</b>
  * @code import org.kde.plasma.plasmoid @endcode
  * @version 2.0
