@@ -12,6 +12,8 @@ set_target_properties(KF6PlasmaQuick PROPERTIES
     EXPORT_NAME PlasmaQuick
 )
 
+qt_add_resources(RESOURCES private/resources.qrc)
+
 target_sources(KF6PlasmaQuick PRIVATE
     appletcontext.cpp
     appletquickitem.cpp
@@ -27,14 +29,12 @@ target_sources(KF6PlasmaQuick PRIVATE
     plasmawindow.cpp
     private/configcategory_p.cpp
     private/plasmoidattached_p.cpp
-    ../declarativeimports/core/framesvgitem.cpp
-    ../declarativeimports/core/imagetexturescache.cpp
-    ../declarativeimports/core/managedtexturenode.cpp
-    ../declarativeimports/core/units.cpp
+    private/dialogbackground_p.cpp
     plasmoid/plasmoiditem.cpp
     plasmoid/containmentitem.cpp
     plasmoid/dropmenu.cpp
     plasmoid/wallpaperitem.cpp
+    ${RESOURCES}
 )
 
 if(HAVE_KWAYLAND)

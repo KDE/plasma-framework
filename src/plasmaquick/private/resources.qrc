@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>DialogBackground.qml</file>
+    </qresource>
+</RCC>

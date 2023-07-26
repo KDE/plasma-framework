@@ -5,8 +5,8 @@
 
 #include "plasmawindow.h"
 
-#include "../declarativeimports/core/framesvgitem.h"
 #include "dialogshadows_p.h"
+#include "private/dialogbackground_p.h"
 
 #include <QMarginsF>
 #include <QQuickItem>
@@ -29,7 +29,7 @@ public:
     void updateMainItemGeometry();
     PlasmaWindow *q;
     QPointer<QQuickItem> mainItem;
-    Plasma::FrameSvgItem *frameSvgItem;
+    DialogBackground *dialogBackground;
 };
 
 PlasmaWindow::PlasmaWindow(QWindow *parent)
@@ -39,17 +39,17 @@ PlasmaWindow::PlasmaWindow(QWindow *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint);
 
-    d->frameSvgItem = new Plasma::FrameSvgItem(contentItem());
-    d->frameSvgItem->setImagePath(QStringLiteral("dialogs/background"));
-    connect(d->frameSvgItem->fixedMargins(), &Plasma::FrameSvgItemMargins::marginsChanged, this, [this]() {
+    d->dialogBackground = new DialogBackground(contentItem());
+    d->dialogBackground->setImagePath(QStringLiteral("dialogs/background"));
+    connect(d->dialogBackground, &DialogBackground::fixedMarginsChanged, this, [this]() {
         d->updateMainItemGeometry();
         Q_EMIT marginsChanged();
     });
-    connect(d->frameSvgItem, &Plasma::FrameSvgItem::maskChanged, this, [this]() {
+    connect(d->dialogBackground, &DialogBackground::maskChanged, this, [this]() {
         d->handleFrameChanged();
     });
 
-    DialogShadows::self()->addWindow(this, d->frameSvgItem->enabledBorders());
+    DialogShadows::self()->addWindow(this, d->dialogBackground->enabledBorders());
 }
 
 PlasmaWindow::~PlasmaWindow()
@@ -97,8 +97,8 @@ static FrameSvg::EnabledBorders edgeToBorder(Qt::Edges edges)
 
 void PlasmaWindow::setBorders(Qt::Edges bordersToShow)
 {
-    d->frameSvgItem->setEnabledBorders(edgeToBorder(bordersToShow));
-    DialogShadows::self()->setEnabledBorders(this, d->frameSvgItem->enabledBorders());
+    d->dialogBackground->setEnabledBorders(edgeToBorder(bordersToShow));
+    DialogShadows::self()->setEnabledBorders(this, d->dialogBackground->enabledBorders());
 }
 
 void PlasmaWindow::resizeEvent(QResizeEvent *e)
@@ -106,7 +106,7 @@ void PlasmaWindow::resizeEvent(QResizeEvent *e)
     QQuickWindow::resizeEvent(e);
 
     const QSize windowSize = e->size();
-    d->frameSvgItem->setSize(windowSize);
+    d->dialogBackground->setSize(windowSize);
     if (d->mainItem) {
         const QSize contentSize = windowSize.shrunkBy(margins());
         d->mainItem->setSize(contentSize);
@@ -116,7 +116,7 @@ void PlasmaWindow::resizeEvent(QResizeEvent *e)
 void PlasmaWindowPrivate::handleFrameChanged()
 {
     auto theme = Plasma::Theme();
-    const QRegion mask = frameSvgItem->frameSvg()->mask();
+    const QRegion mask = dialogBackground->mask();
     KWindowEffects::enableBlurBehind(q, theme.blurBehindEnabled(), mask);
     KWindowEffects::enableBackgroundContrast(q,
                                              theme.backgroundContrastEnabled(),
@@ -149,10 +149,10 @@ void PlasmaWindowPrivate::updateMainItemGeometry()
 
 QMargins PlasmaWindow::margins() const
 {
-    return QMargins(d->frameSvgItem->fixedMargins()->left(),
-                    d->frameSvgItem->fixedMargins()->top(),
-                    d->frameSvgItem->fixedMargins()->right(),
-                    d->frameSvgItem->fixedMargins()->bottom());
+    return QMargins(d->dialogBackground->leftMargin(),
+                    d->dialogBackground->topMargin(),
+                    d->dialogBackground->rightMargin(),
+                    d->dialogBackground->bottomMargin());
 }
 }
 
