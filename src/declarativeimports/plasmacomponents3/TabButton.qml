@@ -67,7 +67,7 @@ T.TabButton {
         iconItem.source: control.icon.name || control.icon.source
         iconItem.active: control.visualFocus
         label.text: control.Kirigami.MnemonicData.richTextLabel
-        label.color: control.visualFocus ? Kirigami.Theme.highlightColor : Kirigami.ThemetextColor
+        label.color: control.visualFocus ? Kirigami.Theme.highlightColor : Kirigami.Theme.textColor
         Rectangle { // As long as we don't enable antialiasing, not rounding should be fine
             parent: control.contentItem.label
             width: Math.min(parent.width, parent.contentWidth)
