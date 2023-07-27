@@ -16,7 +16,7 @@ Item {
 
     required property T.AbstractButton control
 
-    property size hintSize: radioButtonSvg.fromCurrentTheme && radioButtonSvg.hasElement("hint-size")
+    property size hintSize: radioButtonSvg.fromCurrentImageSet && radioButtonSvg.hasElement("hint-size")
         ? radioButtonSvg.elementSize("hint-size")
         : Qt.size(Kirigami.Units.iconSizes.small, Kirigami.Units.iconSizes.small)
 
@@ -33,7 +33,7 @@ Item {
     Loader {
         anchors.fill: parent
         sourceComponent: radioButtonSvg.fromCurrentImageSet
-            // Hardcode breeze-light and breeze-dark because fromCurrentTheme is
+            // Hardcode breeze-light and breeze-dark because fromCurrentImageSet is
             // false for them. This is because they don't contain any SVGs and
             // inherit all of them from the default theme.
             || KSvg.ImageSet.imageSetName === "breeze-light"
