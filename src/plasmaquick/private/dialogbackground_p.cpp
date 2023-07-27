@@ -26,7 +26,7 @@ DialogBackground::DialogBackground(QQuickItem *parent)
     m_frameSvgItem = qobject_cast<QQuickItem *>(object);
     Q_ASSERT(m_frameSvgItem);
 
-    connect(m_frameSvgItem, SIGNAL(maskChanged()), this, SIGNAL(maskChanged));
+    connect(m_frameSvgItem, SIGNAL(maskChanged()), this, SIGNAL(maskChanged()));
     connect(m_frameSvgItem->property("fixedMargins").value<QObject *>(), SIGNAL(marginsChanged()), this, SIGNAL(fixedMarginsChanged()));
 }
 
