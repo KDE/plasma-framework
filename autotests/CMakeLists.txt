@@ -8,7 +8,6 @@ include(ECMMarkAsTest)
 include(ECMAddTests)
 
 find_package(KF6CoreAddons REQUIRED)
-find_package(KF6XmlGui REQUIRED)
 find_package(Qt6Widgets REQUIRED)
 
 # add_definitions( -DKDESRCDIR=${CMAKE_CURRENT_SOURCE_DIR} )
@@ -63,7 +62,7 @@ ecm_add_test(
     coronatest.cpp
     coronatestresources.qrc
     TEST_NAME coronatest
-    LINK_LIBRARIES Qt6::Gui Qt6::Qml Qt6::Widgets Qt6::Test KF6::Plasma KF6::CoreAddons KF6::XmlGui
+    LINK_LIBRARIES Qt6::Gui Qt6::Qml Qt6::Widgets Qt6::Test KF6::Plasma KF6::CoreAddons
 )
 
 ecm_add_test(

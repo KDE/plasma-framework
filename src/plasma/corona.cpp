@@ -12,6 +12,7 @@
 
 #include <QDebug>
 #include <QGuiApplication>
+#include <QJSEngine>
 #include <QMimeData>
 #include <QPainter>
 #include <QScreen>
@@ -305,7 +306,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     Q_EMIT immutabilityChanged(immutable);
 
     // update our actions
-    QAction *action = d->actions.action(QStringLiteral("lock widgets"));
+    QAction *action = d->actions.value(QStringLiteral("lock widgets"));
     if (action) {
         if (d->immutability == Types::SystemImmutable) {
             action->setEnabled(false);
@@ -319,7 +320,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
         }
     }
 
-    action = d->actions.action(QStringLiteral("edit mode"));
+    action = d->actions.value(QStringLiteral("edit mode"));
     if (action) {
         switch (d->immutability) {
         case Types::UserImmutable:
@@ -358,7 +359,7 @@ void Corona::setEditMode(bool edit)
         return;
     }
 
-    QAction *editAction = d->actions.action(QStringLiteral("edit mode"));
+    QAction *editAction = d->actions.value(QStringLiteral("edit mode"));
     if (editAction) {
         if (edit) {
             editAction->setText(i18n("Exit Edit Mode"));
@@ -400,14 +401,39 @@ QList<Plasma::Types::Location> Corona::freeEdges(int screen) const
     return freeEdges;
 }
 
-KActionCollection *Corona::actions() const
-{
-    return &d->actions;
-}
-
 QAction *Corona::action(const QString &name) const
 {
-    return d->actions.action(name);
+    return d->actions.value(name);
+}
+
+void Corona::setAction(const QString &name, QAction *action)
+{
+    if (name.isEmpty()) {
+        return;
+    }
+    action->setObjectName(name);
+    QAction *oldAction = d->actions.value(name);
+    if (oldAction && QJSEngine::objectOwnership(oldAction) == QJSEngine::CppOwnership) {
+        delete oldAction;
+    }
+    connect(action, &QObject::destroyed, this, [this, name]() {
+        d->actions.remove(name);
+    });
+    d->actions[name] = action;
+}
+
+void Corona::removeAction(const QString &name)
+{
+    QAction *action = d->actions.value(name);
+    if (action && QJSEngine::objectOwnership(action) == QJSEngine::CppOwnership) {
+        delete action;
+    }
+    d->actions.remove(name);
+}
+
+QList<QAction *> Corona::actions() const
+{
+    return d->actions.values();
 }
 
 CoronaPrivate::CoronaPrivate(Corona *corona)
@@ -415,7 +441,6 @@ CoronaPrivate::CoronaPrivate(Corona *corona)
     , immutability(Types::Mutable)
     , config(nullptr)
     , configSyncTimer(new QTimer(corona))
-    , actions(corona)
     , containmentsStarting(0)
 {
     // TODO: make Package path configurable
@@ -439,10 +464,8 @@ void CoronaPrivate::init()
     configSyncTimer->setSingleShot(true);
     QObject::connect(configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
 
-    // some common actions
-    actions.setConfigGroup(QStringLiteral("Shortcuts"));
-
-    QAction *lockAction = actions.add<QAction>(QStringLiteral("lock widgets"));
+    QAction *lockAction = new QAction(q);
+    q->setAction(QStringLiteral("lock widgets"), lockAction);
     QObject::connect(lockAction, SIGNAL(triggered(bool)), q, SLOT(toggleImmutability()));
     lockAction->setText(i18n("Lock Widgets"));
     lockAction->setAutoRepeat(true);
@@ -450,10 +473,12 @@ void CoronaPrivate::init()
     lockAction->setShortcutContext(Qt::ApplicationShortcut);
 
     // fake containment/applet actions
-    KActionCollection *containmentActions = AppletPrivate::defaultActions(q); // containment has to start with applet stuff
-    ContainmentPrivate::addDefaultActions(containmentActions); // now it's really containment
+    auto containmentActions = AppletPrivate::defaultActions(q); // containment has to start with applet stuff
+    ContainmentPrivate::addDefaultActions(containmentActions, nullptr, q); // now it's really containment
+    actions.insert(containmentActions);
 
-    QAction *editAction = actions.add<QAction>(QStringLiteral("edit mode"));
+    QAction *editAction = new QAction(q);
+    q->setAction(QStringLiteral("edit mode"), editAction);
     QObject::connect(editAction, &QAction::triggered, q, [this]() {
         q->setEditMode(!q->isEditMode());
     });

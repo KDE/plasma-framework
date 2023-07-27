@@ -21,7 +21,6 @@
 #include <QVersionNumber>
 
 #include <KAcceleratorManager>
-#include <KActionCollection>
 #include <KAuthorized>
 #include <KLocalizedString>
 #include <KNotification>
@@ -973,7 +972,7 @@ void ContainmentItem::addAppletActions(QMenu *desktopMenu, Plasma::Applet *apple
 
     desktopMenu->addSeparator();
     if (m_containment->containmentType() == Plasma::Containment::Type::Desktop) {
-        auto action = m_containment->corona()->actions()->action(QStringLiteral("edit mode"));
+        auto action = m_containment->corona()->action(QStringLiteral("edit mode"));
         if (action) {
             desktopMenu->addAction(action);
         }

@@ -840,7 +840,6 @@ private:
     // TODO KF6: drop Q_PRIVATE_SLOT
     Q_PRIVATE_SLOT(d, void cleanUpAndDelete())
     Q_PRIVATE_SLOT(d, void askDestroy())
-    Q_PRIVATE_SLOT(d, void updateShortcuts())
     Q_PRIVATE_SLOT(d, void globalShortcutChanged())
     Q_PRIVATE_SLOT(d, void propagateConfigChanged())
     Q_PRIVATE_SLOT(d, void requestConfiguration())

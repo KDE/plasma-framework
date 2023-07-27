@@ -57,7 +57,6 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         IconThemes
         KIO
         WindowSystem
-        XmlGui
         Notifications
         Package
         Kirigami2

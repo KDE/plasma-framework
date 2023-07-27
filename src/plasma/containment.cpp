@@ -84,10 +84,9 @@ void Containment::init()
         }
     });
 
-    // TODO: this part needs to change when we port away from KActionCollection
-    KActionCollection *actionCollection = static_cast<Applet *>(this)->d->actions;
+    QMap<QString, QAction *> actions = static_cast<Applet *>(this)->d->actions;
     // connect actions
-    ContainmentPrivate::addDefaultActions(actionCollection, this);
+    ContainmentPrivate::addDefaultActions(actions, this);
     bool unlocked = immutability() == Types::Mutable;
 
     // fix the text of the actions that need title()
@@ -115,10 +114,10 @@ void Containment::init()
     }
 
     if (immutability() != Types::SystemImmutable && corona()) {
-        QAction *lockDesktopAction = corona()->actions()->action(QStringLiteral("lock widgets"));
+        QAction *lockDesktopAction = corona()->action(QStringLiteral("lock widgets"));
         // keep a pointer so nobody notices it moved to corona
         if (lockDesktopAction) {
-            actionCollection->addAction(QStringLiteral("lock widgets"), lockDesktopAction);
+            setInternalAction(QStringLiteral("lock widgets"), lockDesktopAction);
         }
     }
 

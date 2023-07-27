@@ -14,7 +14,6 @@
 #include <plasma/plasma_export.h>
 
 class QAction;
-class KActionCollection;
 
 namespace Plasma
 {
@@ -165,14 +164,24 @@ public:
     QList<Plasma::Types::Location> freeEdges(int screen) const;
 
     /**
-     * The actions associated with this Corona
-     */
-    KActionCollection *actions() const;
-
-    /**
      * @returns The action with the given name, if any
      */
     Q_INVOKABLE QAction *action(const QString &name) const;
+
+    /**
+     * Defines a new action with the given name in the internal collection
+     */
+    void setAction(const QString &name, QAction *action);
+
+    /**
+     * Remove the action with the given name, if exists
+     */
+    void removeAction(const QString &name);
+
+    /**
+     * @returns all the actions supported by the corona
+     */
+    QList<QAction *> actions() const;
 
     /**
      * Imports an applet layout from a config file. The results will be added to the

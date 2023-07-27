@@ -80,12 +80,13 @@ PUBLIC
 PRIVATE
     Qt6::Svg
     Qt6::Quick
+    KF6::ConfigGui
+    KF6::ColorScheme
     KF6::ConfigQml
     KF6::Archive
     KF6::GuiAddons #kimagecache
     KF6::I18n
     KF6::WindowSystem #compositingActive
-    KF6::XmlGui   #KActionCollection
     KF6::GlobalAccel #Applet::setGlobalShortcut
     KF6::Notifications
     KF6::IconThemes

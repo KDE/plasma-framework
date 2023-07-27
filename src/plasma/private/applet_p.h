@@ -13,7 +13,6 @@
 #include <QBasicTimer>
 #include <QPointer>
 
-#include <KActionCollection>
 #include <KConfigPropertyMap>
 #include <KConfigSkeleton>
 #include <KNotification>
@@ -49,12 +48,11 @@ public:
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     void resetConfigurationObject();
-    void updateShortcuts();
     void globalShortcutChanged();
     void propagateConfigChanged();
     void setUiReady();
 
-    static KActionCollection *defaultActions(QObject *parent);
+    static QMap<QString, QAction *> defaultActions(QObject *parent);
 
     static void contextualActions_append(QQmlListProperty<QAction> *prop, QAction *action);
     static qsizetype contextualActions_count(QQmlListProperty<QAction> *prop);
@@ -91,8 +89,8 @@ public:
     KConfigLoader *configLoader = nullptr;
     KConfigPropertyMap *configPropertyMap = nullptr;
 
-    // actions stuff; put activationAction into actions?
-    KActionCollection *actions; // TODO: can KACtionCollection usage be removed and just be QHash<QString, QAction*>?
+    // It's a map to have values() as a stable list
+    QMap<QString, QAction *> actions;
     QList<QAction *> contextualActions;
     QAction *activationAction;
     QHash<QString, QActionGroup *> actionGroups;

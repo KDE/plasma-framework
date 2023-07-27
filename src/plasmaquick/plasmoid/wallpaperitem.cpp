@@ -10,7 +10,6 @@
 #include "containmentitem.h"
 #include "sharedqmlengine.h"
 
-#include <KActionCollection>
 #include <KConfigLoader>
 #include <KConfigPropertyMap>
 #include <KDesktopFile>
@@ -204,6 +203,10 @@ void WallpaperItem::contextualActions_append(QQmlListProperty<QAction> *prop, QA
 {
     WallpaperItem *w = static_cast<WallpaperItem *>(prop->object);
     w->m_contextualActions.append(action);
+    QObject::connect(action, &QObject::destroyed, w, [w, action]() {
+        w->m_contextualActions.removeAll(action);
+        Q_EMIT w->contextualActionsChanged(w->m_contextualActions);
+    });
     Q_EMIT w->contextualActionsChanged(w->m_contextualActions);
 };
 

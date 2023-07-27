@@ -13,7 +13,6 @@
 #include <KPackage/Package>
 
 class KConfigLoader;
-class KActionCollection;
 class KConfigPropertyMap;
 
 class ContainmentItem;

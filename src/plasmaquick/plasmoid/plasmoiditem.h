@@ -114,10 +114,6 @@ public:
     PlasmoidItem(QQuickItem *parent = nullptr);
     ~PlasmoidItem() override;
 
-    // API not intended for the QML part
-
-    void executeAction(QAction *action);
-
     // QML API-------------------------------------------------------------------
 
     /**

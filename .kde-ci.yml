@@ -17,7 +17,6 @@ Dependencies:
     'frameworks/kpackage' : '@same'
     'frameworks/kwidgetsaddons' : '@same'
     'frameworks/kwindowsystem' : '@same'
-    'frameworks/kxmlgui' : '@same'
     'frameworks/kirigami' : '@same'
     'frameworks/kcmutils' : '@same'
     'frameworks/ksvg' : '@same'

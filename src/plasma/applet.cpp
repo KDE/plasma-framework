@@ -16,11 +16,11 @@
 #include <QActionGroup>
 #include <QDebug>
 #include <QFile>
+#include <QJSEngine>
 #include <QList>
 #include <QMessageBox>
 #include <QMetaEnum>
 
-#include <KActionCollection>
 #include <KAuthorized>
 #include <KColorScheme>
 #include <KConfigLoader>
@@ -555,14 +555,14 @@ void Applet::flushPendingConstraintsEvents()
     if (c & Plasma::Types::StartupCompletedConstraint) {
         // common actions
         bool unlocked = immutability() == Types::Mutable;
-        QAction *closeApplet = d->actions->action(QStringLiteral("remove"));
+        QAction *closeApplet = d->actions.value(QStringLiteral("remove"));
         if (closeApplet) {
             closeApplet->setEnabled(unlocked);
             closeApplet->setVisible(unlocked);
             connect(closeApplet, SIGNAL(triggered(bool)), this, SLOT(askDestroy()), Qt::UniqueConnection);
         }
 
-        QAction *configAction = d->actions->action(QStringLiteral("configure"));
+        QAction *configAction = d->actions.value(QStringLiteral("configure"));
         if (configAction) {
             if (d->hasConfigurationInterface) {
                 bool canConfig = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
@@ -570,19 +570,17 @@ void Applet::flushPendingConstraintsEvents()
                 configAction->setEnabled(canConfig);
             }
         }
-
-        d->updateShortcuts();
     }
 
     if (c & Plasma::Types::ImmutableConstraint) {
         bool unlocked = immutability() == Types::Mutable;
-        QAction *action = d->actions->action(QStringLiteral("remove"));
+        QAction *action = d->actions.value(QStringLiteral("remove"));
         if (action) {
             action->setVisible(unlocked);
             action->setEnabled(unlocked);
         }
 
-        action = d->actions->action(QStringLiteral("configure"));
+        action = d->actions.value(QStringLiteral("configure"));
         if (action && d->hasConfigurationInterface) {
             bool canConfig = unlocked || KAuthorized::authorize(QStringLiteral("plasma/allow_configure_when_locked"));
             action->setVisible(canConfig);
@@ -648,28 +646,43 @@ void Applet::setInternalAction(const QString &name, QAction *action)
     if (name.isEmpty()) {
         return;
     }
+
     action->setObjectName(name);
-    QAction *oldAction = d->actions->action(name);
-    d->actions->removeAction(oldAction);
-    d->actions->addAction(name, action);
+    QAction *oldAction = d->actions.value(name);
+    if (oldAction && QJSEngine::objectOwnership(oldAction) == QJSEngine::CppOwnership) {
+        delete oldAction;
+    }
+
+    d->actions[name] = action;
+
+    QObject::connect(action, &QObject::destroyed, this, [this, name]() {
+        removeInternalAction(name);
+    });
+
+    Q_EMIT internalActionsChanged(d->actions.values());
 }
 
 QAction *Applet::internalAction(const QString &name) const
 {
-    return d->actions->action(name);
+    return d->actions.value(name);
 }
 
 void Applet::removeInternalAction(const QString &name)
 {
-    QAction *action = d->actions->action(name);
-    // TODO: when porting to QHash<QString, QAction> we will have to check the object
-    // ownership and delete only if C++ owned
-    d->actions->removeAction(action);
+    QAction *action = d->actions.value(name);
+
+    if (action && QJSEngine::objectOwnership(action) == QJSEngine::CppOwnership) {
+        delete action;
+    }
+
+    d->actions.remove(name);
+
+    Q_EMIT internalActionsChanged(d->actions.values());
 }
 
 QList<QAction *> Applet::internalActions() const
 {
-    return d->actions->actions();
+    return d->actions.values();
 }
 
 Types::FormFactor Applet::formFactor() const
@@ -772,7 +785,7 @@ void Applet::setHasConfigurationInterface(bool hasInterface)
         return;
     }
 
-    QAction *configAction = d->actions->action(QStringLiteral("configure"));
+    QAction *configAction = d->actions.value(QStringLiteral("configure"));
     if (configAction) {
         bool enable = hasInterface;
         if (enable) {
