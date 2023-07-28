@@ -11,7 +11,6 @@ import QtQuick.Layouts 1.1
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PC3
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kirigami 2.20 as Kirigami
 
 ColumnLayout
@@ -45,7 +44,7 @@ ColumnLayout
             Layout.minimumHeight: menuColumn.implicitHeight
             spacing: Kirigami.Units.smallSpacing
 
-            PlasmaExtras.Heading {
+            Kirigami.Heading {
                 level: 3
                 text: "Panel Alignment"
             }

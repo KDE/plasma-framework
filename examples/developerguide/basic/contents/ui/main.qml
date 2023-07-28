@@ -30,7 +30,7 @@ Item {
         spacing: Kirigami.Units.gridUnit
 
         // A title on top
-        PlasmaExtras.Heading {
+        Kirigami.Heading {
             level: 1 // from 1 to 5; level 1 is the size used for titles
             text: i18n("Hello Plasma World!")
         }

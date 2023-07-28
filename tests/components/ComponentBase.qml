@@ -6,7 +6,6 @@
 import QtQuick 2.0
 import QtQuick.Layouts 1.2
 import org.kde.plasma.components 3.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kirigami 2.20 as Kirigami
 
 PlasmaComponents.Page {
@@ -22,7 +21,7 @@ PlasmaComponents.Page {
     header: PlasmaComponents.ToolBar {
         leftPadding: mainPage.padding
         rightPadding: mainPage.padding
-        contentItem: PlasmaExtras.Heading {
+        contentItem: Kirigami.Heading {
             text: mainPage.title
             /* FIXME: this line is needed to prevent vertical pixel
              * misalignment of controls, such as checkboxes.

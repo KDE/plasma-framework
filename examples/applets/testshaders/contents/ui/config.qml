@@ -5,14 +5,13 @@
 */
 
 import QtQuick 2.0
-// import org.kde.plasma.components 2.0 as PlasmaComponents
-// import org.kde.plasma.extras 2.0 as PlasmaExtras
+// import org.kde.kirigami 2.20 as Kirigami
 
 Column {
     id: root
     //property alias cfg_Speed
     Rectangle { color: "green"; width: 200; height: 300; }
-//     PlasmaExtras.Heading {
+//     Kirigami.Heading {
 //         text: "Applet Config:"
 //     }
 }

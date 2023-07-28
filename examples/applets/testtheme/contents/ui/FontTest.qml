@@ -7,7 +7,6 @@
 import QtQuick 2.1
 
 import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 import org.kde.kirigami 2.20 as Kirigami
 
@@ -103,7 +102,7 @@ Column {
             }
         }
 
-        PlasmaExtras.Heading {
+        Kirigami.Heading {
 
             font.weight: lightCheck.checked ? Font.Light : Font.Normal
             font.family: fontCheck.text

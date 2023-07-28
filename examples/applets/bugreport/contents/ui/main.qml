@@ -9,7 +9,6 @@ import QtQuick.Layouts 1.1
 
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core 2.0 as PlasmaCore
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.plasma.components 3.0 as PC3
 import org.kde.kirigami 2.20 as Kirigami
 
@@ -37,11 +36,11 @@ Item {
             margins: Kirigami.Units.gridUnit
         }
 
-        PlasmaExtras.Heading {
+        Kirigami.Heading {
             level: 1
             text: i18n("Reporting Bugs")
         }
-        PlasmaExtras.Heading {
+        Kirigami.Heading {
             level: 3
             text: i18n("So you found something wrong in Plasma...")
             width: parent.width

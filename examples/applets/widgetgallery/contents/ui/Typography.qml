@@ -7,6 +7,7 @@
 import QtQuick 2.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.kirigami 2.20 as Kirigami
 
 
 PlasmaComponents.Page {
@@ -19,7 +20,7 @@ PlasmaComponents.Page {
             iconSource: "go-previous"
             onClicked: pageStack.pop()
         }
-        PlasmaExtras.Heading {
+        Kirigami.Heading {
             level: 1
             text: "Typography"
         }
@@ -43,20 +44,20 @@ PlasmaComponents.Page {
                 }
                 spacing: 12
 
-                PlasmaExtras.Heading {
+                Kirigami.Heading {
                     level: 1
                     text: "A Title"
                 }
 
                 Repeater {
                     model: 5
-                    PlasmaExtras.Heading {
+                    Kirigami.Heading {
                         level: index + 1
                         text: "Header level " + (index + 1)
                     }
                 }
 
-                PlasmaExtras.Heading {
+                Kirigami.Heading {
                     level: 1
                     text: "Paragraphs"
                 }
@@ -70,7 +71,7 @@ PlasmaComponents.Page {
                 }
 
 
-                PlasmaExtras.Heading {
+                Kirigami.Heading {
                     level: 1
                     text: "TBD Components"
                 }

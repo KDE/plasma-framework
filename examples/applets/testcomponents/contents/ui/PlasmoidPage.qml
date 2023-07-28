@@ -7,7 +7,6 @@
 import QtQuick 2.0
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 import org.kde.kirigami 2.20 as Kirigami
 
@@ -22,7 +21,7 @@ PlasmaComponents.Page {
     Column {
         anchors.centerIn: parent
         spacing: _s
-        PlasmaExtras.Heading {
+        Kirigami.Heading {
             level: 2
             text: "I'm an applet"
         }

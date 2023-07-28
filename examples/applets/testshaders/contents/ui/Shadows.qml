@@ -13,6 +13,7 @@ import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.ksvg 1.0 as KSvg
+import org.kde.kirigami 2.20 as Kirigami
 
 ShaderExample {
 
@@ -77,7 +78,7 @@ ShaderExample {
                 anchors.topMargin: _s * 2
                 spacing: _s
 
-                PlasmaExtras.Heading {
+                Kirigami.Heading {
                     text: "Effects on Components"
 
                 }
@@ -85,7 +86,7 @@ ShaderExample {
                     text:"In Plasma 2, the user interface is based on an OpenGL scenegraph, composition of the UI happens on the graphics card. In the past weeks, we've been working on getting a Plasma 2 shell up and running, and on porting the QML imports of the Plasma Components."
                 }
 
-                PlasmaExtras.Heading {
+                Kirigami.Heading {
                     font.pointSize: 48
                     anchors.horizontalCenter: parent.horizontalCenter
                     anchors.topMargin: _s * 3
