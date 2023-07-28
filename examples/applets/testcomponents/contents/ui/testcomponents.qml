@@ -10,7 +10,6 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.plasma5support 2.0 as P5Support
 import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 import org.kde.kirigami 2.20 as Kirigami
 
