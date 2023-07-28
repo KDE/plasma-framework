@@ -495,7 +495,7 @@ Item {
 
                     spacing: 0
 
-                    PlasmaExtras.Heading {
+                    Kirigami.Heading {
                         id: listItemTitle
 
                         visible: text.length > 0

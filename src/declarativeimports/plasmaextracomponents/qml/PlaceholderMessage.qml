@@ -10,7 +10,6 @@ import QtQuick.Controls 2.12 as QQC2
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.plasma.extras 2.0 as PlasmaExtras
 import org.kde.kirigami 2.20 as Kirigami
 
 /**
@@ -236,12 +235,12 @@ ColumnLayout {
         source: root.iconName || null
     }
 
-    PlasmaExtras.Heading {
+    Kirigami.Heading {
         text: root.text
         visible: text.length > 0
         opacity: root.type === PlaceholderMessage.Type.Actionable ? 1 : 0.65
 
-        type: PlasmaExtras.Heading.Primary
+        type: Kirigami.Heading.Primary
 
         Layout.fillWidth: true
         horizontalAlignment: Qt.AlignHCenter
