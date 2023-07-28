@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-26 02:01+0000\n"
+"POT-Creation-Date: 2023-07-28 02:07+0000\n"
 "PO-Revision-Date: 2023-03-19 09:03+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Chinese <zh-l10n@linux.org.tw>\n"
@@ -58,39 +58,39 @@ msgstr "搜尋"
 msgid "Unknown"
 msgstr "未知"
 
-#: plasma/applet.cpp:724
+#: plasma/applet.cpp:737
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "啟動 %1 元件"
 
-#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:104
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "移除 %1"
 
-#: plasma/containment.cpp:103 plasma/corona.cpp:366 plasma/corona.cpp:460
+#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "進入編輯模式"
 
-#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:109
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "設定 %1…"
 
-#: plasma/corona.cpp:315 plasma/corona.cpp:447
+#: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
 msgstr "鎖定元件"
 
-#: plasma/corona.cpp:315
+#: plasma/corona.cpp:316
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "解除鎖定元件"
 
-#: plasma/corona.cpp:364
+#: plasma/corona.cpp:365
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "離開編輯模式"
@@ -118,88 +118,88 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "雜項"
 
-#: plasma/private/applet_p.cpp:124
+#: plasma/private/applet_p.cpp:127
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "%1 元件未定義使用哪個文稿引擎。"
 
-#: plasma/private/applet_p.cpp:142
+#: plasma/private/applet_p.cpp:145
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "無法開啟 %2 元件所需要的套件包 %1。"
 
-#: plasma/private/applet_p.cpp:150
+#: plasma/private/applet_p.cpp:153
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "顯示替代選擇…"
 
-#: plasma/private/applet_p.cpp:252
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "Widget Removed"
 msgstr "元件已移除"
 
-#: plasma/private/applet_p.cpp:253
+#: plasma/private/applet_p.cpp:256
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "元件 \"%1\" 已移除。"
 
-#: plasma/private/applet_p.cpp:257
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "Panel Removed"
 msgstr "面板已移除"
 
-#: plasma/private/applet_p.cpp:258
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "A panel has been removed."
 msgstr "面板已被移除。"
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "Desktop Removed"
 msgstr "桌面已移除"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:265
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "桌面已被移除。"
 
-#: plasma/private/applet_p.cpp:265
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "Undo"
 msgstr "復原"
 
-#: plasma/private/applet_p.cpp:357
+#: plasma/private/applet_p.cpp:360
 #, kde-format
 msgid "Widget Settings"
 msgstr "元件設定"
 
-#: plasma/private/applet_p.cpp:363
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Remove this Widget"
 msgstr "移除此元件"
 
-#: plasma/private/containment_p.cpp:61
+#: plasma/private/containment_p.cpp:59
 #, kde-format
 msgid "Remove this Panel"
 msgstr "移除此面板"
 
-#: plasma/private/containment_p.cpp:63
+#: plasma/private/containment_p.cpp:61
 #, kde-format
 msgid "Remove this Activity"
 msgstr "移除此活動"
 
-#: plasma/private/containment_p.cpp:69
+#: plasma/private/containment_p.cpp:67
 #, kde-format
 msgid "Activity Settings"
 msgstr "活動設定"
 
-#: plasma/private/containment_p.cpp:75
+#: plasma/private/containment_p.cpp:79
 #, kde-format
 msgid "Add Widgets..."
 msgstr "新增元件..."
 
-#: plasma/private/containment_p.cpp:190
+#: plasma/private/containment_p.cpp:198
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "找不到請求的組件：%1"
@@ -260,51 +260,51 @@ msgstr "載入小程式發生錯誤：套件包不存在。%1"
 msgid "%1 Settings"
 msgstr "%1 設定"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:551
+#: plasmaquick/plasmoid/containmentitem.cpp:550
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma 套件包"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:555
+#: plasmaquick/plasmoid/containmentitem.cpp:554
 #, kde-format
 msgid "Install"
 msgstr "安裝"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:566
+#: plasmaquick/plasmoid/containmentitem.cpp:565
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "套件包安裝失敗"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:583
+#: plasmaquick/plasmoid/containmentitem.cpp:582
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "您放入的套件包無效。"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:592
-#: plasmaquick/plasmoid/containmentitem.cpp:661
+#: plasmaquick/plasmoid/containmentitem.cpp:591
+#: plasmaquick/plasmoid/containmentitem.cpp:660
 #, kde-format
 msgid "Widgets"
 msgstr "元件"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:597
+#: plasmaquick/plasmoid/containmentitem.cpp:596
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "增加 %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:611
-#: plasmaquick/plasmoid/containmentitem.cpp:665
+#: plasmaquick/plasmoid/containmentitem.cpp:610
+#: plasmaquick/plasmoid/containmentitem.cpp:664
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "增加圖示"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:623
+#: plasmaquick/plasmoid/containmentitem.cpp:622
 #, kde-format
 msgid "Wallpaper"
 msgstr "桌布"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:633
+#: plasmaquick/plasmoid/containmentitem.cpp:632
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

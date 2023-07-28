@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-26 02:01+0000\n"
+"POT-Creation-Date: 2023-07-28 02:07+0000\n"
 "PO-Revision-Date: 2023-06-10 06:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -55,39 +55,39 @@ msgstr "ძებნა"
 msgid "Unknown"
 msgstr "უცნობი"
 
-#: plasma/applet.cpp:724
+#: plasma/applet.cpp:737
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "ვიჯეტის აქტივაცია: %1"
 
-#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:104
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1-ის წაშლა"
 
-#: plasma/containment.cpp:103 plasma/corona.cpp:366 plasma/corona.cpp:460
+#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "რედაქტირების რეჟიმში გადასვლა"
 
-#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:109
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1-ის მორგება..."
 
-#: plasma/corona.cpp:315 plasma/corona.cpp:447
+#: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
 msgstr "ვიჯეტების დაბლოკვა"
 
-#: plasma/corona.cpp:315
+#: plasma/corona.cpp:316
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "ვიჯეტების განბლოკვა"
 
-#: plasma/corona.cpp:364
+#: plasma/corona.cpp:365
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "რედაქტირების რეჟიმიდან გასვლა"
@@ -116,88 +116,88 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "სხვადასხვა"
 
-#: plasma/private/applet_p.cpp:124
+#: plasma/private/applet_p.cpp:127
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "%1 ვიჯეტში ScriptEngine მითითებული არაა."
 
-#: plasma/private/applet_p.cpp:142
+#: plasma/private/applet_p.cpp:145
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "%2 ვიჯეტისთვის საჭირო %1 პაკეტის გახნა შეუძლებელია."
 
-#: plasma/private/applet_p.cpp:150
+#: plasma/private/applet_p.cpp:153
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "ალტერნატივების ჩვენება…"
 
-#: plasma/private/applet_p.cpp:252
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "Widget Removed"
 msgstr "ვიჯეტი წაშლილია"
 
-#: plasma/private/applet_p.cpp:253
+#: plasma/private/applet_p.cpp:256
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "ვიჯეტი \"%1\" წაიშალა."
 
-#: plasma/private/applet_p.cpp:257
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "Panel Removed"
 msgstr "პანელი წაშლილია"
 
-#: plasma/private/applet_p.cpp:258
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "A panel has been removed."
 msgstr "პანელი წაშლილია."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "Desktop Removed"
 msgstr "სამუშაო მაგიდა წაშლილია"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:265
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "სამუშაო მაგიდა წაშლილია."
 
-#: plasma/private/applet_p.cpp:265
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "Undo"
 msgstr "დაბრუნება"
 
-#: plasma/private/applet_p.cpp:357
+#: plasma/private/applet_p.cpp:360
 #, kde-format
 msgid "Widget Settings"
 msgstr "ვიჯეტის მორგება"
 
-#: plasma/private/applet_p.cpp:363
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Remove this Widget"
 msgstr "ვიჯეტის წაშლა"
 
-#: plasma/private/containment_p.cpp:61
+#: plasma/private/containment_p.cpp:59
 #, kde-format
 msgid "Remove this Panel"
 msgstr "პანელის წაშლა"
 
-#: plasma/private/containment_p.cpp:63
+#: plasma/private/containment_p.cpp:61
 #, kde-format
 msgid "Remove this Activity"
 msgstr "აქტივობის წაშლა"
 
-#: plasma/private/containment_p.cpp:69
+#: plasma/private/containment_p.cpp:67
 #, kde-format
 msgid "Activity Settings"
 msgstr "აქტივობის მორგება"
 
-#: plasma/private/containment_p.cpp:75
+#: plasma/private/containment_p.cpp:79
 #, kde-format
 msgid "Add Widgets..."
 msgstr "ვიჯეტების დამატება..."
 
-#: plasma/private/containment_p.cpp:190
+#: plasma/private/containment_p.cpp:198
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "მოთხოვნილი კომპონენტის პოვნა ვერ მოხერხდა: %1"
@@ -260,51 +260,51 @@ msgstr "აპლეტის ჩატვირთვის შეცდომ�
 msgid "%1 Settings"
 msgstr "%1-ის მორგება"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:551
+#: plasmaquick/plasmoid/containmentitem.cpp:550
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma-ის პაკეტი"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:555
+#: plasmaquick/plasmoid/containmentitem.cpp:554
 #, kde-format
 msgid "Install"
 msgstr "დაყენება"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:566
+#: plasmaquick/plasmoid/containmentitem.cpp:565
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "პაკეტის დაყენების შეცდომა"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:583
+#: plasmaquick/plasmoid/containmentitem.cpp:582
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "მითითებული პაკეტი არასწორია."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:592
-#: plasmaquick/plasmoid/containmentitem.cpp:661
+#: plasmaquick/plasmoid/containmentitem.cpp:591
+#: plasmaquick/plasmoid/containmentitem.cpp:660
 #, kde-format
 msgid "Widgets"
 msgstr "ვიჯეტები"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:597
+#: plasmaquick/plasmoid/containmentitem.cpp:596
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1-ის დამატება"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:611
-#: plasmaquick/plasmoid/containmentitem.cpp:665
+#: plasmaquick/plasmoid/containmentitem.cpp:610
+#: plasmaquick/plasmoid/containmentitem.cpp:664
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "ხატულის დამატება"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:623
+#: plasmaquick/plasmoid/containmentitem.cpp:622
 #, kde-format
 msgid "Wallpaper"
 msgstr "ფონური სურათი"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:633
+#: plasmaquick/plasmoid/containmentitem.cpp:632
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

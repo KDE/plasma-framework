@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-26 02:01+0000\n"
+"POT-Creation-Date: 2023-07-28 02:07+0000\n"
 "PO-Revision-Date: 2021-09-05 15:52+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -55,39 +55,39 @@ msgstr ""
 msgid "Unknown"
 msgstr "Tundmatu"
 
-#: plasma/applet.cpp:724
+#: plasma/applet.cpp:737
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktiveeri %1 vidin"
 
-#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:104
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Eemalda %1"
 
-#: plasma/containment.cpp:103 plasma/corona.cpp:366 plasma/corona.cpp:460
+#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Sisene kohandamisrežiimi"
 
-#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:109
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Seadista apletti %1 ..."
 
-#: plasma/corona.cpp:315 plasma/corona.cpp:447
+#: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
 msgstr "Lukusta vidinad"
 
-#: plasma/corona.cpp:315
+#: plasma/corona.cpp:316
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Eemalda vidinate lukustus"
 
-#: plasma/corona.cpp:364
+#: plasma/corona.cpp:365
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Välju kohandamisrežiimist"
@@ -116,88 +116,88 @@ msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Muu"
 
-#: plasma/private/applet_p.cpp:124
+#: plasma/private/applet_p.cpp:127
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "Vidin %1 ei määratle, millist skriptimootorit kasutada."
 
-#: plasma/private/applet_p.cpp:142
+#: plasma/private/applet_p.cpp:145
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Vidinale %2 vajaliku paketi %1 avamine nurjus."
 
-#: plasma/private/applet_p.cpp:150
+#: plasma/private/applet_p.cpp:153
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Näita alternatiive ..."
 
-#: plasma/private/applet_p.cpp:252
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "Widget Removed"
 msgstr "Vidin eemaldatud"
 
-#: plasma/private/applet_p.cpp:253
+#: plasma/private/applet_p.cpp:256
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Vidin \"%1\" eemaldati."
 
-#: plasma/private/applet_p.cpp:257
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "Panel Removed"
 msgstr "Paneel eemaldatud"
 
-#: plasma/private/applet_p.cpp:258
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Paneel eemaldati."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Töölaud eemaldatud"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:265
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Töölaud eemaldati."
 
-#: plasma/private/applet_p.cpp:265
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "Undo"
 msgstr "Võta tagasi"
 
-#: plasma/private/applet_p.cpp:357
+#: plasma/private/applet_p.cpp:360
 #, kde-format
 msgid "Widget Settings"
 msgstr "Vidina seadistused"
 
-#: plasma/private/applet_p.cpp:363
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Eemalda see vidin"
 
-#: plasma/private/containment_p.cpp:61
+#: plasma/private/containment_p.cpp:59
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Eemalda see paneel"
 
-#: plasma/private/containment_p.cpp:63
+#: plasma/private/containment_p.cpp:61
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Eemalda see tegevus"
 
-#: plasma/private/containment_p.cpp:69
+#: plasma/private/containment_p.cpp:67
 #, kde-format
 msgid "Activity Settings"
 msgstr "Tegevuse seadistused"
 
-#: plasma/private/containment_p.cpp:75
+#: plasma/private/containment_p.cpp:79
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Lisa vidinaid ..."
 
-#: plasma/private/containment_p.cpp:190
+#: plasma/private/containment_p.cpp:198
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Nõutud komponenti ei leitud: %1"
@@ -260,51 +260,51 @@ msgstr "Tõrge apleti laadimisel: paketti ei ole olemas. %1"
 msgid "%1 Settings"
 msgstr "%1 seadistused"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:551
+#: plasmaquick/plasmoid/containmentitem.cpp:550
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma pakett"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:555
+#: plasmaquick/plasmoid/containmentitem.cpp:554
 #, kde-format
 msgid "Install"
 msgstr "Paigalda"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:566
+#: plasmaquick/plasmoid/containmentitem.cpp:565
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Paketi paigaldamine nurjus"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:583
+#: plasmaquick/plasmoid/containmentitem.cpp:582
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Lohistatud pakett on vigane."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:592
-#: plasmaquick/plasmoid/containmentitem.cpp:661
+#: plasmaquick/plasmoid/containmentitem.cpp:591
+#: plasmaquick/plasmoid/containmentitem.cpp:660
 #, kde-format
 msgid "Widgets"
 msgstr "Vidinad"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:597
+#: plasmaquick/plasmoid/containmentitem.cpp:596
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Lisa %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:611
-#: plasmaquick/plasmoid/containmentitem.cpp:665
+#: plasmaquick/plasmoid/containmentitem.cpp:610
+#: plasmaquick/plasmoid/containmentitem.cpp:664
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Lisa ikoon"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:623
+#: plasmaquick/plasmoid/containmentitem.cpp:622
 #, kde-format
 msgid "Wallpaper"
 msgstr "Taustapilt"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:633
+#: plasmaquick/plasmoid/containmentitem.cpp:632
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
