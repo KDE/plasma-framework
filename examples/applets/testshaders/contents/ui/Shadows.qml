@@ -82,7 +82,7 @@ ShaderExample {
                     text: "Effects on Components"
 
                 }
-                PlasmaExtras.Paragraph {
+                PlasmaComponents.Label {
                     text:"In Plasma 2, the user interface is based on an OpenGL scenegraph, composition of the UI happens on the graphics card. In the past weeks, we've been working on getting a Plasma 2 shell up and running, and on porting the QML imports of the Plasma Components."
                 }
 

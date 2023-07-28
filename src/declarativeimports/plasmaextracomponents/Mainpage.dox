@@ -14,7 +14,6 @@ List views
 
 Text formatting
 - \link org::kde::plasma::extras::Heading Heading \endlink
-- \link org::kde::plasma::extras::Paragraph Paragraph \endlink
 - \link org::kde::plasma::extras::Title Title \endlink
 
 Animations

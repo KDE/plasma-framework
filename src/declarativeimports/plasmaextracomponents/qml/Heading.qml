@@ -18,12 +18,13 @@ import org.kde.kirigami 2.20 as Kirigami
  * Example usage:
  *
  * @code
+ * import org.kde.plasma.components 3.0 as PlasmaComponents3
  * import org.kde.plasma.extras 2.0 as PlasmaExtras
  * [...]
  * Column {
  *     PlasmaExtras.Heading { text: "Fruit sweetness on the rise"; level: 1 }
  *     PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
- *     PlasmaExtras.Paragraph { text: "Long text about fruit and apples [...]" }
+ *     PlasmaComponents3.Label { text: "Long text about fruit and apples [...]" }
  *   [...]
  * }
  * @endcode

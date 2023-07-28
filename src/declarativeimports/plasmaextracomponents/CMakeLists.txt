@@ -32,7 +32,6 @@ ecm_generate_qmltypes(org.kde.plasma.extras 2.0 DESTINATION ${KDE_INSTALL_QMLDIR
 
 # install(FILES qml/App.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
 # install(FILES qml/Heading.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
-# install(FILES qml/Paragraph.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
 # install(FILES qml/Title.qml DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
 # install(DIRECTORY qml/animations/ DESTINATION ${KDE_INSTALL_PLUGINDIR}/platformimports/touch/org/kde/plasma/extras)
 

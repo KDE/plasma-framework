@@ -62,11 +62,11 @@ PlasmaComponents.Page {
                     text: "Paragraphs"
                 }
 
-                PlasmaExtras.Paragraph {
+                PlasmaComponents.Label {
                     text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean sit amet turpis eros, in luctus lectus. Curabitur pulvinar ligula at leo pellentesque non faucibus mauris elementum. Pellentesque convallis porttitor sodales. Maecenas risus erat, viverra blandit vestibulum eu, suscipit in est. Praesent quis mattis eros. Sed ante ante, adipiscing non gravida sed, ultrices ultrices urna. Etiam congue mattis convallis. Maecenas sollicitudin mauris at lorem aliquam in venenatis erat convallis. Fusce eleifend scelerisque porttitor. Praesent metus sapien, hendrerit ac congue eget, feugiat id enim. Morbi venenatis gravida felis, vitae varius nunc dictum a. Etiam accumsan, velit ac tempor convallis, leo nibh consequat purus, sit amet fringilla nisi mi et libero."
                 }
 
-                PlasmaExtras.Paragraph {
+                PlasmaComponents.Label {
                     text: "Donec tincidunt justo eget nulla eleifend hendrerit. Ut eleifend erat nibh. Nunc sagittis tincidunt quam quis lobortis. Nam suscipit ultrices nulla. Suspendisse ullamcorper eleifend massa eu pharetra. Donec tempor iaculis elit, in suscipit velit tristique eu. Curabitur suscipit, lacus id pharetra dapibus, velit ante consectetur erat, ac dignissim quam arcu vitae diam. Suspendisse laoreet tortor nec dolor venenatis ultricies. Sed nunc erat, placerat non gravida sit amet, ullamcorper eu turpis. Nullam vestibulum lacus sed tellus fermentum mollis id at urna. Sed eleifend lobortis mollis. Donec lacus dolor, varius commodo gravida et, fringilla in justo. Nam gravida lorem in odio viverra elementum. Suspendisse non tellus at justo convallis placerat vel ac tellus. Nulla tristique tristique dui ut vestibulum."
                 }
 
