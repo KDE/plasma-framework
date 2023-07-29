@@ -10,7 +10,7 @@ import QtQuick.Controls 2.12 as QQC2
 
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.kirigami 2.20 as Kirigami
+import org.kde.kirigami 2 as Kirigami
 
 /**
  * A placeholder message indicating that a list view is empty. The message

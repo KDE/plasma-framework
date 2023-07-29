@@ -5,11 +5,11 @@
  */
 
 import QtQuick 2.12
-import QtQuick.Controls @QQC2_VERSION@ 
+import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.kirigami 2.20 as Kirigami
+import org.kde.kirigami 2 as Kirigami
 import "private" as P
 
 T.SpinBox {

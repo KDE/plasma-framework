@@ -5,7 +5,7 @@
 
 import QtQuick 2.6
 import org.kde.ksvg 1.0 as KSvg
-import org.kde.kirigami 2.20 as Kirigami
+import org.kde.kirigami 2 as Kirigami
 
 Item {
     id: root
@@ -31,8 +31,8 @@ Item {
         flat: true
     }
 
-    // TODO: Maybe add a way to customize the look of normal state flat buttons with "toolbutton-normal"? 
-    // TODO: Maybe add a way to customize the background of focused flat buttons with "toolbutton-focus-background"? 
+    // TODO: Maybe add a way to customize the look of normal state flat buttons with "toolbutton-normal"?
+    // TODO: Maybe add a way to customize the background of focused flat buttons with "toolbutton-focus-background"?
     // TODO KF6: "flat" would be a more logical name than "toolbutton" since toolbuttons can be non-flat.
     KSvg.FrameSvgItem {
         id: surfaceHover

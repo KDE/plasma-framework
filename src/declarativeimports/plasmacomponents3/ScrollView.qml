@@ -10,7 +10,7 @@ import QtQuick 2.9
 import QtQuick.Templates @QQC2_VERSION@ as T
 import QtQml 2.15
 
-import org.kde.kirigami 2.9 as Kirigami
+import org.kde.kirigami 2 as Kirigami
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 
 T.ScrollView {

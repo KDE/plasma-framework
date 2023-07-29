@@ -9,7 +9,7 @@ import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.ksvg 1.0 as KSvg
 import "private" as Private
-import org.kde.kirigami 2.5 as Kirigami
+import org.kde.kirigami 2 as Kirigami
 import "mobiletextselection" as MobileTextSelection
 
 T.TextArea {

@@ -7,14 +7,14 @@
 import QtQuick 2.1
 //for Settings
 import org.kde.ksvg 1.0 as KSvg
-import org.kde.kirigami 2.2 as Kirigami
+import org.kde.kirigami 2 as Kirigami
 
 KSvg.FrameSvgItem {
     id: background
 
     imagePath: "widgets/listitem"
     prefix: control.highlighted || control.pressed ? "pressed" : "normal"
-    
+
     visible: control.ListView.view ? control.ListView.view.highlight === null : true
 
     KSvg.FrameSvgItem {
