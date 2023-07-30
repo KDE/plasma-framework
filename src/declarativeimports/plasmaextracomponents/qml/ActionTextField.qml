@@ -4,7 +4,6 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15 as QQC2
 import org.kde.plasma.components 3.0 as PlasmaComponents3
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2 as Kirigami
 
 /**
@@ -116,7 +115,7 @@ PlasmaComponents3.TextField {
         }
 
         // here to make it private
-        component ActionIcon: PlasmaCore.IconItem {
+        component ActionIcon: Kirigami.Icon {
             implicitWidth: Kirigami.Units.iconSizes.small
             implicitHeight: Kirigami.Units.iconSizes.small
 

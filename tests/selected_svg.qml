@@ -6,7 +6,7 @@
 
 import QtQuick 2.2
 import QtQuick.Controls 2.15 as Controls
-import org.kde.plasma.core 2.0 as PlasmaCore
+import org.kde.kirigami 2.20 as Kirigami
 import org.kde.ksvg 1.0 as KSvg
 
 KSvg.FrameSvgItem {
@@ -33,7 +33,7 @@ KSvg.FrameSvgItem {
             }
         }
 
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             id: icon
             source: "phone"
             state: root.state

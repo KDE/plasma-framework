@@ -8,7 +8,6 @@ import QtQuick 2.3
 import QtQuick.Layouts 1.1
 import QtQuick.Controls 1.0 as QtControls
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.kirigami 2 as Kirigami
 
 Item {
@@ -68,7 +67,7 @@ Item {
     }
 
     // Overlay everything with a decorative, large, translucent icon
-    PlasmaCore.IconItem {
+    Kirigami.Icon {
 
         // We use an anchor layout and dpi-corrected sizing
         width: Kirigami.Units.iconSizes.large * 4

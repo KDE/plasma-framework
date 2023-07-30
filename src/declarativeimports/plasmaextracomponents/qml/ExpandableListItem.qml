@@ -467,15 +467,13 @@ Item {
                 Layout.minimumHeight: defaultActionButton.height
 
                 // Icon and optional emblem
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     id: listItemIcon
-
-                    usesPlasmaTheme: listItem.iconUsesPlasmaSVG
 
                     implicitWidth: Kirigami.Units.iconSizes.medium
                     implicitHeight: Kirigami.Units.iconSizes.medium
 
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         id: iconEmblem
 
                         visible: source != undefined && source.length > 0

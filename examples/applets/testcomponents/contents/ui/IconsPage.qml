@@ -41,27 +41,27 @@ PlasmaComponents.Page {
             width: parent.width
             spacing: _s
 
-            PlasmaCore.IconItem {
+            Kirigami.Icon {
                 source: "configure"
                 width: _h
                 height: width
             }
-            PlasmaCore.IconItem {
+            Kirigami.Icon {
                 source: "dialog-ok"
                 width: _h
                 height: width
             }
-            PlasmaCore.IconItem {
+            Kirigami.Icon {
                 source: "folder-green"
                 width: _h
                 height: width
             }
-            PlasmaCore.IconItem {
+            Kirigami.Icon {
                 source: "akonadi"
                 width: _h
                 height: width
             }
-            PlasmaCore.IconItem {
+            Kirigami.Icon {
                 source: "clock"
                 width: _h
                 height: width
@@ -86,7 +86,7 @@ PlasmaComponents.Page {
                 icon: "klipper"
                 mainText: "Fish sighted in the wild, in the wild, a fish was seen."
                 subText: "A mean-looking grouper swam by."
-                PlasmaCore.IconItem {
+                Kirigami.Icon {
                     id: akonadiIcon
                     objectName: "akonadiIcon"
                     source: "akonadi"

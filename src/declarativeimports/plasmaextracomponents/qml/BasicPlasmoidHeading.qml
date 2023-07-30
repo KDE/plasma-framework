@@ -55,8 +55,8 @@ PlasmoidHeading {
             icon.name: "open-menu-symbolic"
             checkable: visibleActions > 1
             contentItem.opacity: visibleActions > 1
-            // NOTE: it needs an IconItem because QtQuickControls2 buttons cannot load QIcons as their icon
-            PlasmaCore.IconItem {
+            // NOTE: it needs an Icon because QtQuickControls2 buttons cannot load QIcons as their icon
+            Kirigami.Icon {
                 parent: actionsButton
                 anchors.centerIn: parent
                 active: actionsButton.hovered

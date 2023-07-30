@@ -29,8 +29,9 @@ class ToolTipDialog;
  * Example usage:
  * @code
  * import org.kde.plasma.core 2.0 as PlasmaCore
+ * import org.kde.kirigami 2.20 as Kirigami
  *
- * PlasmaCore.IconItem {
+ * Kirigami.Icon {
  *     PlasmaCore.ToolTipArea {
  *         mainText: i18n("Tooltip Title")
  *         subText: i18n("Some explanation.")

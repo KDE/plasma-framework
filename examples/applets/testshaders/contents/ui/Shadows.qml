@@ -9,7 +9,6 @@
 import QtQuick 2.0
 //import QtQuick.Particles 2.0
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2 as Kirigami
@@ -96,12 +95,12 @@ ShaderExample {
                     width: parent.width
                     spacing: _s
 
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         source: "configure"
                         width: parent.height
                         height: width
                     }
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         source: "dialog-ok"
                         width: parent.height
                         height: width
@@ -118,12 +117,12 @@ ShaderExample {
                         height: width
                     }
 
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         source: "akonadi"
                         width: parent.height
                         height: width
                     }
-                    PlasmaCore.IconItem {
+                    Kirigami.Icon {
                         source: "clock"
                         width: parent.height
                         height: width

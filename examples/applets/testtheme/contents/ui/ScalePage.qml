@@ -6,7 +6,6 @@
 
 import QtQuick 2.1
 
-import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
 import org.kde.kirigami 2 as Kirigami
@@ -72,27 +71,27 @@ Item {
         }
         spacing: Kirigami.Units.smallSpacing
 
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             source: "configure"
             width: Kirigami.Units.iconSizes.small
             height: width
         }
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             source: "dialog-ok"
             width: Kirigami.Units.iconSizes.smallMedium
             height: width
         }
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             source: "resize-tr2bl"
             width: Kirigami.Units.iconSizes.medium
             height: width
         }
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             source: "akonadi"
             width: Kirigami.Units.iconSizes.large
             height: width
         }
-        PlasmaCore.IconItem {
+        Kirigami.Icon {
             source: "clock"
             width: Kirigami.Units.iconSizes.huge
             height: width
