@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 02:07+0000\n"
+"POT-Creation-Date: 2023-08-01 02:15+0000\n"
 "PO-Revision-Date: 2023-07-25 01:12+0200\n"
 "Last-Translator: Shinjo Park <kde@peremen.name>\n"
 "Language-Team: Korean <kde-kr@kde.org>\n"
@@ -23,13 +23,13 @@ msgstr ""
 msgid "More actions"
 msgstr "더 많은 동작"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "접기"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -40,12 +40,12 @@ msgstr "펴기"
 msgid "Password"
 msgstr "암호"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:62
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:60
 #, kde-format
 msgid "Search…"
 msgstr "검색…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:64
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:62
 #, kde-format
 msgid "Search"
 msgstr "검색"

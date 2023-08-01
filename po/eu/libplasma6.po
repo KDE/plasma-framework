@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 02:07+0000\n"
+"POT-Creation-Date: 2023-08-01 02:15+0000\n"
 "PO-Revision-Date: 2023-07-15 20:46+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -27,13 +27,13 @@ msgstr ""
 msgid "More actions"
 msgstr "Ekintza gehiago"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Tolestu"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -44,12 +44,12 @@ msgstr "Zabaldu"
 msgid "Password"
 msgstr "Pasahitza"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:62
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:60
 #, kde-format
 msgid "Search…"
 msgstr "Bilatu..."
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:64
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:62
 #, kde-format
 msgid "Search"
 msgstr "Bilatu"

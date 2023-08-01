@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-07-28 02:07+0000\n"
+"POT-Creation-Date: 2023-08-01 02:15+0000\n"
 "PO-Revision-Date: 2022-09-19 12:33+0300\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -26,13 +26,13 @@ msgstr ""
 msgid "More actions"
 msgstr "Daugiau veiksmų"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Suskleisti"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:570
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:568
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -43,12 +43,12 @@ msgstr "Išskleisti"
 msgid "Password"
 msgstr "Slaptažodis"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:62
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:60
 #, kde-format
 msgid "Search…"
 msgstr "Ieškoti…"
 
-#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:64
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:62
 #, kde-format
 msgid "Search"
 msgstr "Paieška"
