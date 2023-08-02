@@ -656,7 +656,8 @@ void Applet::setInternalAction(const QString &name, QAction *action)
     d->actions[name] = action;
 
     QObject::connect(action, &QObject::destroyed, this, [this, name]() {
-        removeInternalAction(name);
+        d->actions.remove(name);
+        Q_EMIT internalActionsChanged(d->actions.values());
     });
 
     Q_EMIT internalActionsChanged(d->actions.values());
@@ -672,6 +673,7 @@ void Applet::removeInternalAction(const QString &name)
     QAction *action = d->actions.value(name);
 
     if (action && QJSEngine::objectOwnership(action) == QJSEngine::CppOwnership) {
+        disconnect(action, &QObject::destroyed, this, nullptr); // Avoid emitting signal again
         delete action;
     }
 
