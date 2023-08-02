@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 02:15+0000\n"
+"POT-Creation-Date: 2023-08-02 02:08+0000\n"
 "PO-Revision-Date: 2019-11-26 19:29+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -54,7 +54,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Ukendt"
 
-#: plasma/applet.cpp:737
+#: plasma/applet.cpp:739
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktivér widgetten %1"

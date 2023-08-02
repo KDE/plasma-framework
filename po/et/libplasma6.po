@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 02:15+0000\n"
+"POT-Creation-Date: 2023-08-02 02:08+0000\n"
 "PO-Revision-Date: 2021-09-05 15:52+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Tundmatu"
 
-#: plasma/applet.cpp:737
+#: plasma/applet.cpp:739
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktiveeri %1 vidin"

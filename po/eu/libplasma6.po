@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-01 02:15+0000\n"
+"POT-Creation-Date: 2023-08-02 02:08+0000\n"
 "PO-Revision-Date: 2023-07-15 20:46+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -59,7 +59,7 @@ msgstr "Bilatu"
 msgid "Unknown"
 msgstr "Ezezaguna"
 
-#: plasma/applet.cpp:737
+#: plasma/applet.cpp:739
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktibatu %1 trepeta"
