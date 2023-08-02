@@ -6,7 +6,6 @@
 */
 
 import QtQuick 2.6
-import QtQuick.Layouts 1.15
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.kirigami 2 as Kirigami
@@ -53,8 +52,16 @@ T.ToolTip {
 
     closePolicy: T.Popup.CloseOnEscape | T.Popup.CloseOnPressOutsideParent | T.Popup.CloseOnReleaseOutsideParent
 
-    contentItem: RowLayout {
+    contentItem: Item {
+        implicitWidth: Math.min(label.maxTextLength, label.contentWidth)
+        implicitHeight: label.implicitHeight
+
         Label {
+            id: label
+
+            // This value is basically arbitrary. It just looks nice.
+            readonly property double maxTextLength: Kirigami.Units.gridUnit * 14
+
             // Strip out ampersands right before non-whitespace characters, i.e.
             // those used to determine the alt key shortcut
             text: control.text.replace(/&(?=\S)/g, "")
@@ -63,9 +70,13 @@ T.ToolTip {
 
             Kirigami.Theme.colorGroup: Kirigami.Theme.Tooltip
             Kirigami.Theme.inherit: false
-            Layout.fillWidth: true
-            // This value is basically arbitrary. It just looks nice.
-            Layout.maximumWidth: Kirigami.Units.gridUnit * 14
+
+            // ensure that long text actually gets wrapped
+            onLineLaidOut: (line) => {
+                if (line.implicitWidth > maxTextLength)
+                    line.width = maxTextLength
+            }
+
         }
     }
 
