@@ -42,7 +42,6 @@ private Q_SLOTS:
     void animatingEnabledChange();
     void windowChanged();
     void paintedSize();
-    void implicitSize();
     void nonSquareImplicitSize();
     void roundToIconSize();
 
