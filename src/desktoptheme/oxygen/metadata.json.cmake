@@ -51,7 +51,7 @@
         "Description[eu]": "Oxygen-en estilora egindako gaia",
         "Description[fi]": "Oxygen-tyylillä tehty teema",
         "Description[fr]": "Thème réalisé selon un thème « Oxygen »",
-        "Description[gl]": "Tema feito no estilo Oxygen",
+        "Description[gl]": "Tema feito no estilo Oxygen.",
         "Description[ia]": "Thema facite in le stilo de Oxygen",
         "Description[id]": "Tema dilakukan dalam gaya Oksigen",
         "Description[it]": "Tema realizzato nello stile di Oxygen",

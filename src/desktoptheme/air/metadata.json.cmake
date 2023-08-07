@@ -51,7 +51,7 @@
         "Description[eu]": "Haize freskoa arnastea",
         "Description[fi]": "Raikkaan ilman henkäys",
         "Description[fr]": "Une bouffée d'air frais",
-        "Description[gl]": "Un folgo de ar fresco",
+        "Description[gl]": "Un folgo de ar fresco.",
         "Description[ia]": "Un respiration de aere fresc",
         "Description[id]": "A breath of fresh air",
         "Description[it]": "Una ventata di aria fresca",
