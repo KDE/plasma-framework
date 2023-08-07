@@ -56,7 +56,7 @@
         "Description[eu]": "Brisa KDEren VDGk egina",
         "Description[fi]": "Breeze KDE VDG:ltä",
         "Description[fr]": "Breeze par l'équipe « KDE VDG »",
-        "Description[gl]": "Brisa do KDE VDG",
+        "Description[gl]": "Brisa do KDE VDG.",
         "Description[ia]": "Breeze (Brisa) per le KDE VDG",
         "Description[id]": "Breeze oleh KDE VDG",
         "Description[it]": "Brezza a cura del KDE VDG",

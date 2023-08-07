@@ -56,7 +56,7 @@
         "Description[eu]": "Brisa argia, KDE VDGk egina",
         "Description[fi]": "Vaalea Breeze KDE VDG:ltä",
         "Description[fr]": "Breeze clair par l'équipe « KDE VDG »",
-        "Description[gl]": "Brisa clara do KDE VDG",
+        "Description[gl]": "Brisa clara do KDE VDG.",
         "Description[ia]": "Brisa Ligier per KDE VDG",
         "Description[id]": "Breeze Terang oleh KDE VDG",
         "Description[it]": "Brezza chiaro a cura del VDG di KDE",
