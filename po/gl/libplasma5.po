@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-01-06 00:44+0000\n"
-"PO-Revision-Date: 2023-06-11 13:16+0200\n"
+"PO-Revision-Date: 2023-08-06 05:29+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
 "Language: gl\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.04.3\n"
 
 #: declarativeimports/calendar/eventdatadecorator.cpp:51
 #, kde-format
@@ -509,13 +509,13 @@ msgstr ""
 #: plasma/private/publish.ui:27
 #, kde-format
 msgid "Share this widget on the network"
-msgstr "Compartir este trebello na rede"
+msgstr "Compartir este trebello na rede."
 
 #. i18n: ectx: property (text), widget (QCheckBox, allUsersCheckbox)
 #: plasma/private/publish.ui:37
 #, kde-format
 msgid "Allow everybody to freely access this widget"
-msgstr "Permitirlle a todo o mundo acceder libremente a este trebello"
+msgstr "Permitirlle a todo o mundo acceder libremente a este trebello."
 
 #: plasma/private/service_p.h:32
 #, kde-format
