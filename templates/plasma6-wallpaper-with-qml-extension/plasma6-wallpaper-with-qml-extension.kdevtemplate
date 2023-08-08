@@ -26,6 +26,7 @@ Name[tr]=QML uzantısıyla Basit Plasma Duvar Kağıdı (Qt6)
 Name[uk]=Просте тло стільниці Плазми із розширенням QML (Qt6)
 Name[x-test]=xxSimple Plasma Wallpaper with QML extension (Qt6)xx
 Name[zh_CN]=带有 QML 扩展的 Plasma 简易壁纸程序 (Qt6)
+Name[zh_TW]=含有 QML 延伸元件的簡易 Plasma 桌布 (Qt6)
 Comment=A Plasma wallpaper which uses custom API provided by an own QML extension plugin
 Comment[az]=QML əlavəsi kimi təqdim edilən öz APİ -sini istifadə edən Plasma üçün divar kağızı nümunələri
 Comment[be]=Шпалеры Plasma, якія выкарыстоўваюць уласны API з дапамогай ўласнай убудовы пашырэння QML
