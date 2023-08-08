@@ -94,6 +94,9 @@ Q_SIGNALS:
     void paintedSizeChanged();
     void thumbnailAvailableChanged();
 
+private Q_SLOTS:
+    void invalidateSceneGraph();
+
 protected:
     void itemChange(ItemChange change, const ItemChangeData &data) override;
     void releaseResources() override;

@@ -237,6 +237,33 @@ void WindowThumbnail::releaseResources()
 #endif
 }
 
+// this method is invoked automagically from the render thread
+// but with the GUI thread locked
+//
+void WindowThumbnail::invalidateSceneGraph()
+{
+    delete m_textureProvider;
+    m_textureProvider = nullptr;
+#if HAVE_GLX
+    if (m_glxPixmap != XCB_PIXMAP_NONE) {
+        // runnable used just to share code with releaseResources, we're already in the render thread
+        // so run directly
+        auto runnable = new DiscardGlxPixmapRunnable(m_texture, m_releaseTexImage, m_glxPixmap);
+        runnable->run();
+        m_glxPixmap = XCB_PIXMAP_NONE;
+        m_texture = 0;
+    }
+#endif
+#if HAVE_EGL
+    if (m_image != EGL_NO_IMAGE_KHR) {
+        auto runnable = new DiscardEglPixmapRunnable(m_texture, m_eglDestroyImageKHR, m_image);
+        runnable->run();
+        m_image = EGL_NO_IMAGE_KHR;
+        m_texture = 0;
+    }
+#endif
+}
+
 uint32_t WindowThumbnail::winId() const
 {
     return m_winId;
