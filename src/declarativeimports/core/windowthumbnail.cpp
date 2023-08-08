@@ -131,33 +131,6 @@ void WindowTextureProvider::setTexture(QSGTexture *texture)
 WindowThumbnail::WindowThumbnail(QQuickItem *parent)
     : QQuickItem(parent)
     , QAbstractNativeEventFilter()
-    , m_xcb(false)
-    , m_composite(false)
-    , m_winId(0)
-    , m_paintedSize(QSizeF())
-    , m_thumbnailAvailable(false)
-    , m_redirecting(false)
-    , m_damaged(false)
-    , m_depth(0)
-#if HAVE_XCB_COMPOSITE
-    , m_openGLFunctionsResolved(false)
-    , m_damageEventBase(0)
-    , m_damage(XCB_NONE)
-    , m_pixmap(XCB_PIXMAP_NONE)
-    , m_texture(0)
-#if HAVE_GLX
-    , m_glxPixmap(XCB_PIXMAP_NONE)
-    , m_bindTexImage(nullptr)
-    , m_releaseTexImage(nullptr)
-#endif // HAVE_GLX
-#if HAVE_EGL
-    , m_eglFunctionsResolved(false)
-    , m_image(EGL_NO_IMAGE_KHR)
-    , m_eglCreateImageKHR(nullptr)
-    , m_eglDestroyImageKHR(nullptr)
-    , m_glEGLImageTargetTexture2DOES(nullptr)
-#endif // HAVE_EGL
-#endif
 {
     setFlag(ItemHasContents);
 

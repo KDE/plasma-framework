@@ -106,23 +106,21 @@ private:
     void resetDamaged();
     void setThumbnailAvailable(bool thumbnailAvailable);
     void sceneVisibilityChanged(bool visible);
-
-    bool m_xcb;
-    bool m_composite;
+    bool m_xcb = false;
+    bool m_composite = false;
     QPointer<QWindow> m_scene;
-    uint32_t m_winId;
+    uint32_t m_winId = 0;
     QSizeF m_paintedSize;
-    bool m_thumbnailAvailable;
-    bool m_redirecting;
-    bool m_damaged;
-    int m_depth;
+    bool m_thumbnailAvailable = false;
+    bool m_redirecting = false;
+    bool m_damaged = false;
     mutable WindowTextureProvider *m_textureProvider = nullptr;
 #if HAVE_XCB_COMPOSITE
     xcb_pixmap_t pixmapForWindow();
-    bool m_openGLFunctionsResolved;
-    uint8_t m_damageEventBase;
-    xcb_damage_damage_t m_damage;
-    xcb_pixmap_t m_pixmap;
+    bool m_openGLFunctionsResolved = false;
+    uint8_t m_damageEventBase = 0;
+    xcb_damage_damage_t m_damage = XCB_NONE;
+    xcb_pixmap_t m_pixmap = XCB_PIXMAP_NONE;
 
     /*The following must *only* be used from the render thread*/
     uint m_texture;
@@ -131,8 +129,9 @@ private:
     void resolveGLXFunctions();
     bool loadGLXTexture();
     void bindGLXTexture();
-    xcb_pixmap_t m_glxPixmap;
-    xcb_visualid_t m_visualid;
+    int m_depth = 0;
+    xcb_pixmap_t m_glxPixmap = XCB_PIXMAP_NONE;
+    xcb_visualid_t m_visualid = XCB_NONE;
     QFunctionPointer m_bindTexImage;
     QFunctionPointer m_releaseTexImage;
 #endif // HAVE_GLX
@@ -140,8 +139,8 @@ private:
     bool xcbWindowToTextureEGL(WindowTextureProvider *textureProvider);
     void resolveEGLFunctions();
     void bindEGLTexture();
-    bool m_eglFunctionsResolved;
-    EGLImageKHR m_image;
+    bool m_eglFunctionsResolved = false;
+    EGLImageKHR m_image = EGL_NO_IMAGE_KHR;
     QFunctionPointer m_eglCreateImageKHR;
     QFunctionPointer m_eglDestroyImageKHR;
     QFunctionPointer m_glEGLImageTargetTexture2DOES;
