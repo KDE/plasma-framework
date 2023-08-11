@@ -13,12 +13,8 @@ Item {
     property Item toolTip
     property int preferredTextWidth: Kirigami.Units.gridUnit * 20
 
-    // gridUnit is effectively equal to `Kirigami.Units.smallSpacing * 4`
-    // which is a double (both sides) of RowLayout's `anchors.margins`.
-    Layout.minimumWidth: childrenRect.width + Kirigami.Units.gridUnit
-    Layout.minimumHeight: childrenRect.height + Kirigami.Units.gridUnit
-    Layout.maximumWidth: childrenRect.width + Kirigami.Units.gridUnit
-    Layout.maximumHeight: childrenRect.height + Kirigami.Units.gridUnit
+    implicitWidth: mainLayout.implicitWidth + Kirigami.Units.largeSpacing * 2
+    implicitHeight: mainLayout.implicitHeight + Kirigami.Units.largeSpacing * 2
 
     LayoutMirroring.enabled: Qt.application.layoutDirection === Qt.RightToLeft
     LayoutMirroring.childrenInherit: true
@@ -27,12 +23,9 @@ Item {
     Kirigami.Theme.inherit: false
 
     RowLayout {
-
-        anchors {
-            left: parent.left
-            top: parent.top
-            margins: Kirigami.Units.largeSpacing
-        }
+        id: mainLayout
+        anchors.fill: parent
+        anchors.margins: Kirigami.Units.largeSpacing
 
         spacing: Kirigami.Units.gridUnit
 

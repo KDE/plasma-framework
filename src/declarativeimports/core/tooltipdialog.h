@@ -7,7 +7,7 @@
 #ifndef TOOLTIPDIALOG_H
 #define TOOLTIPDIALOG_H
 
-#include "dialog.h"
+#include "popupplasmawindow.h"
 
 #include <QQuickWindow>
 #include <QTimer>
@@ -23,12 +23,12 @@ class SharedQmlEngine;
 /**
  * Internally used by Tooltip
  */
-class ToolTipDialog : public PlasmaQuick::Dialog
+class ToolTipDialog : public PlasmaQuick::PopupPlasmaWindow
 {
     Q_OBJECT
 
 public:
-    explicit ToolTipDialog(QQuickItem *parent = nullptr);
+    explicit ToolTipDialog();
     ~ToolTipDialog() override;
 
     QQuickItem *loadDefaultItem();
@@ -51,13 +51,15 @@ public:
 protected:
     void showEvent(QShowEvent *event) override;
     void hideEvent(QHideEvent *event) override;
-    void resizeEvent(QResizeEvent *re) override;
     bool event(QEvent *e) override;
 
 private Q_SLOTS:
     void valueChanged(const QVariant &value);
 
 private:
+    void updateSize();
+
+    QPointer<QQuickItem> m_lastMainItem;
     PlasmaQuick::SharedQmlEngine *m_qmlObject;
     QTimer *m_showTimer;
     int m_hideTimeout;

@@ -63,13 +63,17 @@ void PlasmaWindow::setMainItem(QQuickItem *mainItem)
     if (d->mainItem == mainItem)
         return;
 
+    if (d->mainItem) {
+        d->mainItem->setParentItem(nullptr);
+    }
+
     d->mainItem = mainItem;
+    Q_EMIT mainItemChanged();
 
     if (d->mainItem) {
         mainItem->setParentItem(contentItem());
         d->updateMainItemGeometry();
     }
-    Q_EMIT mainItemChanged();
 }
 
 QQuickItem *PlasmaWindow::mainItem() const

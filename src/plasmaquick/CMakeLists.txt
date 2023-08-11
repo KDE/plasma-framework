@@ -27,6 +27,8 @@ target_sources(KF6PlasmaQuick PRIVATE
     sharedqmlengine.cpp
     quickviewsharedengine.cpp
     plasmawindow.cpp
+    popupplasmawindow.cpp
+    transientplacementhint.cpp
     private/configcategory_p.cpp
     private/plasmoidattached_p.cpp
     private/dialogbackground_p.cpp

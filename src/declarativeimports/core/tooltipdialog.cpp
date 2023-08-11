@@ -15,25 +15,55 @@
 #include <KWindowSystem>
 #include <plasmaquick/sharedqmlengine.h>
 
-ToolTipDialog::ToolTipDialog(QQuickItem *parent)
-    : Dialog(parent)
+#include "waylandintegration_p.h"
+
+ToolTipDialog::ToolTipDialog()
+    : PopupPlasmaWindow()
     , m_qmlObject(nullptr)
     , m_hideTimeout(-1)
     , m_interactive(false)
     , m_owner(nullptr)
 {
-    setLocation(Plasma::Types::Floating);
-    setType(Dialog::WindowType::Tooltip);
+    Qt::WindowFlags flags = Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint;
+    if (KWindowSystem::isPlatformX11()) {
+        flags |= Qt::ToolTip | Qt::BypassWindowManagerHint;
+    } else {
+        flags |= Qt::FramelessWindowHint;
+        PlasmaShellWaylandIntegration::get(this)->setRole(QtWayland::org_kde_plasma_surface::role_tooltip);
+    }
+    setFlags(flags);
 
     m_showTimer = new QTimer(this);
     m_showTimer->setSingleShot(true);
     connect(m_showTimer, &QTimer::timeout, this, [this]() {
         setVisible(false);
     });
+
+    connect(this, &PlasmaQuick::PlasmaWindow::mainItemChanged, this, [this]() {
+        if (m_lastMainItem) {
+            disconnect(m_lastMainItem, &QQuickItem::implicitWidthChanged, this, &ToolTipDialog::updateSize);
+            disconnect(m_lastMainItem, &QQuickItem::implicitHeightChanged, this, &ToolTipDialog::updateSize);
+        }
+        m_lastMainItem = mainItem();
+
+        if (!mainItem()) {
+            return;
+        }
+        connect(mainItem(), &QQuickItem::implicitWidthChanged, this, &ToolTipDialog::updateSize);
+        connect(mainItem(), &QQuickItem::implicitHeightChanged, this, &ToolTipDialog::updateSize);
+        updateSize();
+    });
 }
 
 ToolTipDialog::~ToolTipDialog()
 {
+}
+
+void ToolTipDialog::updateSize()
+{
+    QSize popupSize = QSize(mainItem()->implicitWidth(), mainItem()->implicitHeight());
+    popupSize = popupSize.grownBy(margins());
+    resize(popupSize);
 }
 
 QQuickItem *ToolTipDialog::loadDefaultItem()
@@ -53,19 +83,14 @@ void ToolTipDialog::showEvent(QShowEvent *event)
 {
     keepalive();
 
-    Dialog::showEvent(event);
+    PlasmaQuick::PopupPlasmaWindow::showEvent(event);
 }
 
 void ToolTipDialog::hideEvent(QHideEvent *event)
 {
     m_showTimer->stop();
 
-    Dialog::hideEvent(event);
-}
-
-void ToolTipDialog::resizeEvent(QResizeEvent *re)
-{
-    Dialog::resizeEvent(re);
+    PlasmaQuick::PopupPlasmaWindow::hideEvent(event);
 }
 
 bool ToolTipDialog::event(QEvent *e)
@@ -78,13 +103,7 @@ bool ToolTipDialog::event(QEvent *e)
         dismiss();
     }
 
-    bool ret = Dialog::event(e);
-    Qt::WindowFlags flags = Qt::ToolTip | Qt::WindowDoesNotAcceptFocus | Qt::WindowStaysOnTopHint;
-    if (KWindowSystem::isPlatformX11()) {
-        flags = flags | Qt::BypassWindowManagerHint;
-    }
-    setFlags(flags);
-    return ret;
+    return PopupPlasmaWindow::event(e);
 }
 
 QObject *ToolTipDialog::owner() const
@@ -119,7 +138,6 @@ bool ToolTipDialog::interactive()
 void ToolTipDialog::setInteractive(bool interactive)
 {
     m_interactive = interactive;
-    setOutputOnly(!interactive);
 }
 
 void ToolTipDialog::valueChanged(const QVariant &value)
