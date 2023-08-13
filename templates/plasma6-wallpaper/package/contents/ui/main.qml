@@ -3,11 +3,11 @@
     SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
-import QtQuick 2.1
-
+import QtQuick
+import org.kde.plasma.plasmoid
 import org.kde.kirigami 2 as Kirigami
 
-Item {
+WallpaperItem {
     id: root
 
     Rectangle {
