@@ -70,7 +70,6 @@ ShaderExample {
             anchors.topMargin: _s * 2
 
             Column {
-                id: "txtCol"
                 anchors.fill: parent
                 anchors.margins: _s
                 anchors.topMargin: _s * 2
