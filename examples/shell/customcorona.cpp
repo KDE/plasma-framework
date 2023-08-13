@@ -65,7 +65,7 @@ void CustomCorona::load()
             // example of a shell without a wallpaper
             c->setWallpaper(QStringLiteral("null"));
             m_view->setContainment(c);
-            if (QAction *removeAction = c->actions()->action(QStringLiteral("remove"))) {
+            if (QAction *removeAction = c->internalAction(QStringLiteral("remove"))) {
                 removeAction->deleteLater();
             }
             break;

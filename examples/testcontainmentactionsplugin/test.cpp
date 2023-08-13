@@ -17,12 +17,7 @@ ContextTest::ContextTest(QObject *parent, const QVariantList &args)
 
 QList<QAction *> ContextTest::contextualActions()
 {
-    Plasma::Containment *c = containment();
-    Q_ASSERT(c);
-    QList<QAction *> actions;
-    actions << c->actions()->action(QStringLiteral("configure"));
-
-    return actions;
+    return {};
 }
 
 void ContextTest::performNextAction()
@@ -37,19 +32,15 @@ void ContextTest::performPreviousAction()
 
 void ContextTest::init(const KConfigGroup &config)
 {
-    m_text = config.readEntry("test-text", QString());
+    Q_UNUSED(config)
 }
 
 QWidget *ContextTest::createConfigurationInterface(QWidget *parent)
 {
-    // m_currentText = m_text;
     QWidget *widget = new QWidget(parent);
     m_ui.setupUi(widget);
 
     m_ui.text->setText(m_text);
-    // FIXME this way or just get it on close?
-    // connect(m_ui.text, SIGNAL(changed(QColor)), this, SLOT(setColor(QColor)));
-    // connect(this, SIGNAL(settingsChanged(bool)), parent, SLOT(settingsChanged(bool)));
     return widget;
 }
 
@@ -58,12 +49,17 @@ void ContextTest::configurationAccepted()
     m_text = m_ui.text->text();
 }
 
+void ContextTest::restore(const KConfigGroup &config)
+{
+    m_text = config.readEntry("test-text", QString());
+}
+
 void ContextTest::save(KConfigGroup &config)
 {
     config.writeEntry("test-text", m_text);
 }
 
-K_PLUGIN_CLASS_WITH_JSON(ContextTest, "plasma-containmentactions-test.desktop")
+K_PLUGIN_CLASS_WITH_JSON(ContextTest, "plasma-containmentactions-test.json")
 
 #include "test.moc"
 

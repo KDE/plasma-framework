@@ -6,14 +6,14 @@
     <x>0</x>
     <y>0</y>
     <width>355</width>
-    <height>102</height>
+    <height>100</height>
    </rect>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout" >
    <item>
     <widget class="QLabel" name="label" >
      <property name="text" >
-      <string>text:</string>
+      <string>Text:</string>
      </property>
     </widget>
    </item>

@@ -26,6 +26,8 @@ public:
 
     QWidget *createConfigurationInterface(QWidget *parent) override;
     void configurationAccepted() override;
+
+    void restore(const KConfigGroup &config) override;
     void save(KConfigGroup &config) override;
 
 private:
