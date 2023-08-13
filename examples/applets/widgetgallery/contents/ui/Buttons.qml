@@ -5,7 +5,7 @@
 */
 
 import QtQuick
-import QtQuick.Controls as QtControls
+import QtQuick.Controls as QQC2
 import org.kde.plasma.components as PlasmaComponents
 
 PlasmaComponents.Page {
@@ -93,10 +93,10 @@ PlasmaComponents.Page {
                     icon.name: "konqueror"
 
                     Keys.onTabPressed: bt5.forceActiveFocus();
-                    menu: QtControls.Menu {
-                        QtControls.MenuItem { text: "This Button" }
-                        QtControls.MenuItem { text: "Happens To Have" }
-                        QtControls.MenuItem { text: "A Menu Assigned" }
+                    menu: QQC2.Menu {
+                        QQC2.MenuItem { text: "This Button" }
+                        QQC2.MenuItem { text: "Happens To Have" }
+                        QQC2.MenuItem { text: "A Menu Assigned" }
                     }
                 }
 

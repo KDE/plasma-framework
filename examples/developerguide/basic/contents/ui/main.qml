@@ -4,9 +4,9 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 
-import QtQuick.Layouts 
-import QtQuick.Controls as QtControls
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Controls as QQC2
 import org.kde.kirigami 2 as Kirigami
 
 Item {
@@ -44,7 +44,7 @@ Item {
         }
 
         // A button to change the color to blue or green
-        QtControls.Button {
+        QQC2.Button {
 
             // The button is aligned to the right
             Layout.alignment: Qt.AlignRight
