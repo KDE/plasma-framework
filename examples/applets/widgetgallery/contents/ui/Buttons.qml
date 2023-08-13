@@ -4,9 +4,9 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.0
-import QtQuick.Controls 1.2 as QtControls
-import org.kde.plasma.components 2.0 as PlasmaComponents
+import QtQuick
+import QtQuick.Controls as QtControls
+import org.kde.plasma.components as PlasmaComponents
 
 PlasmaComponents.Page {
     height: childrenRect.height
@@ -14,7 +14,7 @@ PlasmaComponents.Page {
         spacing: 5
         PlasmaComponents.ToolButton {
             visible: pageStack.depth > 1
-            iconSource: "go-previous"
+            icon.name: "go-previous"
             onClicked: pageStack.pop()
         }
         PlasmaComponents.Button {
@@ -90,7 +90,7 @@ PlasmaComponents.Page {
                     id: bt4
 
                     text: "Icon Button"
-                    iconSource: "konqueror"
+                    icon.name: "konqueror"
 
                     Keys.onTabPressed: bt5.forceActiveFocus();
                     menu: QtControls.Menu {
@@ -103,7 +103,7 @@ PlasmaComponents.Page {
                 PlasmaComponents.Button {
                     id: bt5
 
-                    iconSource: "plasma"
+                    icon.name: "plasma"
 
                     Keys.onTabPressed: bt1.forceActiveFocus();
                 }
@@ -126,14 +126,14 @@ PlasmaComponents.Page {
                 PlasmaComponents.ToolButton {
 
                     text: "Icon ToolButton"
-                    iconSource: "konqueror"
+                    icon.name: "konqueror"
                 }
 
                 PlasmaComponents.ToolButton {
-                    iconSource: "plasma"
+                    icon.name: "plasma"
                 }
                 PlasmaComponents.ToolButton {
-                    iconSource: "plasma"
+                    icon.name: "plasma"
                     flat: false
                 }
 

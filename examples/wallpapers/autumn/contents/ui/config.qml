@@ -4,11 +4,8 @@
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-import QtQuick 2.0
-
-import QtQuick.Controls 1.0 as QtControls
-
-// for "units"
+import QtQuick 
+import QtQuick.Controls as QtControls
 import org.kde.kirigami 2 as Kirigami
 
 Column {
@@ -25,8 +22,8 @@ Column {
         }
         QtControls.Slider {
             id: slider
-            minimumValue: 20
-            maximumValue: 150
+            from: .2
+            to: 1.5
         }
     }
 }
