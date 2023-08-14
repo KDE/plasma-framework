@@ -477,7 +477,7 @@ bool AppletQuickItem::hasItemForApplet(Plasma::Applet *applet)
 AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
 {
     // Don't try to create applet items when the app is closing
-    if (!applet || qApp->closingDown()) {
+    if (!applet || qApp->closingDown() || applet->destroyed()) {
         return nullptr;
     }
 

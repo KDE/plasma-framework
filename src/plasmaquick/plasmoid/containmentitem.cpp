@@ -120,6 +120,9 @@ void ContainmentItem::init()
                     toolboxProperties[QStringLiteral("parent")] = QVariant::fromValue(this);
                     QObject *toolBoxObject = qmlObject()->createObjectFromSource(pkg.fileUrl("mainscript"), nullptr, toolboxProperties);
                     if (toolBoxObject && containmentGraphicObject) {
+                        connect(this, &QObject::destroyed, [toolBoxObject]() {
+                            delete toolBoxObject;
+                        });
                         containmentGraphicObject->setProperty("toolBox", QVariant::fromValue(toolBoxObject));
                     }
                 } else {
