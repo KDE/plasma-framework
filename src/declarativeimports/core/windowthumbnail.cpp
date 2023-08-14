@@ -197,6 +197,8 @@ void WindowThumbnail::itemChange(ItemChange change, const ItemChangeData &data)
     default:
         break;
     }
+
+    QQuickItem::itemChange(change, data);
 }
 
 void WindowThumbnail::releaseResources()
