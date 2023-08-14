@@ -50,21 +50,8 @@ void PlasmoidItem::init()
     AppletQuickItem::init();
 
     auto *applet = PlasmoidItem::applet();
-    auto connectActions = [this, applet]() {
-        for (auto *a : applet->contextualActions()) {
-            // TODO: when the old api goes, whole executeAction logic will be deleted
-            if (!m_actions.contains(a)) {
-                connect(a, &QObject::destroyed, this, [this, a]() {
-                    m_actions.remove(a);
-                });
-                m_actions << a;
-            }
-        }
-    };
+
     connect(applet, &Plasma::Applet::contextualActionsAboutToShow, this, &PlasmoidItem::contextualActionsAboutToShow);
-    // FIXME: temporary
-    connect(applet, &Plasma::Applet::contextualActionsChanged, this, connectActions);
-    connectActions();
 
     connect(applet, &Plasma::Applet::titleChanged, this, [this]() {
         if (m_toolTipMainText.isNull()) {

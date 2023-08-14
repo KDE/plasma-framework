@@ -182,8 +182,6 @@ protected:
 private:
     void destroyedChanged(bool destroyed);
 
-    QSet<QAction *> m_actions;
-
     // UI-specific members ------------------
 
     QString m_toolTipMainText;
