@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-02 02:08+0000\n"
+"POT-Creation-Date: 2023-08-15 01:59+0000\n"
 "PO-Revision-Date: 2014-01-31 21:06+0100\n"
 "Last-Translator: Samir Ribić <megaribi@epn.ba>\n"
 "Language-Team: bosanski <bs@li.org>\n"
@@ -57,7 +57,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Nepoznato"
 
-#: plasma/applet.cpp:739
+#: plasma/applet.cpp:742
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktiviraj grafičku kontrolu %1"
@@ -267,55 +267,55 @@ msgstr ""
 msgid "%1 Settings"
 msgstr "%1 Postavke"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:550
+#: plasmaquick/plasmoid/containmentitem.cpp:553
 #, fuzzy, kde-format
 #| msgid "Plasma Package Manager"
 msgid "Plasma Package"
 msgstr "Plasmin menadžer paketa"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:554
+#: plasmaquick/plasmoid/containmentitem.cpp:557
 #, kde-format
 msgid "Install"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentitem.cpp:565
+#: plasmaquick/plasmoid/containmentitem.cpp:568
 #, fuzzy, kde-format
 #| msgid "Script initialization failed"
 msgid "Package Installation Failed"
 msgstr "Neuspjelo pripremanje skripte"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:582
+#: plasmaquick/plasmoid/containmentitem.cpp:585
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentitem.cpp:591
-#: plasmaquick/plasmoid/containmentitem.cpp:660
+#: plasmaquick/plasmoid/containmentitem.cpp:594
+#: plasmaquick/plasmoid/containmentitem.cpp:663
 #, fuzzy, kde-format
 #| msgid "Lock Widgets"
 msgid "Widgets"
 msgstr "Zaključaj grafičku kontrolu"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:596
+#: plasmaquick/plasmoid/containmentitem.cpp:599
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentitem.cpp:610
-#: plasmaquick/plasmoid/containmentitem.cpp:664
+#: plasmaquick/plasmoid/containmentitem.cpp:613
+#: plasmaquick/plasmoid/containmentitem.cpp:667
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentitem.cpp:622
+#: plasmaquick/plasmoid/containmentitem.cpp:625
 #, fuzzy, kde-format
 #| msgid "Wallpaper packages"
 msgid "Wallpaper"
 msgstr "Paketi pozadinskih slika"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:632
+#: plasmaquick/plasmoid/containmentitem.cpp:635
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

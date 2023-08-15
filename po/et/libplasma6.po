@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-02 02:08+0000\n"
+"POT-Creation-Date: 2023-08-15 01:59+0000\n"
 "PO-Revision-Date: 2021-09-05 15:52+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -55,7 +55,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Tundmatu"
 
-#: plasma/applet.cpp:739
+#: plasma/applet.cpp:742
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktiveeri %1 vidin"
@@ -260,51 +260,51 @@ msgstr "Tõrge apleti laadimisel: paketti ei ole olemas. %1"
 msgid "%1 Settings"
 msgstr "%1 seadistused"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:550
+#: plasmaquick/plasmoid/containmentitem.cpp:553
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma pakett"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:554
+#: plasmaquick/plasmoid/containmentitem.cpp:557
 #, kde-format
 msgid "Install"
 msgstr "Paigalda"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:565
+#: plasmaquick/plasmoid/containmentitem.cpp:568
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Paketi paigaldamine nurjus"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:582
+#: plasmaquick/plasmoid/containmentitem.cpp:585
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Lohistatud pakett on vigane."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:591
-#: plasmaquick/plasmoid/containmentitem.cpp:660
+#: plasmaquick/plasmoid/containmentitem.cpp:594
+#: plasmaquick/plasmoid/containmentitem.cpp:663
 #, kde-format
 msgid "Widgets"
 msgstr "Vidinad"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:596
+#: plasmaquick/plasmoid/containmentitem.cpp:599
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Lisa %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:610
-#: plasmaquick/plasmoid/containmentitem.cpp:664
+#: plasmaquick/plasmoid/containmentitem.cpp:613
+#: plasmaquick/plasmoid/containmentitem.cpp:667
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Lisa ikoon"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:622
+#: plasmaquick/plasmoid/containmentitem.cpp:625
 #, kde-format
 msgid "Wallpaper"
 msgstr "Taustapilt"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:632
+#: plasmaquick/plasmoid/containmentitem.cpp:635
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

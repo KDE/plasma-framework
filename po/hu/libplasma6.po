@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-02 02:08+0000\n"
+"POT-Creation-Date: 2023-08-15 01:59+0000\n"
 "PO-Revision-Date: 2021-09-02 09:12+0200\n"
 "Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -56,7 +56,7 @@ msgstr ""
 msgid "Unknown"
 msgstr "Ismeretlen"
 
-#: plasma/applet.cpp:739
+#: plasma/applet.cpp:742
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 felületi elem aktiválása"
@@ -263,51 +263,51 @@ msgstr "Hiba a kisalkalmazás betöltésekor: a csomag nem létezik. %1"
 msgid "%1 Settings"
 msgstr "Beállítások: %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:550
+#: plasmaquick/plasmoid/containmentitem.cpp:553
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma csomag"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:554
+#: plasmaquick/plasmoid/containmentitem.cpp:557
 #, kde-format
 msgid "Install"
 msgstr "Telepítés"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:565
+#: plasmaquick/plasmoid/containmentitem.cpp:568
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Sikertelen csomagtelepítés"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:582
+#: plasmaquick/plasmoid/containmentitem.cpp:585
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "A most ejtett csomag érvénytelen."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:591
-#: plasmaquick/plasmoid/containmentitem.cpp:660
+#: plasmaquick/plasmoid/containmentitem.cpp:594
+#: plasmaquick/plasmoid/containmentitem.cpp:663
 #, kde-format
 msgid "Widgets"
 msgstr "Elemek"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:596
+#: plasmaquick/plasmoid/containmentitem.cpp:599
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "A(z) %1 hozzáadása"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:610
-#: plasmaquick/plasmoid/containmentitem.cpp:664
+#: plasmaquick/plasmoid/containmentitem.cpp:613
+#: plasmaquick/plasmoid/containmentitem.cpp:667
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Ikon hozzáadása"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:622
+#: plasmaquick/plasmoid/containmentitem.cpp:625
 #, kde-format
 msgid "Wallpaper"
 msgstr "Háttérkép"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:632
+#: plasmaquick/plasmoid/containmentitem.cpp:635
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
