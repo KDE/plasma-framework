@@ -568,7 +568,6 @@ void ContainmentItem::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
                                                  i18n("Package Installation Failed"),
                                                  text,
                                                  QStringLiteral("dialog-error"),
-                                                 nullptr,
                                                  KNotification::CloseOnTimeout,
                                                  QStringLiteral("plasma_workspace"));
                         };
