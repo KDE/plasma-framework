@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2014 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2023 Harald Sitter <sitter@kde.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -9,6 +10,16 @@
 #include "utils.h"
 
 #include <KWindowSystem>
+
+namespace
+{
+constexpr auto panelHeight = 50;
+constexpr auto panelWidth = panelHeight;
+constexpr qreal content1Width = 100;
+constexpr qreal content1Height = content1Width;
+constexpr qreal content2Width = 50;
+constexpr qreal content2Height = 25;
+} // namespace
 
 void DialogNativeTest::initTestCase()
 {
@@ -22,25 +33,28 @@ void DialogNativeTest::initTestCase()
     m_dialog->setLocation(Plasma::Types::TopEdge);
 
     m_panel = new QQuickView;
-    m_panel->setGeometry(0, 0, 50, 50);
+    m_panel->setColor(Qt::red);
+    m_panel->setGeometry(0, 0, panelHeight, panelWidth);
     m_panel->setFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
 
     m_panel2 = new QQuickView;
-    m_panel2->setGeometry(100, 0, 50, 50);
+    m_panel2->setColor(Qt::green);
+    m_panel2->setGeometry(panelWidth * 2, 0, panelHeight, panelWidth);
     m_panel2->setFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
 
     m_panel3 = new QQuickView;
-    m_panel3->setGeometry(200, 0, 50, 50);
+    m_panel3->setColor(Qt::blue);
+    m_panel3->setGeometry(panelWidth * 4, 0, panelHeight, panelWidth);
     m_panel3->setFlags(Qt::FramelessWindowHint | Qt::WindowDoesNotAcceptFocus);
 
     m_content = new QQuickItem;
-    m_content->setWidth(100);
-    m_content->setHeight(100);
+    m_content->setWidth(content1Width);
+    m_content->setHeight(content1Height);
     m_dialog->setMainItem(m_content);
 
     m_content2 = new QQuickItem(m_panel3->contentItem());
-    m_content2->setWidth(50);
-    m_content2->setHeight(25);
+    m_content2->setWidth(content2Width);
+    m_content2->setHeight(content2Height);
 
     m_panel->show();
     m_panel2->show();
@@ -66,18 +80,20 @@ void DialogNativeTest::size()
 {
     QVERIFY(QTest::qWaitForWindowExposed(m_dialog));
 
-    QCOMPARE(m_content->width(), (qreal)100);
-    QCOMPARE(m_content->height(), (qreal)100);
-    QCOMPARE(m_dialog->width(), 112);
-    QCOMPARE(m_dialog->height(), 112);
+    QCOMPARE(m_content->width(), content1Width);
+    QCOMPARE(m_content->height(), content1Height);
 
-    QCOMPARE(m_content2->width(), (qreal)50);
-    QCOMPARE(m_content2->height(), (qreal)25);
+    constexpr qreal themeFixedMargin = 4.0;
+    QCOMPARE(m_dialog->margins()->property("left").value<qreal>(), themeFixedMargin);
+    QCOMPARE(m_dialog->margins()->property("top").value<qreal>(), themeFixedMargin);
+    QCOMPARE(m_dialog->margins()->property("right").value<qreal>(), themeFixedMargin);
+    QCOMPARE(m_dialog->margins()->property("bottom").value<qreal>(), themeFixedMargin);
 
-    QCOMPARE(m_dialog->margins()->property("left").value<qreal>(), (qreal)6.0);
-    QCOMPARE(m_dialog->margins()->property("top").value<qreal>(), (qreal)6.0);
-    QCOMPARE(m_dialog->margins()->property("right").value<qreal>(), (qreal)6.0);
-    QCOMPARE(m_dialog->margins()->property("bottom").value<qreal>(), (qreal)6.0);
+    QCOMPARE(m_dialog->width(), content1Width + themeFixedMargin * 2);
+    QCOMPARE(m_dialog->height(), content1Height + themeFixedMargin * 2);
+
+    QCOMPARE(m_content2->width(), content2Width);
+    QCOMPARE(m_content2->height(), content2Height);
 }
 
 void DialogNativeTest::position()
@@ -90,17 +106,21 @@ void DialogNativeTest::position()
     const auto upper_left_x = m_panel->x();
     const auto upper_left_y = m_panel->y();
 
+    constexpr auto offset = 1;
+    constexpr auto anchorY = panelHeight - offset;
+
     QCOMPARE(m_dialog->x(), upper_left_x + 0);
-    QCOMPARE(m_dialog->y(), upper_left_y + 49);
+    QCOMPARE(m_dialog->y(), upper_left_y + anchorY);
 
     m_dialog->setVisualParent(m_panel2->contentItem());
-    QCOMPARE(m_dialog->x(), 69);
-    QCOMPARE(m_dialog->y(), 49);
+    // this derives from the center point of the current panel, I am too lazy to calculate this - sitter, 2023
+    QCOMPARE(m_dialog->x(), 71);
+    QCOMPARE(m_dialog->y(), anchorY);
 
-    m_panel3->setMask(QRect(0, 0, 50, 25));
+    m_panel3->setMask(QRect(0, 0, panelWidth, panelHeight / 2));
     m_dialog->setVisualParent(m_content2);
-    QCOMPARE(m_dialog->x(), 169);
-    QCOMPARE(m_dialog->y(), 24);
+    QCOMPARE(m_dialog->x(), 171);
+    QCOMPARE(m_dialog->y(), panelHeight / 2 - offset);
 }
 
 QTEST_MAIN(DialogNativeTest)
