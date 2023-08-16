@@ -70,6 +70,12 @@ Applet::Applet(QObject *parentObject, const KPluginMetaData &data, const QVarian
 
 Applet::~Applet()
 {
+    for (QAction *a : d->actions.values()) {
+        disconnect(a, nullptr, this, nullptr);
+    }
+    for (QAction *a : d->contextualActions) {
+        disconnect(a, nullptr, this, nullptr);
+    }
     if (d->transient) {
         d->resetConfigurationObject();
     }
@@ -656,9 +662,6 @@ void Applet::setInternalAction(const QString &name, QAction *action)
     d->actions[name] = action;
 
     QObject::connect(action, &QObject::destroyed, this, [this, name]() {
-        if (destroyed()) {
-            return;
-        }
         d->actions.remove(name);
         Q_EMIT internalActionsChanged(d->actions.values());
     });
