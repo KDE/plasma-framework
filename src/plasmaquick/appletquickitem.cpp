@@ -500,7 +500,7 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet);
 
     // TODO: kill packageurlinterceptor
-    auto *qmlObject = new PlasmaQuick::SharedQmlEngine(applet);
+    auto *qmlObject = new PlasmaQuick::SharedQmlEngine(applet, applet);
     qmlObject->engine()->setProperty("_kirigamiTheme", QStringLiteral("KirigamiPlasmaStyle"));
     qmlObject->setInitializationDelayed(true);
     if (qmlObject->engine()->urlInterceptors().isEmpty()) {
@@ -582,7 +582,6 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     }
 
     item->setProperty("_plasma_applet", QVariant::fromValue(applet));
-    qmlObject->setParent(item);
     item->d->applet = applet;
     item->d->qmlObject = qmlObject;
 

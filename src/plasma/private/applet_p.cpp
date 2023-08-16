@@ -204,7 +204,13 @@ void AppletPrivate::cleanUpAndDelete()
         Q_EMIT q->QObject::destroyed(q);
     }
 
-    q->deleteLater();
+    if (qApp->closingDown()) {
+        // If we are closing down, the actual delete will be executed when the corona will be destroyed
+        // which crashes
+        delete q;
+    } else {
+        q->deleteLater();
+    }
 }
 
 void AppletPrivate::setDestroyed(bool destroyed)

@@ -70,7 +70,7 @@ public:
 
     QUrl source;
 
-    QObject *rootObject = nullptr;
+    QPointer<QObject> rootObject;
     QQmlComponent *component;
     QTimer *executionEndTimer;
     KLocalizedContext *context{nullptr};
@@ -158,7 +158,13 @@ SharedQmlEngine::SharedQmlEngine(Plasma::Applet *applet, QObject *parent)
     d->rootContext->setContextObject(d->context);
 }
 
-SharedQmlEngine::~SharedQmlEngine() = default;
+SharedQmlEngine::~SharedQmlEngine()
+{
+    delete d->component;
+    if (QJSEngine::objectOwnership(d->rootObject) == QJSEngine::CppOwnership) {
+        delete d->rootObject;
+    }
+}
 
 void SharedQmlEngine::setTranslationDomain(const QString &translationDomain)
 {
