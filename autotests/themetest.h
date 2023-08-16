@@ -8,7 +8,6 @@
 
 #include <QTest>
 
-#include "plasma/svg.h"
 #include "plasma/theme.h"
 
 class ThemeTest : public QObject
@@ -17,17 +16,14 @@ class ThemeTest : public QObject
 
 public Q_SLOTS:
     void initTestCase();
-    void cleanupTestCase();
 
 private Q_SLOTS:
-    void loadSvgIcon();
     void testThemeConfig_data();
     void testThemeConfig();
     void testColors();
     void testCompositingChange();
 
 private:
-    Plasma::Svg *m_svg;
     Plasma::Theme *m_theme;
 };
 

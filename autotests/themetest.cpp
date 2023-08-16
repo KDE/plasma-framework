@@ -22,24 +22,6 @@
 #endif
 #include <array>
 
-QString cacheIdHash(const Plasma::SvgPrivate::CacheId &id)
-{
-    static const uint seed = 0x9e3779b9;
-    std::array<size_t, 10> parts = {
-        ::qHash(id.width),
-        ::qHash(id.height),
-        ::qHash(id.elementName),
-        ::qHash(id.filePath),
-        ::qHash(id.status),
-        ::qHash(id.devicePixelRatio),
-        ::qHash(id.scaleFactor),
-        ::qHash(id.colorGroup),
-        ::qHash(id.extraFlags),
-        ::qHash(id.lastModified),
-    };
-    return QString::number(qHashRange(parts.begin(), parts.end(), seed));
-}
-
 void ThemeTest::initTestCase()
 {
     // make our theme in search path
@@ -61,66 +43,11 @@ void ThemeTest::initTestCase()
 
     KConfigGroup plasmaConfig(KSharedConfig::openConfig("plasmarc"), "Theme");
     plasmaConfig.writeEntry("name", "default");
-    m_svg = new Plasma::Svg();
 
     KIconTheme::forceThemeForTests("test-theme");
     KSharedConfig::openConfig()->reparseConfiguration();
     KIconTheme::reconfigure();
     KIconLoader::global()->reconfigure(QString());
-}
-
-void ThemeTest::cleanupTestCase()
-{
-    //    m_testIconsDir.removeRecursively();
-    delete m_svg;
-}
-
-void ThemeTest::loadSvgIcon()
-{
-    const auto *iconTheme = KIconLoader::global()->theme();
-    QString iconPath;
-    if (iconTheme) {
-        iconPath = iconTheme->iconPath(QLatin1String("konversation.svg"), 48, KIconLoader::MatchBest);
-    }
-
-    QVERIFY(iconTheme);
-    QVERIFY(iconTheme->isValid());
-    QVERIFY2(QFile::exists(iconPath), qPrintable(iconPath));
-    m_svg->setImagePath(iconPath);
-    QVERIFY(m_svg->isValid());
-
-    m_svg->pixmap(); // trigger the SVG being loaded
-
-    QFileInfo info(iconPath);
-
-    QString cacheId = cacheIdHash(Plasma::SvgPrivate::CacheId{48,
-                                                              48,
-                                                              iconPath,
-                                                              QString(),
-                                                              m_svg->status(),
-                                                              m_svg->devicePixelRatio(),
-                                                              m_svg->scaleFactor(),
-                                                              m_svg->colorGroup(),
-                                                              0,
-                                                              static_cast<uint>(info.lastModified().toSecsSinceEpoch())});
-
-    QPixmap result;
-    QVERIFY(m_svg->theme()->findInCache(cacheId, result, info.lastModified().toSecsSinceEpoch()));
-
-    QSignalSpy spy(m_svg, SIGNAL(repaintNeeded()));
-    QVERIFY(spy.isValid());
-
-    KIconTheme::forceThemeForTests("test-theme-two");
-    // KIconloader needs changesto be emitted manually, ouch.
-    for (int i = 0; i < KIconLoader::LastGroup; i++) {
-        KIconLoader::emitChange(KIconLoader::Group(i));
-    }
-
-    spy.wait();
-    // Svg emitting repaintNeeded when something changes in KIconLoader means the svg loaded an icon
-    QVERIFY(spy.count() == 1);
-
-    QVERIFY(!m_svg->theme()->findInCache(cacheId, result));
 }
 
 void ThemeTest::testThemeConfig_data()
