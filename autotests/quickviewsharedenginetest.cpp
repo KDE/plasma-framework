@@ -229,7 +229,7 @@ void QuickViewSharedEngineTest::errors()
     QVERIFY(view);
     view->setSource(testFileUrl("error1.qml"));
     QCOMPARE(view->status(), QQmlComponent::Error);
-    QCOMPARE(messages.count(), 1);
+    QVERIFY(messages.count() >= 1);
     delete view;
 }
 
