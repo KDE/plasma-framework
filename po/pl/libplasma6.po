@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-15 01:59+0000\n"
+"POT-Creation-Date: 2023-08-17 01:58+0000\n"
 "PO-Revision-Date: 2023-06-10 09:31+0200\n"
 "Last-Translator: Łukasz Wojniłowicz <lukasz.wojnilowicz@gmail.com>\n"
 "Language-Team: Polish <kde-i18n-doc@kde.org>\n"
@@ -50,12 +50,12 @@ msgstr "Szukaj..."
 msgid "Search"
 msgstr "Szukaj"
 
-#: plasma/applet.cpp:296
+#: plasma/applet.cpp:302
 #, kde-format
 msgid "Unknown"
 msgstr "Nieznany"
 
-#: plasma/applet.cpp:742
+#: plasma/applet.cpp:745
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Włącz element interfejsu: %1"
@@ -133,47 +133,47 @@ msgstr "Nie można otworzyć pakietu %1 wymaganego przez element interfejsu %2."
 msgid "Show Alternatives..."
 msgstr "Pokaż zamienniki..."
 
-#: plasma/private/applet_p.cpp:255
+#: plasma/private/applet_p.cpp:261
 #, kde-format
 msgid "Widget Removed"
 msgstr "Usunięto element interfejsu"
 
-#: plasma/private/applet_p.cpp:256
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Element interfejsu \"%1\" został usunięty."
 
-#: plasma/private/applet_p.cpp:260
+#: plasma/private/applet_p.cpp:266
 #, kde-format
 msgid "Panel Removed"
 msgstr "Usunięto panel."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Panel został usunięty."
 
-#: plasma/private/applet_p.cpp:264
+#: plasma/private/applet_p.cpp:270
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Usunięto pulpit."
 
-#: plasma/private/applet_p.cpp:265
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Pulpit został usunięty."
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:274
 #, kde-format
 msgid "Undo"
 msgstr "Cofnij"
 
-#: plasma/private/applet_p.cpp:360
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Widget Settings"
 msgstr "Ustawienia elementu interfejsu"
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:373
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Usuń ten element interfejsu"
