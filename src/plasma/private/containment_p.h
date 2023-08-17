@@ -79,6 +79,7 @@ public:
     // Applets still considered not ready
     QSet<Applet *> loadingApplets;
     QString wallpaper;
+    QObject *wallpaperGraphicsObject = nullptr;
     QHash<QString, ContainmentActions *> localActionPlugins;
     int lastScreen;
     QString activityId;

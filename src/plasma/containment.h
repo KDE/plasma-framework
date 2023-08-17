@@ -77,6 +77,7 @@ class PLASMA_EXPORT Containment : public Applet
                    containmentDisplayHintsChanged)
 
     Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
+    Q_PROPERTY(QObject *wallpaperGraphicsObject READ wallpaperGraphicsObject WRITE setWallpaperGraphicsObject NOTIFY wallpaperGraphicsObjectChanged)
 
     Q_PROPERTY(bool isUiReady READ isUiReady NOTIFY uiReadyChanged)
 
@@ -409,6 +410,11 @@ Q_SIGNALS:
      */
     void screenGeometryChanged(const QRectF &rect);
 
+    /**
+     * Emitted when the root wallpaper item has changed
+     */
+    void wallpaperGraphicsObjectChanged();
+
 public Q_SLOTS:
     /**
      * Informs the Corona as to what position it is in. This is informational
@@ -461,6 +467,12 @@ private:
      * @since 4.3
      */
     Containment(const KPluginMetaData &md, uint appletId);
+
+    /**
+     * @internal Return root wallpaper item
+     */
+    QObject *wallpaperGraphicsObject() const;
+    void setWallpaperGraphicsObject(QObject *object);
 
     Q_PRIVATE_SLOT(d, void appletDeleted(Plasma::Applet *))
     Q_PRIVATE_SLOT(d, void triggerShowAddWidgets())

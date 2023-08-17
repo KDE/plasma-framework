@@ -561,6 +561,20 @@ QString Containment::wallpaper() const
     return d->wallpaper;
 }
 
+QObject *Containment::wallpaperGraphicsObject() const
+{
+    return d->wallpaperGraphicsObject;
+}
+
+void Containment::setWallpaperGraphicsObject(QObject *object)
+{
+    if (d->wallpaperGraphicsObject == object) {
+        return;
+    }
+    d->wallpaperGraphicsObject = object;
+    Q_EMIT wallpaperGraphicsObjectChanged();
+}
+
 void Containment::setContainmentActions(const QString &trigger, const QString &pluginName)
 {
     KConfigGroup cfg = d->containmentActionsConfig();
