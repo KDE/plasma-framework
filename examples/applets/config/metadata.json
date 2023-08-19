@@ -43,6 +43,7 @@
             }
         ],
         "Category": "",
+        "Description": "Example applet with config",
         "Id": "org.kde.example.configuration",
         "License": "GPLv2+",
         "Name": "Configuration test",

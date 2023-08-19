@@ -43,6 +43,7 @@
             }
         ],
         "Category": "",
+        "Description": "Test Containment",
         "Id": "org.kde.example.testcontainment",
         "License": "GPLv2+",
         "Name": "Containment Test",

@@ -42,6 +42,7 @@
             }
         ],
         "Category": "Development Tools",
+        "Description": "Test Components",
         "Icon": "plasma",
         "Id": "org.kde.example.testcomponents",
         "License": "GPLv2+",

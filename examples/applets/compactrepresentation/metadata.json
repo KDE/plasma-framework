@@ -43,7 +43,7 @@
             }
         ],
         "Category": "Miscellaneous",
-        "Description": "",
+        "Description": "Example applet with compact and full representations",
         "Icon": "package_toys",
         "Id": "org.kde.examples.compactrepresentation",
         "License": "GPL",

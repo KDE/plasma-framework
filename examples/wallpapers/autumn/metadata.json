@@ -42,6 +42,7 @@
             }
         ],
         "Category": "",
+        "Description": "Example Autumn Wallpaper",
         "Icon": "java",
         "Id": "org.kde.autumn",
         "License": "GPLv2+",

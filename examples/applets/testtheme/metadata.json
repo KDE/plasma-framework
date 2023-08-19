@@ -42,6 +42,7 @@
             }
         ],
         "Category": "Development Tools",
+        "Description": "Test Theme",
         "Icon": "preferences-desktop-appearance",
         "Id": "org.kde.example.testtheme",
         "License": "GPLv2+",
