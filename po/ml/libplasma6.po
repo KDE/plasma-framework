@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-17 01:58+0000\n"
+"POT-Creation-Date: 2023-08-19 01:57+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -274,36 +274,36 @@ msgstr "ഇന്‍സ്റ്റാള്‍"
 msgid "Package Installation Failed"
 msgstr "പാക്കേജ് ഇന്‍സ്റ്റാളേഷന്‍ പരാജയപ്പെട്ടു"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:585
+#: plasmaquick/plasmoid/containmentitem.cpp:584
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "നിങ്ങളിപ്പോള്‍ നല്‍കിയ പാക്കേജ് സ്വീകാര്യമല്ല."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:594
-#: plasmaquick/plasmoid/containmentitem.cpp:663
+#: plasmaquick/plasmoid/containmentitem.cpp:593
+#: plasmaquick/plasmoid/containmentitem.cpp:662
 #, kde-format
 msgid "Widgets"
 msgstr "വിഡ്ജറ്റുകള്‍"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:599
+#: plasmaquick/plasmoid/containmentitem.cpp:598
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "%1 ചേര്‍ക്കുക [വിഡ്ജറ്റ് ചേര്‍ക്കുക]"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:613
-#: plasmaquick/plasmoid/containmentitem.cpp:667
+#: plasmaquick/plasmoid/containmentitem.cpp:612
+#: plasmaquick/plasmoid/containmentitem.cpp:666
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "സൂചനാചിത്രങ്ങള്‍ ചേര്‍ക്കുക"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:625
+#: plasmaquick/plasmoid/containmentitem.cpp:624
 #, kde-format
 msgid "Wallpaper"
 msgstr "പശ്ചാത്തലചിത്രം"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:635
+#: plasmaquick/plasmoid/containmentitem.cpp:634
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

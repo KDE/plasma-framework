@@ -11,7 +11,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-17 01:58+0000\n"
+"POT-Creation-Date: 2023-08-19 01:57+0000\n"
 "PO-Revision-Date: 2023-07-15 20:46+0200\n"
 "Last-Translator: Iñigo Salvador Azurmendi <xalba@ni.eus>\n"
 "Language-Team: Basque <kde-i18n-eu@kde.org>\n"
@@ -279,36 +279,36 @@ msgstr "Instalatu"
 msgid "Package Installation Failed"
 msgstr "Paketearen instalazioak huts egin du"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:585
+#: plasmaquick/plasmoid/containmentitem.cpp:584
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Jaregin duzun paketea baliogabea da."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:594
-#: plasmaquick/plasmoid/containmentitem.cpp:663
+#: plasmaquick/plasmoid/containmentitem.cpp:593
+#: plasmaquick/plasmoid/containmentitem.cpp:662
 #, kde-format
 msgid "Widgets"
 msgstr "Trepetak"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:599
+#: plasmaquick/plasmoid/containmentitem.cpp:598
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Erantsi %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:613
-#: plasmaquick/plasmoid/containmentitem.cpp:667
+#: plasmaquick/plasmoid/containmentitem.cpp:612
+#: plasmaquick/plasmoid/containmentitem.cpp:666
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Erantsi ikono bat"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:625
+#: plasmaquick/plasmoid/containmentitem.cpp:624
 #, kde-format
 msgid "Wallpaper"
 msgstr "Horma-papera"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:635
+#: plasmaquick/plasmoid/containmentitem.cpp:634
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

@@ -5,7 +5,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-17 01:58+0000\n"
+"POT-Creation-Date: 2023-08-19 01:57+0000\n"
 "PO-Revision-Date: 2016-03-20 15:24+0100\n"
 "Last-Translator: Chusslove Illich <caslav.ilic@gmx.net>\n"
 "Language-Team: Serbian <kde-i18n-sr@kde.org>\n"
@@ -287,27 +287,27 @@ msgstr "Инсталирај"
 msgid "Package Installation Failed"
 msgstr "Пропало инсталирање пакета"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:585
+#: plasmaquick/plasmoid/containmentitem.cpp:584
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Пакет који сте управо испустили није добар."
 
 # >> @title
-#: plasmaquick/plasmoid/containmentitem.cpp:594
-#: plasmaquick/plasmoid/containmentitem.cpp:663
+#: plasmaquick/plasmoid/containmentitem.cpp:593
+#: plasmaquick/plasmoid/containmentitem.cpp:662
 #, kde-format
 msgid "Widgets"
 msgstr "Виџети"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:599
+#: plasmaquick/plasmoid/containmentitem.cpp:598
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr ""
 
 # >> @action
-#: plasmaquick/plasmoid/containmentitem.cpp:613
-#: plasmaquick/plasmoid/containmentitem.cpp:667
+#: plasmaquick/plasmoid/containmentitem.cpp:612
+#: plasmaquick/plasmoid/containmentitem.cpp:666
 #, fuzzy, kde-format
 #| msgid "Icon"
 msgctxt "Add icon widget"
@@ -315,12 +315,12 @@ msgid "Add Icon"
 msgstr "Иконица"
 
 # >> @title
-#: plasmaquick/plasmoid/containmentitem.cpp:625
+#: plasmaquick/plasmoid/containmentitem.cpp:624
 #, kde-format
 msgid "Wallpaper"
 msgstr "Тапет"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:635
+#: plasmaquick/plasmoid/containmentitem.cpp:634
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

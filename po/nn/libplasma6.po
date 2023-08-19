@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-17 01:58+0000\n"
+"POT-Creation-Date: 2023-08-19 01:57+0000\n"
 "PO-Revision-Date: 2023-07-15 13:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -291,36 +291,36 @@ msgstr "Installer"
 msgid "Package Installation Failed"
 msgstr "Feil ved pakkeinstallering"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:585
+#: plasmaquick/plasmoid/containmentitem.cpp:584
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "Pakken du sleppte er ugyldig."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:594
-#: plasmaquick/plasmoid/containmentitem.cpp:663
+#: plasmaquick/plasmoid/containmentitem.cpp:593
+#: plasmaquick/plasmoid/containmentitem.cpp:662
 #, kde-format
 msgid "Widgets"
 msgstr "Skjermelement"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:599
+#: plasmaquick/plasmoid/containmentitem.cpp:598
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Legg til %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:613
-#: plasmaquick/plasmoid/containmentitem.cpp:667
+#: plasmaquick/plasmoid/containmentitem.cpp:612
+#: plasmaquick/plasmoid/containmentitem.cpp:666
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Legg til ikon"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:625
+#: plasmaquick/plasmoid/containmentitem.cpp:624
 #, kde-format
 msgid "Wallpaper"
 msgstr "Bakgrunnsbilete"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:635
+#: plasmaquick/plasmoid/containmentitem.cpp:634
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
