@@ -9,6 +9,8 @@ import QtQuick.Layouts 1.2
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.kirigami 2 as Kirigami
 import "private" as Private
+//NOTE: importing PlasmaCore is necessary in order to make KSvg load the current Plasma Theme
+import org.kde.plasma.core 2 as PlasmaCore
 
 T.Button {
     id: control

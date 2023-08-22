@@ -38,6 +38,8 @@ void CoreBindingsPlugin::initializeEngine(QQmlEngine *engine, const char *uri)
         KLocalizedContext *localizedContextObject = new KLocalizedContext(engine);
         context->setContextObject(localizedContextObject);
     }
+    // This ensures that importing plasmacore will make any KSvg use the current lasma theme
+    new Plasma::Theme(engine);
 }
 
 void CoreBindingsPlugin::registerTypes(const char *uri)

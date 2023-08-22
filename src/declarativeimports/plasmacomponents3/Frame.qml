@@ -9,6 +9,8 @@ import QtQuick.Controls @QQC2_VERSION@
 import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.kirigami 2 as Kirigami
 import org.kde.ksvg 1.0 as KSvg
+//NOTE: importing PlasmaCore is necessary in order to make KSvg load the current Plasma Theme
+import org.kde.plasma.core 2 as PlasmaCore
 
 T.Frame {
     id: control
