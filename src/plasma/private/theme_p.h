@@ -8,7 +8,6 @@
 #ifndef PLASMA_THEME_P_H
 #define PLASMA_THEME_P_H
 
-#include "svg.h"
 #include "theme.h"
 #include <QHash>
 
@@ -67,8 +66,6 @@ public:
     void processAdaptiveTransparencySettings(const KSharedConfigPtr &metadata);
     void processBlurBehindSettings(const KSharedConfigPtr &metadata);
 
-    const QString processStyleSheet(const QString &css, Plasma::Svg::Status status);
-    const QString svgStyleSheet(Plasma::Theme::ColorGroup group, Plasma::Svg::Status status);
     QColor color(Theme::ColorRole role, Theme::ColorGroup group = Theme::NormalColorGroup) const;
 
 public Q_SLOTS:
@@ -116,14 +113,6 @@ public:
     QString defaultWallpaperSuffix;
     int defaultWallpaperWidth;
     int defaultWallpaperHeight;
-    KImageCache *pixmapCache;
-    QString cachedDefaultStyleSheet;
-    QHash<QString, QPixmap> pixmapsToCache;
-    QHash<QString, QString> keysToCache;
-    QHash<QString, QString> idsToCache;
-    QHash<Theme::ColorGroup, QString> cachedSvgStyleSheets;
-    QHash<Theme::ColorGroup, QString> cachedSelectedSvgStyleSheets;
-    QHash<Theme::ColorGroup, QString> cachedInactiveSvgStyleSheets;
     QHash<QString, QString> discoveries;
     QTimer *pixmapSaveTimer;
     QTimer *updateNotificationTimer;

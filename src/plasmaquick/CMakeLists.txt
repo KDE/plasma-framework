@@ -78,6 +78,7 @@ target_link_libraries(KF6PlasmaQuick
         KF6::Notifications
         KF6::Activities
         KF6::KCMUtilsQuick
+        KF6::Svg
 )
 
 if(HAVE_KWAYLAND)

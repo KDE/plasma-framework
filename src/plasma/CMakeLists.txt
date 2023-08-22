@@ -35,8 +35,6 @@ target_sources(KF6Plasma PRIVATE
     private/timetracker.cpp
 
 #graphics
-    framesvg.cpp
-    svg.cpp
     theme.cpp
     private/theme_p.cpp
 )

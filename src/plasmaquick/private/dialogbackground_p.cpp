@@ -44,14 +44,14 @@ void DialogBackground::setImagePath(const QString &path)
     m_frameSvgItem->setProperty("imagePath", path);
 }
 
-void DialogBackground::setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders)
+void DialogBackground::setEnabledBorders(const KSvg::FrameSvg::EnabledBorders borders)
 {
     m_frameSvgItem->setProperty("enabledBorders", QVariant::fromValue(borders));
 }
 
-Plasma::FrameSvg::EnabledBorders DialogBackground::enabledBorders() const
+KSvg::FrameSvg::EnabledBorders DialogBackground::enabledBorders() const
 {
-    return m_frameSvgItem->property("enabledBorders").value<Plasma::FrameSvg::EnabledBorders>();
+    return m_frameSvgItem->property("enabledBorders").value<KSvg::FrameSvg::EnabledBorders>();
 }
 
 QRegion DialogBackground::mask() const

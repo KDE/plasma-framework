@@ -225,7 +225,7 @@ void DialogPrivate::syncBorders(const QRect &geom)
     }
 
     if (dialogBackground->enabledBorders() != (Plasma::FrameSvg::EnabledBorder)borders) {
-        dialogBackground->setEnabledBorders((Plasma::FrameSvg::EnabledBorder)borders);
+        dialogBackground->setEnabledBorders((KSvg::FrameSvg::EnabledBorder)borders);
     }
 }
 
@@ -282,7 +282,7 @@ void DialogPrivate::updateVisibility(bool visible)
         }
 
         if (q->location() == Plasma::Types::FullScreen) {
-            dialogBackground->setEnabledBorders(Plasma::FrameSvg::NoBorder);
+            dialogBackground->setEnabledBorders(KSvg::FrameSvg::NoBorder);
 
             // We cache the original size of the item, to retrieve it
             // when the dialog is switched back from fullscreen.

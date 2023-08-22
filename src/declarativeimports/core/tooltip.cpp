@@ -13,7 +13,6 @@
 #include <QDebug>
 #include <QQmlEngine>
 
-#include "framesvgitem.h"
 #include <KDirWatch>
 #include <KWindowEffects>
 #include <Plasma/Applet>

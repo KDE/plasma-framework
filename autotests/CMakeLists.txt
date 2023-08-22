@@ -34,8 +34,6 @@ PLASMA_UNIT_TESTS(
     dialogqmltest
     dialogstatetest
     pluginloadertest
-    framesvgtest
-    iconitemtest
     themetest
     sharedqmlenginetest
 )
@@ -50,12 +48,6 @@ if(HAVE_X11)
         TEST_NAME dialognativetest
         LINK_LIBRARIES Qt6::Gui Qt6::Test Qt6::Qml Qt6::Quick KF6::WindowSystem KF6::Plasma KF6::PlasmaQuick
     )
-    ecm_add_test(
-        iconitemhidpitest.cpp
-        TEST_NAME iconitemhidpitest
-        LINK_LIBRARIES Qt::Gui Qt::Test Qt::Qml Qt::Quick KF6::IconThemes KF6::WindowSystem KF6::Plasma KF6::PlasmaQuick
-    )
-    set_tests_properties(iconitemhidpitest PROPERTIES ENVIRONMENT "QT_SCALE_FACTOR=1.25")
 endif()
 
 ecm_add_test(

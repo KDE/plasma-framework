@@ -8,7 +8,7 @@
 #define DIALOGBACKGROUND_P_H
 
 #include "sharedqmlengine.h"
-#include <Plasma/FrameSvg>
+#include <KSvg/FrameSvg>
 
 #include <QQuickItem>
 
@@ -39,8 +39,8 @@ public:
     QString imagePath() const;
     void setImagePath(const QString &name);
 
-    void setEnabledBorders(const Plasma::FrameSvg::EnabledBorders borders);
-    Plasma::FrameSvg::EnabledBorders enabledBorders() const;
+    void setEnabledBorders(const KSvg::FrameSvg::EnabledBorders borders);
+    KSvg::FrameSvg::EnabledBorders enabledBorders() const;
 
     QRegion mask() const;
 

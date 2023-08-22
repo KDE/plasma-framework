@@ -14,6 +14,8 @@
 #include <KWindowEffects>
 #include <KX11Extras>
 
+#include <Plasma/Theme>
+
 using namespace Plasma;
 
 namespace PlasmaQuick
@@ -75,21 +77,21 @@ QQuickItem *PlasmaWindow::mainItem() const
     return d->mainItem;
 }
 
-static FrameSvg::EnabledBorders edgeToBorder(Qt::Edges edges)
+static KSvg::FrameSvg::EnabledBorders edgeToBorder(Qt::Edges edges)
 {
-    FrameSvg::EnabledBorders borders = FrameSvg::EnabledBorders(0);
+    KSvg::FrameSvg::EnabledBorders borders = KSvg::FrameSvg::EnabledBorders(0);
 
     if (edges & Qt::Edge::TopEdge) {
-        borders |= FrameSvg::EnabledBorder::TopBorder;
+        borders |= KSvg::FrameSvg::EnabledBorder::TopBorder;
     }
     if (edges & Qt::Edge::BottomEdge) {
-        borders |= FrameSvg::EnabledBorder::BottomBorder;
+        borders |= KSvg::FrameSvg::EnabledBorder::BottomBorder;
     }
     if (edges & Qt::Edge::LeftEdge) {
-        borders |= FrameSvg::EnabledBorder::LeftBorder;
+        borders |= KSvg::FrameSvg::EnabledBorder::LeftBorder;
     }
     if (edges & Qt::Edge::RightEdge) {
-        borders |= FrameSvg::EnabledBorder::RightBorder;
+        borders |= KSvg::FrameSvg::EnabledBorder::RightBorder;
     }
 
     return borders;
