@@ -18,6 +18,8 @@ Item {
 
     implicitWidth: inactive.implicitWidth
     implicitHeight: Math.max(inactive.implicitHeight, button.implicitHeight)
+
+    layer.enabled: opacity < 1
     opacity: control.enabled ? 1 : 0.6
 
     KSvg.Svg {
