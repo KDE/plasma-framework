@@ -1220,39 +1220,52 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         }
     }
 
+    // For top & bottom the inner conditions are intentionally different from thouse for left & right,
+    // because we want floating popups to flip vertically, but only push them in bounds horizontally.
+
     // If popup goes out of bounds...
     // ...at the left edge
     if (dialogPos.x() < avail.left()) {
-        if (d->location != Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
-            // move it
+        if (d->location != Plasma::Types::LeftEdge) {
+            // move it in bounds
+            // Note: floating popup goes here.
             dialogPos.setX(avail.left());
         } else {
-            // swap edge
+            // flip it around
             dialogPos.setX(rightPoint.x());
         }
     }
     // ...at the right edge
     if (dialogPos.x() + size.width() > avail.right()) {
-        if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
+        if (d->location != Plasma::Types::RightEdge) {
+            // move it in bounds
+            // Note: floating popup goes here.
             dialogPos.setX(qMax(avail.left(), (avail.right() - size.width() + 1)));
         } else {
+            // flip it around
             dialogPos.setX(leftPoint.x());
         }
     }
     // ...at the top edge
     if (dialogPos.y() < avail.top()) {
         if (d->location == Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
+            // move it in bounds
             dialogPos.setY(avail.top());
         } else {
+            // flip it around
+            // Note: floating popup goes here.
             dialogPos.setY(bottomPoint.y());
         }
     }
     // ...at the bottom edge
     if (dialogPos.y() + size.height() > avail.bottom()) {
-        if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
-            dialogPos.setY(topPoint.y());
-        } else {
+        if (d->location == Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
+            // move it in bounds
             dialogPos.setY(qMax(avail.top(), (avail.bottom() - size.height() + 1)));
+        } else {
+            // flip it around
+            // Note: floating popup goes here.
+            dialogPos.setY(topPoint.y());
         }
     }
 
