@@ -18,6 +18,7 @@ Item {
     implicitWidth: Math.round(PlasmaCore.Units.gridUnit * 1.5)
     implicitHeight : PlasmaCore.Units.gridUnit
 
+    layer.enabled: opacity < 1
     opacity: control.enabled ? 1 : 0.6
 
     PlasmaCore.FrameSvgItem {
