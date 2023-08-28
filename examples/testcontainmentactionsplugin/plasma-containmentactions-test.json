@@ -10,6 +10,7 @@
                 "Name[es]": "Chani",
                 "Name[eu]": "Chani",
                 "Name[fr]": "Chani",
+                "Name[gl]": "Chani",
                 "Name[ia]": "Chani",
                 "Name[ka]": "Chani",
                 "Name[ko]": "Chani",
@@ -18,7 +19,8 @@
                 "Name[ta]": "இச்சானி",
                 "Name[tr]": "Çani",
                 "Name[uk]": "Chani",
-                "Name[x-test]": "xxChanixx"
+                "Name[x-test]": "xxChanixx",
+                "Name[zh_CN]": "Chani"
             }
         ],
         "Description": "A dummy plugin for testing",
@@ -28,6 +30,7 @@
         "Description[es]": "Un complemento simulado para pruebas",
         "Description[eu]": "Probatarako gezurrezko plugin bat",
         "Description[fr]": "Un module externe vide pour du test",
+        "Description[gl]": "Un complemento para probas.",
         "Description[ia]": "Un plugin vacue pro essayar",
         "Description[ka]": "უაზრო დამატება, ტესტირებისთვის",
         "Description[ko]": "테스트용 뼈대 플러그인",
@@ -36,6 +39,7 @@
         "Description[tr]": "Sınama için bir boş eklenti",
         "Description[uk]": "Додаток для тестування",
         "Description[x-test]": "xxA dummy plugin for testingxx",
+        "Description[zh_CN]": "测试用虚拟插件",
         "EnabledByDefault": true,
         "Icon": "preferences-desktop-color",
         "License": "GPL",
@@ -46,6 +50,7 @@
         "Name[es]": "Prueba",
         "Name[eu]": "Proba",
         "Name[fr]": "Test",
+        "Name[gl]": "Proba",
         "Name[ia]": "Essayo",
         "Name[ka]": "შემოწმება",
         "Name[ko]": "테스트",
@@ -55,6 +60,7 @@
         "Name[tr]": "Sınama",
         "Name[uk]": "Тест",
         "Name[x-test]": "xxTestxx",
+        "Name[zh_CN]": "测试",
         "Version": "pre0.1",
         "Website": "https://plasma.kde.org/"
     },
