@@ -1156,12 +1156,15 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         }
     }
 
-    const QPoint topPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.top() - size.height());
-    const QPoint bottomPoint(pos.x() + (item->mapRectToScene(item->boundingRect()).width() - size.width()) / 2, parentGeometryBounds.bottom());
+    const QRectF itemSceneBoundingRect = item->mapRectToScene(item->boundingRect());
+    const QPoint centerPoint(pos.x() + (itemSceneBoundingRect.width() - size.width()) / 2, //
+                             pos.y() + (itemSceneBoundingRect.height() - size.height()) / 2);
 
-    const QPoint leftPoint(parentGeometryBounds.left() - size.width(), pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
+    const QPoint topPoint(centerPoint.x(), parentGeometryBounds.top() - size.height());
+    const QPoint bottomPoint(centerPoint.x(), parentGeometryBounds.bottom());
 
-    const QPoint rightPoint(parentGeometryBounds.right(), pos.y() + (item->mapRectToScene(item->boundingRect()).height() - size.height()) / 2);
+    const QPoint leftPoint(parentGeometryBounds.left() - size.width(), centerPoint.y());
+    const QPoint rightPoint(parentGeometryBounds.right(), centerPoint.y());
 
     QPoint dialogPos;
     if (d->location == Plasma::Types::TopEdge) {
@@ -1217,8 +1220,9 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
         }
     }
 
+    // If popup goes out of bounds...
+    // ...at the left edge
     if (dialogPos.x() < avail.left()) {
-        // popup hits lhs
         if (d->location != Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
             // move it
             dialogPos.setX(avail.left());
@@ -1227,25 +1231,24 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
             dialogPos.setX(rightPoint.x());
         }
     }
+    // ...at the right edge
     if (dialogPos.x() + size.width() > avail.right()) {
-        // popup hits rhs
         if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
             dialogPos.setX(qMax(avail.left(), (avail.right() - size.width() + 1)));
         } else {
             dialogPos.setX(leftPoint.x());
         }
     }
+    // ...at the top edge
     if (dialogPos.y() < avail.top()) {
-        // hitting top
         if (d->location == Plasma::Types::LeftEdge || d->location == Plasma::Types::RightEdge) {
             dialogPos.setY(avail.top());
         } else {
             dialogPos.setY(bottomPoint.y());
         }
     }
-
+    // ...at the bottom edge
     if (dialogPos.y() + size.height() > avail.bottom()) {
-        // hitting bottom
         if (d->location == Plasma::Types::TopEdge || d->location == Plasma::Types::BottomEdge) {
             dialogPos.setY(topPoint.y());
         } else {
