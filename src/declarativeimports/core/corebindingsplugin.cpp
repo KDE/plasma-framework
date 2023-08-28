@@ -15,16 +15,15 @@
 #include <KLocalizedContext>
 
 #include "action.h"
-#include "colorscope.h"
 #include "datamodel.h"
 #include "dialog.h"
 #include "quicktheme.h"
 
 #include "tooltip.h"
-#include "units.h"
 #include "windowthumbnail.h"
 
 #include <QDebug>
+#include <QQmlPropertyMap>
 #include <QWindow>
 #include <qqml.h>
 
@@ -47,16 +46,11 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QByteArray("org.kde.plasma.core"));
 
     qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", {});
-    qmlRegisterSingletonType<Units>(uri, 2, 0, "Units", [](QQmlEngine *engine, QJSEngine *) -> QObject * {
-        engine->setObjectOwnership(&Units::instance(), QQmlEngine::CppOwnership);
-        return &Units::instance();
-    });
 
     // qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
     qmlRegisterSingletonType<Plasma::QuickTheme>(uri, 2, 0, "Theme", [](QQmlEngine *engine, QJSEngine *) -> QObject * {
         return new Plasma::QuickTheme(engine);
     });
-    qmlRegisterType<ColorScope>(uri, 2, 0, "ColorScope");
 
     // TODO: remove
     qmlRegisterType<Plasma::SortFilterModel, 0>(uri, 2, 0, "SortFilterModel");
