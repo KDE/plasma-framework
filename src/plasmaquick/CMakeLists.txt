@@ -34,12 +34,15 @@ target_sources(KF6PlasmaQuick PRIVATE
     plasmoid/containmentitem.cpp
     plasmoid/dropmenu.cpp
     plasmoid/wallpaperitem.cpp
+    waylandintegration.cpp
     ${RESOURCES}
 )
 
-if(HAVE_KWAYLAND)
-    target_sources(KF6PlasmaQuick PRIVATE waylandintegration.cpp)
-endif()
+qt_generate_wayland_protocol_client_sources(KF6PlasmaQuick
+    FILES
+        "${PLASMA_WAYLAND_PROTOCOLS_DIR}/plasma-shell.xml"
+        "${Wayland_DATADIR}/wayland.xml"
+)
 
 ecm_qt_declare_logging_category(KF6PlasmaQuick
     HEADER debug_p.h
@@ -48,6 +51,12 @@ ecm_qt_declare_logging_category(KF6PlasmaQuick
     OLD_CATEGORY_NAMES org.kde.plasmaquick
     DESCRIPTION "Plasma Quick lib"
     EXPORT PLASMA
+)
+
+set_target_properties(KF6PlasmaQuick PROPERTIES
+    VERSION     ${PLASMA_VERSION}
+    SOVERSION   ${PLASMA_SOVERSION}
+    EXPORT_NAME PlasmaQuick
 )
 
 target_include_directories(KF6PlasmaQuick
@@ -67,6 +76,9 @@ target_link_libraries(KF6PlasmaQuick
         KF6::WindowSystem
     PRIVATE
         Qt6::Svg
+        Qt6::GuiPrivate
+        Qt6::WaylandClient
+        Wayland::Client
         KF6::ConfigGui
         KF6::ConfigQml
         KF6::I18n
@@ -80,13 +92,6 @@ target_link_libraries(KF6PlasmaQuick
         KF6::KCMUtilsQuick
         KF6::Svg
 )
-
-if(HAVE_KWAYLAND)
-    target_link_libraries(KF6PlasmaQuick
-        PRIVATE
-        KF6::WaylandClient
-    )
-endif()
 
 if(HAVE_X11)
     target_link_libraries(KF6PlasmaQuick

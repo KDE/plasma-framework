@@ -33,12 +33,6 @@
 #include <QDebug>
 #include <optional>
 
-#if HAVE_KWAYLAND
-#include "waylandintegration_p.h"
-#include <KWayland/Client/plasmashell.h>
-#include <KWayland/Client/surface.h>
-#endif
-
 #if HAVE_XCB_SHAPE
 #include <private/qtx11extras_p.h>
 #include <xcb/shape.h>
@@ -47,6 +41,8 @@
 #if HAVE_X11
 #include <qpa/qplatformwindow_p.h>
 #endif
+
+#include "waylandintegration_p.h"
 
 // Unfortunately QWINDOWSIZE_MAX is not exported
 #define DIALOGSIZE_MAX ((1 << 24) - 1)
@@ -129,8 +125,6 @@ public:
     bool mainItemContainsPosition(const QPointF &point) const;
     QPointF positionAdjustedForMainItem(const QPointF &point) const;
 
-    void setupWaylandIntegration();
-
     void applyType();
 
     bool updateMouseCursor(const QPointF &globalMousePos);
@@ -145,9 +139,6 @@ public:
     DialogBackground *dialogBackground;
     QPointer<QQuickItem> mainItem;
     QPointer<QQuickItem> visualParent;
-#if HAVE_KWAYLAND
-    QPointer<KWayland::Client::PlasmaShellSurface> shellSurface;
-#endif
 
     QRect cachedGeometry;
     bool hasMask;
@@ -165,6 +156,12 @@ public:
     // Attached Layout property of mainItem, if any
     QPointer<QObject> mainItemLayout;
 };
+
+static bool isRunningInKWin()
+{
+    static bool check = QGuiApplication::platformName() == QLatin1String("wayland-org.kde.kwin.qpa");
+    return check;
+}
 
 QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint &pos) const
 {
@@ -307,13 +304,11 @@ void DialogPrivate::updateVisibility(bool visible)
                 updateLayoutParameters();
             }
 
-#if HAVE_KWAYLAND
             // if is a wayland window that was hidden, we need
             // to set its position again as there won't be any move event to sync QWindow::position and shellsurface::position
-            if (shellSurface && type != Dialog::OnScreenDisplay) {
-                shellSurface->setPosition(q->position());
+            if (type != Dialog::OnScreenDisplay) {
+                PlasmaShellWaylandIntegration::get(q)->setPosition(q->position());
             }
-#endif
         }
     }
 
@@ -750,27 +745,6 @@ QPointF DialogPrivate::positionAdjustedForMainItem(const QPointF &point) const
     return QPointF(qBound(itemRect.left(), point.x(), itemRect.right()), qBound(itemRect.top(), point.y(), itemRect.bottom()));
 }
 
-void DialogPrivate::setupWaylandIntegration()
-{
-#if HAVE_KWAYLAND
-    if (shellSurface) {
-        // already setup
-        return;
-    }
-
-    using namespace KWayland::Client;
-    PlasmaShell *interface = WaylandIntegration::self()->waylandPlasmaShell();
-    if (!interface) {
-        return;
-    }
-    Surface *s = Surface::fromWindow(q);
-    if (!s) {
-        return;
-    }
-    shellSurface = interface->createSurface(s, q);
-#endif
-}
-
 void DialogPrivate::applyType()
 {
     /*QXcbWindowFunctions::WmWindowType*/ int wmType = 0;
@@ -810,46 +784,44 @@ void DialogPrivate::applyType()
     }
 #endif
 
-    if (!wmType && type != Dialog::Normal) {
+    if (!wmType && type != Dialog::Normal && KWindowSystem::isPlatformX11()) {
         KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
     }
-#if HAVE_KWAYLAND
-    if (shellSurface) {
-        if (q->flags() & Qt::WindowStaysOnTopHint) {
-            // If the AppletPopup type is not explicitly requested, then use the Dock type in this case
-            // to avoid bug #454635.
-            if (type != Dialog::AppletPopup && type != Dialog::Tooltip) {
-                type = Dialog::Dock;
-                shellSurface->setPanelBehavior(KWayland::Client::PlasmaShellSurface::PanelBehavior::WindowsGoBelow);
-            }
-        }
-        switch (type) {
-        case Dialog::Dock:
-            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Panel);
-            break;
-        case Dialog::Tooltip:
-            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::ToolTip);
-            break;
-        case Dialog::Notification:
-            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Notification);
-            break;
-        case Dialog::OnScreenDisplay:
-            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::OnScreenDisplay);
-            break;
-        case Dialog::CriticalNotification:
-            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::CriticalNotification);
-            break;
-        case Dialog::Normal:
-            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::Normal);
-            break;
-        case Dialog::AppletPopup:
-            shellSurface->setRole(KWayland::Client::PlasmaShellSurface::Role::AppletPopup);
-            break;
-        default:
-            break;
+    if (q->flags() & Qt::WindowStaysOnTopHint) {
+        // If the AppletPopup type is not explicitly requested, then use the Dock type in this case
+        // to avoid bug #454635.
+        if (type != Dialog::AppletPopup && type != Dialog::Tooltip) {
+            type = Dialog::Dock;
+            PlasmaShellWaylandIntegration::get(q)->setPanelBehavior(QtWayland::org_kde_plasma_surface::panel_behavior_windows_go_below);
+        } else {
+            PlasmaShellWaylandIntegration::get(q)->setPanelBehavior(QtWayland::org_kde_plasma_surface::panel_behavior_always_visible);
         }
     }
-#endif
+    switch (type) {
+    case Dialog::Dock:
+        PlasmaShellWaylandIntegration::get(q)->setRole(QtWayland::org_kde_plasma_surface::role_panel);
+        break;
+    case Dialog::Tooltip:
+        PlasmaShellWaylandIntegration::get(q)->setRole(QtWayland::org_kde_plasma_surface::role_tooltip);
+        break;
+    case Dialog::Notification:
+        PlasmaShellWaylandIntegration::get(q)->setRole(QtWayland::org_kde_plasma_surface::role_notification);
+        break;
+    case Dialog::OnScreenDisplay:
+        PlasmaShellWaylandIntegration::get(q)->setRole(QtWayland::org_kde_plasma_surface::role_onscreendisplay);
+        break;
+    case Dialog::CriticalNotification:
+        PlasmaShellWaylandIntegration::get(q)->setRole(QtWayland::org_kde_plasma_surface::role_criticalnotification);
+        break;
+    case Dialog::Normal:
+        PlasmaShellWaylandIntegration::get(q)->setRole(QtWayland::org_kde_plasma_surface::role_normal);
+        break;
+    case Dialog::AppletPopup:
+        PlasmaShellWaylandIntegration::get(q)->setRole(QtWayland::org_kde_plasma_surface::role_appletpopup);
+        break;
+    default:
+        break;
+    }
 
     // an OSD can't be a Dialog, as qt xcb would attempt to set a transient parent for it
     // see bug 370433
@@ -877,11 +849,7 @@ void DialogPrivate::applyType()
         KX11Extras::setOnAllDesktops(q->winId(), false);
     }
 
-#if HAVE_KWAYLAND
-    if (shellSurface) {
-        shellSurface->setPanelTakesFocus(!q->flags().testFlag(Qt::WindowDoesNotAcceptFocus));
-    }
-#endif
+    PlasmaShellWaylandIntegration::get(q)->setTakesFocus(q->flags().testFlag(Qt::WindowDoesNotAcceptFocus));
 }
 
 bool DialogPrivate::updateMouseCursor(const QPointF &globalMousePos)
@@ -1413,15 +1381,10 @@ void Dialog::showEvent(QShowEvent *event)
         DialogShadows::self()->addWindow(this, d->dialogBackground->enabledBorders());
     }
 
-    KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
-
+    if (KWindowSystem::isPlatformX11() || isRunningInKWin()) {
+        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+    }
     QQuickWindow::showEvent(event);
-}
-
-static bool isRunningInKWin()
-{
-    static bool check = QGuiApplication::platformName() == QLatin1String("wayland-org.kde.kwin.qpa");
-    return check;
 }
 
 bool Dialog::event(QEvent *event)
@@ -1440,40 +1403,26 @@ bool Dialog::event(QEvent *event)
          * and tear it down when the window gets hidden
          * see https://phabricator.kde.org/T6064
          */
-#if HAVE_KWAYLAND
         // sometimes non null regions arrive even for non visible windows
         // for which surface creation would fail
-        if (!d->shellSurface && isVisible()) {
-            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
-            d->setupWaylandIntegration();
+        if (isVisible()) {
+            if (KWindowSystem::isPlatformX11() || isRunningInKWin()) {
+                KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+            }
             d->updateVisibility(true);
             const bool ret = QQuickWindow::event(event);
             d->updateTheme();
             return ret;
         }
-#endif
     } else if (event->type() == QEvent::PlatformSurface) {
         const QPlatformSurfaceEvent *pSEvent = static_cast<QPlatformSurfaceEvent *>(event);
-
-        if (pSEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
-            KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
-        }
     } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
-#if HAVE_KWAYLAND
-        delete d->shellSurface;
-        d->shellSurface = nullptr;
-#endif
-
     } else if (event->type() == QEvent::Move) {
-#if HAVE_KWAYLAND
-        if (d->shellSurface) {
-            QMoveEvent *me = static_cast<QMoveEvent *>(event);
-            d->shellSurface->setPosition(me->pos());
-        }
-#endif
+        QMoveEvent *me = static_cast<QMoveEvent *>(event);
+        PlasmaShellWaylandIntegration::get(this)->setPosition(me->pos());
     }
 
     /*Fitt's law: if the containment has margins, and the mouse cursor clicked

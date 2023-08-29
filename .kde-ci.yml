@@ -21,10 +21,6 @@ Dependencies:
     'frameworks/kcmutils' : '@same'
     'frameworks/ksvg' : '@same'
 
-- 'on': ['Linux', 'FreeBSD']
-  'require':
-    'frameworks/kwayland' : '@same'
-
 Options:
   test-before-installing: True
   cppcheck-ignore-files: ['templates/']

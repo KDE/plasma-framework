@@ -62,16 +62,12 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         Kirigami2
         KCMUtils
         Svg
-    OPTIONAL_COMPONENTS
-        Wayland
 )
 
-set_package_properties(KF6Wayland PROPERTIES DESCRIPTION "Integration with the Wayland compositor"
-                       TYPE OPTIONAL
-                      )
-if(KF6Wayland_FOUND)
-  set(HAVE_KWAYLAND 1)
-endif()
+# Wayland features
+find_package(PlasmaWaylandProtocols 1.10.0 REQUIRED)
+find_package(Qt6WaylandClient ${REQUIRED_QT_VERSION} REQUIRED CONFIG)
+find_package(Wayland 1.9 REQUIRED Client)
 
 option(WITHOUT_X11 "Build without X11 support (skips finding X11)." OFF)
 if(NOT WITHOUT_X11)

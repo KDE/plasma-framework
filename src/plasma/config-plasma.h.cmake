@@ -1,6 +1,5 @@
 #cmakedefine01 HAVE_X11
 #cmakedefine01 HAVE_GLX
 #cmakedefine01 HAVE_EGL
-#cmakedefine01 HAVE_KWAYLAND
 
 #define PLASMA_RELATIVE_DATA_INSTALL_DIR "@PLASMA_RELATIVE_DATA_INSTALL_DIR@"
