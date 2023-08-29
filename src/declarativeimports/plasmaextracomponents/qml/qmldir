@@ -14,6 +14,7 @@ PlaceholderMessage 2.0 PlaceholderMessage.qml
 PlasmoidHeading 2.0 PlasmoidHeading.qml
 Representation 2.0 Representation.qml
 SearchField 2.0 SearchField.qml
+SegmentedProgressBar 2.0 SegmentedProgressBar.qml
 
 ActivateAnimation 2.0 animations/ActivateAnimation.qml
 AppearAnimation 2.0 animations/AppearAnimation.qml

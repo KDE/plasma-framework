@@ -116,4 +116,11 @@
         <rect id="rect8453-9-29" height="3" style="opacity:0.50;fill:currentColor;fill-rule:evenodd" class="ColorScheme-Highlight" width="2.5" x="32" y="11" />
         <path id="path37-3" d="m 34,11 v 3 h 1 v -3 z" style="fill:currentColor;fill-opacity:1" class="ColorScheme-Highlight" inkscape:connector-curvature="0" />
     </g>
+    <g id="bar-inactive-separator" transform="translate(13, 0)">
+        <rect style="fill:currentColor" class="ColorScheme-ButtonBackground" width="1" height="1"/>
+        <rect style="fill:currentColor;opacity:0.24" class="ColorScheme-ButtonText" width="1" height="1"/>
+    </g>
+    <g id="bar-active-separator" transform="translate(15, 0)">
+        <rect style="fill:currentColor" class="ColorScheme-Highlight" width="1" height="1"/>
+    </g>
 </svg>
