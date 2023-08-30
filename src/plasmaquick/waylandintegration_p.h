@@ -36,14 +36,16 @@ public:
      */
     static PlasmaShellWaylandIntegration *get(QWindow *window);
     ~PlasmaShellWaylandIntegration();
-
     void setPosition(const QPoint &position);
     void setPanelBehavior(QtWayland::org_kde_plasma_surface::panel_behavior panelBehavior);
     void setRole(QtWayland::org_kde_plasma_surface::role role);
     void setTakesFocus(bool takesFocus);
 
+    bool eventFilter(QObject *watched, QEvent *event) override;
+
 private:
     PlasmaShellWaylandIntegration(QWindow *window);
+    void platformWindowCreated();
     void surfaceCreated();
     void surfaceDestroyed();
 

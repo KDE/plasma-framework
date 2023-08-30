@@ -7,6 +7,7 @@
 #include "waylandintegration_p.h"
 
 #include <QGuiApplication>
+#include <QPlatformSurfaceEvent>
 #include <QWaylandClientExtensionTemplate>
 #include <QWindow>
 #include <qpa/qplatformwindow_p.h>
@@ -70,8 +71,15 @@ PlasmaShellWaylandIntegration::PlasmaShellWaylandIntegration(QWindow *window)
     : QObject(window)
     , m_window(window)
 {
-    m_window->create();
-    if (auto waylandWindow = window->nativeInterface<QNativeInterface::Private::QWaylandWindow>()) {
+    m_window->installEventFilter(this);
+    if (m_window->handle()) {
+        platformWindowCreated();
+    }
+}
+
+void PlasmaShellWaylandIntegration::platformWindowCreated()
+{
+    if (auto waylandWindow = m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>()) {
         connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceCreated, this, [this] {
             surfaceCreated();
         });
@@ -127,6 +135,19 @@ void PlasmaShellWaylandIntegration::setTakesFocus(bool takesFocus)
     if (m_shellSurface) {
         m_shellSurface->set_panel_takes_focus(takesFocus);
     }
+}
+
+bool PlasmaShellWaylandIntegration::eventFilter(QObject *watched, QEvent *event)
+{
+    Q_ASSERT(watched == m_window);
+
+    if (event->type() == QEvent::PlatformSurface) {
+        QPlatformSurfaceEvent *pe = static_cast<QPlatformSurfaceEvent *>(event);
+        if (pe->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
+            platformWindowCreated();
+        }
+    }
+    return false;
 }
 
 void PlasmaShellWaylandIntegration::surfaceCreated()
