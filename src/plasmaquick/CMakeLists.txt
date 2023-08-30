@@ -23,6 +23,7 @@ target_sources(KF6PlasmaQuick PRIVATE
     containmentview.cpp
     configmodel.cpp
     configview.cpp
+    edgeeventforwarder.cpp
     packageurlinterceptor.cpp
     sharedqmlengine.cpp
     quickviewsharedengine.cpp
