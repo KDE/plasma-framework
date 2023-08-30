@@ -23,48 +23,6 @@ Types::~Types()
 {
 }
 
-Types::Direction locationToDirection(Types::Location location)
-{
-    switch (location) {
-    case Types::Floating:
-    case Types::Desktop:
-    case Types::TopEdge:
-    case Types::FullScreen:
-        // TODO: should we be smarter for floating and planer?
-        //      perhaps we should take a QRect and/or QPos as well?
-        return Types::Down;
-    case Types::BottomEdge:
-        return Types::Up;
-    case Types::LeftEdge:
-        return Types::Right;
-    case Types::RightEdge:
-        return Types::Left;
-    }
-
-    return Types::Down;
-}
-
-Types::Direction locationToInverseDirection(Types::Location location)
-{
-    switch (location) {
-    case Types::Floating:
-    case Types::Desktop:
-    case Types::TopEdge:
-    case Types::FullScreen:
-        // TODO: should we be smarter for floating and planer?
-        //      perhaps we should take a QRect and/or QPos as well?
-        return Types::Up;
-    case Types::BottomEdge:
-        return Types::Down;
-    case Types::LeftEdge:
-        return Types::Left;
-    case Types::RightEdge:
-        return Types::Right;
-    }
-
-    return Types::Up;
-}
-
 Types::PopupPlacement visualPopupPlacement(Types::PopupPlacement placement, Qt::LayoutDirection layoutDirection)
 {
     const bool mirrored = (layoutDirection == Qt::LayoutDirectionAuto) ? qApp->isRightToLeft() : (layoutDirection == Qt::RightToLeft);
