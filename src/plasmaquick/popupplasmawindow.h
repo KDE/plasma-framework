@@ -27,6 +27,8 @@ class PLASMAQUICK_EXPORT PopupPlasmaWindow : public PlasmaWindow
     Q_PROPERTY(QQuickItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged)
     Q_PROPERTY(Qt::Edge popupDirection READ popupDirection WRITE setPopupDirection NOTIFY popupDirectionChanged)
     Q_PROPERTY(bool floating READ floating WRITE setFloating NOTIFY floatingChanged)
+    Q_PROPERTY(bool animated READ animated WRITE setAnimated NOTIFY animatedChanged)
+
 public:
     PopupPlasmaWindow();
     QQuickItem *visualParent() const;
@@ -38,15 +40,20 @@ public:
     bool floating() const;
     void setFloating(bool floating);
 
+    bool animated();
+    void setAnimated(bool animated);
+
     bool event(QEvent *event) override;
 
 Q_SIGNALS:
     void visualParentChanged();
     void popupDirectionChanged();
     void floatingChanged();
+    void animatedChanged();
 
 private:
     void queuePositionUpdate();
+    void updateSlideEffect();
     void updatePosition();
     void updatePositionX11(const QPoint &position);
     void updatePositionWayland(const QPoint &position);
@@ -54,6 +61,7 @@ private:
     QPointer<QQuickItem> m_visualParent;
     bool m_needsReposition = false;
     bool m_floating = false;
+    bool m_animated = false;
     Qt::Edge m_popupDirection = Qt::TopEdge;
 };
 }
