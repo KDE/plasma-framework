@@ -15,6 +15,8 @@
 #include <KLocalizedContext>
 
 #include "action.h"
+#include "appletpopup.h"
+
 #include "dialog.h"
 #include "quicktheme.h"
 
@@ -51,6 +53,7 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
         return new Plasma::QuickTheme(engine);
     });
 
+    qmlRegisterType<PlasmaQuick::AppletPopup>(uri, 2, 0, "AppletPopup");
     qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 0, "Dialog");
     // HACK make properties like "opacity" work that are in REVISION 1 of QWindow
     qmlRegisterRevision<QWindow, 1>(uri, 2, 0);

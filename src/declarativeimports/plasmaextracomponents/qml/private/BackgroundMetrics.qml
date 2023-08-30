@@ -14,7 +14,7 @@ KSvg.FrameSvgItem {
     id: backgroundMetrics
     visible: false
     imagePath: {
-        if (Window.window instanceof PlasmaCore.Dialog) {
+        if (Window.window instanceof PlasmaCore.AppletPopup || Window.window instanceof PlasmaCore.Dialog) {
             return "dialogs/background";
         } else if (Plasmoid.formFactor === PlasmaCore.Types.Planar) {
             return "widgets/background";

@@ -12,6 +12,7 @@
 #include <QQuickItem>
 
 #include <KWindowEffects>
+#include <KWindowSystem>
 #include <KX11Extras>
 
 #include <Plasma/Theme>
@@ -40,7 +41,7 @@ PlasmaWindow::PlasmaWindow(QWindow *parent)
     , d(new PlasmaWindowPrivate(this))
 {
     setColor(QColor(Qt::transparent));
-    setFlags(Qt::FramelessWindowHint);
+    setFlags(Qt::FramelessWindowHint | Qt::WindowStaysOnTopHint);
 
     d->dialogBackground = new DialogBackground(contentItem());
     d->dialogBackground->setImagePath(QStringLiteral("dialogs/background"));
@@ -132,10 +133,19 @@ Qt::Edges PlasmaWindow::borders()
     return bordersToEdge(d->dialogBackground->enabledBorders());
 }
 
+void PlasmaWindow::showEvent(QShowEvent *e)
+{
+    // EWMH states that the state is reset every hide
+    // Qt supports external factors setting state before the next show
+    if (KWindowSystem::isPlatformX11()) {
+        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+    }
+    QQuickWindow::showEvent(e);
+}
+
 void PlasmaWindow::resizeEvent(QResizeEvent *e)
 {
     QQuickWindow::resizeEvent(e);
-
     const QSize windowSize = e->size();
     d->dialogBackground->setSize(windowSize);
     if (d->mainItem) {
@@ -205,6 +215,26 @@ void PlasmaWindow::setBackgroundHints(BackgroundHints hints)
     d->dialogBackground->setImagePath(prefix + QStringLiteral("dialogs/background"));
 
     Q_EMIT backgroundHintsChanged();
+}
+
+qreal PlasmaWindow::topMargin() const
+{
+    return d->dialogBackground->topMargin();
+}
+
+qreal PlasmaWindow::bottomMargin() const
+{
+    return d->dialogBackground->bottomMargin();
+}
+
+qreal PlasmaWindow::leftMargin() const
+{
+    return d->dialogBackground->leftMargin();
+}
+
+qreal PlasmaWindow::rightMargin() const
+{
+    return d->dialogBackground->rightMargin();
 }
 }
 

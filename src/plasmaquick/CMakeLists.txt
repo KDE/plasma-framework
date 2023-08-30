@@ -17,6 +17,7 @@ qt_add_resources(RESOURCES private/resources.qrc)
 target_sources(KF6PlasmaQuick PRIVATE
     appletcontext.cpp
     appletquickitem.cpp
+    appletpopup.cpp
     debug_p.cpp
     dialog.cpp
     dialogshadows.cpp
