@@ -45,6 +45,7 @@
         ],
         "Category": "",
         "Description": "Example applet with config",
+        "Description[bg]": "Примерна приставка с конфигурация",
         "Description[ca@valencia]": "Miniaplicació d'exemple amb configuració",
         "Description[ca]": "Miniaplicació d'exemple amb configuració",
         "Description[eo]": "Ekzempla apleto kun agordo",

@@ -4,6 +4,7 @@
             {
                 "Email": "chani@kde.org",
                 "Name": "Chani",
+                "Name[bg]": "Chani",
                 "Name[ca@valencia]": "Chani",
                 "Name[ca]": "Chani",
                 "Name[eo]": "Ĉani",
@@ -25,6 +26,7 @@
             }
         ],
         "Description": "A dummy plugin for testing",
+        "Description[bg]": "Тестов плъгин",
         "Description[ca@valencia]": "Un connector simulat per a proves",
         "Description[ca]": "Un connector simulat per a proves",
         "Description[eo]": "Lokokupa kromprogramo por testado",
@@ -46,6 +48,7 @@
         "Icon": "preferences-desktop-color",
         "License": "GPL",
         "Name": "Test",
+        "Name[bg]": "Изпробване",
         "Name[ca@valencia]": "Prova",
         "Name[ca]": "Prova",
         "Name[eo]": "Testo",

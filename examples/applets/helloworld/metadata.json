@@ -45,6 +45,7 @@
         ],
         "Category": "Miscellaneous",
         "Description": "Hello World",
+        "Description[bg]": "Hello World",
         "Description[ca@valencia]": "Hola món",
         "Description[ca]": "Hola món",
         "Description[eo]": "Saluton Mondo",

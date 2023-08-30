@@ -44,6 +44,7 @@
         ],
         "Category": "Development Tools",
         "Description": "Test Components",
+        "Description[bg]": "Тест на компоненти",
         "Description[ca@valencia]": "Components de prova",
         "Description[ca]": "Components de prova",
         "Description[eo]": "Testi Komponantojn",

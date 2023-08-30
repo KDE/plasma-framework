@@ -45,6 +45,7 @@
         ],
         "Category": "Miscellaneous",
         "Description": "Example applet with compact and full representations",
+        "Description[bg]": "Примерна приставка с компактно и пълно представяне",
         "Description[ca@valencia]": "Miniaplicació d'exemple amb representació compacta i completa",
         "Description[ca]": "Miniaplicació d'exemple amb representació compacta i completa",
         "Description[eo]": "Ekzempla apleto kun kompakta kaj plena reprezentoj",

@@ -45,6 +45,7 @@
         ],
         "Category": "",
         "Description": "Test Containment",
+        "Description[bg]": "Тест на съдържание",
         "Description[ca@valencia]": "Contenidor de prova",
         "Description[ca]": "Contenidor de prova",
         "Description[eo]": "Testi Retenon",
