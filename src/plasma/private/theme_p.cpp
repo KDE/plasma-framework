@@ -152,6 +152,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
     });
 
     connect(KX11Extras::self(), &KX11Extras::compositingChanged, this, &ThemePrivate::compositingChanged);
+    compositingChanged(KX11Extras::compositingActive());
 }
 
 ThemePrivate::~ThemePrivate()
