@@ -849,7 +849,7 @@ void DialogPrivate::applyType()
         KX11Extras::setOnAllDesktops(q->winId(), false);
     }
 
-    PlasmaShellWaylandIntegration::get(q)->setTakesFocus(q->flags().testFlag(Qt::WindowDoesNotAcceptFocus));
+    PlasmaShellWaylandIntegration::get(q)->setTakesFocus(!q->flags().testFlag(Qt::WindowDoesNotAcceptFocus));
 }
 
 bool DialogPrivate::updateMouseCursor(const QPointF &globalMousePos)
