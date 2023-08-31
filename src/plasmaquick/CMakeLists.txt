@@ -30,6 +30,7 @@ target_sources(KF6PlasmaQuick PRIVATE
     plasmawindow.cpp
     popupplasmawindow.cpp
     transientplacementhint.cpp
+    windowresizehandler.cpp
     private/configcategory_p.cpp
     private/plasmoidattached_p.cpp
     private/dialogbackground_p.cpp
