@@ -28,8 +28,13 @@ class PLASMAQUICK_EXPORT PopupPlasmaWindow : public PlasmaWindow
     Q_PROPERTY(Qt::Edge popupDirection READ popupDirection WRITE setPopupDirection NOTIFY popupDirectionChanged)
     Q_PROPERTY(bool floating READ floating WRITE setFloating NOTIFY floatingChanged)
     Q_PROPERTY(bool animated READ animated WRITE setAnimated NOTIFY animatedChanged)
+    Q_PROPERTY(RemoveBorders removeBorderStrategy READ removeBorderStrategy WRITE setRemoveBorderStrategy NOTIFY removeBorderStrategyChanged)
 
 public:
+    enum RemoveBorder { Never = 0x0, AtScreenEdges = 0x1, AtPanelEdges = 0x2 };
+    Q_DECLARE_FLAGS(RemoveBorders, RemoveBorder)
+    Q_ENUM(RemoveBorder);
+
     PopupPlasmaWindow();
     QQuickItem *visualParent() const;
     void setVisualParent(QQuickItem *parent);
@@ -43,6 +48,9 @@ public:
     bool animated();
     void setAnimated(bool animated);
 
+    RemoveBorders removeBorderStrategy() const;
+    void setRemoveBorderStrategy(RemoveBorders borders);
+
     bool event(QEvent *event) override;
 
 Q_SIGNALS:
@@ -50,6 +58,7 @@ Q_SIGNALS:
     void popupDirectionChanged();
     void floatingChanged();
     void animatedChanged();
+    void removeBorderStrategyChanged();
 
 private:
     void queuePositionUpdate();
@@ -57,11 +66,14 @@ private:
     void updatePosition();
     void updatePositionX11(const QPoint &position);
     void updatePositionWayland(const QPoint &position);
+    void updateBorders(const QRect &globalPosition);
 
     QPointer<QQuickItem> m_visualParent;
+    RemoveBorders m_removeBorderStrategy = Never;
     bool m_needsReposition = false;
     bool m_floating = false;
     bool m_animated = false;
     Qt::Edge m_popupDirection = Qt::TopEdge;
 };
+Q_DECLARE_OPERATORS_FOR_FLAGS(PopupPlasmaWindow::RemoveBorders)
 }
