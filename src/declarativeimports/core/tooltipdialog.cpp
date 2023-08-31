@@ -43,14 +43,7 @@ QQuickItem *ToolTipDialog::loadDefaultItem()
     }
 
     if (!m_qmlObject->rootObject()) {
-        // HACK: search our own import
-        const auto paths = m_qmlObject->engine()->importPathList();
-        for (const QString &path : paths) {
-            if (QFile::exists(path + QStringLiteral("/org/kde/plasma/core"))) {
-                m_qmlObject->setSource(QUrl::fromLocalFile(path + QStringLiteral("/org/kde/plasma/core/private/DefaultToolTip.qml")));
-                break;
-            }
-        }
+        m_qmlObject->setSource(QUrl(QStringLiteral("qrc:/plasma/DefaultToolTip.qml")));
     }
 
     return qobject_cast<QQuickItem *>(m_qmlObject->rootObject());

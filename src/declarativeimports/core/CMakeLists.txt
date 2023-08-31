@@ -8,6 +8,8 @@ configure_file(config-x11.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-x11.h)
 
 ecm_add_qml_module(corebindingsplugin URI "org.kde.plasma.core")
 
+qt_add_resources(RESOURCES private/resources.qrc)
+
 target_sources(corebindingsplugin PRIVATE
     action.cpp
     corebindingsplugin.cpp
@@ -16,6 +18,7 @@ target_sources(corebindingsplugin PRIVATE
     tooltip.cpp
     tooltipdialog.cpp
     windowthumbnail.cpp
+    ${RESOURCES}
 )
 
 target_link_libraries(corebindingsplugin
@@ -48,7 +51,5 @@ endif()
 if(HAVE_EGL)
     target_link_libraries(corebindingsplugin OpenGL::EGL)
 endif()
-
-install(FILES private/DefaultToolTip.qml DESTINATION ${KDE_INSTALL_QMLDIR}/org/kde/plasma/core/private)
 
 ecm_finalize_qml_module(corebindingsplugin DESTINATION ${KDE_INSTALL_QMLDIR})

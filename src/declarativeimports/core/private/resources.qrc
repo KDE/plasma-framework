@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/plasma/">
+        <file>DefaultToolTip.qml</file>
+    </qresource>
+</RCC>
