@@ -1413,8 +1413,6 @@ bool Dialog::event(QEvent *event)
             d->updateTheme();
             return ret;
         }
-    } else if (event->type() == QEvent::PlatformSurface) {
-        const QPlatformSurfaceEvent *pSEvent = static_cast<QPlatformSurfaceEvent *>(event);
     } else if (event->type() == QEvent::Show) {
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
