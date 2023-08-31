@@ -32,6 +32,7 @@ public:
     PlasmaWindow *q;
     QPointer<QQuickItem> mainItem;
     DialogBackground *dialogBackground;
+    PlasmaWindow::BackgroundHints backgroundHints = PlasmaWindow::StandardBackground;
 };
 
 PlasmaWindow::PlasmaWindow(QWindow *parent)
@@ -183,6 +184,27 @@ QMargins PlasmaWindow::margins() const
                     d->dialogBackground->topMargin(),
                     d->dialogBackground->rightMargin(),
                     d->dialogBackground->bottomMargin());
+}
+
+PlasmaWindow::BackgroundHints PlasmaWindow::backgroundHints() const
+{
+    return d->backgroundHints;
+}
+
+void PlasmaWindow::setBackgroundHints(BackgroundHints hints)
+{
+    if (d->backgroundHints == hints) {
+        return;
+    }
+    d->backgroundHints = hints;
+
+    auto prefix = QStringLiteral("");
+    if (d->backgroundHints == PlasmaWindow::SolidBackground) {
+        prefix = QStringLiteral("solid/");
+    }
+    d->dialogBackground->setImagePath(prefix + QStringLiteral("dialogs/background"));
+
+    Q_EMIT backgroundHintsChanged();
 }
 }
 

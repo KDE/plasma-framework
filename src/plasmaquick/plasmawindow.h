@@ -31,7 +31,17 @@ class PLASMAQUICK_EXPORT PlasmaWindow : public QQuickWindow
      */
     Q_PROPERTY(QQuickItem *mainItem READ mainItem WRITE setMainItem NOTIFY mainItemChanged)
 
+    /**
+     * Defines the background used for the window
+     */
+    Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints NOTIFY backgroundHintsChanged)
 public:
+    enum BackgroundHints {
+        StandardBackground = 0, /**< The standard background from the theme is drawn */
+        SolidBackground = 1, /**< The solid version of the background is preferred */
+    };
+    Q_ENUM(BackgroundHints)
+
     PlasmaWindow(QWindow *parent = nullptr);
     ~PlasmaWindow() override;
 
@@ -57,10 +67,14 @@ public:
      */
     QMargins margins() const;
 
+    BackgroundHints backgroundHints() const;
+    void setBackgroundHints(BackgroundHints hints);
+
 Q_SIGNALS:
     void mainItemChanged();
     void marginsChanged();
     void bordersChanged();
+    void backgroundHintsChanged();
 
 protected:
     void resizeEvent(QResizeEvent *e) override;
