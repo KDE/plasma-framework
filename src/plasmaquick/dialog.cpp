@@ -65,6 +65,7 @@ public:
         , overridingCursor(false)
         , appletInterface(nullptr)
         , componentComplete(dialog->parent() == nullptr)
+        , needsSetupNextExpose(true)
         , backgroundHints(Dialog::StandardBackground)
     {
     }
@@ -151,6 +152,7 @@ public:
     AppletQuickItem *appletInterface;
     Plasma::Theme theme;
     bool componentComplete;
+    bool needsSetupNextExpose;
     Dialog::BackgroundHints backgroundHints;
 
     // Attached Layout property of mainItem, if any
@@ -1398,17 +1400,14 @@ bool Dialog::event(QEvent *event)
          * expose event is the only place where to correctly
          * register our wayland extensions, as showevent is a bit too
          * soon and the platform window isn't shown yet
-         * create a shell surface every time the window gets exposed
-         * (only the first expose event, guarded by shelldurface existence)
+         * (only the first expose event, guarded by needsSetupNextExpose bool)
          * and tear it down when the window gets hidden
          * see https://phabricator.kde.org/T6064
          */
         // sometimes non null regions arrive even for non visible windows
         // for which surface creation would fail
-        if (isVisible()) {
-            if (KWindowSystem::isPlatformX11() || isRunningInKWin()) {
-                KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
-            }
+        if (d->needsSetupNextExpose && isVisible()) {
+            d->needsSetupNextExpose = false;
             d->updateVisibility(true);
             const bool ret = QQuickWindow::event(event);
             d->updateTheme();
@@ -1420,6 +1419,7 @@ bool Dialog::event(QEvent *event)
         d->updateVisibility(true);
     } else if (event->type() == QEvent::Hide) {
         d->updateVisibility(false);
+        d->needsSetupNextExpose = true;
     } else if (event->type() == QEvent::Move) {
         QMoveEvent *me = static_cast<QMoveEvent *>(event);
         PlasmaShellWaylandIntegration::get(this)->setPosition(me->pos());
