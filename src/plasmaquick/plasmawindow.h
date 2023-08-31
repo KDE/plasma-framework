@@ -49,6 +49,8 @@ public:
      */
     void setBorders(Qt::Edges bordersToShow);
 
+    Qt::Edges borders();
+
     /**
      * Returns the margins that are placed around the mainItem
      * When setting size hints on the window this should be factored in.
@@ -58,6 +60,7 @@ public:
 Q_SIGNALS:
     void mainItemChanged();
     void marginsChanged();
+    void bordersChanged();
 
 protected:
     void resizeEvent(QResizeEvent *e) override;

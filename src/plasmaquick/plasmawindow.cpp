@@ -101,10 +101,34 @@ static KSvg::FrameSvg::EnabledBorders edgeToBorder(Qt::Edges edges)
     return borders;
 }
 
+static Qt::Edges bordersToEdge(KSvg::FrameSvg::EnabledBorders borders)
+{
+    Qt::Edges edges;
+    if (borders & KSvg::FrameSvg::EnabledBorder::TopBorder) {
+        edges |= Qt::Edge::TopEdge;
+    }
+    if (borders & KSvg::FrameSvg::EnabledBorder::BottomBorder) {
+        edges |= Qt::Edge::BottomEdge;
+    }
+    if (borders & KSvg::FrameSvg::EnabledBorder::LeftBorder) {
+        edges |= Qt::Edge::LeftEdge;
+    }
+    if (borders & KSvg::FrameSvg::EnabledBorder::RightBorder) {
+        edges |= Qt::Edge::RightEdge;
+    }
+    return edges;
+}
+
 void PlasmaWindow::setBorders(Qt::Edges bordersToShow)
 {
     d->dialogBackground->setEnabledBorders(edgeToBorder(bordersToShow));
     DialogShadows::self()->setEnabledBorders(this, d->dialogBackground->enabledBorders());
+    Q_EMIT bordersChanged();
+}
+
+Qt::Edges PlasmaWindow::borders()
+{
+    return bordersToEdge(d->dialogBackground->enabledBorders());
 }
 
 void PlasmaWindow::resizeEvent(QResizeEvent *e)
