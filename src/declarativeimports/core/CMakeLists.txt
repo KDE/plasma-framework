@@ -21,7 +21,7 @@ target_sources(corebindingsplugin PRIVATE
     ${RESOURCES}
 )
 
-target_link_libraries(corebindingsplugin
+target_link_libraries(corebindingsplugin PRIVATE
         Qt6::Quick
         Qt6::Qml
         Qt6::Widgets
@@ -34,22 +34,22 @@ target_link_libraries(corebindingsplugin
 )
 
 if(HAVE_X11)
-  target_link_libraries(corebindingsplugin ${X11_LIBRARIES} XCB::XCB Qt6::GuiPrivate)
+  target_link_libraries(corebindingsplugin PRIVATE ${X11_LIBRARIES} XCB::XCB Qt6::GuiPrivate)
 
   if(XCB_COMPOSITE_FOUND AND XCB_DAMAGE_FOUND)
-    target_link_libraries(corebindingsplugin
+    target_link_libraries(corebindingsplugin PRIVATE
         XCB::DAMAGE
         XCB::COMPOSITE
         )
   endif()
 
   if(HAVE_GLX)
-    target_link_libraries(corebindingsplugin OpenGL::GLX)
+    target_link_libraries(corebindingsplugin PRIVATE OpenGL::GLX)
   endif()
 endif()
 
 if(HAVE_EGL)
-    target_link_libraries(corebindingsplugin OpenGL::EGL)
+    target_link_libraries(corebindingsplugin PRIVATE OpenGL::EGL)
 endif()
 
 ecm_finalize_qml_module(corebindingsplugin DESTINATION ${KDE_INSTALL_QMLDIR})
