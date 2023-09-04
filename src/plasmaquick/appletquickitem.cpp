@@ -476,8 +476,7 @@ bool AppletQuickItem::hasItemForApplet(Plasma::Applet *applet)
 
 AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
 {
-    // Don't try to create applet items when the app is closing
-    if (!applet || qApp->closingDown() || applet->destroyed()) {
+    if (!applet) {
         return nullptr;
     }
 
@@ -495,6 +494,11 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     auto it = AppletQuickItemPrivate::s_itemsForApplet.constFind(applet);
     if (it != AppletQuickItemPrivate::s_itemsForApplet.constEnd()) {
         return it.value();
+    }
+
+    // Don't try to create applet items when the app is closing
+    if (qApp->closingDown() || applet->destroyed()) {
+        return nullptr;
     }
 
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet);
