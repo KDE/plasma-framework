@@ -153,7 +153,7 @@ void Containment::restore(KConfigGroup &group)
     setFormFactor((Plasma::Types::FormFactor)group.readEntry("formfactor", (int)d->formFactor));
     d->lastScreen = group.readEntry("lastScreen", d->lastScreen);
 
-    setWallpaper(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaper));
+    setWallpaperPlugin(group.readEntry("wallpaperplugin", ContainmentPrivate::defaultWallpaperPlugin));
 
     d->activityId = group.readEntry("activityId", QString());
 
@@ -220,7 +220,7 @@ void Containment::save(KConfigGroup &g) const
     group.writeEntry("location", (int)d->location);
     group.writeEntry("activityId", d->activityId);
 
-    group.writeEntry("wallpaperplugin", d->wallpaper);
+    group.writeEntry("wallpaperplugin", d->wallpaperPlugin);
 
     saveContents(group);
 }
@@ -544,21 +544,21 @@ QRectF Containment::screenGeometry() const
     return corona()->screenGeometry(screen());
 }
 
-void Containment::setWallpaper(const QString &pluginName)
+void Containment::setWallpaperPlugin(const QString &pluginName)
 {
-    if (pluginName != d->wallpaper) {
-        d->wallpaper = pluginName;
+    if (pluginName != d->wallpaperPlugin) {
+        d->wallpaperPlugin = pluginName;
 
         KConfigGroup cfg = config();
-        cfg.writeEntry("wallpaperplugin", d->wallpaper);
+        cfg.writeEntry("wallpaperplugin", d->wallpaperPlugin);
         Q_EMIT configNeedsSaving();
-        Q_EMIT wallpaperChanged();
+        Q_EMIT wallpaperPluginChanged();
     }
 }
 
-QString Containment::wallpaper() const
+QString Containment::wallpaperPlugin() const
 {
-    return d->wallpaper;
+    return d->wallpaperPlugin;
 }
 
 QObject *Containment::wallpaperGraphicsObject() const

@@ -45,7 +45,7 @@ void WallpaperItem::classBegin()
     PlasmaQuick::AppletContext *ac = qobject_cast<PlasmaQuick::AppletContext *>(QQmlEngine::contextForObject(this)->parentContext());
     Q_ASSERT(ac);
     m_containment = ac->applet()->containment();
-    m_wallpaperPlugin = m_containment->wallpaper();
+    m_wallpaperPlugin = m_containment->wallpaperPlugin();
     m_qmlObject = ac->sharedQmlEngine();
     m_qmlObject->setParent(this);
 
@@ -121,11 +121,11 @@ void WallpaperItem::requestOpenUrl(const QUrl &url)
 
 WallpaperItem *WallpaperItem::loadWallpaper(ContainmentItem *containmentItem)
 {
-    if (containmentItem->containment()->wallpaper().isEmpty()) {
+    if (containmentItem->containment()->wallpaperPlugin().isEmpty()) {
         return nullptr;
     }
     KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Wallpaper"));
-    pkg.setPath(containmentItem->containment()->wallpaper());
+    pkg.setPath(containmentItem->containment()->wallpaperPlugin());
     if (!pkg.isValid()) {
         qWarning() << "Error loading the wallpaper, no valid package loaded";
         return nullptr;
@@ -152,7 +152,7 @@ WallpaperItem *WallpaperItem::loadWallpaper(ContainmentItem *containmentItem)
         if (qmlObject->mainComponent() && qmlObject->mainComponent()->isError()) {
             qWarning() << "Error loading the wallpaper" << qmlObject->mainComponent()->errors();
         } else if (qmlObject->rootObject()) {
-            qWarning() << "Root item of wallpaper" << containmentItem->containment()->wallpaper() << "not a WallpaperItem instance, instead is"
+            qWarning() << "Root item of wallpaper" << containmentItem->containment()->wallpaperPlugin() << "not a WallpaperItem instance, instead is"
                        << qmlObject->rootObject();
         }
         delete qmlObject->rootObject();

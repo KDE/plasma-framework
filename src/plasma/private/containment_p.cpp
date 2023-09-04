@@ -20,11 +20,10 @@
 
 #include "debug_p.h"
 #include "private/applet_p.h"
-#include "timetracker.h"
 
 namespace Plasma
 {
-const char ContainmentPrivate::defaultWallpaper[] = "org.kde.image";
+const char ContainmentPrivate::defaultWallpaperPlugin[] = "org.kde.image";
 
 ContainmentPrivate::ContainmentPrivate(Containment *c)
     : q(c)
@@ -94,7 +93,7 @@ KConfigGroup ContainmentPrivate::containmentActionsConfig() const
 void ContainmentPrivate::configChanged()
 {
     KConfigGroup group = q->config();
-    q->setWallpaper(group.readEntry("wallpaperplugin", defaultWallpaper));
+    q->setWallpaperPlugin(group.readEntry("wallpaperplugin", defaultWallpaperPlugin));
 }
 
 void ContainmentPrivate::checkStatus(Plasma::Types::ItemStatus appletStatus)

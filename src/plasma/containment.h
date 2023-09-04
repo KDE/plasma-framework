@@ -76,7 +76,7 @@ class PLASMA_EXPORT Containment : public Applet
     Q_PROPERTY(Plasma::Types::ContainmentDisplayHints containmentDisplayHints READ containmentDisplayHints WRITE setContainmentDisplayHints NOTIFY
                    containmentDisplayHintsChanged)
 
-    Q_PROPERTY(QString wallpaper READ wallpaper WRITE setWallpaper NOTIFY wallpaperChanged)
+    Q_PROPERTY(QString wallpaperPlugin READ wallpaperPlugin WRITE setWallpaperPlugin NOTIFY wallpaperPluginChanged)
     Q_PROPERTY(QObject *wallpaperGraphicsObject READ wallpaperGraphicsObject WRITE setWallpaperGraphicsObject NOTIFY wallpaperGraphicsObjectChanged)
 
     Q_PROPERTY(bool isUiReady READ isUiReady NOTIFY uiReadyChanged)
@@ -211,12 +211,12 @@ public:
      *
      * @param pluginName the name of the wallpaper to attempt to load
      */
-    void setWallpaper(const QString &pluginName);
+    void setWallpaperPlugin(const QString &pluginName);
 
     /**
      * Return wallpaper plugin.
      */
-    QString wallpaper() const;
+    QString wallpaperPlugin() const;
 
     /**
      * Sets the current activity by id
@@ -365,7 +365,7 @@ Q_SIGNALS:
     /**
      * Emitted when the wallpaper plugin is changed
      */
-    void wallpaperChanged();
+    void wallpaperPluginChanged();
 
     /**
      * Emitted when the location has changed

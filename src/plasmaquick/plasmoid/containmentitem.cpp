@@ -141,7 +141,7 @@ void ContainmentItem::init()
         connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentItem::activityNameChanged);
         Q_EMIT activityNameChanged();
     });
-    connect(m_containment.data(), &Plasma::Containment::wallpaperChanged, this, &ContainmentItem::loadWallpaper);
+    connect(m_containment.data(), &Plasma::Containment::wallpaperPluginChanged, this, &ContainmentItem::loadWallpaper);
 
     connect(m_containment, &Plasma::Containment::internalActionsChanged, this, &ContainmentItem::actionsChanged);
     connect(m_containment, &Plasma::Containment::contextualActionsChanged, this, &ContainmentItem::actionsChanged);
@@ -641,8 +641,8 @@ void ContainmentItem::mimeTypeRetrieved(KIO::Job *job, const QString &mimetype)
                     const QUrl url = tjob->url();
                     connect(action, &QAction::triggered, this, [this, info, url]() {
                         // Change wallpaper plugin if it's not the current one
-                        if (containment()->wallpaper() != info.pluginId()) {
-                            containment()->setWallpaper(info.pluginId());
+                        if (containment()->wallpaperPlugin() != info.pluginId()) {
+                            containment()->setWallpaperPlugin(info.pluginId());
                         }
 
                         // set wallpapery stuff
@@ -738,7 +738,7 @@ void ContainmentItem::loadWallpaper()
 
     auto *oldWallpaper = m_wallpaperItem;
 
-    if (!m_containment->wallpaper().isEmpty()) {
+    if (!m_containment->wallpaperPlugin().isEmpty()) {
         m_wallpaperItem = WallpaperItem::loadWallpaper(this);
     }
 
@@ -1051,7 +1051,7 @@ void ContainmentItem::itemChange(ItemChange change, const ItemChangeData &value)
 {
     if (change == QQuickItem::ItemSceneChange) {
         // we have a window: create the representations if needed
-        if (value.window && !m_containment->wallpaper().isEmpty()) {
+        if (value.window && !m_containment->wallpaperPlugin().isEmpty()) {
             loadWallpaper();
         } else if (m_wallpaperItem) {
             deleteWallpaperItem();

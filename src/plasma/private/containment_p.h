@@ -78,7 +78,7 @@ public:
     QList<Applet *> applets;
     // Applets still considered not ready
     QSet<Applet *> loadingApplets;
-    QString wallpaper;
+    QString wallpaperPlugin;
     QObject *wallpaperGraphicsObject = nullptr;
     QHash<QString, ContainmentActions *> localActionPlugins;
     int lastScreen;
@@ -87,7 +87,7 @@ public:
     bool uiReady : 1;
     bool appletsUiReady : 1;
 
-    static const char defaultWallpaper[];
+    static const char defaultWallpaperPlugin[];
 };
 
 } // Plasma namespace
