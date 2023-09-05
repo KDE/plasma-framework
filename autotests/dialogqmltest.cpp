@@ -20,7 +20,7 @@ void DialogQmlTest::loadAndShow()
 
     QByteArray dialogQml =
         "import QtQuick 2.0\n"
-        "import org.kde.plasma.core 2.0 as PlasmaCore\n"
+        "import org.kde.plasma.core as PlasmaCore\n"
         "\n"
         "PlasmaCore.Dialog {\n"
         "    id: root\n"

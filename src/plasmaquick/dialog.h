@@ -46,7 +46,7 @@ class DialogPrivate;
  *
  * @code{.qml}
  *  import QtQuick 2.0
- *  import org.kde.plasma.core 2.0 as PlasmaCore
+ *  import org.kde.plasma.core as PlasmaCore
  *  Item {
  *     PlasmaCore.Dialog {
  *          visible: true

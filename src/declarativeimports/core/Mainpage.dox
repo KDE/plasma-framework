@@ -1,6 +1,6 @@
 /** @page core Plasma Core
 
-<h2>import org.kde.plasma.core 2.0</h2>
+<h2>import org.kde.plasma.core</h2>
 
 Uncreatable Types:
 - \link Plasma::Types Types \endlink
