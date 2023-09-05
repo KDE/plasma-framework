@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 01:57+0000\n"
+"POT-Creation-Date: 2023-09-05 01:56+0000\n"
 "PO-Revision-Date: 2023-09-02 02:55\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -226,27 +226,27 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "无效的服务，无法执行任何操作。"
 
-#: plasmaquick/appletquickitem.cpp:525
+#: plasmaquick/appletquickitem.cpp:529
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
 msgstr "%1 的根项目必须是 ContaimentItem 类型"
 
-#: plasmaquick/appletquickitem.cpp:530
+#: plasmaquick/appletquickitem.cpp:534
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr "%1 的根项目必须是 PlasmoidItem 类型"
 
-#: plasmaquick/appletquickitem.cpp:537
+#: plasmaquick/appletquickitem.cpp:541
 #, kde-format
 msgid "Unknown Applet"
 msgstr "未知小程序"
 
-#: plasmaquick/appletquickitem.cpp:553
+#: plasmaquick/appletquickitem.cpp:557
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "加载 QML 文件出错：%1 %2"
 
-#: plasmaquick/appletquickitem.cpp:555
+#: plasmaquick/appletquickitem.cpp:559
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "加载小程序出错：软件包不存在。%1"

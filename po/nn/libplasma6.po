@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 01:57+0000\n"
+"POT-Creation-Date: 2023-09-05 01:56+0000\n"
 "PO-Revision-Date: 2023-07-15 13:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -246,27 +246,27 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Ugyldig teneste (null) kan ikkje utføra operasjonar."
 
-#: plasmaquick/appletquickitem.cpp:525
+#: plasmaquick/appletquickitem.cpp:529
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
 msgstr "Rotelement til %1 må vera av typen ContainmentItem"
 
-#: plasmaquick/appletquickitem.cpp:530
+#: plasmaquick/appletquickitem.cpp:534
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr "Rotelement til %1 må vera av typen PlasmoidItem"
 
-#: plasmaquick/appletquickitem.cpp:537
+#: plasmaquick/appletquickitem.cpp:541
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Ukjent element"
 
-#: plasmaquick/appletquickitem.cpp:553
+#: plasmaquick/appletquickitem.cpp:557
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Feil ved lasting av QML-fil: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:555
+#: plasmaquick/appletquickitem.cpp:559
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Feil ved lasting av miniprogram: pakken finst ikkje. %1"

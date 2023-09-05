@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-08-19 01:57+0000\n"
+"POT-Creation-Date: 2023-09-05 01:56+0000\n"
 "PO-Revision-Date: 2023-07-04 10:50-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -231,27 +231,27 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Serviço inválido (null), não pode executar quaisquer operações."
 
-#: plasmaquick/appletquickitem.cpp:525
+#: plasmaquick/appletquickitem.cpp:529
 #, kde-format
 msgid "The root item of %1 must be of type ContaimentItem"
 msgstr "O item raiz de %1 deve ser do tipo ContaimentItem"
 
-#: plasmaquick/appletquickitem.cpp:530
+#: plasmaquick/appletquickitem.cpp:534
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr "O item raiz de %1 deve ser do tipo PlasmoidItem"
 
-#: plasmaquick/appletquickitem.cpp:537
+#: plasmaquick/appletquickitem.cpp:541
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Miniaplicativo desconhecido"
 
-#: plasmaquick/appletquickitem.cpp:553
+#: plasmaquick/appletquickitem.cpp:557
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Ocorreu um erro ao carregar o arquivo QML: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:555
+#: plasmaquick/appletquickitem.cpp:559
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Erro ao carregar o miniaplicativo: O pacote não existe. %1"
