@@ -18,9 +18,9 @@ T.RoundButton {
 
     Accessible.role: Accessible.Button
 
-    implicitWidth: Math.max(Kirigami.Units.gridUnit, contentItem.implicitWidth)
+    implicitWidth: Math.max(Kirigami.Units.gridUnit, implicitContentWidth)
                             + leftPadding + rightPadding
-    implicitHeight: Math.max(Kirigami.Units.gridUnit, contentItem.implicitHeight)
+    implicitHeight: Math.max(Kirigami.Units.gridUnit, implicitContentHeight)
                             + topPadding + bottomPadding
 
     leftPadding: text.length > 0 ? surfaceNormal.margins.left : contentItem.extraSpace
