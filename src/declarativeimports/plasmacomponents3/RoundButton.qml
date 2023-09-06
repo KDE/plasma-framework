@@ -23,37 +23,28 @@ T.RoundButton {
     implicitHeight: Math.max(Kirigami.Units.gridUnit, implicitContentHeight)
                             + topPadding + bottomPadding
 
-    leftPadding: text.length > 0 ? surfaceNormal.margins.left : contentItem.extraSpace
-    topPadding: text.length > 0 ? surfaceNormal.margins.top : contentItem.extraSpace
-    rightPadding: text.length > 0 ? surfaceNormal.margins.right : contentItem.extraSpace
-    bottomPadding: text.length > 0 ? surfaceNormal.margins.bottom : contentItem.extraSpace
+    topPadding: text.length > 0 ? surfaceNormal.margins.top : __extraSpace
+    leftPadding: text.length > 0 ? surfaceNormal.margins.left : __extraSpace
+    rightPadding: text.length > 0 ? surfaceNormal.margins.right : __extraSpace
+    bottomPadding: text.length > 0 ? surfaceNormal.margins.bottom : __extraSpace
 
     hoverEnabled: !Kirigami.Settings.tabletMode
+
+    Kirigami.MnemonicData.enabled: control.enabled && control.visible
+    Kirigami.MnemonicData.controlType: Kirigami.MnemonicData.SecondaryControl
+    Kirigami.MnemonicData.label: control.text
 
     Kirigami.Theme.colorSet: Kirigami.Theme.Button
     Kirigami.Theme.inherit: false
 
-    contentItem: RowLayout {
-        // This is the spacing which will make the icon a square inscribed in the circle with an extra smallspacing of margins
-        readonly property int extraSpace: implicitWidth / 2 - implicitWidth / 2 * Math.sqrt(2) / 2 + Kirigami.Units.smallSpacing
-        Kirigami.Icon {
-            Layout.preferredWidth: Kirigami.Units.iconSizes.smallMedium
-            Layout.preferredHeight: Kirigami.Units.iconSizes.smallMedium
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            visible: source.length > 0
-            source: control.icon ? (control.icon.name || control.icon.source) : ""
-        }
-        Label {
-            visible: text.length > 0
-            text: control.text
-            font: control.font
-            opacity: enabled || control.highlighted || control.checked ? 1 : 0.4
-            color: Kirigami.Theme.textColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            elide: Text.ElideRight
-        }
+    // This is the spacing which will make the icon a square inscribed in the circle with an extra smallspacing of margins
+    readonly property int __extraSpace: implicitContentWidth * (1 - Math.sqrt(2) / 2) / 2 + Kirigami.Units.smallSpacing
+
+    icon.width: Kirigami.Units.iconSizes.smallMedium
+    icon.height: Kirigami.Units.iconSizes.smallMedium
+
+    contentItem: Private.ButtonContent {
+        labelText: control.Kirigami.MnemonicData.richTextLabel
     }
 
     background: Item {
