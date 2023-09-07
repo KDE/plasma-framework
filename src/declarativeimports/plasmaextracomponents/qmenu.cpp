@@ -299,6 +299,8 @@ void QMenuProxy::rebuildMenu()
         }
     }
 
+    const auto isOnTopEdgeOfTheScreen = m_placement == Plasma::Types::BottomPosedLeftAlignedPopup || m_placement == Plasma::Types::BottomPosedRightAlignedPopup;
+    m_menu->setProperty("_breeze_menu_is_top", isOnTopEdgeOfTheScreen);
     m_menu->adjustSize();
 }
 
