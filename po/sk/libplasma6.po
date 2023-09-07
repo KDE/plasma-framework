@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 01:56+0000\n"
+"POT-Creation-Date: 2023-09-07 01:57+0000\n"
 "PO-Revision-Date: 2023-01-11 11:24+0100\n"
 "Last-Translator: Matej Mrenica <matejm98mthw@gmail.com>\n"
 "Language-Team: Slovak <kde-i18n-doc@kde.org>\n"
@@ -177,27 +177,27 @@ msgstr "Nastavenia miniaplikácie"
 msgid "Remove this Widget"
 msgstr "Odstrániť túto miniaplikáciu"
 
-#: plasma/private/containment_p.cpp:59
+#: plasma/private/containment_p.cpp:58
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Odstrániť tento panel"
 
-#: plasma/private/containment_p.cpp:61
+#: plasma/private/containment_p.cpp:60
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Odstrániť túto aktivitu"
 
-#: plasma/private/containment_p.cpp:67
+#: plasma/private/containment_p.cpp:66
 #, kde-format
 msgid "Activity Settings"
 msgstr "Nastavenia aktivity"
 
-#: plasma/private/containment_p.cpp:79
+#: plasma/private/containment_p.cpp:78
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Pridať miniaplikácie..."
 
-#: plasma/private/containment_p.cpp:198
+#: plasma/private/containment_p.cpp:197
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Nepodarilo sa nájsť požadovaný komponent: %1"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 01:56+0000\n"
+"POT-Creation-Date: 2023-09-07 01:57+0000\n"
 "PO-Revision-Date: 2023-02-22 21:27+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -179,27 +179,27 @@ msgstr "ウィジェットの設定"
 msgid "Remove this Widget"
 msgstr "このウィジェットを削除"
 
-#: plasma/private/containment_p.cpp:59
+#: plasma/private/containment_p.cpp:58
 #, kde-format
 msgid "Remove this Panel"
 msgstr "このパネルを削除"
 
-#: plasma/private/containment_p.cpp:61
+#: plasma/private/containment_p.cpp:60
 #, kde-format
 msgid "Remove this Activity"
 msgstr "このアクティビティを削除"
 
-#: plasma/private/containment_p.cpp:67
+#: plasma/private/containment_p.cpp:66
 #, kde-format
 msgid "Activity Settings"
 msgstr "アクティビティの設定"
 
-#: plasma/private/containment_p.cpp:79
+#: plasma/private/containment_p.cpp:78
 #, kde-format
 msgid "Add Widgets..."
 msgstr "ウィジェットを追加..."
 
-#: plasma/private/containment_p.cpp:198
+#: plasma/private/containment_p.cpp:197
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "要求されたコンポーネントが見つかりませんでした: %1"

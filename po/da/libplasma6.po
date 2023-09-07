@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 01:56+0000\n"
+"POT-Creation-Date: 2023-09-07 01:57+0000\n"
 "PO-Revision-Date: 2019-11-26 19:29+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -176,27 +176,27 @@ msgstr "Indstilling af widget"
 msgid "Remove this Widget"
 msgstr "Fjern denne widget"
 
-#: plasma/private/containment_p.cpp:59
+#: plasma/private/containment_p.cpp:58
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Fjern dette panel"
 
-#: plasma/private/containment_p.cpp:61
+#: plasma/private/containment_p.cpp:60
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Fjern denne aktivitet"
 
-#: plasma/private/containment_p.cpp:67
+#: plasma/private/containment_p.cpp:66
 #, kde-format
 msgid "Activity Settings"
 msgstr "Aktivitetsindstillinger"
 
-#: plasma/private/containment_p.cpp:79
+#: plasma/private/containment_p.cpp:78
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Tilføj widgets..."
 
-#: plasma/private/containment_p.cpp:198
+#: plasma/private/containment_p.cpp:197
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "Kunne ikke finde den anmodede komponent: %1"

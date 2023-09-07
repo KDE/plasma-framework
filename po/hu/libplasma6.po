@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-05 01:56+0000\n"
+"POT-Creation-Date: 2023-09-07 01:57+0000\n"
 "PO-Revision-Date: 2021-09-02 09:12+0200\n"
 "Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -180,27 +180,27 @@ msgstr "Felületi elem beállítások"
 msgid "Remove this Widget"
 msgstr "Felületi elem eltávolítása"
 
-#: plasma/private/containment_p.cpp:59
+#: plasma/private/containment_p.cpp:58
 #, kde-format
 msgid "Remove this Panel"
 msgstr "Panel eltávolítása"
 
-#: plasma/private/containment_p.cpp:61
+#: plasma/private/containment_p.cpp:60
 #, kde-format
 msgid "Remove this Activity"
 msgstr "Aktivitás eltávolítása"
 
-#: plasma/private/containment_p.cpp:67
+#: plasma/private/containment_p.cpp:66
 #, kde-format
 msgid "Activity Settings"
 msgstr "Tevékenység beállítások"
 
-#: plasma/private/containment_p.cpp:79
+#: plasma/private/containment_p.cpp:78
 #, kde-format
 msgid "Add Widgets..."
 msgstr "Felületi elemek hozzáadása…"
 
-#: plasma/private/containment_p.cpp:198
+#: plasma/private/containment_p.cpp:197
 #, kde-format
 msgid "Could not find requested component: %1"
 msgstr "A kért komponens nem található: %1"
