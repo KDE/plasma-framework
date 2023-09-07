@@ -134,7 +134,7 @@ T.Slider {
                 anchors.fill: parent
                 rows: control.vertical ? tickLoader.stepCount + 1 : 1
                 columns: control.horizontal ? tickLoader.stepCount + 1 : 1
-                spacing: (control.vertical ? height : width) / tickLoader.stepCount - Kirigami.Units.devicePixelRatio
+                spacing: (control.vertical ? height : width - (tickLoader.stepCount + 1)) / tickLoader.stepCount
                 LayoutMirroring.enabled: control.mirrored
                 Repeater {
                     model: tickLoader.stepCount + 1

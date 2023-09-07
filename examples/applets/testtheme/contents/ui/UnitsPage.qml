@@ -43,17 +43,6 @@ Item {
                 id: dpilabel
             }
         }
-        Row {
-            PlasmaComponents.Label {
-                text: "Kirigami.Units.devicePixelRatio: "
-                width: cwidth
-            }
-            PlasmaComponents.Label {
-                width: cheight
-                height: cheight / 2
-                text: Kirigami.Units.devicePixelRatio
-            }
-        }
 
         Row {
             PlasmaComponents.Label {
@@ -78,6 +67,7 @@ Item {
                 text: Kirigami.Units.largeSpacing
             }
         }
+
         Row {
             PlasmaComponents.Label {
                 text: "Kirigami.Units.smallSpacing: "
