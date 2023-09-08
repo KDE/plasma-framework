@@ -63,7 +63,7 @@ void CustomCorona::load()
     for (auto c : containments()) {
         if (c->containmentType() == Plasma::Containment::Type::Desktop) {
             // example of a shell without a wallpaper
-            c->setWallpaper(QStringLiteral("null"));
+            c->setWallpaperPlugin(QStringLiteral("null"));
             m_view->setContainment(c);
             if (QAction *removeAction = c->internalAction(QStringLiteral("remove"))) {
                 removeAction->deleteLater();
