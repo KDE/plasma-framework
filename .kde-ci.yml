@@ -15,6 +15,8 @@ Dependencies:
     'frameworks/kio' : '@same'
     'frameworks/knotifications' : '@same'
     'frameworks/kpackage' : '@same'
+    # kparts for examples
+    'frameworks/kparts' : '@same'
     'frameworks/kwidgetsaddons' : '@same'
     'frameworks/kwindowsystem' : '@same'
     'frameworks/kirigami' : '@same'
@@ -25,3 +27,4 @@ Options:
   test-before-installing: True
   cppcheck-ignore-files: ['templates/']
   require-passing-tests-on: [ '@all' ]
+  cmake-options: -DBUILD_EXAMPLES=ON
