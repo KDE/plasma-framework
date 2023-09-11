@@ -76,7 +76,6 @@ PUBLIC
     KF6::CoreAddons
     Qt6::Qml
 PRIVATE
-    Qt6::Svg
     Qt6::Quick
     KF6::ConfigGui
     KF6::ColorScheme
@@ -115,8 +114,6 @@ ecm_generate_headers(Plasma_CamelCase_HEADERS
         ContainmentActions
         Corona
         PluginLoader
-        FrameSvg
-        Svg
         Theme
         Plasma
     REQUIRED_HEADERS Plasma_HEADERS

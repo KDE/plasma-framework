@@ -13,8 +13,10 @@
 
 #include <QDebug>
 #include <QQmlEngine>
+#include <QStandardPaths>
 
 #include <KDirWatch>
+#include <KSharedConfig>
 #include <KWindowEffects>
 #include <Plasma/Applet>
 

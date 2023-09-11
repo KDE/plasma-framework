@@ -6,6 +6,7 @@
 
 #include "pluginloader.h"
 
+#include <QGuiApplication>
 #include <QPluginLoader>
 #include <QPointer>
 #include <QStandardPaths>

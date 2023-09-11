@@ -18,7 +18,6 @@
 #include <KConfigGroup>
 #include <plasma/plasma_export.h>
 
-#include <plasma/framesvg.h>
 #include <plasma/plasma.h>
 
 namespace KPackage

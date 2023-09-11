@@ -5,7 +5,6 @@
 */
 
 #include "themetest.h"
-#include "../src/plasma/private/svg_p.h"
 #include <QApplication>
 #include <QSignalSpy>
 #include <QStandardPaths>

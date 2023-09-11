@@ -204,26 +204,26 @@ QRect DialogPrivate::availableScreenGeometryForPosition(const QPoint &pos) const
 void DialogPrivate::syncBorders(const QRect &geom)
 {
     QRect avail = availableScreenGeometryForPosition(geom.topLeft());
-    int borders = Plasma::FrameSvg::AllBorders;
+    int borders = KSvg::FrameSvg::AllBorders;
 
     // Tooltips always have all the borders
     // floating windows have all borders
     if (!q->flags().testFlag(Qt::ToolTip) && location != Plasma::Types::Floating) {
         if (geom.x() <= avail.x() || location == Plasma::Types::LeftEdge) {
-            borders = borders & ~Plasma::FrameSvg::LeftBorder;
+            borders = borders & ~KSvg::FrameSvg::LeftBorder;
         }
         if (geom.y() <= avail.y() || location == Plasma::Types::TopEdge) {
-            borders = borders & ~Plasma::FrameSvg::TopBorder;
+            borders = borders & ~KSvg::FrameSvg::TopBorder;
         }
         if (avail.right() <= geom.x() + geom.width() || location == Plasma::Types::RightEdge) {
-            borders = borders & ~Plasma::FrameSvg::RightBorder;
+            borders = borders & ~KSvg::FrameSvg::RightBorder;
         }
         if (avail.bottom() <= geom.y() + geom.height() || location == Plasma::Types::BottomEdge) {
-            borders = borders & ~Plasma::FrameSvg::BottomBorder;
+            borders = borders & ~KSvg::FrameSvg::BottomBorder;
         }
     }
 
-    if (dialogBackground->enabledBorders() != (Plasma::FrameSvg::EnabledBorder)borders) {
+    if (dialogBackground->enabledBorders() != (KSvg::FrameSvg::EnabledBorder)borders) {
         dialogBackground->setEnabledBorders((KSvg::FrameSvg::EnabledBorder)borders);
     }
 }
@@ -1153,7 +1153,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     // not actually the current window. See QWindow::screen() documentation
     QRect avail = item->window()->screen()->availableGeometry();
 
-    if (outsideParentWindow && d->dialogBackground->enabledBorders() != Plasma::FrameSvg::AllBorders) {
+    if (outsideParentWindow && d->dialogBackground->enabledBorders() != KSvg::FrameSvg::AllBorders) {
         // make the panel look it's inside the panel, in order to not make it look cut
         switch (d->location) {
         case Plasma::Types::LeftEdge:

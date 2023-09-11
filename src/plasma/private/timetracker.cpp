@@ -7,6 +7,7 @@
 #include "timetracker.h"
 #include <QDebug>
 #include <QFile>
+#include <QGuiApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QMetaObject>
