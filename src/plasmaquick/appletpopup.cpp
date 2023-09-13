@@ -7,6 +7,8 @@
 #include "appletpopup.h"
 
 #include <QGuiApplication>
+#include <QQmlProperty>
+#include <qpa/qplatformwindow.h> // for QWINDOWSIZE_MAX
 
 #include <KConfigGroup>
 #include <KWindowSystem>
@@ -20,6 +22,37 @@
 // used in detecting if focus passes to config UI
 #include "configview.h"
 #include "sharedqmlengine.h"
+
+// This is a proxy object that connects to the Layout attached property of an item
+// it also handles turning properties to proper defaults
+// we need a wrapper as QQmlProperty can't disconnect
+
+namespace PlasmaQuick
+{
+
+class LayoutChangedProxy : public QObject
+{
+    Q_OBJECT
+public:
+    LayoutChangedProxy(QQuickItem *item);
+    QSize minimumSize() const;
+    QSize maximumSize() const;
+    QSize implicitSize() const;
+Q_SIGNALS:
+    void implicitSizeChanged();
+    void minimumSizeChanged();
+    void maximumSizeChanged();
+
+private:
+    QQmlProperty m_minimumWidth;
+    QQmlProperty m_maximumWidth;
+    QQmlProperty m_minimumHeight;
+    QQmlProperty m_maximumHeight;
+    QQmlProperty m_preferredWidth;
+    QQmlProperty m_preferredHeight;
+    QPointer<QQuickItem> m_item;
+};
+}
 
 using namespace PlasmaQuick;
 
@@ -51,6 +84,15 @@ AppletPopup::AppletPopup()
     connect(this, &PlasmaWindow::bordersChanged, this, [windowResizer, this]() {
         windowResizer->setActiveEdges(borders());
     });
+
+    connect(this, &PlasmaWindow::mainItemChanged, this, &AppletPopup::onMainItemChanged);
+    connect(this, &PlasmaWindow::marginsChanged, this, &AppletPopup::updateMaxSize);
+    connect(this, &PlasmaWindow::marginsChanged, this, &AppletPopup::updateSize);
+    connect(this, &PlasmaWindow::marginsChanged, this, &AppletPopup::updateMinSize);
+}
+
+AppletPopup::~AppletPopup()
+{
 }
 
 QQuickItem *AppletPopup::appletInterface() const
@@ -81,51 +123,6 @@ void AppletPopup::setHideOnWindowDeactivate(bool hideOnWindowDeactivate)
     }
     m_hideOnWindowDeactivate = hideOnWindowDeactivate;
     Q_EMIT hideOnWindowDeactivateChanged();
-}
-
-int AppletPopup::implicitWidth() const
-{
-    return m_implicitWidth;
-}
-
-void AppletPopup::setImplicitWidth(int implicitWidth)
-{
-    if (implicitWidth == m_implicitWidth) {
-        return;
-    }
-    m_implicitWidth = implicitWidth;
-    updateSize();
-    Q_EMIT implicitWidthChanged();
-}
-
-int AppletPopup::implicitHeight() const
-{
-    return m_implicitHeight;
-}
-
-void AppletPopup::setImplicitHeight(int implicitHeight)
-{
-    if (implicitHeight == m_implicitHeight) {
-        return;
-    }
-    m_implicitHeight = implicitHeight;
-    updateSize();
-    Q_EMIT implicitHeightChanged();
-}
-
-void AppletPopup::updateSize()
-{
-    if (m_appletInterface) {
-        KConfigGroup config = m_appletInterface->applet()->config();
-        QSize size;
-        size.rwidth() = config.readEntry("popupWidth", 0);
-        size.rheight() = config.readEntry("popupHeight", 0);
-        if (size.isValid()) {
-            resize(size.grownBy(margins()));
-            return;
-        }
-    }
-    resize(implicitWidth(), implicitHeight());
 }
 
 void AppletPopup::hideEvent(QHideEvent *event)
@@ -171,3 +168,128 @@ void AppletPopup::focusOutEvent(QFocusEvent *ev)
 
     PopupPlasmaWindow::focusOutEvent(ev);
 }
+
+void AppletPopup::onMainItemChanged()
+{
+    QQuickItem *mainItem = PlasmaWindow::mainItem();
+    if (!mainItem) {
+        m_layoutChangedProxy.reset();
+        return;
+    }
+
+    // update window to mainItem size hints
+    m_layoutChangedProxy.reset(new LayoutChangedProxy(mainItem));
+    connect(m_layoutChangedProxy.data(), &LayoutChangedProxy::maximumSizeChanged, this, &AppletPopup::updateMaxSize);
+    connect(m_layoutChangedProxy.data(), &LayoutChangedProxy::minimumSizeChanged, this, &AppletPopup::updateMinSize);
+    connect(m_layoutChangedProxy.data(), &LayoutChangedProxy::implicitSizeChanged, this, &AppletPopup::updateSize);
+
+    updateMinSize();
+    updateMaxSize();
+    updateSize();
+}
+
+void AppletPopup::updateMinSize()
+{
+    if (!m_layoutChangedProxy) {
+        return;
+    }
+    setMinimumSize(m_layoutChangedProxy->minimumSize().grownBy(margins()));
+}
+
+void AppletPopup::updateMaxSize()
+{
+    if (!m_layoutChangedProxy) {
+        return;
+    }
+    setMaximumSize(m_layoutChangedProxy->maximumSize().grownBy(margins()));
+}
+
+void AppletPopup::updateSize()
+{
+    if (!m_layoutChangedProxy) {
+        return;
+    }
+
+    if (m_appletInterface) {
+        KConfigGroup config = m_appletInterface->applet()->config();
+        QSize size;
+        size.rwidth() = config.readEntry("popupWidth", 0);
+        size.rheight() = config.readEntry("popupHeight", 0);
+        if (size.isValid()) {
+            resize(size.grownBy(margins()));
+            return;
+        }
+    }
+
+    resize(m_layoutChangedProxy->implicitSize().grownBy(margins()));
+}
+
+LayoutChangedProxy::LayoutChangedProxy(QQuickItem *item)
+    : m_item(item)
+{
+    m_minimumWidth = QQmlProperty(item, QStringLiteral("Layout.minimumWidth"), qmlContext(item));
+    m_minimumHeight = QQmlProperty(item, QStringLiteral("Layout.minimumHeight"), qmlContext(item));
+    m_maximumWidth = QQmlProperty(item, QStringLiteral("Layout.maximumWidth"), qmlContext(item));
+    m_maximumHeight = QQmlProperty(item, QStringLiteral("Layout.maximumHeight"), qmlContext(item));
+    m_preferredWidth = QQmlProperty(item, QStringLiteral("Layout.preferredWidth"), qmlContext(item));
+    m_preferredHeight = QQmlProperty(item, QStringLiteral("Layout.preferredHeight"), qmlContext(item));
+
+    m_minimumWidth.connectNotifySignal(this, QMetaMethod::fromSignal(&LayoutChangedProxy::minimumSizeChanged).methodIndex());
+    m_minimumHeight.connectNotifySignal(this, QMetaMethod::fromSignal(&LayoutChangedProxy::minimumSizeChanged).methodIndex());
+    m_maximumWidth.connectNotifySignal(this, QMetaMethod::fromSignal(&LayoutChangedProxy::maximumSizeChanged).methodIndex());
+    m_maximumHeight.connectNotifySignal(this, QMetaMethod::fromSignal(&LayoutChangedProxy::maximumSizeChanged).methodIndex());
+    m_preferredWidth.connectNotifySignal(this, QMetaMethod::fromSignal(&LayoutChangedProxy::implicitSizeChanged).methodIndex());
+    m_preferredHeight.connectNotifySignal(this, QMetaMethod::fromSignal(&LayoutChangedProxy::implicitSizeChanged).methodIndex());
+    connect(item, &QQuickItem::implicitWidthChanged, this, &LayoutChangedProxy::implicitSizeChanged);
+    connect(item, &QQuickItem::implicitHeightChanged, this, &LayoutChangedProxy::implicitSizeChanged);
+}
+
+QSize LayoutChangedProxy::maximumSize() const
+{
+    QSize size(QWINDOWSIZE_MAX, QWINDOWSIZE_MAX);
+    qreal width = m_maximumWidth.read().toReal();
+    if (qIsFinite(width) && width > 0) {
+        size.setWidth(width);
+    }
+    qreal height = m_maximumHeight.read().toReal();
+    if (qIsFinite(height) && height > 0) {
+        size.setHeight(height);
+    }
+    return size;
+}
+
+QSize LayoutChangedProxy::implicitSize() const
+{
+    QSize size(200, 200);
+
+    // Layout.preferredSize has precedent over implicit in layouts
+    // so mimic that behaviour here
+    if (m_item) {
+        size = QSize(m_item->implicitWidth(), m_item->implicitHeight());
+    }
+    qreal width = m_preferredWidth.read().toReal();
+    if (qIsFinite(width) && width > 0) {
+        size.setWidth(width);
+    }
+    qreal height = m_preferredHeight.read().toReal();
+    if (qIsFinite(height) && height > 0) {
+        size.setHeight(height);
+    }
+    return size;
+}
+
+QSize LayoutChangedProxy::minimumSize() const
+{
+    QSize size(0, 0);
+    qreal width = m_minimumWidth.read().toReal();
+    if (qIsFinite(width) && width > 0) {
+        size.setWidth(width);
+    }
+    qreal height = m_minimumHeight.read().toReal();
+    if (qIsFinite(height) && height > 0) {
+        size.setHeight(height);
+    }
+    return size;
+}
+
+#include "appletpopup.moc"

@@ -16,7 +16,16 @@ namespace PlasmaQuick
 {
 
 class AppletQuickItem;
+class LayoutChangedProxy;
 
+/**
+ * @brief The AppletPopup class shows a popup for an applet either in the panel or on the desktop
+ *
+ * In addition to the new API this class is resizable and can forward any input events recieved
+ * on the margin to the main item
+ *
+ * Size hints are transferred from the mainItem's size hints.
+ */
 class PLASMAQUICK_EXPORT AppletPopup : public PopupPlasmaWindow
 {
     Q_OBJECT
@@ -32,38 +41,18 @@ class PLASMAQUICK_EXPORT AppletPopup : public PopupPlasmaWindow
      **/
     Q_PROPERTY(bool hideOnWindowDeactivate READ hideOnWindowDeactivate WRITE setHideOnWindowDeactivate NOTIFY hideOnWindowDeactivateChanged)
 
-    /**
-     * Sets an implicitWidth for the window
-     *
-     * The window width may be modified by external factors, the implicitWidth remains the value set by the caller
-     */
-    Q_PROPERTY(int implicitWidth READ implicitWidth WRITE setImplicitWidth NOTIFY implicitWidthChanged)
-    /**
-     * Sets an implicitHeight for the window
-     *
-     * The window height may be modified by external factors, the implicitHeight remains the value set by the caller
-     */
-    Q_PROPERTY(int implicitHeight READ implicitHeight WRITE setImplicitHeight NOTIFY implicitHeightChanged)
-
 public:
     AppletPopup();
+    ~AppletPopup();
     QQuickItem *appletInterface() const;
     void setAppletInterface(QQuickItem *appletInterface);
 
     bool hideOnWindowDeactivate() const;
     void setHideOnWindowDeactivate(bool hideOnWindowDeactivate);
 
-    int implicitWidth() const;
-    void setImplicitWidth(int implicitWidth);
-
-    int implicitHeight() const;
-    void setImplicitHeight(int implicitHeight);
-
 Q_SIGNALS:
     void appletInterfaceChanged();
     void hideOnWindowDeactivateChanged();
-    void implicitWidthChanged();
-    void implicitHeightChanged();
 
 protected:
     void hideEvent(QHideEvent *event) override;
@@ -71,12 +60,13 @@ protected:
 
 private:
     void onMainItemChanged();
+    void updateMinSize();
+    void updateMaxSize();
     void updateSize();
 
     QPointer<AppletQuickItem> m_appletInterface;
-    int m_implicitWidth = 500;
-    int m_implicitHeight = 500;
     bool m_hideOnWindowDeactivate = false;
+    QScopedPointer<LayoutChangedProxy> m_layoutChangedProxy;
 };
 
 }

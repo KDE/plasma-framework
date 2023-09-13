@@ -9,7 +9,6 @@
 #include <kwindowsystem.h>
 
 #include "debug_p.h"
-#include "kwindoweffects.h"
 #include <QGuiApplication>
 #include <QScreen>
 #include <qnamespace.h>
@@ -197,7 +196,6 @@ void PlasmaQuick::PopupPlasmaWindow::updatePosition()
     placementHint.setFlipConstraintAdjustments(m_floating ? Qt::Vertical : Qt::Orientations());
 
     const QRect popupPosition = TransientPlacementHelper::popupRect(this, placementHint);
-    resize(popupPosition.size());
 
     if (KWindowSystem::isPlatformX11()) {
         updatePositionX11(popupPosition.topLeft());
