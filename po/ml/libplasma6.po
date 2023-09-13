@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 01:57+0000\n"
+"POT-Creation-Date: 2023-09-13 02:06+0000\n"
 "PO-Revision-Date: 2019-12-14 15:16+0530\n"
 "Last-Translator: Nithin S Sabu <nithinsn@protonmail.com>\n"
 "Language-Team: Swathanthra|സ്വതന്ത്ര Malayalam|മലയാളം Computing|കമ്പ്യൂട്ടിങ്ങ് <smc."
@@ -60,7 +60,7 @@ msgstr "അജ്ഞാതം"
 msgid "Activate %1 Widget"
 msgstr "%1 വിഡ്ജറ്റ് സജീവമാക്കുക"
 
-#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
@@ -71,7 +71,7 @@ msgstr "%1 കളയുക"
 msgid "Enter Edit Mode"
 msgstr ""
 
-#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:113
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -107,69 +107,69 @@ msgid ""
 "larger size is therefore often quite safe."
 msgstr ""
 
-#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
+#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "പലവക"
 
-#: plasma/private/applet_p.cpp:127
+#: plasma/private/applet_p.cpp:128
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "%1 വിഡ്ജറ്റ് ഏത് സ്ക്രിപ്റ്റ് എന്‍ജിനാണ് ഉപയോഗിക്കേണ്ടതെന്ന് നിര്‍വചിച്ചിട്ടില്ല."
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "%2 വിഡ്ജറ്റിനാവശ്യമായ %1 പാക്കേജ് തുറക്കാനായില്ല."
 
-#: plasma/private/applet_p.cpp:153
+#: plasma/private/applet_p.cpp:154
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "മറ്റു മാര്‍ഗങ്ങള്‍ കാണിക്കുക..."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Widget Removed"
 msgstr "വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "%1 വിഡ്ജറ്റ് നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:266
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Panel Removed"
 msgstr "പാളി നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "A panel has been removed."
 msgstr "ഒരു പാളി നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "Desktop Removed"
 msgstr "പണിയിടം നീക്കംചെയ്യപ്പെട്ടു"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:272
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "ഒരു പണിയിടം നീക്കംചെയ്യപ്പെട്ടിരിക്കുന്നു."
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Undo"
 msgstr "തിരിച്ചെടുക്കുക"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Widget Settings"
 msgstr "വിഡ്ജറ്റ് ക്രമീകരണങ്ങള്‍"
 
-#: plasma/private/applet_p.cpp:373
+#: plasma/private/applet_p.cpp:374
 #, kde-format
 msgid "Remove this Widget"
 msgstr "ഈ വിഡ്ജറ്റ് നീക്കംചെയ്യുക"

@@ -18,7 +18,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 01:57+0000\n"
+"POT-Creation-Date: 2023-09-13 02:06+0000\n"
 "PO-Revision-Date: 2023-08-24 12:58+0200\n"
 "Last-Translator: Xavier BESNARD <xavier.besnard@neuf.fr>\n"
 "Language-Team: fr\n"
@@ -74,7 +74,7 @@ msgstr "Inconnu"
 msgid "Activate %1 Widget"
 msgstr "Activer le composant graphique %1"
 
-#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
@@ -85,7 +85,7 @@ msgstr "Supprimer %1"
 msgid "Enter Edit Mode"
 msgstr "Démarrer en mode d'édition"
 
-#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:113
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -124,70 +124,70 @@ msgstr ""
 "noter que ces fichiers sont fragmentés, la taille maximale pourrait ne pas "
 "être utilisée. Il est souvent plus sûr de spécifier une taille plus grande."
 
-#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
+#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Divers"
 
-#: plasma/private/applet_p.cpp:127
+#: plasma/private/applet_p.cpp:128
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr ""
 "Le composant graphique %1 n'a pas défini le moteur de script à utiliser."
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Impossible d'ouvrir le paquet %1 requis par le composant graphique %2."
 
-#: plasma/private/applet_p.cpp:153
+#: plasma/private/applet_p.cpp:154
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Afficher les alternatives..."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Widget Removed"
 msgstr "Composant graphique supprimé"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Le composant graphique « %1 » a été supprimé."
 
-#: plasma/private/applet_p.cpp:266
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Panel Removed"
 msgstr "Tableau de bord supprimé"
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Un tableau de bord a été supprimé."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Bureau supprimé"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:272
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Un bureau a été supprimé"
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Undo"
 msgstr "Annuler"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Widget Settings"
 msgstr "Paramètres du composant graphique"
 
-#: plasma/private/applet_p.cpp:373
+#: plasma/private/applet_p.cpp:374
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Supprimer ce composant graphique"

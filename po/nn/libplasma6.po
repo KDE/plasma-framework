@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 01:57+0000\n"
+"POT-Creation-Date: 2023-09-13 02:06+0000\n"
 "PO-Revision-Date: 2023-07-15 13:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -69,7 +69,7 @@ msgstr "Start %1-elementet"
 # Men viss det ikkje finst ei tilhøyrande oppføring i scripts/frameworks/ki18n5/skjermelement.pmap, vert det heller:
 # Fjern «Panel»
 # Fjern «Global meny»
-#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
@@ -87,7 +87,7 @@ msgstr "Start tilpassing"
 # Men viss det ikkje finst ei tilhøyrande oppføring i scripts/frameworks/ki18n5/skjermelement.pmap, vert det heller:
 # Set opp «Panel»
 # Set opp «Global meny»
-#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:113
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -126,69 +126,69 @@ msgstr ""
 "er kompakte, så maksstorleiken vert gjerne ikkje brukt. Det er derfor ofte "
 "trygt å bruka ein stor verdi her."
 
-#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
+#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Ymse"
 
-#: plasma/private/applet_p.cpp:127
+#: plasma/private/applet_p.cpp:128
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "Skjermelementet %1 oppgav ikkje kva ScriptEngine som skal brukast."
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Klarte ikkje opna pakken %1 som skjermelementet %2 treng."
 
-#: plasma/private/applet_p.cpp:153
+#: plasma/private/applet_p.cpp:154
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Vis alternativ …"
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Widget Removed"
 msgstr "Skjermelement fjerna"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Skjermelementet «%1» vart fjerna."
 
-#: plasma/private/applet_p.cpp:266
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panel fjerna"
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Eit panel vart fjerna."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Skrivebord fjerna"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:272
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Eit skrivebord vart fjerna."
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Undo"
 msgstr "Angra"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Widget Settings"
 msgstr "Set opp element"
 
-#: plasma/private/applet_p.cpp:373
+#: plasma/private/applet_p.cpp:374
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Fjern dette elementet"

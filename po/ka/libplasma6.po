@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 01:57+0000\n"
+"POT-Creation-Date: 2023-09-13 02:06+0000\n"
 "PO-Revision-Date: 2023-06-10 06:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -60,7 +60,7 @@ msgstr "უცნობი"
 msgid "Activate %1 Widget"
 msgstr "ვიჯეტის აქტივაცია: %1"
 
-#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
@@ -71,7 +71,7 @@ msgstr "%1-ის წაშლა"
 msgid "Enter Edit Mode"
 msgstr "რედაქტირების რეჟიმში გადასვლა"
 
-#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:113
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -110,69 +110,69 @@ msgstr ""
 "ეს ფაილები დამატებითი ფაილებია, ასე რომ მაქსიმალურ ზომას ვერ მიუთითეთ. ასე "
 "რომ, უფრო მეტი ზომის მითითება ჩვეულებრივ საკმაოდ უსაფრთხოა."
 
-#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
+#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "სხვადასხვა"
 
-#: plasma/private/applet_p.cpp:127
+#: plasma/private/applet_p.cpp:128
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr "%1 ვიჯეტში ScriptEngine მითითებული არაა."
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "%2 ვიჯეტისთვის საჭირო %1 პაკეტის გახნა შეუძლებელია."
 
-#: plasma/private/applet_p.cpp:153
+#: plasma/private/applet_p.cpp:154
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "ალტერნატივების ჩვენება…"
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Widget Removed"
 msgstr "ვიჯეტი წაშლილია"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "ვიჯეტი \"%1\" წაიშალა."
 
-#: plasma/private/applet_p.cpp:266
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Panel Removed"
 msgstr "პანელი წაშლილია"
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "A panel has been removed."
 msgstr "პანელი წაშლილია."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "Desktop Removed"
 msgstr "სამუშაო მაგიდა წაშლილია"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:272
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "სამუშაო მაგიდა წაშლილია."
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Undo"
 msgstr "დაბრუნება"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Widget Settings"
 msgstr "ვიჯეტის მორგება"
 
-#: plasma/private/applet_p.cpp:373
+#: plasma/private/applet_p.cpp:374
 #, kde-format
 msgid "Remove this Widget"
 msgstr "ვიჯეტის წაშლა"

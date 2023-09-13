@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-07 01:57+0000\n"
+"POT-Creation-Date: 2023-09-13 02:06+0000\n"
 "PO-Revision-Date: 2016-09-22 16:19+0200\n"
 "Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -59,7 +59,7 @@ msgstr "Άγνωστο"
 msgid "Activate %1 Widget"
 msgstr "Ενεργοποίηση γραφικού συστατικού %1"
 
-#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:107
+#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:108
 #, fuzzy, kde-format
 #| msgctxt "%1 is the name of the applet"
 #| msgid "Remove this %1"
@@ -72,7 +72,7 @@ msgstr "Αφαίρεση του %1"
 msgid "Enter Edit Mode"
 msgstr ""
 
-#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:112
+#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:113
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
@@ -112,19 +112,19 @@ msgstr ""
 "επομένως ενδέχεται να μη χρησιμοποιηθεί το μέγιστο μέγεθος. Συνεπώς, ο "
 "ορισμός ενός μεγάλου μεγέθους είναι συχνά μια αρκετά ασφαλής επιλογή."
 
-#: plasma/pluginloader.cpp:289 plasma/pluginloader.cpp:290
+#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
 #, kde-format
 msgctxt "misc category"
 msgid "Miscellaneous"
 msgstr "Διάφορα"
 
-#: plasma/private/applet_p.cpp:127
+#: plasma/private/applet_p.cpp:128
 #, kde-format
 msgid "The %1 widget did not define which ScriptEngine to use."
 msgstr ""
 "Το γραφικό συστατικό %1 δεν καθορίζει ποιο ScriptEngine θα χρησιμοποιηθεί."
 
-#: plasma/private/applet_p.cpp:145
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
@@ -132,53 +132,53 @@ msgstr ""
 "Αδυναμία ανοίγματος του πακέτου %1 που απαιτείται για το γραφικό συστατικό "
 "%2."
 
-#: plasma/private/applet_p.cpp:153
+#: plasma/private/applet_p.cpp:154
 #, fuzzy, kde-format
 #| msgid "Alternatives..."
 msgid "Show Alternatives..."
 msgstr "Εναλλακτικά..."
 
-#: plasma/private/applet_p.cpp:261
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Widget Removed"
 msgstr "Το γραφικό συστατικό αφαιρέθηκε"
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Το γραφικό συστατικό \"%1\" αφαιρέθηκε."
 
-#: plasma/private/applet_p.cpp:266
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Panel Removed"
 msgstr "Ο πίνακας αφαιρέθηκε"
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:268
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Ένας πίνακας αφαιρέθηκε."
 
-#: plasma/private/applet_p.cpp:270
+#: plasma/private/applet_p.cpp:271
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Η επιφάνεια εργασίας αφαιρέθηκε"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:272
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Μια επιφάνεια εργασίας αφαιρέθηκε."
 
-#: plasma/private/applet_p.cpp:274
+#: plasma/private/applet_p.cpp:275
 #, kde-format
 msgid "Undo"
 msgstr "Αναίρεση"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:367
 #, kde-format
 msgid "Widget Settings"
 msgstr "Ρυθμίσεις γραφικών συστατικών"
 
-#: plasma/private/applet_p.cpp:373
+#: plasma/private/applet_p.cpp:374
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Αφαίρεση αυτού του γραφικού συστατικού"
