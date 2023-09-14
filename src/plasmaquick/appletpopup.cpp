@@ -114,7 +114,7 @@ void AppletPopup::setAppletInterface(QQuickItem *appletInterface)
         QSize size;
         size.rwidth() = config.readEntry("popupWidth", 0);
         size.rheight() = config.readEntry("popupHeight", 0);
-        if (size.isValid()) {
+        if (!size.isEmpty()) {
             m_sizeExplicitlySetFromConfig = true;
             resize(size.grownBy(margins()));
             return;
