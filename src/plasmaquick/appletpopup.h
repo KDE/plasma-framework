@@ -66,6 +66,7 @@ private:
 
     QPointer<AppletQuickItem> m_appletInterface;
     bool m_hideOnWindowDeactivate = false;
+    bool m_sizeExplicitlySetFromConfig = false;
     QScopedPointer<LayoutChangedProxy> m_layoutChangedProxy;
 };
 

@@ -107,7 +107,20 @@ void AppletPopup::setAppletInterface(QQuickItem *appletInterface)
     }
 
     m_appletInterface = qobject_cast<AppletQuickItem *>(appletInterface);
-    updateSize();
+    m_sizeExplicitlySetFromConfig = false;
+
+    if (m_appletInterface) {
+        KConfigGroup config = m_appletInterface->applet()->config();
+        QSize size;
+        size.rwidth() = config.readEntry("popupWidth", 0);
+        size.rheight() = config.readEntry("popupHeight", 0);
+        if (size.isValid()) {
+            m_sizeExplicitlySetFromConfig = true;
+            resize(size.grownBy(margins()));
+            return;
+        }
+    }
+
     Q_EMIT appletInterfaceChanged();
 }
 
@@ -206,21 +219,12 @@ void AppletPopup::updateMaxSize()
 
 void AppletPopup::updateSize()
 {
+    if (m_sizeExplicitlySetFromConfig) {
+        return;
+    }
     if (!m_layoutChangedProxy) {
         return;
     }
-
-    if (m_appletInterface) {
-        KConfigGroup config = m_appletInterface->applet()->config();
-        QSize size;
-        size.rwidth() = config.readEntry("popupWidth", 0);
-        size.rheight() = config.readEntry("popupHeight", 0);
-        if (size.isValid()) {
-            resize(size.grownBy(margins()));
-            return;
-        }
-    }
-
     resize(m_layoutChangedProxy->implicitSize().grownBy(margins()));
 }
 
@@ -255,6 +259,7 @@ QSize LayoutChangedProxy::maximumSize() const
     if (qIsFinite(height) && height > 0) {
         size.setHeight(height);
     }
+
     return size;
 }
 
@@ -289,6 +294,7 @@ QSize LayoutChangedProxy::minimumSize() const
     if (qIsFinite(height) && height > 0) {
         size.setHeight(height);
     }
+
     return size;
 }
 
