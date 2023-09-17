@@ -50,7 +50,7 @@ PlasmaExtras.ActionTextField {
         onTriggered: root.showPassword = !root.showPassword
     }
 
-    Keys.onPressed: {
+    Keys.onPressed: event => {
         if (event.matches(StandardKey.Undo)) {
             // Disable undo action for security reasons
             // See QTBUG-103934
