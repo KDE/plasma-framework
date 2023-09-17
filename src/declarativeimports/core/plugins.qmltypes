@@ -558,7 +558,8 @@ Module {
                 "NoContainmentDisplayHint": 0,
                 "ContainmentDrawsPlasmoidHeading": 1,
                 "ContainmentForcesSquarePlasmoids": 2,
-                "DesktopFullyCovered": 4
+                "ContainmentPrefersOpaqueBackground": 4,
+                "ContainmentPrefersFloatingApplets": 8
             }
         }
         Enum {
@@ -567,7 +568,8 @@ Module {
                 "NoContainmentDisplayHint": 0,
                 "ContainmentDrawsPlasmoidHeading": 1,
                 "ContainmentForcesSquarePlasmoids": 2,
-                "DesktopFullyCovered": 4
+                "ContainmentPrefersOpaqueBackground": 4,
+                "ContainmentPrefersFloatingApplets": 8
             }
         }
         Enum {

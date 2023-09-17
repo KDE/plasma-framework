@@ -80,8 +80,8 @@ public:
             1, /**< The containment will draw an titlebar-looking header for the applets, so the applets shouldn't attempt to paint a similar thing **/
         ContainmentForcesSquarePlasmoids =
             2, /**< The containment will force every plasmoid to be constrained in a square icon (An example is the System Tray)**/
-        DesktopFullyCovered =
-            4, /**< The desktop area for the contaiment's screen is not visible at all, for instance a window has been maximized on top of it */
+        ContainmentPrefersOpaqueBackground = 4, /**< The containment prefers the style of the applets to be opaque, where applicable */
+        ContainmentPrefersFloatingApplets = 8 /**< The containment prefers applet's dialogs to be floating, where applicable */
     };
     Q_ENUM(ContainmentDisplayHint)
     Q_DECLARE_FLAGS(ContainmentDisplayHints, ContainmentDisplayHint)

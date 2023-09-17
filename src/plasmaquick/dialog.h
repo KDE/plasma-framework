@@ -143,6 +143,13 @@ class PLASMAQUICK_EXPORT Dialog : public QQuickWindow, public QQmlParserStatus
     Q_PROPERTY(bool visible READ isVisible WRITE setVisible NOTIFY visibleChangedProxy)
 
     /**
+     * This property holds by how much the applet should be floating even if the location
+     * is set to a certain screen side; if this value is positive, the dialog will draw
+     * all four sides and maintain the required distance from the screen borders.
+     */
+    Q_PROPERTY(int floating READ floating WRITE setFloating NOTIFY floatingChanged)
+
+    /**
      * This property holds a pointer to the AppletInterface used by an applet. It is
      * null when the dialog is not used for an applet.
      */
@@ -205,6 +212,9 @@ public:
     bool isVisible() const;
     void setVisible(bool visible);
 
+    int floating() const;
+    void setFloating(int floating);
+
     QQuickItem *appletInterface() const;
     void setAppletInterface(QQuickItem *appletInterface);
 
@@ -223,6 +233,7 @@ Q_SIGNALS:
     void hideOnWindowDeactivateChanged();
     void outputOnlyChanged();
     void flagsChanged();
+    void floatingChanged();
     void backgroundHintsChanged();
     void visibleChangedProxy(); // redeclaration of QQuickWindow::visibleChanged
     void appletInterfaceChanged();

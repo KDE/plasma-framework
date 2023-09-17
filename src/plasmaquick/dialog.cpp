@@ -61,6 +61,7 @@ public:
         , hideOnWindowDeactivate(false)
         , outputOnly(false)
         , visible(false)
+        , floating(0)
         , resizableEdges({})
         , overridingCursor(false)
         , appletInterface(nullptr)
@@ -148,6 +149,7 @@ public:
     bool outputOnly;
     bool visible;
     Qt::Edges resizableEdges;
+    int floating;
     bool overridingCursor;
     AppletQuickItem *appletInterface;
     Plasma::Theme theme;
@@ -208,7 +210,7 @@ void DialogPrivate::syncBorders(const QRect &geom)
 
     // Tooltips always have all the borders
     // floating windows have all borders
-    if (!q->flags().testFlag(Qt::ToolTip) && location != Plasma::Types::Floating) {
+    if (!q->flags().testFlag(Qt::ToolTip) && location != Plasma::Types::Floating && floating == 0) {
         if (geom.x() <= avail.x() || location == Plasma::Types::LeftEdge) {
             borders = borders & ~KSvg::FrameSvg::LeftBorder;
         }
@@ -713,7 +715,7 @@ void DialogPrivate::slotWindowPositionChanged()
 {
     // Tooltips always have all the borders
     // floating windows have all borders
-    if (!q->isVisible() || q->flags().testFlag(Qt::ToolTip) || location == Plasma::Types::Floating) {
+    if (!q->isVisible() || q->flags().testFlag(Qt::ToolTip) || location == Plasma::Types::Floating || floating > 0) {
         return;
     }
 
@@ -1152,6 +1154,7 @@ QPoint Dialog::popupPosition(QQuickItem *item, const QSize &size)
     // QWindow::screen() is always only the screen where the window gets first created
     // not actually the current window. See QWindow::screen() documentation
     QRect avail = item->window()->screen()->availableGeometry();
+    avail.adjust(d->floating, d->floating, -d->floating, -d->floating);
 
     if (outsideParentWindow && d->dialogBackground->enabledBorders() != KSvg::FrameSvg::AllBorders) {
         // make the panel look it's inside the panel, in order to not make it look cut
@@ -1605,6 +1608,17 @@ void Dialog::setOutputOnly(bool outputOnly)
     }
     d->outputOnly = outputOnly;
     Q_EMIT outputOnlyChanged();
+}
+
+void Dialog::setFloating(int floating)
+{
+    d->floating = floating;
+    Q_EMIT floatingChanged();
+}
+
+int Dialog::floating() const
+{
+    return d->floating;
 }
 
 void Dialog::setVisible(bool visible)
