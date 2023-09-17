@@ -42,15 +42,15 @@ T.TextField {
     readonly property bool __hasBackgroundAndMargins: background && background.hasOwnProperty("margins")
 
     // store information that echoMode was set to Password, regardless of its current value
-    property var __isPassword: false
+    property bool __isPassword: false
     onEchoModeChanged: __isPassword |= (echoMode === TextInput.Password);
 
     // TextField doesn't have this property by default for whatever reason
-    property bool visualFocus: control.activeFocus && (
-        control.focusReason == Qt.TabFocusReason ||
-        control.focusReason == Qt.BacktabFocusReason ||
-        control.focusReason == Qt.ShortcutFocusReason
-    )
+    property bool visualFocus: activeFocus && [
+        Qt.TabFocusReason,
+        Qt.BacktabFocusReason,
+        Qt.ShortcutFocusReason,
+    ].includes(focusReason)
 
     /* It might be preferable to do background width OR content width if we
      * want content to stay within the background rather than expanding the
@@ -73,7 +73,7 @@ T.TextField {
     Kirigami.Theme.inherit: !background || !background.visible
     Kirigami.Theme.colorSet: Kirigami.Theme.View
 
-    color:  Kirigami.Theme.textColor
+    color: Kirigami.Theme.textColor
     selectionColor: Kirigami.Theme.highlightColor
     selectedTextColor: Kirigami.Theme.highlightedTextColor
     placeholderTextColor: Kirigami.Theme.disabledTextColor
@@ -183,7 +183,7 @@ T.TextField {
                 anchors.fill: parent
                 enabled: __effectiveRevealPasswordButtonShown
                 onClicked: {
-                    control.echoMode = (control.echoMode == TextInput.Normal ? TextInput.Password : TextInput.Normal)
+                    control.echoMode = (control.echoMode === TextInput.Normal ? TextInput.Password : TextInput.Normal)
                     control.forceActiveFocus()
                 }
             }
@@ -260,5 +260,4 @@ T.TextField {
             }
         }
     }
-
 }

@@ -36,7 +36,7 @@ PlasmaExtras.ActionTextField {
      */
     property bool showPassword: false
 
-    readonly property var p0: Shortcut {
+    Shortcut {
         // Let's consider this shortcut a standard, it's also supported at least by su and sudo
         sequence: "Ctrl+Shift+U"
         onActivated: root.clear();

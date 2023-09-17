@@ -116,6 +116,10 @@ PlasmaComponents3.TextField {
 
         // here to make it private
         component ActionIcon: Kirigami.Icon {
+            id: button
+
+            required property T.Action modelData
+
             implicitWidth: Kirigami.Units.iconSizes.small
             implicitHeight: Kirigami.Units.iconSizes.small
 
@@ -124,7 +128,7 @@ PlasmaComponents3.TextField {
             source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
             visible: modelData.enabled
             MouseArea {
-                onClicked: modelData.trigger()
+                onClicked: button.modelData.trigger()
                 cursorShape: Qt.ArrowCursor
                 anchors.fill: parent
             }
