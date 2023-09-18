@@ -38,12 +38,10 @@ class PluginLoaderPrivate
 {
 public:
     PluginLoaderPrivate()
-        : isDefaultLoader(false)
     {
     }
 
     static QSet<QString> s_customCategories;
-    bool isDefaultLoader;
 
     static QString s_plasmoidsPluginDir;
     static QString s_containmentActionsPluginDir;
@@ -89,7 +87,6 @@ PluginLoader *PluginLoader::self()
         // implementation. this prevents plugins from nefariously injecting their own
         // plugin loader if the app doesn't
         s_pluginLoader = new PluginLoader;
-        s_pluginLoader->d->isDefaultLoader = true;
     }
 
     return s_pluginLoader;
