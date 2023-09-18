@@ -221,16 +221,8 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
 {
-    QString parentApp;
-    QCoreApplication *app = QCoreApplication::instance();
-    if (app) {
-        parentApp = app->applicationName();
-    }
-
-    auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
-        const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-        return (parentApp.isEmpty() || pa == parentApp) //
-            && !md.value(QStringLiteral("X-Plasma-DropUrlPatterns"), QStringList()).isEmpty();
+    auto filter = [](const KPluginMetaData &md) -> bool {
+        return !md.value(QStringLiteral("X-Plasma-DropUrlPatterns"), QStringList()).isEmpty();
     };
     const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
 
