@@ -32,7 +32,6 @@ inline bool isContainmentMetaData(const KPluginMetaData &md)
 {
     return md.rawData().contains(QStringLiteral("X-Plasma-ContainmentType"));
 }
-static PluginLoader *s_pluginLoader = nullptr;
 
 class PluginLoaderPrivate
 {
@@ -82,14 +81,8 @@ PluginLoader::~PluginLoader()
 
 PluginLoader *PluginLoader::self()
 {
-    if (!s_pluginLoader) {
-        // we have been called before any PluginLoader was set, so just use the default
-        // implementation. this prevents plugins from nefariously injecting their own
-        // plugin loader if the app doesn't
-        s_pluginLoader = new PluginLoader;
-    }
-
-    return s_pluginLoader;
+    static PluginLoader self;
+    return &self;
 }
 
 Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVariantList &args)
