@@ -152,7 +152,7 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     return nullptr;
 }
 
-QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const QString &parentApp)
+QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category)
 {
     auto platforms = KRuntimePlatform::runtimePlatform();
     // For now desktop always lists everything
@@ -209,11 +209,6 @@ QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const
     }
 
     return KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
-}
-
-QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category)
-{
-    return listAppletMetaDataInternal(category, QString());
 }
 
 QList<KPluginMetaData> PluginLoader::listAppletMetaDataForMimeType(const QString &mimeType)
