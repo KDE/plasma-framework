@@ -45,7 +45,6 @@ public:
     static QSet<QString> s_customCategories;
     bool isDefaultLoader;
 
-    static QString s_packageStructurePluginDir;
     static QString s_plasmoidsPluginDir;
     static QString s_containmentActionsPluginDir;
 
@@ -70,7 +69,6 @@ public:
 
 QSet<QString> PluginLoaderPrivate::s_customCategories;
 
-QString PluginLoaderPrivate::s_packageStructurePluginDir = QStringLiteral("plasma/packagestructure");
 QString PluginLoaderPrivate::s_plasmoidsPluginDir = QStringLiteral("plasma/applets");
 QString PluginLoaderPrivate::s_containmentActionsPluginDir = QStringLiteral("plasma/containmentactions");
 
