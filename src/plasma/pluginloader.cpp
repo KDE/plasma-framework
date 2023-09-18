@@ -166,7 +166,7 @@ QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const
         KConfigGroup group(KSharedConfig::openConfig(), "General");
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
 
-        filter = [excluded, parentApp, platforms](const KPluginMetaData &md) -> bool {
+        filter = [excluded, platforms](const KPluginMetaData &md) -> bool {
             if (!platforms.isEmpty() && !md.formFactors().isEmpty()) {
                 bool found = false;
                 for (const auto &plat : platforms) {
@@ -181,12 +181,11 @@ QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const
                 }
             }
 
-            const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-            return (parentApp.isEmpty() || pa == parentApp) && !excluded.contains(md.category());
+            return !excluded.contains(md.category());
         };
     } else { // specific category (this could be an excluded one - is that bad?)
 
-        filter = [category, parentApp, platforms](const KPluginMetaData &md) -> bool {
+        filter = [category, platforms](const KPluginMetaData &md) -> bool {
             if (!platforms.isEmpty() && !md.formFactors().isEmpty()) {
                 bool found = false;
                 for (const auto &plat : platforms) {
@@ -201,12 +200,10 @@ QList<KPluginMetaData> listAppletMetaDataInternal(const QString &category, const
                 }
             }
 
-            const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-
             if (category == QLatin1String("Miscellaneous")) {
-                return (parentApp.isEmpty() || pa == parentApp) && (md.category() == category || md.category().isEmpty());
+                return md.category() == category || md.category().isEmpty();
             } else {
-                return (parentApp.isEmpty() || pa == parentApp) && md.category() == category;
+                return md.category() == category;
             }
         };
     }
