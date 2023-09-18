@@ -100,39 +100,6 @@ public:
     QList<KPluginMetaData> listAppletMetaDataForUrl(const QUrl &url);
 
     /**
-     * Returns a list of all the categories used by installed applets.
-     *
-     * @param parentApp the application to filter applets on. Uses the
-     *                  X-KDE-ParentApp entry (if any) in the plugin info.
-     *                  The default value of QString() will result in a
-     *                  list of all Applets.
-     * @return list of categories
-     * @param visibleOnly true if it should only return applets that are marked as visible
-     */
-    QStringList listAppletCategories(const QString &parentApp = QString(), bool visibleOnly = true);
-
-    /**
-     * Sets the list of custom categories that are used in addition to the default
-     * set of categories known to libplasma for applets.
-     * @param categories a list of categories
-     * @since 4.3
-     */
-    void setCustomAppletCategories(const QStringList &categories);
-
-    /**
-     * @return the list of custom categories known to libplasma
-     * @since 4.3
-     */
-    QStringList customAppletCategories() const;
-
-    /**
-     * Get the category of the given applet
-     *
-     * @param appletName the name of the applet
-     */
-    QString appletCategory(const QString &appletName);
-
-    /**
      * Returns a list of all known containments.
      *
      * @param filter An optional predicate that can be used for filtering.

@@ -40,8 +40,6 @@ public:
     {
     }
 
-    static QSet<QString> s_customCategories;
-
     static QString s_plasmoidsPluginDir;
     static QString s_containmentActionsPluginDir;
 
@@ -63,8 +61,6 @@ public:
     Cache plasmoidCache;
     Cache containmentactionCache;
 };
-
-QSet<QString> PluginLoaderPrivate::s_customCategories;
 
 QString PluginLoaderPrivate::s_plasmoidsPluginDir = QStringLiteral("plasma/applets");
 QString PluginLoaderPrivate::s_containmentActionsPluginDir = QStringLiteral("plasma/containmentactions");
@@ -258,56 +254,6 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaDataForUrl(const QUrl &url)
     }
 
     return filtered;
-}
-
-QStringList PluginLoader::listAppletCategories(const QString &parentApp, bool visibleOnly)
-{
-    KConfigGroup group(KSharedConfig::openConfig(), "General");
-    const QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
-    auto filter = [&parentApp, &excluded, visibleOnly](const KPluginMetaData &md) -> bool {
-        const QString pa = md.value(QStringLiteral("X-KDE-ParentApp"));
-        return (parentApp.isEmpty() || pa == parentApp) //
-            && (excluded.isEmpty() || excluded.contains(md.value(QStringLiteral("X-KDE-PluginInfo-Category")))) //
-            && (!visibleOnly || !md.isHidden());
-    };
-    const QList<KPluginMetaData> allApplets = KPackage::PackageLoader::self()->findPackages(QStringLiteral("Plasma/Applet"), QString(), filter);
-
-    QStringList categories;
-    for (auto &plugin : allApplets) {
-        if (plugin.category().isEmpty()) {
-            if (!categories.contains(i18nc("misc category", "Miscellaneous"))) {
-                categories << i18nc("misc category", "Miscellaneous");
-            }
-        } else {
-            categories << plugin.category();
-        }
-    }
-    categories.sort();
-    return categories;
-}
-
-void PluginLoader::setCustomAppletCategories(const QStringList &categories)
-{
-    PluginLoaderPrivate::s_customCategories = QSet<QString>(categories.begin(), categories.end());
-}
-
-QStringList PluginLoader::customAppletCategories() const
-{
-    return PluginLoaderPrivate::s_customCategories.values();
-}
-
-QString PluginLoader::appletCategory(const QString &appletName)
-{
-    if (appletName.isEmpty()) {
-        return QString();
-    }
-
-    const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), appletName);
-    if (!p.isValid()) {
-        return QString();
-    }
-
-    return p.metadata().category();
 }
 
 QList<KPluginMetaData> PluginLoader::listContainmentsMetaData(std::function<bool(const KPluginMetaData &)> filter)

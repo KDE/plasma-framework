@@ -16,7 +16,6 @@ public:
     PluginTest();
 
 private Q_SLOTS:
-    void listAppletCategories();
     void listContainmentActions();
     void listContainmentsOfType();
 };

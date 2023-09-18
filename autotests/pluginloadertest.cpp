@@ -22,13 +22,6 @@ PluginTest::PluginTest()
     qputenv("XDG_DATA_DIRS", QFINDTESTDATA("data/").toLocal8Bit().constData());
 }
 
-void PluginTest::listAppletCategories()
-{
-    const QStringList cats = Plasma::PluginLoader::self()->listAppletCategories();
-    QVERIFY(cats.count() > 0);
-    QVERIFY(cats.contains(QLatin1String("System Information")));
-}
-
 void PluginTest::listContainmentActions()
 {
     const QVector<KPluginMetaData> plugins = Plasma::PluginLoader::self()->listContainmentActionsMetaData(QStringLiteral("plasma-shell"));
