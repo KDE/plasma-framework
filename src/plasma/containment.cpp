@@ -105,6 +105,15 @@ void Containment::init()
             configAction->setText(i18nc("%1 is the name of the applet", "Configure %1...", title()));
         }
     }
+    connect(corona(), &Plasma::Corona::editModeChanged, this, [=](bool isEditModeNow) {
+        if (d->type == Containment::Type::Panel || d->type == Containment::Type::CustomPanel) {
+            if (isEditModeNow) {
+                configAction->setText(i18n("Exit Edit Mode"));
+            } else {
+                configAction->setText(i18n("Enter Edit Mode"));
+            }
+        }
+    });
 
     QAction *appletBrowserAction = internalAction(QStringLiteral("add widgets"));
     if (appletBrowserAction) {
