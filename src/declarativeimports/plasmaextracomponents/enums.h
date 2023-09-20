@@ -23,33 +23,4 @@ public:
     Q_ENUM(Status)
 };
 
-class PageOrientation : public QObject
-{
-    Q_OBJECT
-
-public:
-    enum Orientation {
-        Automatic,
-        LockPortrait,
-        LockLandscape,
-        LockPrevious,
-        Manual,
-    };
-    Q_ENUM(Orientation)
-};
-
-class PageStatus : public QObject
-{
-    Q_OBJECT
-
-public:
-    enum Status {
-        Inactive,
-        Activating,
-        Active,
-        Deactivating,
-    };
-    Q_ENUM(Status)
-};
-
 #endif // ENUMS_H
