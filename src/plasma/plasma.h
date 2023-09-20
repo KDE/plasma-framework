@@ -31,24 +31,6 @@ class PLASMA_EXPORT Types : public QObject
 
 public:
     ~Types() override;
-    /**
-     * The Constraint enumeration lists the various constraints that Plasma
-     * objects have managed for them and which they may wish to react to,
-     * for instance in Applet::constraintsUpdated
-     */
-    enum Constraint {
-        NoConstraint = 0, /**< No constraint; never passed in to Applet::constraintsEvent on its own */
-        FormFactorConstraint = 1, /**< The FormFactor for an object */
-        LocationConstraint = 2, /**< The Location of an object */
-        ScreenConstraint = 4, /**< Which screen an object is on */
-        ImmutableConstraint = 8, /**< the immutability (locked) nature of the applet changed  */
-        StartupCompletedConstraint = 16, /**< application startup has completed */
-        UiReadyConstraint = 32,
-        /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
-        AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint | ImmutableConstraint,
-    };
-    Q_ENUM(Constraint)
-    Q_DECLARE_FLAGS(Constraints, Constraint)
 
     /**
      * This enumeration lists the various hints that an applet can pass to its
@@ -172,7 +154,6 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ContainmentDisplayHints)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ConstraintFlags)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::BackgroundFlags)
 

@@ -512,7 +512,7 @@ void CoronaPrivate::updateContainmentImmutability()
 {
     for (Containment *c : std::as_const(containments)) {
         // we need to tell each containment that immutability has been altered
-        c->updateConstraints(Types::ImmutableConstraint);
+        c->updateConstraints(Applet::ImmutableConstraint);
     }
 }
 
@@ -579,7 +579,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             containment->d->lastScreen = lastScreen;
         }
         // if it's a dummy containment, just say its ui is ready, not blocking the corona
-        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+        applet->updateConstraints(Applet::UiReadyConstraint);
 
         // we want to provide something and don't care about the failure to launch
         containment->setFormFactor(Plasma::Types::Planar);
@@ -607,7 +607,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
         containment->init();
         KConfigGroup cg = containment->config();
         containment->restore(cg);
-        containment->updateConstraints(Plasma::Types::StartupCompletedConstraint);
+        containment->updateConstraints(Applet::StartupCompletedConstraint);
         containment->save(cg);
         q->requestConfigSync();
         containment->flushPendingConstraintsEvents();

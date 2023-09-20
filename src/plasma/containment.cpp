@@ -285,7 +285,7 @@ void Containment::restoreContents(KConfigGroup &group)
     const auto lstApplets = Containment::applets();
     for (Applet *applet : lstApplets) {
         if (!applet->pluginMetaData().isValid()) {
-            applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+            applet->updateConstraints(UiReadyConstraint);
         }
     }
 }
@@ -319,7 +319,7 @@ void Containment::setFormFactor(Types::FormFactor formFactor)
     // qCDebug(LOG_PLASMA) << "switching FF to " << formFactor;
     d->formFactor = formFactor;
 
-    updateConstraints(Plasma::Types::FormFactorConstraint);
+    updateConstraints(FormFactorConstraint);
 
     KConfigGroup c = config();
     c.writeEntry("formfactor", (int)formFactor);
@@ -346,10 +346,10 @@ void Containment::setLocation(Types::Location location)
     d->location = location;
 
     for (Applet *applet : std::as_const(d->applets)) {
-        applet->updateConstraints(Plasma::Types::LocationConstraint);
+        applet->updateConstraints(LocationConstraint);
     }
 
-    updateConstraints(Plasma::Types::LocationConstraint);
+    updateConstraints(LocationConstraint);
 
     KConfigGroup c = config();
     c.writeEntry("location", (int)location);
@@ -455,7 +455,7 @@ void Containment::addApplet(Applet *applet, const QRectF &geometryHint)
         // FIXME: an on-appear animation would be nice to have again
     }
 
-    applet->updateConstraints(Plasma::Types::AllConstraints);
+    applet->updateConstraints(AllConstraints);
     applet->flushPendingConstraintsEvents();
 
     Q_EMIT appletAdded(applet, geometryHint);
@@ -463,7 +463,7 @@ void Containment::addApplet(Applet *applet, const QRectF &geometryHint)
     Q_EMIT applet->containmentChanged(this);
 
     if (!currentContainment) {
-        applet->updateConstraints(Plasma::Types::StartupCompletedConstraint);
+        applet->updateConstraints(StartupCompletedConstraint);
         applet->flushPendingConstraintsEvents();
     }
 

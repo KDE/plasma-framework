@@ -273,12 +273,12 @@ KPackage::Package Applet::kPackage() const
     return d->package;
 }
 
-void Applet::updateConstraints(Plasma::Types::Constraints constraints)
+void Applet::updateConstraints(Constraints constraints)
 {
     d->scheduleConstraintsUpdate(constraints);
 }
 
-void Applet::constraintsEvent(Plasma::Types::Constraints constraints)
+void Applet::constraintsEvent(Constraints constraints)
 {
     // NOTE: do NOT put any code in here that reacts to constraints updates
     //      as it will not get called for any applet that reimplements constraintsEvent
@@ -456,7 +456,7 @@ void Applet::setImmutability(const Types::ImmutabilityType immutable)
     }
 
     d->immutability = immutable;
-    updateConstraints(Types::ImmutableConstraint);
+    updateConstraints(ImmutableConstraint);
 }
 
 bool Applet::immutable() const
@@ -542,7 +542,7 @@ void Applet::setStatus(const Types::ItemStatus status)
 
 void Applet::flushPendingConstraintsEvents()
 {
-    if (d->pendingConstraints == Types::NoConstraint) {
+    if (d->pendingConstraints == NoConstraint) {
         return;
     }
 
@@ -551,14 +551,14 @@ void Applet::flushPendingConstraintsEvents()
     }
 
     // qCDebug(LOG_PLASMA) << "flushing constraints: " << d->pendingConstraints << "!!!!!!!!!!!!!!!!!!!!!!!!!!!";
-    Plasma::Types::Constraints c = d->pendingConstraints;
-    d->pendingConstraints = Types::NoConstraint;
+    Constraints c = d->pendingConstraints;
+    d->pendingConstraints = NoConstraint;
 
-    if (c & Plasma::Types::UiReadyConstraint) {
+    if (c & UiReadyConstraint) {
         d->setUiReady();
     }
 
-    if (c & Plasma::Types::StartupCompletedConstraint) {
+    if (c & StartupCompletedConstraint) {
         // common actions
         bool unlocked = immutability() == Types::Mutable;
         QAction *closeApplet = d->actions.value(QStringLiteral("remove"));
@@ -578,7 +578,7 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
-    if (c & Plasma::Types::ImmutableConstraint) {
+    if (c & ImmutableConstraint) {
         bool unlocked = immutability() == Types::Mutable;
         QAction *action = d->actions.value(QStringLiteral("remove"));
         if (action) {
@@ -610,7 +610,7 @@ void Applet::flushPendingConstraintsEvents()
     // pass the constraint on to the actual subclass
     constraintsEvent(c);
 
-    if (c & Types::StartupCompletedConstraint) {
+    if (c & StartupCompletedConstraint) {
         // start up is done, we can now go do a mod timer
         if (d->modificationsTimer) {
             if (d->modificationsTimer->isActive()) {
@@ -621,11 +621,11 @@ void Applet::flushPendingConstraintsEvents()
         }
     }
 
-    if (c & Plasma::Types::FormFactorConstraint) {
+    if (c & FormFactorConstraint) {
         Q_EMIT formFactorChanged(formFactor());
     }
 
-    if (c & Plasma::Types::LocationConstraint) {
+    if (c & LocationConstraint) {
         Q_EMIT locationChanged(location());
     }
 }
@@ -836,7 +836,7 @@ void Applet::timerEvent(QTimerEvent *event)
 
         // Don't flushPendingConstraints if we're just starting up
         // flushPendingConstraints will be called by Corona
-        if (!(d->pendingConstraints & Plasma::Types::StartupCompletedConstraint)) {
+        if (!(d->pendingConstraints & StartupCompletedConstraint)) {
             flushPendingConstraintsEvents();
         }
     } else if (d->modificationsTimer && event->timerId() == d->modificationsTimer->timerId()) {

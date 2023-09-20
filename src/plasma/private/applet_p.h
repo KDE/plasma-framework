@@ -44,7 +44,7 @@ public:
     void setupPackage();
 
     QString globalName() const;
-    void scheduleConstraintsUpdate(Plasma::Types::Constraints c);
+    void scheduleConstraintsUpdate(Applet::Constraints c);
     void scheduleModificationNotification();
     KConfigGroup *mainConfigGroup();
     void resetConfigurationObject();
@@ -82,7 +82,7 @@ public:
 
     // bookkeeping
     KConfigGroup *mainConfig;
-    Plasma::Types::Constraints pendingConstraints;
+    Applet::Constraints pendingConstraints;
 
     // config and package stuff
     KPackage::Package package;

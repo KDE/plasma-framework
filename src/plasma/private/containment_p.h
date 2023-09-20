@@ -45,7 +45,7 @@ public:
      * constraint services common to all containments. Containments should still
      * implement their own constraintsEvent method
      */
-    void containmentConstraintsEvent(Plasma::Types::Constraints constraints);
+    void containmentConstraintsEvent(Applet::Constraints constraints);
 
     bool isPanelContainment() const;
     void appletDeleted(Applet *);

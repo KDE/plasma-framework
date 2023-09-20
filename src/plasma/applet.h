@@ -200,6 +200,25 @@ class PLASMA_EXPORT Applet : public QObject
     Q_PROPERTY(QString pluginName READ pluginName CONSTANT FINAL)
 
 public:
+    /**
+     * The Constraint enumeration lists the various constraints that Plasma
+     * objects have managed for them and which they may wish to react to,
+     * for instance in Applet::constraintsUpdated
+     */
+    enum Constraint {
+        NoConstraint = 0, /**< No constraint; never passed in to Applet::constraintsEvent on its own */
+        FormFactorConstraint = 1, /**< The FormFactor for an object */
+        LocationConstraint = 2, /**< The Location of an object */
+        ScreenConstraint = 4, /**< Which screen an object is on */
+        ImmutableConstraint = 8, /**< the immutability (locked) nature of the applet changed  */
+        StartupCompletedConstraint = 16, /**< application startup has completed */
+        UiReadyConstraint = 32,
+        /**< The ui has been completely loaded */ // (FIXME: merged with StartupCompletedConstraint?)
+        AllConstraints = FormFactorConstraint | LocationConstraint | ScreenConstraint | ImmutableConstraint,
+    };
+    Q_ENUM(Constraint)
+    Q_DECLARE_FLAGS(Constraints, Constraint)
+
     // CONSTRUCTORS
 
     /**
@@ -415,7 +434,7 @@ public:
      *
      * @param constraints the type of constraints that were updated
      */
-    void updateConstraints(Plasma::Types::Constraints constraints = Plasma::Types::AllConstraints);
+    void updateConstraints(Constraints constraints = AllConstraints);
 
     // METADATA
 
@@ -815,7 +834,7 @@ protected:
      * @param constraints the type of constraints that were updated
      * @property constraint
      */
-    virtual void constraintsEvent(Plasma::Types::Constraints constraints);
+    virtual void constraintsEvent(Constraints constraints);
 
     // TODO: timerEvent should go into AppletPrivate
     /**
@@ -863,6 +882,8 @@ private:
     friend class PlasmaQuick::ConfigView;
     friend DeclarativeAppletScript;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Applet::Constraints)
 
 } // Plasma namespace
 

@@ -44,7 +44,7 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
     , appletDescription(info)
     , icon(appletDescription.iconName())
     , mainConfig(nullptr)
-    , pendingConstraints(Types::NoConstraint)
+    , pendingConstraints(Applet::NoConstraint)
     , package(nullptr)
     , configLoader(nullptr)
     , actions(AppletPrivate::defaultActions(applet))
@@ -488,15 +488,15 @@ QString AppletPrivate::globalName() const
     return appletDescription.pluginId();
 }
 
-void AppletPrivate::scheduleConstraintsUpdate(Plasma::Types::Constraints c)
+void AppletPrivate::scheduleConstraintsUpdate(Applet::Constraints c)
 {
     // Don't start up a timer if we're just starting up
     // flushPendingConstraints will be called by Corona
-    if (started && !constraintsTimer.isActive() && !(c & Plasma::Types::StartupCompletedConstraint)) {
+    if (started && !constraintsTimer.isActive() && !(c & Applet::StartupCompletedConstraint)) {
         constraintsTimer.start(0, q);
     }
 
-    if (c & Plasma::Types::StartupCompletedConstraint) {
+    if (c & Applet::StartupCompletedConstraint) {
         started = true;
         if (q->isContainment()) {
             qobject_cast<Containment *>(q)->d->setStarted();

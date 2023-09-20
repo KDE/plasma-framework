@@ -731,7 +731,7 @@ void ContainmentItem::loadWallpaper()
 
     if (m_containment->containmentType() != Plasma::Containment::Type::Desktop && m_containment->containmentType() != Plasma::Containment::Type::Custom) {
         if (!isLoading()) {
-            applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
+            applet()->updateConstraints(Plasma::Applet::UiReadyConstraint);
         }
         return;
     }
@@ -749,7 +749,7 @@ void ContainmentItem::loadWallpaper()
 
         connect(m_wallpaperItem, &WallpaperItem::isLoadingChanged, this, [this]() {
             if (!isLoading()) {
-                applet()->updateConstraints(Plasma::Types::UiReadyConstraint);
+                applet()->updateConstraints(Plasma::Applet::UiReadyConstraint);
             }
         });
 

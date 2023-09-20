@@ -581,7 +581,7 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
 
     // A normal applet has UI ready as soon as is loaded, a containment, only when also the wallpaper is loaded
     if (!pc || !pc->isContainment()) {
-        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+        applet->updateConstraints(Plasma::Applet::UiReadyConstraint);
         applet->flushPendingConstraintsEvents();
     }
 

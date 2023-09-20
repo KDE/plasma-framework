@@ -123,14 +123,14 @@ void ContainmentPrivate::triggerShowAddWidgets()
     Q_EMIT q->showAddWidgetsInterface(QPointF());
 }
 
-void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints constraints)
+void ContainmentPrivate::containmentConstraintsEvent(Applet::Constraints constraints)
 {
     if (!q->isContainment()) {
         return;
     }
 
     // qCDebug(LOG_PLASMA) << "got containmentConstraintsEvent" << constraints;
-    if (constraints & Plasma::Types::ImmutableConstraint) {
+    if (constraints & Applet::ImmutableConstraint) {
         // update actions
         const bool unlocked = q->immutability() == Types::Mutable;
 
@@ -155,21 +155,21 @@ void ContainmentPrivate::containmentConstraintsEvent(Plasma::Types::Constraints 
              * or the applet will not be able to be unlocked properly
              */
             a->setImmutability(qMin(q->immutability(), a->d->immutability));
-            a->updateConstraints(Types::ImmutableConstraint);
+            a->updateConstraints(Applet::ImmutableConstraint);
         }
     }
 
     // pass on the constraints that are relevant here
-    Types::Constraints appletConstraints = Types::NoConstraint;
-    if (constraints & Types::FormFactorConstraint) {
-        appletConstraints |= Types::FormFactorConstraint;
+    Applet::Constraints appletConstraints = Applet::NoConstraint;
+    if (constraints & Applet::FormFactorConstraint) {
+        appletConstraints |= Applet::FormFactorConstraint;
     }
 
-    if (constraints & Types::ScreenConstraint) {
-        appletConstraints |= Types::ScreenConstraint;
+    if (constraints & Applet::ScreenConstraint) {
+        appletConstraints |= Applet::ScreenConstraint;
     }
 
-    if (appletConstraints != Types::NoConstraint) {
+    if (appletConstraints != Applet::NoConstraint) {
         for (Applet *applet : std::as_const(applets)) {
             applet->updateConstraints(appletConstraints);
         }
@@ -200,7 +200,7 @@ Applet *ContainmentPrivate::createApplet(const QString &name, const QVariantList
     q->addApplet(applet, geometryHint);
     // mirror behavior of resorecontents: if an applet is not valid, set it immediately to uiReady
     if (!applet->pluginMetaData().isValid()) {
-        applet->updateConstraints(Plasma::Types::UiReadyConstraint);
+        applet->updateConstraints(Applet::UiReadyConstraint);
     }
     return applet;
 }
