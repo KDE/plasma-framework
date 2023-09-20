@@ -2,7 +2,6 @@ ecm_add_qml_module(plasmaextracomponentsplugin VERSION 2.0 URI "org.kde.plasma.e
 
 target_sources(plasmaextracomponentsplugin PRIVATE
     plasmaextracomponentsplugin.cpp
-    enums.cpp
     qmenu.cpp
     qmenuitem.cpp
 )

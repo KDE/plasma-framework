@@ -7,7 +7,6 @@
 #ifndef QMENU_PROXY_H
 #define QMENU_PROXY_H
 
-#include "enums.h"
 #include "plasma.h"
 #include "qmenuitem.h"
 #include <QMenu>
@@ -74,7 +73,7 @@ class QMenuProxy : public QObject
      * (in this case this will be a submenu).
      */
     Q_PROPERTY(QObject *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged())
-    Q_PROPERTY(DialogStatus::Status status READ status NOTIFY statusChanged)
+    Q_PROPERTY(Status status READ status NOTIFY statusChanged)
 
     /**
      * The default placement for the menu.
@@ -121,13 +120,21 @@ public:
     };
     Q_ENUM(PopupPlacement)
 
+    enum Status {
+        Opening,
+        Open,
+        Closing,
+        Closed,
+    };
+    Q_ENUM(Status)
+
     explicit QMenuProxy(QObject *parent = nullptr);
     ~QMenuProxy() override;
 
     QQmlListProperty<QMenuItem> content();
     int actionCount() const;
     QMenuItem *action(int) const;
-    DialogStatus::Status status() const;
+    Status status() const;
 
     QObject *visualParent() const;
     void setVisualParent(QObject *parent);
@@ -217,7 +224,7 @@ private:
 
     QList<QMenuItem *> m_items;
     QMenu *m_menu;
-    DialogStatus::Status m_status;
+    Status m_status;
     QPointer<QObject> m_visualParent;
     PopupPlacement m_placement;
 };

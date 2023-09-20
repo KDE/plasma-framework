@@ -19,7 +19,6 @@ void PlasmaExtraComponentsPlugin::registerTypes(const char *uri)
     Q_ASSERT(uri == QByteArray("org.kde.plasma.extras"));
     qmlRegisterType<QMenuProxy>(uri, 2, 0, "Menu");
     qmlRegisterType<QMenuItem>(uri, 2, 0, "MenuItem");
-    qmlRegisterUncreatableType<DialogStatus>(uri, 2, 0, "DialogStatus", {});
 }
 
 #include "moc_plasmaextracomponentsplugin.cpp"

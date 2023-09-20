@@ -23,7 +23,7 @@
 QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent)
     , m_menu(nullptr)
-    , m_status(DialogStatus::Closed)
+    , m_status(Closed)
     , m_placement(LeftPosedTopAlignedPopup)
 {
     if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
@@ -36,7 +36,7 @@ QMenuProxy::QMenuProxy(QObject *parent)
         KAcceleratorManager::manage(m_menu);
         connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
         connect(m_menu, &QMenu::aboutToHide, this, [=]() {
-            m_status = DialogStatus::Closed;
+            m_status = Closed;
             Q_EMIT statusChanged();
         });
     }
@@ -62,7 +62,7 @@ QMenuItem *QMenuProxy::action(int index) const
     return m_items.at(index);
 }
 
-DialogStatus::Status QMenuProxy::status() const
+QMenuProxy::Status QMenuProxy::status() const
 {
     return m_status;
 }
@@ -470,7 +470,7 @@ void QMenuProxy::openInternal(QPoint pos)
     }
 
     m_menu->popup(pos);
-    m_status = DialogStatus::Open;
+    m_status = Open;
     Q_EMIT statusChanged();
 }
 

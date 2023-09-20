@@ -49,7 +49,7 @@ PlasmoidHeading {
         PlasmaComponents.ToolButton {
             id: actionsButton
             visible: visibleActions > 0 && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
-            checked: configMenu.status !== PlasmaExtras.DialogStatus.Closed
+            checked: configMenu.status !== PlasmaExtras.Menu.Closed
             property int visibleActions: menuItemFactory.count
             property QtObject singleAction: visibleActions === 1 ? menuItemFactory.object.action : null
             icon.name: "open-menu-symbolic"
