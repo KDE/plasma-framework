@@ -24,7 +24,7 @@ QMenuProxy::QMenuProxy(QObject *parent)
     : QObject(parent)
     , m_menu(nullptr)
     , m_status(DialogStatus::Closed)
-    , m_placement(Plasma::Types::LeftPosedTopAlignedPopup)
+    , m_placement(LeftPosedTopAlignedPopup)
 {
     if (qobject_cast<QApplication *>(QCoreApplication::instance())) {
         m_menu = new QMenu(nullptr);
@@ -125,12 +125,12 @@ void QMenuProxy::setTransientParent(QWindow *parent)
     Q_EMIT transientParentChanged();
 }
 
-Plasma::Types::PopupPlacement QMenuProxy::placement() const
+QMenuProxy::PopupPlacement QMenuProxy::placement() const
 {
     return m_placement;
 }
 
-void QMenuProxy::setPlacement(Plasma::Types::PopupPlacement placement)
+void QMenuProxy::setPlacement(QMenuProxy::PopupPlacement placement)
 {
     if (m_placement != placement) {
         m_placement = placement;
@@ -299,7 +299,7 @@ void QMenuProxy::rebuildMenu()
         }
     }
 
-    const auto isOnTopEdgeOfTheScreen = m_placement == Plasma::Types::BottomPosedLeftAlignedPopup || m_placement == Plasma::Types::BottomPosedRightAlignedPopup;
+    const auto isOnTopEdgeOfTheScreen = m_placement == BottomPosedLeftAlignedPopup || m_placement == BottomPosedRightAlignedPopup;
     m_menu->setProperty("_breeze_menu_is_top", isOnTopEdgeOfTheScreen);
     m_menu->adjustSize();
 }
@@ -396,40 +396,40 @@ void QMenuProxy::openRelative()
     using namespace Plasma;
 
     switch (placement) {
-    case Types::TopPosedLeftAlignedPopup: {
+    case TopPosedLeftAlignedPopup: {
         posLocal = parentItem->mapToScene(QPointF(0, -m_menu->height()));
         boundaryCorrection(-m_menu->width() + parentItem->width(), m_menu->height() + parentItem->height());
         break;
     }
-    case Types::LeftPosedTopAlignedPopup: {
+    case LeftPosedTopAlignedPopup: {
         posLocal = parentItem->mapToScene(QPointF(-m_menu->width(), 0));
         boundaryCorrection(m_menu->width() + parentItem->width(), -m_menu->height() + parentItem->height());
         break;
     }
-    case Types::TopPosedRightAlignedPopup:
+    case TopPosedRightAlignedPopup:
         posLocal = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), -m_menu->height()));
         boundaryCorrection(m_menu->width() - parentItem->width(), m_menu->height() + parentItem->height());
         break;
-    case Types::RightPosedTopAlignedPopup: {
+    case RightPosedTopAlignedPopup: {
         posLocal = parentItem->mapToScene(QPointF(parentItem->width(), 0));
         boundaryCorrection(-m_menu->width() - parentItem->width(), -m_menu->height() + parentItem->height());
         break;
     }
-    case Types::LeftPosedBottomAlignedPopup:
+    case LeftPosedBottomAlignedPopup:
         posLocal = parentItem->mapToScene(QPointF(-m_menu->width(), -m_menu->height() + parentItem->height()));
         boundaryCorrection(m_menu->width() + parentItem->width(), m_menu->height() - parentItem->height());
         break;
-    case Types::BottomPosedLeftAlignedPopup: {
+    case BottomPosedLeftAlignedPopup: {
         posLocal = parentItem->mapToScene(QPointF(0, parentItem->height()));
         boundaryCorrection(-m_menu->width() + parentItem->width(), -m_menu->height() - parentItem->height());
         break;
     }
-    case Types::BottomPosedRightAlignedPopup: {
+    case BottomPosedRightAlignedPopup: {
         posLocal = parentItem->mapToScene(QPointF(parentItem->width() - m_menu->width(), parentItem->height()));
         boundaryCorrection(m_menu->width() - parentItem->width(), -m_menu->height() - parentItem->height());
         break;
     }
-    case Types::RightPosedBottomAlignedPopup: {
+    case RightPosedBottomAlignedPopup: {
         posLocal = parentItem->mapToScene(QPointF(parentItem->width(), -m_menu->height() + parentItem->height()));
         boundaryCorrection(-m_menu->width() - parentItem->width(), m_menu->height() - parentItem->height());
         break;
@@ -486,6 +486,37 @@ QQuickItem *QMenuProxy::parentItem() const
 void QMenuProxy::close()
 {
     m_menu->hide();
+}
+
+QMenuProxy::PopupPlacement QMenuProxy::visualPopupPlacement(QMenuProxy::PopupPlacement placement, Qt::LayoutDirection layoutDirection)
+{
+    const bool mirrored = (layoutDirection == Qt::LayoutDirectionAuto) ? qApp->isRightToLeft() : (layoutDirection == Qt::RightToLeft);
+
+    if (!mirrored) {
+        return placement;
+    }
+
+    switch (placement) {
+    case TopPosedLeftAlignedPopup:
+        return TopPosedRightAlignedPopup;
+    case TopPosedRightAlignedPopup:
+        return TopPosedLeftAlignedPopup;
+    case LeftPosedTopAlignedPopup:
+        return RightPosedTopAlignedPopup;
+    case LeftPosedBottomAlignedPopup:
+        return RightPosedBottomAlignedPopup;
+    case BottomPosedLeftAlignedPopup:
+        return BottomPosedRightAlignedPopup;
+    case BottomPosedRightAlignedPopup:
+        return BottomPosedLeftAlignedPopup;
+    case RightPosedTopAlignedPopup:
+        return LeftPosedTopAlignedPopup;
+    case RightPosedBottomAlignedPopup:
+        return LeftPosedBottomAlignedPopup;
+    case FloatingPopup:
+    default:
+        return placement;
+    }
 }
 
 #include "moc_qmenu.cpp"

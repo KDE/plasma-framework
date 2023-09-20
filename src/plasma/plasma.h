@@ -123,31 +123,6 @@ public:
     Q_ENUM(Location)
 
     /**
-     * The popup position enumeration relatively to his attached widget
-     *
-     **/
-    enum PopupPlacement {
-        FloatingPopup = 0, /**< Free floating, non attached popup */
-        TopPosedLeftAlignedPopup, /**< Popup positioned on the top, aligned
-                                 to the left of the widget */
-        TopPosedRightAlignedPopup, /**< Popup positioned on the top, aligned
-                                  to the right of the widget */
-        LeftPosedTopAlignedPopup, /**< Popup positioned on the left, aligned
-                                 to the top of the widget */
-        LeftPosedBottomAlignedPopup, /**< Popup positioned on the left, aligned
-                                    to the bottom of the widget */
-        BottomPosedLeftAlignedPopup, /**< Popup positioned on the bottom, aligned
-                                    to the left of the widget */
-        BottomPosedRightAlignedPopup, /**< Popup positioned on the bottom, aligned
-                                     to the right of the widget */
-        RightPosedTopAlignedPopup, /**< Popup positioned on the right, aligned
-                                  to the top of the widget */
-        RightPosedBottomAlignedPopup, /**< Popup positioned on the right, aligned
-                                    to the bottom of the widget */
-    };
-    Q_ENUM(PopupPlacement)
-
-    /**
      * Defines the immutability of items like applets, corona and containments
      * they can be free to modify, locked down by the user or locked down by the
      * system (e.g. kiosk setups).
@@ -195,16 +170,6 @@ public:
 private:
     Types(QObject *parent = nullptr);
 };
-
-/**
- * Mirrors popup placement horizontally in Right-To-Left environments.
- *
- * Mirroring behavior can be explicitly overridden by passing a specific
- * direction with layoutDirection parameter, or left at default value of
- * Qt::LayoutDirectionAuto, in which case it will be deduced from shared
- * QGuiApplication instance.
- **/
-PLASMA_EXPORT Types::PopupPlacement visualPopupPlacement(Types::PopupPlacement placement, Qt::LayoutDirection layoutDirection = Qt::LayoutDirectionAuto);
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ContainmentDisplayHints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)

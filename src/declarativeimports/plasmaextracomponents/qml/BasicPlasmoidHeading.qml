@@ -83,7 +83,7 @@ PlasmoidHeading {
             PlasmaExtras.Menu {
                 id: configMenu
                 visualParent: actionsButton
-                placement: PlasmaCore.Types.BottomPosedLeftAlignedPopup
+                placement: PlasmaExtras.Menu.BottomPosedLeftAlignedPopup
             }
 
             Instantiator {

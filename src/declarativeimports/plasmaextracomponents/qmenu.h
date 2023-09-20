@@ -81,7 +81,7 @@ class QMenuProxy : public QObject
      *
      * (since 5.103) Will be automatically flipped horizontally in Right-to-left User Interfaces.
      */
-    Q_PROPERTY(Plasma::Types::PopupPlacement placement READ placement WRITE setPlacement NOTIFY placementChanged)
+    Q_PROPERTY(PopupPlacement placement READ placement WRITE setPlacement NOTIFY placementChanged)
 
     /**
      * A minimum width for the menu.
@@ -96,6 +96,31 @@ class QMenuProxy : public QObject
     Q_PROPERTY(int maximumWidth READ maximumWidth WRITE setMaximumWidth RESET resetMaximumWidth NOTIFY maximumWidthChanged)
 
 public:
+    /**
+     * The popup position enumeration relatively to his attached widget
+     *
+     **/
+    enum PopupPlacement {
+        FloatingPopup = 0, /**< Free floating, non attached popup */
+        TopPosedLeftAlignedPopup, /**< Popup positioned on the top, aligned
+                                 to the left of the widget */
+        TopPosedRightAlignedPopup, /**< Popup positioned on the top, aligned
+                                  to the right of the widget */
+        LeftPosedTopAlignedPopup, /**< Popup positioned on the left, aligned
+                                 to the top of the widget */
+        LeftPosedBottomAlignedPopup, /**< Popup positioned on the left, aligned
+                                    to the bottom of the widget */
+        BottomPosedLeftAlignedPopup, /**< Popup positioned on the bottom, aligned
+                                    to the left of the widget */
+        BottomPosedRightAlignedPopup, /**< Popup positioned on the bottom, aligned
+                                     to the right of the widget */
+        RightPosedTopAlignedPopup, /**< Popup positioned on the right, aligned
+                                  to the top of the widget */
+        RightPosedBottomAlignedPopup, /**< Popup positioned on the right, aligned
+                                    to the bottom of the widget */
+    };
+    Q_ENUM(PopupPlacement)
+
     explicit QMenuProxy(QObject *parent = nullptr);
     ~QMenuProxy() override;
 
@@ -110,8 +135,8 @@ public:
     QWindow *transientParent();
     void setTransientParent(QWindow *parent);
 
-    Plasma::Types::PopupPlacement placement() const;
-    void setPlacement(Plasma::Types::PopupPlacement placement);
+    PopupPlacement placement() const;
+    void setPlacement(PopupPlacement placement);
 
     int minimumWidth() const;
     void setMinimumWidth(int width);
@@ -180,12 +205,21 @@ private:
     void rebuildMenu();
     void openInternal(QPoint pos);
     QQuickItem *parentItem() const;
+    /*
+     * Mirrors popup placement horizontally in Right-To-Left environments.
+     *
+     * Mirroring behavior can be explicitly overridden by passing a specific
+     * direction with layoutDirection parameter, or left at default value of
+     * Qt::LayoutDirectionAuto, in which case it will be deduced from shared
+     * QGuiApplication instance.
+     **/
+    PopupPlacement visualPopupPlacement(PopupPlacement placement, Qt::LayoutDirection layoutDirection = Qt::LayoutDirectionAuto);
 
     QList<QMenuItem *> m_items;
     QMenu *m_menu;
     DialogStatus::Status m_status;
     QPointer<QObject> m_visualParent;
-    Plasma::Types::PopupPlacement m_placement;
+    PopupPlacement m_placement;
 };
 
 #endif // QMENU_PROXY_H
