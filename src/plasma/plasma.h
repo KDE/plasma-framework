@@ -123,19 +123,6 @@ public:
     Q_ENUM(Location)
 
     /**
-     * The position enumeration
-     *
-     **/
-    enum Position {
-        LeftPositioned, /**< Positioned left */
-        RightPositioned, /**< Positioned right */
-        TopPositioned, /**< Positioned top */
-        BottomPositioned, /**< Positioned bottom */
-        CenterPositioned, /**< Positioned in the center */
-    };
-    Q_ENUM(Position)
-
-    /**
      * The popup position enumeration relatively to his attached widget
      *
      **/
@@ -175,27 +162,6 @@ public:
     Q_ENUM(ImmutabilityType)
 
     /**
-     * The ComonentType enumeration refers to the various types of components,
-     * or plugins, supported by plasma.
-     */
-    enum ComponentType {
-        AppletComponent = 1, /**< Plasma::Applet based plugins **/
-        ContainmentComponent = 2, /**< Plasma::Containment based plugins **/
-        WallpaperComponent = 4, /**< Plasma::Wallpaper based plugins **/
-        GenericComponent = 8, /** Generic repositories of files, usually they keep QML files and their assets **/
-    };
-    Q_ENUM(ComponentType)
-    Q_DECLARE_FLAGS(ComponentTypes, ComponentType)
-
-    enum MarginEdge {
-        TopMargin = 0, /**< The top margin **/
-        BottomMargin, /**< The bottom margin **/
-        LeftMargin, /**< The left margin **/
-        RightMargin, /**< The right margin **/
-    };
-    Q_ENUM(MarginEdge)
-
-    /**
      * Status of an applet
      * @since 4.3
      */
@@ -210,19 +176,6 @@ public:
         HiddenStatus = 6, /**< The Item will be hidden totally  **/
     };
     Q_ENUM(ItemStatus)
-
-    enum TrustLevel {
-        UnverifiableTrust = 0, /**< The trust of the object can not be verified, usually because no
-                                trust information (e.g. a cryptographic signature) was provided */
-        CompletelyUntrusted, /**< The signature is broken/expired/false */
-        UnknownTrusted, /**< The signature is valid, but the key is unknown */
-        UserTrusted, /**< The signature is valid and made with a key signed by one of the
-                      user's own keys*/
-        SelfTrusted, /**< The signature is valid and made with one of the user's own keys*/
-        FullyTrusted, /**< The signature is valid and made with a key signed by the vendor's key*/
-        UltimatelyTrusted, /**< The signature is valid and made with the vendor's key*/
-    };
-    Q_ENUM(TrustLevel)
 
     /**
      * Description on how draw a background for the applet
@@ -256,7 +209,6 @@ PLASMA_EXPORT Types::PopupPlacement visualPopupPlacement(Types::PopupPlacement p
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ContainmentDisplayHints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::Constraints)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ConstraintFlags)
-Q_DECLARE_OPERATORS_FOR_FLAGS(Types::ComponentTypes)
 Q_DECLARE_OPERATORS_FOR_FLAGS(Types::BackgroundFlags)
 
 } // Plasma namespace
