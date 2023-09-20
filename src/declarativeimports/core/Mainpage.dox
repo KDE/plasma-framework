@@ -5,7 +5,6 @@
 Uncreatable Types:
 - \link Plasma::Types Types \endlink
 - \link Units Units \endlink
-- \link Plasma::QuickTheme Theme \endlink
 
 Types:
 - \link Plasma::Svg Svg \endlink

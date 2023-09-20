@@ -16,7 +16,7 @@
 
 #include "action.h"
 #include "dialog.h"
-#include "quicktheme.h"
+#include "theme.h"
 
 #include "tooltip.h"
 #include "windowthumbnail.h"
@@ -46,9 +46,8 @@ void CoreBindingsPlugin::registerTypes(const char *uri)
 
     qmlRegisterUncreatableType<Plasma::Types>(uri, 2, 0, "Types", {});
 
-    // qmlRegisterType<ThemeProxy>(uri, 2, 0, "Theme");
-    qmlRegisterSingletonType<Plasma::QuickTheme>(uri, 2, 0, "Theme", [](QQmlEngine *engine, QJSEngine *) -> QObject * {
-        return new Plasma::QuickTheme(engine);
+    qmlRegisterSingletonType<Plasma::Theme>(uri, 2, 0, "Theme", [](QQmlEngine *engine, QJSEngine *) -> QObject * {
+        return new Plasma::Theme(engine);
     });
 
     qmlRegisterType<PlasmaQuick::Dialog>(uri, 2, 0, "Dialog");
