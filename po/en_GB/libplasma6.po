@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-06-17 12:03+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -111,12 +111,6 @@ msgstr ""
 "The maximum size of the on-disk Theme cache in kilobytes. Note that these "
 "files are sparse files, so the maximum size may not be used. Setting a "
 "larger size is therefore often quite safe."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Miscellaneous"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -316,6 +310,10 @@ msgstr "Set %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Content dropped"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Miscellaneous"
 
 #~ msgid "Main Script File"
 #~ msgstr "Main Script File"

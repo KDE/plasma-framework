@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2013-03-09 14:27+0530\n"
 "Last-Translator: Chetan Khona <chetan@kompkin.com>\n"
 "Language-Team: Marathi <kde-i18n-doc@kde.org>\n"
@@ -105,12 +105,6 @@ msgid ""
 "files are sparse files, so the maximum size may not be used. Setting a "
 "larger size is therefore often quite safe."
 msgstr ""
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "किरकोळ"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -314,6 +308,10 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "किरकोळ"
 
 #~ msgid "Main Script File"
 #~ msgstr "मुख्य स्क्रिप्ट फाईल"

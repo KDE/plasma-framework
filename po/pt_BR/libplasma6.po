@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-07-04 10:50-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
@@ -110,12 +110,6 @@ msgstr ""
 "O tamanho máximo do cache do tema no disco em quilobytes. Lembre-se de que "
 "esses arquivos são esparsos, sendo que o tamanho máximo poderá não ser "
 "usado. A atribuição de um tamanho mais elevado normalmente é bastante seguro."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Diversos"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -315,6 +309,10 @@ msgstr "Configurar %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Conteúdo solto"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Diversos"
 
 #~ msgid "Main Script File"
 #~ msgstr "Arquivo principal do script"

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2022-08-02 10:18+0200\n"
 "Last-Translator: Phu Hung Nguyen <phu.nguyen@kdemail.net>\n"
 "Language-Team: Vietnamese <kde-l10n-vi@kde.org>\n"
@@ -109,12 +109,6 @@ msgstr ""
 "Lưu ý rằng các tệp này là các tệp thưa, nên kích thước tối đa kia có thể sẽ "
 "không bị đạt đến. Vì vậy, đặt một kích thước lớn thường cũng không gây vấn "
 "đề gì."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Hỗn hợp"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -314,6 +308,10 @@ msgstr "Đặt %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Nội dung được thả"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Hỗn hợp"
 
 #~ msgid "Main Script File"
 #~ msgstr "Tệp kịch bản chính"

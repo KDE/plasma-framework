@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-06-10 06:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -109,12 +109,6 @@ msgstr ""
 "დისკზე მდებარე თემის ქეშის მაქსიმალური ზომა, კილობაიტებში. დაიმახსოვრეთ, რომ "
 "ეს ფაილები დამატებითი ფაილებია, ასე რომ მაქსიმალურ ზომას ვერ მიუთითეთ. ასე "
 "რომ, უფრო მეტი ზომის მითითება ჩვეულებრივ საკმაოდ უსაფრთხოა."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "სხვადასხვა"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -314,6 +308,10 @@ msgstr "%1-ის დაყენება"
 #, kde-format
 msgid "Content dropped"
 msgstr "შემცველობა მოცილებულია"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "სხვადასხვა"
 
 #~ msgid "Main Script File"
 #~ msgstr "მთავარი სკრიპტის ფაილები"

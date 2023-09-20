@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-02-19 15:12+0400\n"
 "Last-Translator: Kheyyam <xxmn77@gmail.com>\n"
 "Language-Team: Azerbaijani <kde-i18n-doc@kde.org>\n"
@@ -108,12 +108,6 @@ msgstr ""
 "Diskdəki Mövzuların kilobytla maksimum ölçüsü. Qeyd edək ki, bu fayllar "
 "seyrək fayllardır, bu halda maksimum ölçü istifadə olunmaya bilər. Buna görə "
 "daha böyük bir ölçü qurmaq əslində daha etibarlıdır."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Müxtəlif"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -314,6 +308,10 @@ msgstr "%1 istifadə et"
 #, kde-format
 msgid "Content dropped"
 msgstr "Elementin daşınması"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Müxtəlif"
 
 #~ msgid "Main Script File"
 #~ msgstr "Əsas skript faylı"

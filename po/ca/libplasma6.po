@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-06-09 08:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -113,12 +113,6 @@ msgstr ""
 "La mida màxima de la memòria cau al disc per al tema en kilobytes. Cal tenir "
 "en compte que aquests fitxers són fitxers dispersos, per tant, gairebé no "
 "s'usarà la mida màxima. Per consegüent, es força segur definir una mida gran."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Miscel·lània"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -318,3 +312,7 @@ msgstr "Estableix el %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contingut descartat"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Miscel·lània"

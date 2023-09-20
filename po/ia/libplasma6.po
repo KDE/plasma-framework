@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-06-09 12:29+0200\n"
 "Last-Translator: giovanni <g.sora@tiscali.it>\n"
 "Language-Team: Interlingua <kde-i18n-doc@kde.org>\n"
@@ -108,12 +108,6 @@ msgstr ""
 "Le maxime grandor del cache de Thema sur le disco in kilobytes. Nota que "
 "iste files es files sparse, assi quw le maxime grandor pote non esser "
 "utilisate. Ergo fixar un dimension plus grande sovente es assatis secur."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Miscellanea"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -313,6 +307,10 @@ msgstr "Fixa %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contento lassate cader"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Miscellanea"
 
 #~ msgid "Main Script File"
 #~ msgstr "File de script principal"

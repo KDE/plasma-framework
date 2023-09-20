@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2019-12-08 12:11+0200\n"
 "Last-Translator: Maris Nartiss <maris.kde@gmail.com>\n"
 "Language-Team: Latvian <kde-i18n-doc@kde.org>\n"
@@ -109,12 +109,6 @@ msgstr ""
 "Maksimālais tēmas kešatmiņas izmērs uz diska kilobaitos. Ņemiet vērā, ka "
 "parasti šīs datnes ir nelielas un tādēļ maksimālais izmērs netiks izmantots. "
 "Tādēļ ir droši likt lielu izmēru."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Dažādi"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -317,6 +311,10 @@ msgstr "Uzlikt %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Saturs ir nomests"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Dažādi"
 
 #~ msgid "Main Script File"
 #~ msgstr "Galvenā skripta datne"

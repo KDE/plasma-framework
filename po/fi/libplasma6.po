@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-06-27 15:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -116,12 +116,6 @@ msgstr ""
 "Teemavälimuistin enimmäiskoko levyllä kilotavuina. Huomaa, että nämä ovat "
 "ns. harvoja tiedostoja, joten enimmäiskokoa ei saavuteta. Suuren koon "
 "asettaminen on siis yleensä aika turvallista."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Sekalaiset"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -321,6 +315,10 @@ msgstr "Aseta %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Sisältö pudotettu"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Sekalaiset"
 
 #~ msgid "Main Script File"
 #~ msgstr "Pääskriptitiedosto"

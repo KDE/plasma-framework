@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2016-09-22 16:19+0200\n"
 "Last-Translator: Dimitris Kardarakos <dimkard@gmail.com>\n"
 "Language-Team: Greek <kde-i18n-el@kde.org>\n"
@@ -111,12 +111,6 @@ msgstr ""
 "kilobytes. Σημειώστε πως αυτά τα αρχεία έχουν μεγάλο βαθμό διασποράς, "
 "επομένως ενδέχεται να μη χρησιμοποιηθεί το μέγιστο μέγεθος. Συνεπώς, ο "
 "ορισμός ενός μεγάλου μεγέθους είναι συχνά μια αρκετά ασφαλής επιλογή."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Διάφορα"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -323,6 +317,10 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Διάφορα"
 
 #~ msgid "Main Script File"
 #~ msgstr "Κύριο αρχείο σεναρίου"

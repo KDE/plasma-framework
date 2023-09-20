@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2021-09-05 15:52+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -109,12 +109,6 @@ msgstr ""
 "Teema kettapuhvri maksimaalne suurus kilobaitides. Pane tähele, et tegu on "
 "hajusfailiga, nii et maksimaalset suurust küllap ei kasutatagi. Seepärast "
 "võib suurema suuruse määramist pidada üpris turvaliseks valikuks."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Muu"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -314,6 +308,10 @@ msgstr "Määra taustapildiks %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Kohale lohistati sisu"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Muu"
 
 #~ msgid "Main Script File"
 #~ msgstr "Peamine skriptifail"

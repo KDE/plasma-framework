@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2019-11-26 19:29+0100\n"
 "Last-Translator: Martin Schlander <mschlander@opensuse.org>\n"
 "Language-Team: Danish <kde-i18n-doc@kde.org>\n"
@@ -108,12 +108,6 @@ msgstr ""
 "Den maksimale størrelse på tema-cachen på disken i kilobyte. Bemærk at disse "
 "filer er små, så den maksimale størrelse bliver måske ikke brugt. Det er "
 "altså normalt helt ufarligt at angive en stor størrelse."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Diverse"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -315,6 +309,10 @@ msgstr "Sæt %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Indhold droppet"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Diverse"
 
 #~ msgid "Main Script File"
 #~ msgstr "Hovedscriptfil"

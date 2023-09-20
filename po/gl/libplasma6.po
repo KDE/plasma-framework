@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-08-06 05:29+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -110,12 +110,6 @@ msgstr ""
 "O tamaño máximo da caché en disco do tema, en kilobytes. Lembre que estes "
 "ficheiros son dispersos, polo que poida que non se use o tamaño máximo, polo "
 "que pór un tamaño maior a miúdo é seguro."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Diversos"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -316,6 +310,10 @@ msgstr "Definir %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Soltouse contido"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Diversos"
 
 #~ msgid "Main Script File"
 #~ msgstr "Ficheiro de script principal"

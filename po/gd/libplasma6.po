@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2016-04-30 12:08+0100\n"
 "Last-Translator: GunChleoc <fios@foramnagaidhlig.net>\n"
 "Language-Team: Fòram na Gàidhlig\n"
@@ -115,12 +115,6 @@ msgstr ""
 "ùrlair. Thoir an aire gu bheil na faidhlichean seo gann, mar sin dh'fhaoidte "
 "nach dèid am meud as motha a chleachdadh. Bidh e gu math sàbhailte mar a "
 "trice ma shònraicheas tu meud nas motha."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Eile"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -329,6 +323,10 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr "Chaidh an t-susbaint a leigeil às"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Eile"
 
 #~ msgid "Main Script File"
 #~ msgstr "Prìomh-fhaidhle an sgriobt"

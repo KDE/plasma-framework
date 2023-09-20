@@ -17,7 +17,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2022-08-11 15:23+0300\n"
 "Last-Translator: Alexander Yavorsky <kekcuha@gmail.com>\n"
 "Language-Team: Russian <kde-russian@lists.kde.ru>\n"
@@ -124,12 +124,6 @@ msgstr ""
 "Максимальный размер кэша темы на диске в килобайтах. Кэш хранится в "
 "разреженных файлах, и на диске может быть не использован указанный "
 "максимальный объём. Поэтому увеличение этого параметра обычно безопасно."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Разное"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -334,6 +328,10 @@ msgstr "Использовать «%1»"
 #, kde-format
 msgid "Content dropped"
 msgstr "Перетаскивание элемента"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Разное"
 
 #~ msgid "Main Script File"
 #~ msgstr "Основной файл скрипта"

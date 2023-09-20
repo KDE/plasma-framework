@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-09-16 10:06\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -107,12 +107,6 @@ msgid ""
 msgstr ""
 "保存在磁盘中的主题缓存的最大体积，单位为 KB。注意：缓存文件是稀疏文件，因此不"
 "一定能够完全利用设置的最大体积。设置一个较大的体积会比较安全。"
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "其他"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -310,3 +304,7 @@ msgstr "设置 %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "内容已拖放"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "其他"

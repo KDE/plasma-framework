@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-02-22 21:27+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -111,12 +111,6 @@ msgstr ""
 "はスパースファイルなので、設定された最大サイズが使用されない可能性があること"
 "に注意してください。したがって、より大きなサイズを設定することが、多くの場合"
 "安全です。"
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "その他"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -317,6 +311,10 @@ msgstr "%1 を設定"
 #, kde-format
 msgid "Content dropped"
 msgstr "コンテンツがドロップされました"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "その他"
 
 #~ msgid "Main Script File"
 #~ msgstr "メインスクリプトファイル"

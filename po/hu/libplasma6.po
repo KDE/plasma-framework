@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2021-09-02 09:12+0200\n"
 "Last-Translator: Kristóf Kiszel <kiszel.kristof@gmail.com>\n"
 "Language-Team: Hungarian <kde-l10n-hu@kde.org>\n"
@@ -110,12 +110,6 @@ msgstr ""
 "A téma gyorsítótárának maximális mérete, kilobájtban megadva. Ezek a fájlok "
 "ritkán használtak, vagyis a maximális méret nem mindig lesz kihasználva, "
 "ugyanakkor biztonságosabb nagyobb méretet beállítani."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Egyebek"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -317,6 +311,10 @@ msgstr "A(z) %1 beállítása"
 #, kde-format
 msgid "Content dropped"
 msgstr "Tartalom ejtve"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Egyebek"
 
 #~ msgid "Main Script File"
 #~ msgstr "Fő szkriptfájl"

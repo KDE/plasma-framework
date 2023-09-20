@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2022-09-19 12:33+0300\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -112,12 +112,6 @@ msgstr ""
 "Didžiausias apipavidalinimo podėlio dydis diske, kilobaitais. Atminkite, kad "
 "failai yra reti masyvai, tad didžiausias dydis gali būti ir nenaudojamas. "
 "Dažniausiai, yra saugiau nurodyti didesnį dydį."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Įvairios"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -317,6 +311,10 @@ msgstr "Nustatyti %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Numestas turinys"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Įvairios"
 
 #~ msgid "Main Script File"
 #~ msgstr "Pagrindinis scenarijaus failas"

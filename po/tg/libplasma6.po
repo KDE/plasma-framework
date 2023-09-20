@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2020-09-19 11:42+0500\n"
 "Last-Translator: Victor Ibragimov <victor.ibragimov@gmail.com>\n"
 "Language-Team: English <kde-i18n-doc@kde.org>\n"
@@ -110,12 +110,6 @@ msgstr ""
 "ҳисоб карда мешавад. Ба назар гиред, ки файлҳо алоҳида нигоҳ дошта мешаванд, "
 "бинобар ин андозаи калонтарин метавонад истифода бурда нашавад. Танзимкунии "
 "андозаи калонтар ба ҳамин сабаб безарар аст."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Барномаҳои гуногун"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -319,6 +313,10 @@ msgstr "Танзим кардани %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Ҳаракаткунии муҳтаво"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Барномаҳои гуногун"
 
 #~ msgid "Main Script File"
 #~ msgstr "Файли нақши асосӣ"

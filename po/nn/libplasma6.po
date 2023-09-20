@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-07-15 13:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -125,12 +125,6 @@ msgstr ""
 "Maksstorleiken på snøgglageret for temaet i kilobyte. Merk at desse filene "
 "er kompakte, så maksstorleiken vert gjerne ikkje brukt. Det er derfor ofte "
 "trygt å bruka ein stor verdi her."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Ymse"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -330,3 +324,7 @@ msgstr "Set %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Innhald sleppt"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Ymse"

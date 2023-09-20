@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-04-06 12:44+0400\n"
 "Last-Translator: Zayed Al-Saidi <zayed.alsaidi@gmail.com>\n"
 "Language-Team: ar\n"
@@ -110,12 +110,6 @@ msgstr ""
 "الحد الأقصى لحجم ذاكرة التخزين المؤقت للسمة على القرص بالكيلو بايت. لاحظ أن "
 "هذه الملفات هي ملفات متفرقة ، لذا قد لا يتم استخدام الحجم الأقصى. لذلك فإن "
 "تحديد حجم أكبر غالبًا ما يكون آمنًا تمامًا."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "متنوع"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -315,6 +309,10 @@ msgstr "عيّن %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "أسقط المحتوى"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "متنوع"
 
 #~ msgid "Main Script File"
 #~ msgstr "ملف السكرِبت الرئيسي"

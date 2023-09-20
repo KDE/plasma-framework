@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2018-06-23 18:51+0100\n"
 "Last-Translator: Øystein Steffensen-Alværvik <ystein@posteo.net>\n"
 "Language-Team: Norwegian Bokmål <l10n-no@lister.huftis.org>\n"
@@ -111,12 +111,6 @@ msgstr ""
 "Maksimal størrelse for tema-mellomlager på disk i kilobyte. Merk at disse "
 "filene har mye tomrom, så maksimal størrelse blir kanskje ikke brukt. Det er "
 "derfor ofte ganske trygt å oppgi stor størrelse."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Diverse"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -316,3 +310,7 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Diverse"

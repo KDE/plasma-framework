@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-13 02:06+0000\n"
+"POT-Creation-Date: 2023-09-20 01:54+0000\n"
 "PO-Revision-Date: 2023-06-10 00:47+0200\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
@@ -109,12 +109,6 @@ msgstr ""
 "cuenta que estos archivos están muy dispersos, por lo que es posible que no "
 "se utilice el tamaño máximo. Por este motivo, suele ser bastante seguro "
 "especificar un tamaño mayor."
-
-#: plasma/pluginloader.cpp:290 plasma/pluginloader.cpp:291
-#, kde-format
-msgctxt "misc category"
-msgid "Miscellaneous"
-msgstr "Varios"
 
 #: plasma/private/applet_p.cpp:128
 #, kde-format
@@ -315,6 +309,10 @@ msgstr "Definir %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contenido soltado"
+
+#~ msgctxt "misc category"
+#~ msgid "Miscellaneous"
+#~ msgstr "Varios"
 
 #~ msgid "Main Script File"
 #~ msgstr "Archivo de script principal"
