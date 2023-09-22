@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2023-07-15 13:59+0200\n"
 "Last-Translator: Karl Ove Hufthammer <karl@huftis.org>\n"
 "Language-Team: Norwegian Nynorsk <l10n-no@lister.huftis.org>\n"
@@ -75,7 +75,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Fjern «%1»|/|Fjern $[pron %1] $[bunden %1]"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Start tilpassing"
@@ -93,6 +94,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Set opp «%1» …|/|Set opp $[dobbelbest %1]$[bunden %1] …"
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Avslutt tilpassing"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -102,11 +108,6 @@ msgstr "Lås elementa"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Lås opp elementa"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "Avslutt tilpassing"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

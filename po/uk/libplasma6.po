@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2023-06-09 23:36+0300\n"
 "Last-Translator: Yuri Chornoivan <yurchor@ukr.net>\n"
 "Language-Team: Ukrainian <kde-i18n-uk@kde.org>\n"
@@ -68,7 +68,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Вилучити аплет «%1»"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Увійти до режиму редагування"
@@ -79,6 +80,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Налаштувати «%1»…"
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Вийти з режиму редагування"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -88,11 +94,6 @@ msgstr "Заблокувати віджети"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Розблокувати віджети"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "Вийти з режиму редагування"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

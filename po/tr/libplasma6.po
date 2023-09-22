@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2023-06-09 13:12+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
@@ -68,7 +68,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Kaldır: %1"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Düzenleme Kipine Gir"
@@ -79,6 +80,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1 Ögesini Yapılandır..."
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Düzenleme Kipinden Çık"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -88,11 +94,6 @@ msgstr "Araç Takımlarını Kilitle"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Araç Takımlarının Kilidini Aç"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "Düzenleme Kipinden Çık"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

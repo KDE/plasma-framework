@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2023-06-27 15:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -73,7 +73,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Poista %1|/|Poista $[yleisnimi_pienellä %1]"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Siirry muokkaustilaan"
@@ -84,6 +85,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Asetukset: %1…|/|$[gen %1] asetukset…"
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Poistu muokkaustilasta"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -93,11 +99,6 @@ msgstr "Lukitse sovelmat"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Poista sovelmien lukitus"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "Poistu muokkaustilasta"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2023-06-11 06:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -66,7 +66,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Forigi %1"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Eniri redaktan reĝimon"
@@ -77,6 +78,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Agordi %1..."
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "Eliri redaktan reĝimon"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -86,11 +92,6 @@ msgstr "Ŝlosi fenestraĵojn"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "Malŝlosi fenestraĵojn"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "Eliri redaktan reĝimon"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

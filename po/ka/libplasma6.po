@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2023-06-10 06:25+0200\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
@@ -66,7 +66,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1-ის წაშლა"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "რედაქტირების რეჟიმში გადასვლა"
@@ -77,6 +78,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1-ის მორგება..."
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "რედაქტირების რეჟიმიდან გასვლა"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -86,11 +92,6 @@ msgstr "ვიჯეტების დაბლოკვა"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "ვიჯეტების განბლოკვა"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "რედაქტირების რეჟიმიდან გასვლა"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

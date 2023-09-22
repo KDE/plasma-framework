@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2022-11-19 05:34-0800\n"
 "Last-Translator: A S Alam <aalam@satluj.org>\n"
 "Language-Team: Punjabi <punjabi-users@lists.sf.net>\n"
@@ -66,7 +66,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "%1 ਨੂੰ ਹਟਾਓ"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "ਸੋਧ ਢੰਗ ਵਿੱਚ ਜਾਓ"
@@ -77,6 +78,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "%1 ਸੰਰਚਨਾ..."
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "ਸੋਧ ਢੰਗ ਤੋਂ ਬਾਹਰ"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -86,11 +92,6 @@ msgstr "ਵਿਦਜੈਟ ਲਾਕ ਕਰੋ"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "ਵਿਦਜੈਟ ਅਣ-ਲਾਕ ਕਰੋ"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "ਸੋਧ ਢੰਗ ਤੋਂ ਬਾਹਰ"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

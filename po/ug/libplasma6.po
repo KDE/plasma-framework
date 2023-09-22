@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2013-09-08 07:05+0900\n"
 "Last-Translator: Gheyret Kenji <gheyret@gmail.com>\n"
 "Language-Team: Uyghur <kde-i18n-doc@kde.org>\n"
@@ -67,7 +67,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "بۇ %1 نى چىقىرىۋەت"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr ""
@@ -76,6 +77,11 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
+msgstr ""
+
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
 msgstr ""
 
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
@@ -87,11 +93,6 @@ msgstr "Widget قۇلۇپلا"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "ۋىجېتلارنى قۇلۇپسىزلا"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr ""
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9

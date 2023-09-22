@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-09-20 01:54+0000\n"
+"POT-Creation-Date: 2023-09-22 01:45+0000\n"
 "PO-Revision-Date: 2023-09-16 10:06\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
@@ -65,7 +65,8 @@ msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "移除 %1"
 
-#: plasma/containment.cpp:102 plasma/corona.cpp:367 plasma/corona.cpp:485
+#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "进入编辑模式"
@@ -76,6 +77,11 @@ msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "配置 %1..."
 
+#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#, kde-format
+msgid "Exit Edit Mode"
+msgstr "退出编辑模式"
+
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
 msgid "Lock Widgets"
@@ -85,11 +91,6 @@ msgstr "锁定挂件"
 #, kde-format
 msgid "Unlock Widgets"
 msgstr "解锁挂件"
-
-#: plasma/corona.cpp:365
-#, kde-format
-msgid "Exit Edit Mode"
-msgstr "退出编辑模式"
 
 #. i18n: ectx: label, entry, group (CachePolicies)
 #: plasma/data/kconfigxt/libplasma-theme-global.kcfg:9
