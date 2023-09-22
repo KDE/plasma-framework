@@ -11,9 +11,13 @@
 #include <QAction>
 #include <QObject>
 
+#include <qqmlregistration.h>
+
 class QMenuItem : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_NAMED_ELEMENT(MenuItem)
 
     /**
      * The parent object

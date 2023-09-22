@@ -15,6 +15,8 @@
 #include <QQmlListProperty>
 #include <QWindow>
 
+#include <qqmlregistration.h>
+
 class QDeclarativeItem;
 class QQuickItem;
 
@@ -57,6 +59,8 @@ class QQuickItem;
 class QMenuProxy : public QObject
 {
     Q_OBJECT
+    QML_ELEMENT
+    QML_NAMED_ELEMENT(Menu)
 
     Q_PROPERTY(QQmlListProperty<QMenuItem> content READ content CONSTANT)
     Q_CLASSINFO("DefaultProperty", "content")
