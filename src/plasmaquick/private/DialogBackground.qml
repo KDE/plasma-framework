@@ -6,6 +6,7 @@
 
 import QtQuick
 import org.kde.ksvg as KSvg
+import org.kde.kirigami as Kirigami
 
 KSvg.FrameSvgItem {
     anchors.fill: parent
