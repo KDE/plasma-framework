@@ -171,7 +171,7 @@ class PLASMA_EXPORT Applet : public QObject
      * The hints that the applet gives to its constraint,
      * such as asking to fill all the available space ignoring margins.
      */
-    Q_PROPERTY(Plasma::Types::ConstraintHints constraintHints READ constraintHints WRITE setConstraintHints NOTIFY constraintHintsChanged FINAL)
+    Q_PROPERTY(Applet::ConstraintHints constraintHints READ constraintHints WRITE setConstraintHints NOTIFY constraintHintsChanged FINAL)
 
     /**
      * The metadata of the applet.
@@ -218,6 +218,19 @@ public:
     };
     Q_ENUM(Constraint)
     Q_DECLARE_FLAGS(Constraints, Constraint)
+
+    /**
+     * This enumeration lists the various hints that an applet can pass to its
+     * constraint regarding the way that it is represented
+     */
+    enum ConstraintHint {
+        NoHint = 0,
+        CanFillArea = 1,
+        /**< The CompactRepresentation can fill the area and ignore constraint margins*/ // (TODO: KF6 CanFillArea -> CompactRepresentationFillArea)
+        MarginAreasSeparator = CanFillArea | 2, /**< The applet acts as a separator between the standard and slim panel margin areas*/
+    };
+    Q_DECLARE_FLAGS(ConstraintHints, ConstraintHint)
+    Q_FLAG(ConstraintHints)
 
     // CONSTRUCTORS
 
@@ -406,13 +419,13 @@ public:
      * @param constraintHints such as CanFillArea or MarginAreasSeparator,
      *                        they can be in bitwise OR
      */
-    void setConstraintHints(Plasma::Types::ConstraintHints constraintHints);
+    void setConstraintHints(ConstraintHints constraintHints);
 
     /**
      * @return The constraint hints such as CanFillArea or MarginAreasSeparator,
      *         they can be in bitwise OR
      */
-    Plasma::Types::ConstraintHints constraintHints() const;
+    ConstraintHints constraintHints() const;
 
     /**
      * @return true when the configuration interface is being shown
@@ -721,7 +734,7 @@ Q_SIGNALS:
      * Emitted when the constraint hints changed
      * @see setConstraintHints
      */
-    void constraintHintsChanged(Plasma::Types::ConstraintHints constraintHints);
+    void constraintHintsChanged(ConstraintHints constraintHints);
 
     /**
      * Emitted when the containment changes
@@ -884,6 +897,7 @@ private:
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(Applet::Constraints)
+Q_DECLARE_OPERATORS_FOR_FLAGS(Applet::ConstraintHints)
 
 } // Plasma namespace
 

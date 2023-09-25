@@ -494,7 +494,7 @@ void Applet::setConfigurationRequired(bool needsConfig, const QString &reason)
     Q_EMIT configurationRequiredChanged(needsConfig, reason);
 }
 
-void Applet::setConstraintHints(Plasma::Types::ConstraintHints constraintHints)
+void Applet::setConstraintHints(ConstraintHints constraintHints)
 {
     if (d->constraintHints == constraintHints) {
         return;
@@ -504,7 +504,7 @@ void Applet::setConstraintHints(Plasma::Types::ConstraintHints constraintHints)
     Q_EMIT constraintHintsChanged(constraintHints);
 }
 
-Plasma::Types::ConstraintHints Applet::constraintHints() const
+Applet::ConstraintHints Applet::constraintHints() const
 {
     return d->constraintHints;
 }
