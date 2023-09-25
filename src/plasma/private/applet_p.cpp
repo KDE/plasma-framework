@@ -550,7 +550,7 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
             appletConfig = c->config();
             appletConfig = KConfigGroup(&appletConfig, "Applets");
         } else {
-            qCWarning(LOG_PLASMA) << "requesting config for" << q->title() << "without a containment!";
+            qCDebug(LOG_PLASMA) << "requesting config for" << q->title() << "without a containment!";
             appletConfig = KConfigGroup(KSharedConfig::openConfig(), "Applets");
         }
 
