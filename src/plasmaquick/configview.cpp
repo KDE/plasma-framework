@@ -302,6 +302,11 @@ QQmlContext *ConfigView::rootContext()
 void ConfigView::setSource(const QUrl &src)
 {
     QQmlComponent uiComponent(engine(), src);
+    if (uiComponent.isError()) {
+        for (const auto &error : uiComponent.errors()) {
+            qWarning() << error;
+        }
+    }
     QObject *object = uiComponent.createWithInitialProperties({{QStringLiteral("parent"), QVariant::fromValue(contentItem())}}, d->rootContext);
 
     d->rootItem = qobject_cast<QQuickItem *>(object);
