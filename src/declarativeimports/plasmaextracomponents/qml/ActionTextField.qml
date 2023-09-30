@@ -3,6 +3,7 @@
 
 import QtQuick 2.15
 import QtQuick.Controls 2.15 as QQC2
+import QtQuick.Templates as T
 import org.kde.plasma.components 3.0 as PlasmaComponents3
 import org.kde.kirigami 2 as Kirigami
 
@@ -63,7 +64,7 @@ PlasmaComponents3.TextField {
      *
      * @since 5.93
      */
-    property list<QQC2.Action> leftActions
+    property list<T.Action> leftActions
 
     /**
      * This property holds a list of actions that will be displayed on the right side of the text field.
@@ -72,7 +73,7 @@ PlasmaComponents3.TextField {
      *
      * @since 5.93
      */
-    property list<QQC2.Action> rightActions
+    property list<T.Action> rightActions
 
     property alias _leftActionsRow: leftActionsRow
     property alias _rightActionsRow: rightActionsRow
