@@ -10,10 +10,9 @@ import QtQuick.Templates @QQC2_VERSION@ as T
 import org.kde.ksvg 1.0 as KSvg
 //NOTE: importing PlasmaCore is necessary in order to make KSvg load the current Plasma Theme
 import org.kde.plasma.core 2 as PlasmaCore
-import org.kde.config
-import "private" as Private
 import org.kde.kirigami 2 as Kirigami
 import "mobiletextselection" as MobileTextSelection
+import "private" as Private
 
 T.TextField {
     id: control
@@ -24,19 +23,6 @@ T.TextField {
      * @deprecated since 5.93 Use SearchField instead
      */
     property bool clearButtonShown: false
-
-    /**
-     * Whether to show a button that allows the user to reveal the password in
-     * plain text. This only makes sense if the echoMode is set to Password.
-     * @since 5.73
-     * @deprecated since 5.93 Use PasswordField instead
-     */
-    property bool revealPasswordButtonShown: false
-
-    // this takes into account kiosk restriction
-    readonly property bool __effectiveRevealPasswordButtonShown: revealPasswordButtonShown
-                                                              && KAuthorized.authorize("lineedit_reveal_password")
-                                                              && (echoMode == TextInput.Normal || control.text.length > 0)
 
     // Can't guarantee that background will always be present or have the margins property
     readonly property bool __hasBackgroundAndMargins: background && background.hasOwnProperty("margins")
@@ -165,29 +151,6 @@ T.TextField {
         anchors.rightMargin: control.__hasBackgroundAndMargins ? background.margins.right : 0
         anchors.verticalCenter: control.verticalCenter
         LayoutMirroring.enabled: control.effectiveHorizontalAlignment === TextInput.AlignRight
-
-        Kirigami.Icon {
-            id: showPasswordButton
-            source: __effectiveRevealPasswordButtonShown ? (control.echoMode === TextInput.Normal ? "visibility": "hint") : ""
-            height: Kirigami.Units.iconSizes.small
-            width: height
-            opacity: (__effectiveRevealPasswordButtonShown && control.enabled) ? 1 : 0
-            visible: opacity > 0
-            Behavior on opacity {
-                NumberAnimation {
-                    duration: Kirigami.Units.longDuration
-                    easing.type: Easing.InOutQuad
-                }
-            }
-            MouseArea {
-                anchors.fill: parent
-                enabled: __effectiveRevealPasswordButtonShown
-                onClicked: {
-                    control.echoMode = (control.echoMode === TextInput.Normal ? TextInput.Password : TextInput.Normal)
-                    control.forceActiveFocus()
-                }
-            }
-        }
 
         Kirigami.Icon {
             id: clearButton
