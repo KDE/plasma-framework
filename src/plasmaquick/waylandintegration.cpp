@@ -134,7 +134,17 @@ void PlasmaShellWaylandIntegration::surfaceCreated()
     struct wl_surface *surface = nullptr;
 
     ;
-    if (!s_waylandIntegration->shellManager || !s_waylandIntegration->shellManager->isActive()) {
+    if (!s_waylandIntegration->shellManager) {
+        return;
+    }
+
+    if (!s_waylandIntegration->shellManager->isActive()) {
+        // BUG 474452: Some dialogs can be created before it's active
+        connect(s_waylandIntegration->shellManager.get(),
+                &QWaylandClientExtension::activeChanged,
+                this,
+                &PlasmaShellWaylandIntegration::surfaceCreated,
+                Qt::SingleShotConnection);
         return;
     }
 
