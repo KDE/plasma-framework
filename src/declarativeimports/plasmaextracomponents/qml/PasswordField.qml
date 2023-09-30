@@ -4,6 +4,8 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15 as QQC2
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import org.kde.config as KConfig
+import org.kde.kirigami as Kirigami
 
 /**
  * This is a standard password text field.
@@ -46,7 +48,10 @@ PlasmaExtras.ActionTextField {
     echoMode: root.showPassword ? TextInput.Normal : TextInput.Password
     placeholderText: i18nd("libplasma6", "Password")
     inputMethodHints: Qt.ImhNoAutoUppercase | Qt.ImhNoPredictiveText | Qt.ImhSensitiveData
-    rightActions: QQC2.Action {
+
+    rightActions: Kirigami.Action {
+        enabled: KConfig.KAuthorized.authorize("lineedit_reveal_password")
+        visible: enabled
         icon.name: root.showPassword ? "password-show-off" : "password-show-on"
         onTriggered: root.showPassword = !root.showPassword
     }
