@@ -19,6 +19,7 @@ public:
     PlasmaShellManager()
         : QWaylandClientExtensionTemplate<PlasmaShellManager>(8)
     {
+        initialize();
     }
 };
 
