@@ -39,6 +39,7 @@ PlasmaExtras.ActionTextField {
     Shortcut {
         // Let's consider this shortcut a standard, it's also supported at least by su and sudo
         sequence: "Ctrl+Shift+U"
+        enabled: root.activeFocus
         onActivated: root.clear();
     }
 
