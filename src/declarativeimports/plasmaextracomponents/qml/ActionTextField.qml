@@ -127,7 +127,7 @@ PlasmaComponents3.TextField {
             anchors.verticalCenter: parent.verticalCenter
 
             source: modelData.icon.name.length > 0 ? modelData.icon.name : modelData.icon.source
-            visible: modelData.enabled
+            visible: !(modelData instanceof Kirigami.Action) || modelData.visible
             MouseArea {
                 onClicked: button.modelData.trigger()
                 cursorShape: Qt.ArrowCursor
