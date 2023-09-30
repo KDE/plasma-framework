@@ -311,7 +311,3 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
-
-#~ msgctxt "misc category"
-#~ msgid "Miscellaneous"
-#~ msgstr "Diverse"

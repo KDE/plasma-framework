@@ -325,7 +325,3 @@ msgstr "Set %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Innhald sleppt"
-
-#~ msgctxt "misc category"
-#~ msgid "Miscellaneous"
-#~ msgstr "Ymse"
