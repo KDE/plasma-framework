@@ -15,10 +15,7 @@ class ThemePackage : public KPackage::PackageStructure
 {
     Q_OBJECT
 public:
-    ThemePackage(QObject *parent = nullptr, const QVariantList &args = QVariantList())
-        : KPackage::PackageStructure(parent, args)
-    {
-    }
+    using KPackage::PackageStructure::PackageStructure;
 
     void initPackage(KPackage::Package *package) override
     {

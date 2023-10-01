@@ -15,10 +15,7 @@ class ContainmentActionsPackage : public Plasma::ChangeableMainScriptPackage
 {
     Q_OBJECT
 public:
-    ContainmentActionsPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList())
-        : ChangeableMainScriptPackage(parent, args)
-    {
-    }
+    using Plasma::ChangeableMainScriptPackage::ChangeableMainScriptPackage;
 
     void initPackage(KPackage::Package *package) override
     {

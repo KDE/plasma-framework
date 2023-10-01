@@ -17,10 +17,7 @@ class PlasmoidPackage : public Plasma::GenericPackage
 {
     Q_OBJECT
 public:
-    PlasmoidPackage(QObject *parent = nullptr, const QVariantList &args = QVariantList())
-        : GenericPackage(parent, args)
-    {
-    }
+    using Plasma::GenericPackage::GenericPackage;
 
     void initPackage(KPackage::Package *package) override
     {
