@@ -30,11 +30,6 @@ void ChangeableMainScriptPackage::initPackage(KPackage::Package *package)
     package->setRequired("mainscript", true);
 }
 
-QString ChangeableMainScriptPackage::mainScriptConfigKey() const
-{
-    return QStringLiteral("X-Plasma-MainScript");
-}
-
 void ChangeableMainScriptPackage::pathChanged(KPackage::Package *package)
 {
     if (package->path().isEmpty()) {
