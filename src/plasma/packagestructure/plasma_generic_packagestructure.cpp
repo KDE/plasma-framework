@@ -11,7 +11,6 @@
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
 
-using namespace Plasma;
-K_PLUGIN_CLASS_WITH_JSON(GenericPackage, "plasma_generic_packagestructure.json")
+K_PLUGIN_CLASS_WITH_JSON(Plasma::GenericPackage, "plasma_generic_packagestructure.json")
 
 #include "plasma_generic_packagestructure.moc"
