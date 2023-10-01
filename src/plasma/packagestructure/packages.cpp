@@ -47,14 +47,10 @@ void GenericPackage::initPackage(KPackage::Package *package)
 {
     ChangeableMainScriptPackage::initPackage(package);
 
-    QStringList platform = KRuntimePlatform::runtimePlatform();
-    if (!platform.isEmpty()) {
-        QMutableStringListIterator it(platform);
-        while (it.hasNext()) {
-            it.next();
-            it.setValue(QStringLiteral("platformcontents/") + it.value());
+    if (QStringList platform = KRuntimePlatform::runtimePlatform(); !platform.isEmpty()) {
+        for (QString &platformEntry : platform) {
+            platformEntry.prepend(QLatin1String("platformcontents/"));
         }
-
         platform.append(QStringLiteral("contents"));
         package->setContentsPrefixPaths(platform);
     }
