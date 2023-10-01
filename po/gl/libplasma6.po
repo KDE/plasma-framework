@@ -121,7 +121,7 @@ msgstr "O trebello %1 non define que ScriptEngine usar."
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
-msgstr "Non se puido abrir o paquete %1 requirido polo trebello %2."
+msgstr "Non foi posíbel abrir o paquete %1 requirido polo trebello %2."
 
 #: plasma/private/applet_p.cpp:154
 #, kde-format
@@ -196,7 +196,7 @@ msgstr "Engadir trebellos…"
 #: plasma/private/containment_p.cpp:197
 #, kde-format
 msgid "Could not find requested component: %1"
-msgstr "Non se puido atopar o compoñente pedido: %1"
+msgstr "Non foi posíbel atopar o compoñente pedido: %1"
 
 #. i18n: ectx: property (text), widget (QLabel, label)
 #: plasma/private/publish.ui:17
