@@ -212,6 +212,10 @@ void PlasmaQuick::PopupPlasmaWindow::updatePositionX11(const QPoint &position)
 
 void PopupPlasmaWindow::updatePositionWayland(const QPoint &position)
 {
+    // still update's Qt internal reference as it's used by the next dialog
+    // this can be dropped when we're using true semantic positioning in the backend
+    setPosition(position);
+
     PlasmaShellWaylandIntegration::get(this)->setPosition(position);
 }
 
