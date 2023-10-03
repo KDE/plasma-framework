@@ -528,9 +528,10 @@ QList<QRectF> Containment::availableRelativeScreenRegion() const
 
     QRegion reg = QRect(QPoint(0, 0), screenGeometry().size().toSize());
     int screenId = screen();
-    if (screenId > -1) {
-        reg = containment()->corona()->availableScreenRegion(screenId);
+    if (screenId < 0) {
+        return {};
     }
+    reg = containment()->corona()->availableScreenRegion(screenId);
 
     auto it = reg.begin();
     const auto itEnd = reg.end();
