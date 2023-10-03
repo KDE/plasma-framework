@@ -46,9 +46,14 @@ class PLASMAQUICK_EXPORT PopupPlasmaWindow : public PlasmaWindow
     Q_PROPERTY(bool animated READ animated WRITE setAnimated NOTIFY animatedChanged)
 
     /**
-     * Defines which borders should be enabled/disabled when the popup is shown.
+     * Defines which borders should be enabled/disabled when the popup is shown. The default is to show all borders
      */
     Q_PROPERTY(RemoveBorders removeBorderStrategy READ removeBorderStrategy WRITE setRemoveBorderStrategy NOTIFY removeBorderStrategyChanged)
+
+    /**
+     * If set provides a gap between the parent window and all screen edges
+     */
+    Q_PROPERTY(int margin READ margin WRITE setMargin NOTIFY marginChanged)
 
 public:
     enum RemoveBorder { Never = 0x0, AtScreenEdges = 0x1, AtPanelEdges = 0x2 };
@@ -65,11 +70,14 @@ public:
     bool floating() const;
     void setFloating(bool floating);
 
-    bool animated();
+    bool animated() const;
     void setAnimated(bool animated);
 
     RemoveBorders removeBorderStrategy() const;
     void setRemoveBorderStrategy(RemoveBorders borders);
+
+    int margin() const;
+    void setMargin(int margin);
 
     bool event(QEvent *event) override;
 
@@ -79,6 +87,7 @@ Q_SIGNALS:
     void floatingChanged();
     void animatedChanged();
     void removeBorderStrategyChanged();
+    void marginChanged();
 
 private:
     void queuePositionUpdate();
@@ -93,7 +102,9 @@ private:
     bool m_needsReposition = false;
     bool m_floating = false;
     bool m_animated = false;
+    int m_margin = 0;
     Qt::Edge m_popupDirection = Qt::TopEdge;
 };
+
 Q_DECLARE_OPERATORS_FOR_FLAGS(PopupPlasmaWindow::RemoveBorders)
 }

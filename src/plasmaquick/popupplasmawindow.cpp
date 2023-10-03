@@ -90,7 +90,7 @@ void PopupPlasmaWindow::setFloating(bool floating)
     Q_EMIT floatingChanged();
 }
 
-bool PopupPlasmaWindow::animated()
+bool PopupPlasmaWindow::animated() const
 {
     return m_animated;
 }
@@ -116,6 +116,22 @@ void PopupPlasmaWindow::setRemoveBorderStrategy(PopupPlasmaWindow::RemoveBorders
     m_removeBorderStrategy = strategy;
     queuePositionUpdate(); // This will update borders as well
     Q_EMIT removeBorderStrategyChanged();
+}
+
+int PopupPlasmaWindow::margin() const
+{
+    return m_margin;
+}
+
+void PopupPlasmaWindow::setMargin(int margin)
+{
+    if (m_margin == margin) {
+        return;
+    }
+
+    m_margin = margin;
+    queuePositionUpdate();
+    Q_EMIT marginChanged();
 }
 
 bool PopupPlasmaWindow::event(QEvent *event)
@@ -194,6 +210,7 @@ void PlasmaQuick::PopupPlasmaWindow::updatePosition()
     placementHint.setParentAnchor(m_popupDirection);
     placementHint.setPopupAnchor(oppositeEdge(m_popupDirection));
     placementHint.setFlipConstraintAdjustments(m_floating ? Qt::Vertical : Qt::Orientations());
+    placementHint.setMargin(m_margin);
 
     const QRect popupPosition = TransientPlacementHelper::popupRect(this, placementHint);
 
@@ -230,6 +247,12 @@ void PopupPlasmaWindow::updateBorders(const QRect &globalPosition)
     const QRect screenGeometry = screen->geometry();
 
     Qt::Edges enabledBorders = Qt::LeftEdge | Qt::RightEdge | Qt::TopEdge | Qt::BottomEdge;
+
+    if (m_margin) {
+        setBorders(enabledBorders);
+        return;
+    }
+
     if (m_removeBorderStrategy & AtScreenEdges) {
         if (globalPosition.top() <= screenGeometry.top()) {
             enabledBorders.setFlag(Qt::TopEdge, false);

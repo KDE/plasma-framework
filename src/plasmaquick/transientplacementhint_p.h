@@ -34,6 +34,8 @@ public:
     void setSlideConstraintAdjustments(Qt::Orientations slideConstraintAdjustments);
     Qt::Orientations flipConstraintAdjustments() const;
     void setFlipConstraintAdjustments(Qt::Orientations flipConstraintAdjustments);
+    int margin() const;
+    void setMargin(int margin);
 
 private:
     QSharedDataPointer<TransientPlacementHintPrivate> d;

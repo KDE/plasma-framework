@@ -22,6 +22,7 @@ public:
     Qt::Edges popupAnchor = Qt::TopEdge | Qt::LeftEdge;
     Qt::Orientations slideConstraintAdjustments = Qt::Horizontal | Qt::Vertical;
     Qt::Orientations flipConstraintAdjustments;
+    int margin = 0;
 };
 /*!
  * Constructs a new QTransientPlacementHint
@@ -100,6 +101,16 @@ Qt::Orientations TransientPlacementHint::flipConstraintAdjustments() const
     return d->flipConstraintAdjustments;
 }
 
+int TransientPlacementHint::margin() const
+{
+    return d->margin;
+}
+
+void TransientPlacementHint::setMargin(int margin)
+{
+    d->margin = margin;
+}
+
 static QPoint popupPosition(const QRect &anchorRect, const Qt::Edges parentAnchor, const Qt::Edges popupAnchor, const QSize &popupSize)
 {
     QPoint anchorPoint;
@@ -157,12 +168,18 @@ QRect TransientPlacementHelper::popupRect(QWindow *w, const TransientPlacementHi
         globalParentAnchorRect = globalParentAnchorRect.translated(w->transientParent()->position());
         screen = w->transientParent()->screen();
     }
-    QRect popupRect = QRect(popupPosition(globalParentAnchorRect, placement.parentAnchor(), placement.popupAnchor(), w->size()), w->size());
+
+    const QMargins margin(placement.margin(), placement.margin(), placement.margin(), placement.margin());
+    QSize paddedWindowSize = w->size().grownBy(margin);
+    QRect popupRect = QRect(popupPosition(globalParentAnchorRect, placement.parentAnchor(), placement.popupAnchor(), paddedWindowSize), paddedWindowSize);
+
     if (!screen)
         screen = qApp->screenAt(globalParentAnchorRect.center());
     if (!screen)
         screen = qApp->primaryScreen();
-    const QRect screenArea = screen->availableGeometry();
+
+    const QRect screenArea = screen->geometry();
+
     auto inScreenArea = [screenArea](const QRect &target, Qt::Edges edges = Qt::LeftEdge | Qt::RightEdge | Qt::TopEdge | Qt::BottomEdge) -> bool {
         if (edges & Qt::LeftEdge && target.left() < screenArea.left()) {
             return false;
@@ -236,5 +253,6 @@ QRect TransientPlacementHelper::popupRect(QWindow *w, const TransientPlacementHi
             popupRect.moveBottom(screenArea.bottom());
         }
     }
-    return popupRect;
+    return popupRect.marginsRemoved(margin);
+    ;
 }
