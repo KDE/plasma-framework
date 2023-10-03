@@ -24,10 +24,30 @@ class PopupPlasmaWindowPrivate;
 class PLASMAQUICK_EXPORT PopupPlasmaWindow : public PlasmaWindow
 {
     Q_OBJECT
+
+    /**
+     * The anchor item to place the popup relative to.
+     */
     Q_PROPERTY(QQuickItem *visualParent READ visualParent WRITE setVisualParent NOTIFY visualParentChanged)
+
+    /**
+     * Defines the default direction to place the popup relative to the visualParent.
+     */
     Q_PROPERTY(Qt::Edge popupDirection READ popupDirection WRITE setPopupDirection NOTIFY popupDirectionChanged)
+
+    /**
+     * Defines whether the popup can appaer (float) over the parent window. The default is false.
+     */
     Q_PROPERTY(bool floating READ floating WRITE setFloating NOTIFY floatingChanged)
+
+    /**
+     * Defines whether the popup is animated on show and close. The default is false.
+     */
     Q_PROPERTY(bool animated READ animated WRITE setAnimated NOTIFY animatedChanged)
+
+    /**
+     * Defines which borders should be enabled/disabled when the popup is shown.
+     */
     Q_PROPERTY(RemoveBorders removeBorderStrategy READ removeBorderStrategy WRITE setRemoveBorderStrategy NOTIFY removeBorderStrategyChanged)
 
 public:
