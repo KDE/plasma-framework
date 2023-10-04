@@ -90,10 +90,10 @@ PlasmoidHeading {
                 id: menuItemFactory
                 model: {
                     configMenu.clearMenuItems();
-                    let actions = [];
-                    for (let i in Plasmoid.contextualActions) {
-                        const action = Plasmoid.contextualActions[i];
-                        if (action.visible && action !== Plasmoid.internalAction("configure")) {
+                    const actions = [];
+                    const configureAction = Plasmoid.internalAction("configure");
+                    for (const action of Plasmoid.contextualActions) {
+                        if (action.visible && action !== configureAction) {
                             actions.push(action);
                         }
                     }
