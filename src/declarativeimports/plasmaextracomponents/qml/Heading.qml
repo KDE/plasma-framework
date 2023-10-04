@@ -4,9 +4,9 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.0
-import org.kde.plasma.components 3.0
-import org.kde.kirigami 2 as Kirigami
+import QtQuick
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components as PlasmaComponents
 
 /**
  * A heading label used for subsections of texts.
@@ -33,7 +33,7 @@ import org.kde.kirigami 2 as Kirigami
  * Label. See PlasmaComponents Label and primitive QML Text element API for
  * additional properties, methods and signals.
  */
-Label {
+PlasmaComponents.Label {
     id: heading
 
     /**
