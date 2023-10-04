@@ -1,56 +1,77 @@
 /*
     SPDX-FileCopyrightText: 2014 Sebastian Kügler <sebas@kde.org>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Layouts
 
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.components 3.0 as PC3
-import org.kde.kirigami 2 as Kirigami
+import org.kde.plasma.plasmoid
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.kirigami as Kirigami
 
-Item {
-    Layout.minimumWidth: 200
-    Layout.minimumHeight: 300
+PlasmoidItem {
+    id: root
 
-    Kirigami.Icon {
-        source: "kbugbuster"
-        width: Kirigami.Units.iconSizes.large
-        height: width
-        anchors {
-            right: col.right
-            top: col.top
-        }
-//         opacity: 0.3
-    }
+    switchWidth: Kirigami.Units.gridUnit * 10
+    switchHeight: Kirigami.Units.gridUnit * 5
 
-    Column {
-        id: col
+    Plasmoid.icon: "tools-report-bug"
 
-        spacing: Kirigami.Units.largeSpacing
-        anchors {
-            fill: parent
-            margins: Kirigami.Units.gridUnit
-        }
+    fullRepresentation: PlasmaComponents.ScrollView {
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 10
+        Layout.preferredWidth: Kirigami.Units.gridUnit * 20
 
-        Kirigami.Heading {
-            level: 1
-            text: i18n("Reporting Bugs")
-        }
-        Kirigami.Heading {
-            level: 3
-            text: i18n("So you found something wrong in Plasma...")
+        PlasmaComponents.ScrollBar.horizontal.policy: PlasmaComponents.ScrollBar.AlwaysOff
+
+        contentWidth: availableWidth
+        contentHeight: Math.ceil(col.implicitHeight + col.anchors.margins * 2)
+
+        Item {
             width: parent.width
-            wrapMode: Text.Wrap
-        }
-        PC3.Label {
 
-            width: parent.width
-            wrapMode: Text.Wrap
+            Kirigami.Icon {
+                id: icon
 
-            text: i18n("You are running a development version of Plasma. This software is not fit for production use. We do, however encourage testing and reporting the results. A few easy steps to report a bug: <br />\
+                anchors {
+                    top: col.top
+                    right: col.right
+                }
+                width: Kirigami.Units.iconSizes.large
+                height: Kirigami.Units.iconSizes.large
+                source: root.Plasmoid.icon
+            }
+
+            ColumnLayout {
+                id: col
+
+                anchors {
+                    fill: parent
+                    margins: Kirigami.Units.gridUnit
+                }
+                spacing: Kirigami.Units.largeSpacing
+
+                Kirigami.Heading {
+                    level: 1
+                    text: i18n("Reporting Bugs")
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                    Layout.rightMargin: icon.width
+                }
+                Kirigami.Heading {
+                    level: 3
+                    text: i18n("So you found something wrong in Plasma…")
+                    wrapMode: Text.Wrap
+                    Layout.fillWidth: true
+                    Layout.rightMargin: icon.width
+                }
+                PlasmaComponents.Label {
+                    Layout.fillWidth: true
+                    wrapMode: Text.Wrap
+                    textFormat: Text.StyledText
+                    text: i18n("You are running a development version of Plasma. This software is not fit for production use. We do, however encourage testing and reporting the results. A few easy steps to report a bug: <br />\
             <ul>\
             <li>Check <a href=\"\">here if the bug already exists</li>\
             <li>Report it using the form <a href=\"\">here</li>\
@@ -58,6 +79,8 @@ Item {
             </ul>\
             <br />If you would like to participate in development, or have a question, you can ask them on the plasma-devel@kde.org mailing list.\
              ")
+                }
+            }
         }
     }
 }

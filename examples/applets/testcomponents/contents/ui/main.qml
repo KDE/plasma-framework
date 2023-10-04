@@ -1,91 +1,121 @@
 /*
     SPDX-FileCopyrightText: 2013 Sebastian Kügler <sebas@kde.org>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-import QtQuick 2.0
-import QtQuick.Layouts 1.1
+import QtQuick
+import QtQuick.Layouts
+import QtQuick.Templates as T
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.plasma.plasmoid
 
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.plasma5support 2.0 as P5Support
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
-import org.kde.kirigami 2 as Kirigami
-
-Item {
+PlasmoidItem {
     id: root
-    width: 100
-    height: 100
-    clip: true
-    Layout.minimumWidth: Kirigami.Units.gridUnit * 20
-    Layout.minimumHeight: Kirigami.Units.gridUnit * 30
 
-    property int _s: Kirigami.Units.iconSizes.small
-    property int _h: Kirigami.Units.iconSizes.desktop
+    property int currentIndex: 0
+    onCurrentIndexChanged: print("AAA", currentIndex)
 
-    P5Support.DataSource {
-        id: dataSource
-    }
+    fullRepresentation: ColumnLayout {
+        spacing: 0
 
-    PlasmaComponents.TabBar {
-        id: tabBar
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 15
+        Layout.minimumHeight: Kirigami.Units.gridUnit * 15
 
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: parent.top
+        Layout.maximumWidth: Kirigami.Units.gridUnit * 60
+        Layout.maximumHeight: Kirigami.Units.gridUnit * 60
+
+        PlasmaComponents.TabBar {
+            id: tabBar
+
+            currentIndex: root.currentIndex
+
+            onCurrentIndexChanged: {
+                root.currentIndex = currentIndex;
+            }
+
+            Layout.fillWidth: true
+            // Layout.preferredHeight:
+            // anchors {
+            //     left: parent.left
+            //     right: parent.right
+            //     top: parent.top
+            // }
+
+            // height: Kirigami.Units.iconSizes.desktop
+
+            PlasmaComponents.TabButton {
+                display: T.AbstractButton.IconOnly
+                text: "Theme Page"
+                icon.name: "preferences-desktop-appearance"
+            }
+            PlasmaComponents.TabButton {
+                display: T.AbstractButton.IconOnly
+                text: "Drag Page"
+                icon.name: "preferences-desktop-mouse"
+            }
+            PlasmaComponents.TabButton {
+                display: T.AbstractButton.IconOnly
+                text: "Icons Page"
+                icon.name: "preferences-desktop-icons"
+            }
+            PlasmaComponents.TabButton {
+                display: T.AbstractButton.IconOnly
+                text: "Dialogs Page"
+                icon.name: "preferences-system-windows"
+            }
+            PlasmaComponents.TabButton {
+                display: T.AbstractButton.IconOnly
+                text: "Buttons Page"
+                icon.name: "preferences-desktop-theme"
+            }
+            PlasmaComponents.TabButton {
+                display: T.AbstractButton.IconOnly
+                text: "Plasmoid Page"
+                icon.name: "plasma"
+            }
+            PlasmaComponents.TabButton {
+                display: T.AbstractButton.IconOnly
+                text: "Mouse Page"
+                icon.name: "preferences-desktop-mouse"
+            }
         }
-        height: _h
 
-        PlasmaComponents.TabButton { tab: themePage; iconSource: "preferences-desktop-appearance"}
-        PlasmaComponents.TabButton { tab: dragPage; iconSource: "preferences-desktop-mouse"}
-        PlasmaComponents.TabButton { tab: iconsPage; iconSource: "preferences-desktop-icons"}
-        PlasmaComponents.TabButton { tab: dialogsPage; iconSource: "preferences-system-windows"}
-        PlasmaComponents.TabButton { tab: buttonsPage; iconSource: "preferences-desktop-theme"}
-        PlasmaComponents.TabButton { tab: plasmoidPage; iconSource: "plasma"}
-        PlasmaComponents.TabButton { tab: mousePage; iconSource: "preferences-desktop-mouse"}
-    }
+        PlasmaComponents.SwipeView {
+            id: contentViewContainer
 
-    PlasmaComponents.TabGroup {
-        id: tabGroup
-        anchors {
-            left: parent.left
-            right: parent.right
-            top: tabBar.bottom
-            bottom: parent.bottom
-        }
+            Layout.fillWidth: true
+            Layout.fillHeight: true
 
-        //currentTab: tabBar.currentTab
+            clip: true
 
-        ThemePage {
-            id: themePage
-        }
-        DragPage {
-            id: dragPage
-        }
-        IconsPage {
-            id: iconsPage
-        }
-        DialogsPage {
-            id: dialogsPage
-        }
-        ButtonsPage {
-            id: buttonsPage
-        }
-        PlasmoidPage {
-            id: plasmoidPage
-        }
+            currentIndex: root.currentIndex
 
-        MousePage {
-            id: mousePage
+            onCurrentIndexChanged: {
+                root.currentIndex = currentIndex;
+            }
+
+            ThemePage {}
+            DragPage {}
+            // IconsPage {
+            //     id: iconsPage
+            // }
+            // DialogsPage {
+            //     id: dialogsPage
+            // }
+            // ButtonsPage {
+            //     id: buttonsPage
+            // }
+            // PlasmoidPage {
+            //     id: plasmoidPage
+            // }
+
+            // MousePage {
+            //     id: mousePage
+            // }
+
         }
-
-    }
-
-    Component.onCompleted: {
-        print("Components Test Applet loaded");
-        //dataSource.engine = "org.kde.foobar"
-//         tabGroup.currentTab = mousePage;
     }
 }

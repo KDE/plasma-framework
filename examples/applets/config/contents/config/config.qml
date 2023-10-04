@@ -1,12 +1,12 @@
 /*
     SPDX-FileCopyrightText: 2013 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-import QtQuick 2.0
-
-import org.kde.plasma.configuration 2.0
+import QtQuick
+import org.kde.plasma.configuration
 
 ConfigModel {
     ConfigCategory {
@@ -17,6 +17,6 @@ ConfigModel {
     ConfigCategory {
          name: "Other page"
          icon: "konqueror"
-         source: "configSecondPage.qml"
+         source: "configOther.qml"
     }
 }

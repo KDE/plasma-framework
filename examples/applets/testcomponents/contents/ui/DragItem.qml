@@ -1,25 +1,22 @@
 /*
     SPDX-FileCopyrightText: 2013 Sebastian Kügler <sebas@kde.org>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-import QtQuick 2.0
+import QtQuick
 
-import org.kde.kirigami 2.20 as Kirigami
-import org.kde.plasma.components 2.0 as PlasmaComponents
-import org.kde.kquickcontrolsaddons 2.0 as KQuickControlsAddons
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.components as PlasmaComponents
 
-import org.kde.draganddrop 2.0 as DragAndDrop
+import org.kde.draganddrop as DragAndDrop
 
+PlasmaComponents.ItemDelegate {
+    id: control
 
-//Item {
-PlasmaComponents.ListItem {
-
-    width: parent.width
+    width: parent?.width ?? 0
     //height: _h * 1.5
-    property alias icon: itemIcon.source
-    property alias text: label.text
 
     Kirigami.Icon {
         id: itemIcon
@@ -29,6 +26,8 @@ PlasmaComponents.ListItem {
         anchors.verticalCenter: parent.verticalCenter
         anchors.left: parent.left
         anchors.leftMargin: _h/2
+
+        source: control.icon.name
     }
 
     PlasmaComponents.Label {
@@ -42,5 +41,6 @@ PlasmaComponents.ListItem {
             rightMargin: _h/2
         }
 
+        text: control.text
     }
 }

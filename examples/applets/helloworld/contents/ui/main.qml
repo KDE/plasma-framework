@@ -1,20 +1,25 @@
-// -*- coding: iso-8859-1 -*-
 /*
     SPDX-FileCopyrightText: 2012 Marco Martin <mart@kde.org>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
-import QtQuick 2.0
-import org.kde.plasma.plasmoid 2.0
-import QtQuick.Layouts 1.0
-import org.kde.plasma.components 3.0 as PC3
+import QtQuick
+import QtQuick.Layouts
+import org.kde.kirigami as Kirigami
+import org.kde.plasma.plasmoid
+import org.kde.plasma.components as PlasmaComponents
 
-Item {
-    Layout.minimumWidth: 200
-    Layout.minimumHeight: 300
+PlasmoidItem {
+    Layout.minimumWidth: Kirigami.Units.gridUnit * 5
+    Layout.minimumHeight: Kirigami.Units.gridUnit * 5
 
-    PC3.Label {
+    implicitHeight: Kirigami.Units.gridUnit * 10
+    implicitWidth: Kirigami.Units.gridUnit * 10
+
+    PlasmaComponents.Label {
+        anchors.fill: parent
+        wrapMode: Text.Wrap
         text: i18n("Hello world")
     }
 }

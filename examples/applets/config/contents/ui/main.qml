@@ -1,65 +1,100 @@
 /*
     SPDX-FileCopyrightText: 2013 Marco Martin <mart@kde.org>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: GPL-2.0-or-later
 */
 
-import QtQuick 2.1
-import QtQuick.Layouts 1.0
+import QtQuick
+import QtQuick.Layouts
 
-import org.kde.plasma.plasmoid 2.0
-import org.kde.plasma.components 3.0 as PC3
-import org.kde.kirigami 2 as Kirigami
+import org.kde.plasma.plasmoid
+import org.kde.plasma.components as PlasmaComponents
+import org.kde.kirigami as Kirigami
 
-Item {
+PlasmoidItem {
     id: root
-    width: 100
-    height: 100
-    Layout.minimumWidth: Kirigami.Units.gridUnit * 20
-    Layout.minimumHeight: column.implicitHeight
 
-
-    ColumnLayout {
+    fullRepresentation: ColumnLayout {
         id: column
-        anchors.centerIn: parent
-        PC3.Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: i18n("String test")
+        spacing: Kirigami.Units.smallSpacing
+
+        Layout.minimumWidth: Kirigami.Units.gridUnit * 10
+        Layout.minimumHeight: implicitHeight
+
+        Item {
+            Layout.fillHeight: true
         }
-        PC3.TextField {
-            text: Plasmoid.configuration.Test
-            onTextChanged: Plasmoid.configuration.Test = text
-        }
-        PC3.CheckBox {
+        PlasmaComponents.CheckBox {
+            Layout.fillWidth: true
+            Layout.bottomMargin: Kirigami.Units.largeSpacing
             enabled: true
             checked: Plasmoid.configuration.BoolTest
             text: i18n("Bool from config")
-            onCheckedChanged: Plasmoid.configuration.BoolTest = checked
+            onToggled: {
+                Plasmoid.configuration.BoolTest = checked;
+            }
         }
-        PC3.Label {
-            anchors.horizontalCenter: parent.horizontalCenter
+        PlasmaComponents.Label {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            text: i18n("String test")
+        }
+        PlasmaComponents.TextField {
+            Layout.fillWidth: true
+            Layout.bottomMargin: Kirigami.Units.largeSpacing
+            text: Plasmoid.configuration.Test
+            onTextEdited: {
+                Plasmoid.configuration.Test = text;
+            }
+        }
+        PlasmaComponents.Label {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
             text: i18n("String from another group")
         }
-        PC3.TextField {
+        PlasmaComponents.TextField {
+            Layout.fillWidth: true
+            Layout.bottomMargin: Kirigami.Units.largeSpacing
             text: Plasmoid.configuration.OtherTest
-            onTextChanged: Plasmoid.configuration.OtherTest = text
+            onTextEdited: {
+                Plasmoid.configuration.OtherTest = text;
+            }
         }
-        PC3.Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: i18n("Enum: displayed as int,\n written as string")
+        PlasmaComponents.Label {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            text: i18n("Enum\ndisplayed as int,\nwritten as string")
         }
-        PC3.TextField {
+        PlasmaComponents.TextField {
+            Layout.fillWidth: true
+            Layout.bottomMargin: Kirigami.Units.largeSpacing
             text: Plasmoid.configuration.EnumTest
-            onTextChanged: Plasmoid.configuration.EnumTest = text
+            onTextEdited: {
+                Plasmoid.configuration.EnumTest = text;
+            }
         }
-        PC3.Label {
-            anchors.horizontalCenter: parent.horizontalCenter
-            text: i18n("Integer: minimum -1,\n maximum 100")
+        PlasmaComponents.Label {
+            Layout.fillWidth: true
+            horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+            text: i18n("Integer\nminimum: -1\nmaximum: 100")
         }
-        PC3.TextField {
-            text: Plasmoid.configuration.IntTest
-            onTextChanged: Plasmoid.configuration.IntTest = text
+        PlasmaComponents.SpinBox {
+            Layout.fillWidth: true
+            Layout.bottomMargin: Kirigami.Units.largeSpacing
+            from: -1
+            to: 100
+            value: Plasmoid.configuration.IntTest
+            onValueModified: {
+                Plasmoid.configuration.IntTest = value;
+            }
+        }
+        Item {
+            Layout.fillHeight: true
         }
     }
-
 }

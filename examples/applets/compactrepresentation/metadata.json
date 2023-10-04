@@ -70,7 +70,7 @@
         "Description[x-test]": "xxExample applet with compact and full representationsxx",
         "Description[zh_CN]": "简洁但功能完整的示例小程序",
         "Icon": "package_toys",
-        "Id": "org.kde.examples.compactrepresentation",
+        "Id": "org.kde.example.compactrepresentation",
         "License": "GPL",
         "Name": "hello world",
         "Name[ar]": "مرحبا أيها العالم",

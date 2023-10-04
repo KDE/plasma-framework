@@ -6,12 +6,12 @@
   <kcfgfile name=""/>
 
   <group name="General">
+    <entry name="BoolTest" type="Bool">
+      <default>true</default>
+    </entry>
     <entry name="Test" type="String">
       <label>This is a test</label>
       <default>test</default>
-    </entry>
-    <entry name="BoolTest" type="Bool">
-      <default>true</default>
     </entry>
     <entry name="IntTest" type="Int">
       <default>1</default>
@@ -19,7 +19,7 @@
       <max>100</max>
     </entry>
   </group>
-  
+
   <group name="Group2">
     <entry name="OtherTest" type="String">
       <label>This is another test</label>
