@@ -1,5 +1,6 @@
 /*
     SPDX-FileCopyrightText: 2012 Sebastian Kügler <sebas@kde.org>
+    SPDX-FileCopyrightText: 2023 ivan tkachenko <me@ratijas.tk>
 
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
@@ -18,14 +19,13 @@ import org.kde.plasma.components as PlasmaComponents
  * Example usage:
  *
  * @code
- * import org.kde.plasma.components 3.0 as PlasmaComponents3
- * import org.kde.plasma.extras 2.0 as PlasmaExtras
- * [...]
+ * import org.kde.plasma.components as PlasmaComponents
+ * import org.kde.plasma.extras as PlasmaExtras
+ *
  * Column {
  *     PlasmaExtras.Heading { text: "Fruit sweetness on the rise"; level: 1 }
  *     PlasmaExtras.Heading { text: "Apples in the sunlight"; level: 2 }
- *     PlasmaComponents3.Label { text: "Long text about fruit and apples [...]" }
- *   [...]
+ *     PlasmaComponents.Label { text: "Long text about fruit and apples [...]" }
  * }
  * @endcode
  *
@@ -34,20 +34,22 @@ import org.kde.plasma.components as PlasmaComponents
  * additional properties, methods and signals.
  */
 PlasmaComponents.Label {
-    id: heading
-
     /**
-     * The level determines how big the section header is display, values
-     * between 1 (big) and 5 (small) are accepted. (default: 1)
+     * @brief This property holds the level of the heading, which determines its size.
+     *
+     * This property holds the level, which determines how large the header is.
+     *
+     * Acceptable values range from 1 (big) to 5 (small).
+     *
+     * default: ``1``
      */
     property int level: 1
 
     /**
-     * Adjust the point size in between a level and another. (default: 0)
-     * @deprecated
+     * @brief This enumeration defines heading types.
+     *
+     * This enum helps with heading visibility (making it less or more important).
      */
-    property int step: 0
-
     enum Type {
         Normal,
         Primary,
@@ -67,43 +69,29 @@ PlasmaComponents.Label {
      */
     property int type: Heading.Type.Normal
 
-    font.pointSize: __headerPointSize(level)
+    font.pointSize: {
+        let factor = 1;
+        switch (level) {
+            case 1:
+                factor = 1.35;
+                break;
+            case 2:
+                factor = 1.20;
+                break;
+            case 3:
+                factor = 1.15;
+                break;
+            case 4:
+                factor = 1.10;
+                break;
+            default:
+                break;
+        }
+        return Kirigami.Theme.defaultFont.pointSize * factor;
+    }
     font.weight: type === Heading.Type.Primary ? Font.DemiBold : Font.Normal
-    wrapMode: Text.WordWrap
 
     opacity: type === Heading.Type.Secondary ? 0.7 : 1
 
     Accessible.role: Accessible.Heading
-
-    // TODO KF6: Remove this public method
-    function headerPointSize(l) {
-        console.warn("org.kde.plasma.extras/Heading::headerPointSize() is deprecated. Use font.pointSize directly instead");
-        return __headerPointSize(l);
-    }
-
-    //
-    //  W A R N I N G
-    //  -------------
-    //
-    // This method is not part of the PlasmaExtras API.  It exists purely as an
-    // implementation detail.  It may change from version to
-    // version without notice, or even be removed.
-    //
-    // We mean it.
-    //
-    function __headerPointSize(level) {
-        const n = Kirigami.Theme.defaultFont.pointSize;
-        switch (level) {
-        case 1:
-            return n * 1.35 + step;
-        case 2:
-            return n * 1.20 + step;
-        case 3:
-            return n * 1.15 + step;
-        case 4:
-            return n * 1.10 + step;
-        default:
-            return n + step;
-        }
-    }
 }
