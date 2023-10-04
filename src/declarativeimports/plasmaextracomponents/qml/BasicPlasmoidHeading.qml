@@ -106,14 +106,30 @@ PlasmoidHeading {
         }
         PlasmaComponents.ToolButton {
             id: configureButton
+
+            property PlasmaCore.Action internalAction
+
+            function fetchInternalAction() {
+                internalAction = Plasmoid.internalAction("configure");
+            }
+
+            Connections {
+                target: Plasmoid
+                function onInternalActionsChanged(actions) {
+                    configureButton.fetchInternalAction();
+                }
+            }
+
+            Component.onCompleted: fetchInternalAction()
+
             icon.name: "configure"
-            visible: Plasmoid.internalAction("configure") !== null
-            text: Plasmoid.internalAction("configure")?.text ?? ""
+            visible: internalAction !== null
+            text: internalAction?.text ?? ""
             display: T.AbstractButton.IconOnly
             PlasmaComponents.ToolTip {
                 text: configureButton.text
             }
-            onClicked: Plasmoid.internalAction("configure")?.trigger();
+            onClicked: internalAction?.trigger();
         }
     }
 }
