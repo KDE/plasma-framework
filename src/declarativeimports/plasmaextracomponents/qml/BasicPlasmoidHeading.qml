@@ -96,7 +96,7 @@ PlasmoidHeading {
                     return actions;
                 }
                 delegate: PlasmaExtras.MenuItem {
-                    id: menuItem
+                    required property QtObject modelData // type: QAction
                     action: modelData
                 }
                 onObjectAdded: {
