@@ -106,7 +106,7 @@ PlasmoidHeading {
         }
         PlasmaComponents.ToolButton {
             icon.name: "configure"
-            visible: plasmoid && Plasmoid.internalAction("configure") && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+            visible: Plasmoid.internalAction("configure") && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
             PlasmaComponents.ToolTip {
                 text: parent.visible ? Plasmoid.internalAction("configure").text : ""
             }
