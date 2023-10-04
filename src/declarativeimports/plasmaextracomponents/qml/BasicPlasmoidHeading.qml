@@ -6,6 +6,7 @@
 
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Templates as T
 
 import org.kde.plasma.plasmoid 2.0
 import org.kde.plasma.core as PlasmaCore
@@ -104,12 +105,15 @@ PlasmoidHeading {
             }
         }
         PlasmaComponents.ToolButton {
+            id: configureButton
             icon.name: "configure"
             visible: Plasmoid.internalAction("configure") !== null
+            text: Plasmoid.internalAction("configure")?.text ?? ""
+            display: T.AbstractButton.IconOnly
             PlasmaComponents.ToolTip {
-                text: parent.visible ? Plasmoid.internalAction("configure").text : ""
+                text: configureButton.text
             }
-            onClicked: Plasmoid.internalAction("configure").trigger();
+            onClicked: Plasmoid.internalAction("configure")?.trigger();
         }
     }
 }
