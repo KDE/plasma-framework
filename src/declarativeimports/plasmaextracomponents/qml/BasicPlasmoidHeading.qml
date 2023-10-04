@@ -37,7 +37,6 @@ PlasmoidHeading {
             elide: Text.ElideRight
             wrapMode: Text.NoWrap
             Layout.fillWidth: true
-            visible: (Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
             level: 1
             text: Plasmoid.title
         }
@@ -48,7 +47,7 @@ PlasmoidHeading {
         }
         PlasmaComponents.ToolButton {
             id: actionsButton
-            visible: visibleActions > 0 && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+            visible: visibleActions > 0
             checked: configMenu.status !== PlasmaExtras.Menu.Closed
             property int visibleActions: menuItemFactory.count
             property QtObject singleAction: visibleActions === 1 ? menuItemFactory.object.action : null
@@ -106,7 +105,7 @@ PlasmoidHeading {
         }
         PlasmaComponents.ToolButton {
             icon.name: "configure"
-            visible: Plasmoid.internalAction("configure") && !(Plasmoid.containmentDisplayHints & PlasmaCore.Types.ContainmentDrawsPlasmoidHeading)
+            visible: Plasmoid.internalAction("configure") !== null
             PlasmaComponents.ToolTip {
                 text: parent.visible ? Plasmoid.internalAction("configure").text : ""
             }
