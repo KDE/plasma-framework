@@ -93,7 +93,7 @@ PlasmoidHeading {
                     const actions = [];
                     const configureAction = Plasmoid.internalAction("configure");
                     for (const action of Plasmoid.contextualActions) {
-                        if (action.visible && action !== configureAction) {
+                        if (action !== configureAction) {
                             actions.push(action);
                         }
                     }
