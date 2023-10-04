@@ -39,7 +39,7 @@ PlasmaComponents.Page {
      * collapseMarginsHint: bool
      * if true, the representation will remove any borders its container may have put and will be collapsed above its borders
      */
-    property bool collapseMarginsHint: (control.contentItem instanceof PlasmaComponents.ScrollView) || (control.contentItem instanceof ScrollArea)
+    property bool collapseMarginsHint: contentItem instanceof PlasmaComponents.ScrollView
 
     leftPadding: backgroundMetrics.getMargin("left")
     rightPadding: backgroundMetrics.getMargin("right")
