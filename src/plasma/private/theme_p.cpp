@@ -330,7 +330,11 @@ void ThemePrivate::compositingChanged(bool active)
         compositingActive = active;
         // qCDebug(LOG_PLASMA) << QTime::currentTime();
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
-        kSvgImageSet->setSelectors({QStringLiteral("opaque")});
+        if (active) {
+            kSvgImageSet->setSelectors({});
+        } else {
+            kSvgImageSet->setSelectors({QStringLiteral("opaque")});
+        }
     }
 #endif
 }
