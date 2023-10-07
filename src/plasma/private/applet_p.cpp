@@ -95,7 +95,7 @@ AppletPrivate::~AppletPrivate()
     delete modificationsTimer;
 }
 
-void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
+void AppletPrivate::init(const QVariantList &args)
 {
     startupArguments = args;
 
@@ -124,8 +124,7 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
 
     // A constructor may have set a valid package already
     if (!package.isValid()) {
-        const QString packagePath =
-            _packagePath.isEmpty() && !appletDescription.fileName().isEmpty() ? QFileInfo(appletDescription.fileName()).dir().path() : _packagePath;
+        const QString packagePath = QFileInfo(appletDescription.fileName()).dir().path();
         QString path = appletDescription.value(QStringLiteral("X-Plasma-RootPath"));
         if (path.isEmpty()) {
             path = packagePath.isEmpty() ? appletDescription.pluginId() : packagePath;
