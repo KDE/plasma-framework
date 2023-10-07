@@ -133,11 +133,8 @@ ContainmentActions *PluginLoader::loadContainmentActions(Containment *parent, co
     }
 
     KPluginMetaData plugin = d->containmentactionCache.findPluginById(name, PluginLoaderPrivate::s_containmentActionsPluginDir);
-
     if (plugin.isValid()) {
-        if (auto res = KPluginFactory::instantiatePlugin<Plasma::ContainmentActions>(plugin, nullptr, {QVariant::fromValue(plugin)})) {
-            return res.plugin;
-        }
+        return KPluginFactory::instantiatePlugin<Plasma::ContainmentActions>(plugin).plugin;
     }
 
     return nullptr;

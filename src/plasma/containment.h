@@ -107,10 +107,9 @@ class PLASMA_EXPORT Containment : public Applet
 public:
     /**
      * This constructor can be used with the KCoreAddons plugin loading system.
-     * The argument list is expected to have contain the KPackage of the applet,
-     * the meta data file path (for compatibility) and an applet ID which must be a base 10 number.
+     * The argument list is expected to have contain the KPackage of the applet and an applet ID which must be a base 10 number.
      *
-     * @param parent a QObject parent; you probably want to pass in 0
+     * @param parent a QObject parent; you probably want to pass in nullptr
      * @param data, KPluginMetaData used to create this plugin
      * @param args a list of strings containing the applet id
      * @since 5.86
