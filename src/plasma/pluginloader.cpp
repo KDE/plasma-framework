@@ -104,9 +104,9 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         }
     }
 
+    const QVariantList allArgs = QVariantList{QVariant::fromValue(p), appletId} << args;
     if (plugin.isValid()) {
         QPluginLoader loader(plugin.fileName());
-        QVariantList allArgs = QVariantList{QVariant::fromValue(p), appletId} << args;
         if (KPluginFactory *factory = KPluginFactory::loadFactory(plugin).plugin) {
             if (factory->metaData().rawData().isEmpty()) {
                 factory->setMetaData(p.metadata());
@@ -117,9 +117,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     if (applet) {
         return applet;
     }
-
-    QVariantList allArgs;
-    allArgs << QVariant::fromValue(p) << p.metadata().fileName() << appletId << args;
 
     if (isContainmentMetaData(p.metadata())) {
         applet = new Containment(nullptr, p.metadata(), allArgs);
