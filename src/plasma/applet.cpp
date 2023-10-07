@@ -44,12 +44,10 @@
 
 namespace Plasma
 {
-
 Applet::Applet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
-    : QObject(nullptr)
+    : QObject(parentObject)
     , d(new AppletPrivate(data, args.count() > 2 ? args[2].toInt() : 0, this))
 {
-    setParent(parentObject);
     if (!args.isEmpty()) {
         const QVariant first = args.first();
         if (first.canConvert<KPackage::Package>()) {
