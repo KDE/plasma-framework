@@ -125,6 +125,5 @@
         "Version": "1.0",
         "Website": "https://www.kde.org"
     },
-    "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-MainScript": "ui/main.qml"
 }

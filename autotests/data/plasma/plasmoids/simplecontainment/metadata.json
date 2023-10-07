@@ -5,6 +5,5 @@
         "Category": "System Information"
     },
     "KPackageStructure": "Plasma/Applet",
-    "X-Plasma-ContainmentType": "Desktop",
-    "X-Plasma-API": "declarativeappletscript"
+    "X-Plasma-ContainmentType": "Desktop"
 }
