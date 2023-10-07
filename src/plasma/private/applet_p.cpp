@@ -61,6 +61,7 @@ AppletPrivate::AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *
     , userConfiguring(false)
     , busy(false)
 {
+    Q_ASSERT(appletDescription.isValid());
     if (appletId == 0) {
         appletId = ++s_maxAppletId;
     } else if (appletId > s_maxAppletId) {
@@ -111,15 +112,6 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
     QAction *configAction = actions.value(QStringLiteral("configure"));
     if (configAction) {
         configAction->setText(i18nc("%1 is the name of the applet", "Configure %1...", q->title().replace(QLatin1Char('&'), QStringLiteral("&&"))));
-    }
-
-    if (!appletDescription.isValid()) {
-#ifndef NDEBUG
-        // qCDebug(LOG_PLASMA) << "Check your constructor! "
-        //         << "You probably want to be passing in a Service::Ptr "
-        //         << "or a QVariantList with a valid storageid as arg[0].";
-#endif
-        return;
     }
 
     // A constructor may have set a valid package already

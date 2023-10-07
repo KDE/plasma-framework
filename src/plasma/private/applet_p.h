@@ -73,7 +73,6 @@ public:
     Types::ImmutabilityType oldImmutability;
     QString launchErrorMessage;
 
-    // applet info we keep around in case its needed
     KPluginMetaData appletDescription;
     QString customTitle;
     QString icon;
