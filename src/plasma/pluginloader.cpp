@@ -87,8 +87,6 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
         return nullptr;
     }
 
-    Applet *applet = nullptr;
-
     if (appletId == 0) {
         appletId = ++AppletPrivate::s_maxAppletId;
     }
@@ -111,13 +109,10 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
             if (factory->metaData().rawData().isEmpty()) {
                 factory->setMetaData(p.metadata());
             }
-            applet = factory->create<Plasma::Applet>(nullptr, allArgs);
+            return factory->create<Plasma::Applet>(nullptr, allArgs);
         }
     }
-    if (applet) {
-        return applet;
-    }
-
+    Applet *applet = nullptr;
     if (isContainmentMetaData(p.metadata())) {
         applet = new Containment(nullptr, p.metadata(), allArgs);
     } else {
