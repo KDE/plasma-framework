@@ -106,8 +106,7 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
 
     if (plugin.isValid()) {
         QPluginLoader loader(plugin.fileName());
-        QVariantList allArgs = {QVariant::fromValue(p), loader.metaData().toVariantMap(), appletId};
-        allArgs << args;
+        QVariantList allArgs = QVariantList{QVariant::fromValue(p), appletId} << args;
         if (KPluginFactory *factory = KPluginFactory::loadFactory(plugin).plugin) {
             if (factory->metaData().rawData().isEmpty()) {
                 factory->setMetaData(p.metadata());
