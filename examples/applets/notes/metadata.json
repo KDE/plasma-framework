@@ -123,7 +123,6 @@
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
-    "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-DropMimeTypes": [
         "text/plain"
     ],

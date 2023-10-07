@@ -15,6 +15,5 @@
     },
     "Keywords": "",
     "X-KDE-ParentApp": "",
-    "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-MainScript": "ui/main.qml"
 }

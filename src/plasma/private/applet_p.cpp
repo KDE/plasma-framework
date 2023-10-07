@@ -122,13 +122,6 @@ void AppletPrivate::init(const QString &_packagePath, const QVariantList &args)
         return;
     }
 
-    const QString api = appletDescription.value(QStringLiteral("X-Plasma-API"));
-
-    if (api.isEmpty()) {
-        q->setLaunchErrorMessage(i18n("The %1 widget did not define which ScriptEngine to use.", appletDescription.name()));
-        return;
-    }
-
     // A constructor may have set a valid package already
     if (!package.isValid()) {
         const QString packagePath =

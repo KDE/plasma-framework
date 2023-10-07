@@ -123,6 +123,5 @@
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
     },
-    "X-Plasma-API": "declarativeappletscript",
     "X-Plasma-MainScript": "ui/main.qml"
 }
