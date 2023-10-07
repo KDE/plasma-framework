@@ -127,9 +127,9 @@ protected:
      * to have one element: the KService service ID for the desktop entry.
      *
      * @param parent a QObject parent; you probably want to pass in 0
-     * @param args a list of strings containing one entry: the service id
+     * @param data
      */
-    ContainmentActions(QObject *parent, const QVariantList &args);
+    ContainmentActions(QObject *parent, const KPluginMetaData &data);
 
 private:
     ContainmentActionsPrivate *const d;

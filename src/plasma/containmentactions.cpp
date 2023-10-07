@@ -26,18 +26,10 @@ ContainmentActions::ContainmentActions(QObject *parentObject)
     setParent(parentObject);
 }
 
-ContainmentActions::ContainmentActions(QObject *parentObject, const QVariantList &args)
-    : d(new ContainmentActionsPrivate(args.value(0), this))
+ContainmentActions::ContainmentActions(QObject *parentObject, const KPluginMetaData &data)
+    : d(new ContainmentActionsPrivate(data, this))
 {
     setParent(parentObject);
-
-    // now remove first item since those are managed by Wallpaper and subclasses shouldn't
-    // need to worry about them. yes, it violates the constness of this var, but it lets us add
-    // or remove items later while applets can just pretend that their args always start at 0
-    QVariantList &mutableArgs = const_cast<QVariantList &>(args);
-    if (!mutableArgs.isEmpty()) {
-        mutableArgs.removeFirst();
-    }
 }
 
 ContainmentActions::~ContainmentActions()
