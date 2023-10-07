@@ -47,7 +47,7 @@ namespace Plasma
 
 Applet::Applet(QObject *parentObject, const KPluginMetaData &data, const QVariantList &args)
     : QObject(nullptr)
-    , d(new AppletPrivate(data, args.count() > 2 ? args[2].toInt() : 0, this))
+    , d(new AppletPrivate(data, args.count() > 1 ? args[1].toInt() : 0, this))
 {
     setParent(parentObject);
     if (!args.isEmpty()) {
@@ -64,7 +64,7 @@ Applet::Applet(QObject *parentObject, const KPluginMetaData &data, const QVarian
 
     // WARNING: do not access config() OR globalConfig() in this method!
     //          that requires a scene, which is not available at this point
-    d->init(QString(), args.mid(3));
+    d->init(QString(), args.mid(2));
     d->setupPackage();
 }
 

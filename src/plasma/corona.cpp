@@ -574,7 +574,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             applet->init();
             delete applet;
         }
-        applet = containment = new Containment(q, KPluginMetaData(), QVariantList{QVariant(), QVariant(), id});
+        applet = containment = new Containment(q, KPluginMetaData(), QVariantList{QVariant(), id});
         if (lastScreen >= 0) {
             containment->d->lastScreen = lastScreen;
         }
