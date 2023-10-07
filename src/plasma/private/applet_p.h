@@ -35,7 +35,7 @@ public:
     AppletPrivate(const KPluginMetaData &info, int uniqueID, Applet *applet);
     virtual ~AppletPrivate();
 
-    void init(const QString &packagePath = QString(), const QVariantList &args = QVariantList());
+    void init(const QVariantList &args);
 
     void setDestroyed(bool destroyed);
     void askDestroy();
