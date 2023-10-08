@@ -94,7 +94,7 @@ void ContainmentItem::init()
         }
 
         if (defaults.isValid()) {
-            KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("KPackage/GenericQML"));
+            KPackage::Package pkg = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Generic"));
             pkg.setDefaultPackageRoot(QStringLiteral("plasma/packages"));
 
             if (defaults.isValid()) {
