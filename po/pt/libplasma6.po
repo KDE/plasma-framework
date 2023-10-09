@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 01:38+0000\n"
+"POT-Creation-Date: 2023-10-09 01:44+0000\n"
 "PO-Revision-Date: 2022-07-25 09:37+0100\n"
 "Last-Translator: José Nuno Coelho Pires <zepires@gmail.com>\n"
 "Language-Team: Portuguese <kde-i18n-pt@kde.org>\n"
@@ -47,12 +47,12 @@ msgstr "Procurar…"
 msgid "Search"
 msgstr "Procurar"
 
-#: plasma/applet.cpp:302
+#: plasma/applet.cpp:300
 #, kde-format
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: plasma/applet.cpp:745
+#: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Activar o Elemento %1"
@@ -108,63 +108,58 @@ msgstr ""
 "estes ficheiros são esparsos, pelo que o tamanho máximo poderá não ser "
 "usado. A definição de um tamanho mais elevado será à partida bastante seguro."
 
-#: plasma/private/applet_p.cpp:128
-#, kde-format
-msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr "O elemento %1 não definiu qual o motor de programação a usar."
-
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Não foi possível abrir o pacote %1 necessário para o elemento %2."
 
-#: plasma/private/applet_p.cpp:154
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Mostrar as Alternativas..."
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "Widget Removed"
 msgstr "Elemento Removido"
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "O elemento \"%1\" foi removido."
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Panel Removed"
 msgstr "Painel Removido"
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Foi removido um painel."
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Ecrã Removido"
 
-#: plasma/private/applet_p.cpp:272
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Foi removido um ecrã."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Undo"
 msgstr "Desfazer"
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Widget Settings"
 msgstr "Configuração do Elemento"
 
-#: plasma/private/applet_p.cpp:374
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Remover este Elemento"
@@ -306,6 +301,9 @@ msgstr "Configurar o %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Conteúdo largado"
+
+#~ msgid "The %1 widget did not define which ScriptEngine to use."
+#~ msgstr "O elemento %1 não definiu qual o motor de programação a usar."
 
 #~ msgctxt "misc category"
 #~ msgid "Miscellaneous"

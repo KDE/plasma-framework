@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 01:38+0000\n"
+"POT-Creation-Date: 2023-10-09 01:44+0000\n"
 "PO-Revision-Date: 2023-06-11 06:10+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -50,12 +50,12 @@ msgstr "Serĉi…"
 msgid "Search"
 msgstr "Serĉi"
 
-#: plasma/applet.cpp:302
+#: plasma/applet.cpp:300
 #, kde-format
 msgid "Unknown"
 msgstr "Nekonata"
 
-#: plasma/applet.cpp:745
+#: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktivigi fenestraĵon %1"
@@ -111,63 +111,58 @@ msgstr ""
 "ĉi tiuj dosieroj estas malabundaj dosieroj, do la maksimuma grandeco eble ne "
 "estas uzata. Agordi pli grandan grandecon do ofte estas sufiĉe sekura."
 
-#: plasma/private/applet_p.cpp:128
-#, kde-format
-msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr "La %1 fenestraĵo ne difinis kiun ScriptEngine uzi."
-
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Ne eblis malfermi la %1 pakaĵon necesan por la %2 fenestraĵo."
 
-#: plasma/private/applet_p.cpp:154
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Montri alternativojn..."
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "Widget Removed"
 msgstr "Fenestraĵo forigita"
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "La fenestraĵo \"%1\" estis forigita."
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panelo forigita"
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Panelo estis forigita."
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Labortablo forigita"
 
-#: plasma/private/applet_p.cpp:272
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Labortablo estis forigita."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Undo"
 msgstr "Malfari"
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Widget Settings"
 msgstr "Agordoj de fenestraĵoj"
 
-#: plasma/private/applet_p.cpp:374
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Forigi ĉi tiun fenestraĵon"
@@ -309,6 +304,9 @@ msgstr "Agordi %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Enhavo perdiĝis"
+
+#~ msgid "The %1 widget did not define which ScriptEngine to use."
+#~ msgstr "La %1 fenestraĵo ne difinis kiun ScriptEngine uzi."
 
 #~ msgctxt "misc category"
 #~ msgid "Miscellaneous"

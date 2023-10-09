@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 01:38+0000\n"
+"POT-Creation-Date: 2023-10-09 01:44+0000\n"
 "PO-Revision-Date: 2023-03-21 20:07+0100\n"
 "Last-Translator: Frederik Schwarzer <schwarzer@kde.org>\n"
 "Language-Team: German <kde-i18n-de@kde.org>\n"
@@ -47,12 +47,12 @@ msgstr "Suchen ..."
 msgid "Search"
 msgstr "Suchen"
 
-#: plasma/applet.cpp:302
+#: plasma/applet.cpp:300
 #, kde-format
 msgid "Unknown"
 msgstr "Unbekannt"
 
-#: plasma/applet.cpp:745
+#: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Miniprogramm %1 aktivieren"
@@ -110,64 +110,58 @@ msgstr ""
 "maximale Größe wahrscheinlich nicht erreicht wird. Ein höheres Limit zu "
 "setzen, ist hier daher oft eine gute Wahl."
 
-#: plasma/private/applet_p.cpp:128
-#, kde-format
-msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr ""
-"Das Bedienelement %1 definiert kein Skript-Modul, das benutzt werden soll."
-
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Das Paket %1 (nötig für %2) kann nicht geöffnet werden."
 
-#: plasma/private/applet_p.cpp:154
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Alternativen anzeigen ..."
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "Widget Removed"
 msgstr "Miniprogramm entfernt"
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Das Miniprogramm „%1“ wurde entfernt."
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Panel Removed"
 msgstr "Kontrollleiste entfernt"
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Eine Kontrollleiste wurde entfernt."
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Arbeitsfläche entfernt"
 
-#: plasma/private/applet_p.cpp:272
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Eine Arbeitsfläche wurde entfernt."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Undo"
 msgstr "Zurücknehmen"
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Widget Settings"
 msgstr "Miniprogramm-Einstellungen"
 
-#: plasma/private/applet_p.cpp:374
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Dieses Miniprogramm entfernen"
@@ -309,6 +303,10 @@ msgstr "%1 einstellen"
 #, kde-format
 msgid "Content dropped"
 msgstr "Inhalt abgelegt"
+
+#~ msgid "The %1 widget did not define which ScriptEngine to use."
+#~ msgstr ""
+#~ "Das Bedienelement %1 definiert kein Skript-Modul, das benutzt werden soll."
 
 #~ msgctxt "misc category"
 #~ msgid "Miscellaneous"

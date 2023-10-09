@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 01:38+0000\n"
+"POT-Creation-Date: 2023-10-09 01:44+0000\n"
 "PO-Revision-Date: 2022-08-03 09:42+0200\n"
 "Last-Translator: Stefan Asserhäll <stefan.asserhall@bredband.net>\n"
 "Language-Team: Swedish <kde-i18n-doc@kde.org>\n"
@@ -49,12 +49,12 @@ msgstr "Sök…"
 msgid "Search"
 msgstr "Sök"
 
-#: plasma/applet.cpp:302
+#: plasma/applet.cpp:300
 #, kde-format
 msgid "Unknown"
 msgstr "Okänd"
 
-#: plasma/applet.cpp:745
+#: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktivera komponenten %1"
@@ -110,65 +110,58 @@ msgstr ""
 "filerna är glesa, så den maximala storleken kanske inte används. Att ställa "
 "in en större storlek är därför ofta helt säkert."
 
-#: plasma/private/applet_p.cpp:128
-#, kde-format
-msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr ""
-"Den grafiska komponenten %1 definierar inte vilket skriptgränssnitt som ska "
-"användas."
-
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Kunde inte öppna paketet %1 som krävs för den grafiska komponenten %2."
 
-#: plasma/private/applet_p.cpp:154
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Visa alternativ..."
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "Widget Removed"
 msgstr "Grafisk komponent borttagen"
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Den grafiska komponenten \"%1\" har tagits bort."
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panel borttagen"
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "A panel has been removed."
 msgstr "En panel har tagits bort."
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Skrivbord borttaget"
 
-#: plasma/private/applet_p.cpp:272
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Ett skrivbord har tagits bort."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Undo"
 msgstr "Ångra"
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Widget Settings"
 msgstr "Inställningar av grafiska komponenter"
 
-#: plasma/private/applet_p.cpp:374
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Ta bort den här grafiska komponenten"
@@ -310,6 +303,11 @@ msgstr "Ställ in %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Innehåll släppt"
+
+#~ msgid "The %1 widget did not define which ScriptEngine to use."
+#~ msgstr ""
+#~ "Den grafiska komponenten %1 definierar inte vilket skriptgränssnitt som "
+#~ "ska användas."
 
 #~ msgctxt "misc category"
 #~ msgid "Miscellaneous"

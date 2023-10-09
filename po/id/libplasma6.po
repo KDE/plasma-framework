@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 01:38+0000\n"
+"POT-Creation-Date: 2023-10-09 01:44+0000\n"
 "PO-Revision-Date: 2022-06-14 10:56+0700\n"
 "Last-Translator: Aziz Adam Adrian <4.adam.adrian@gmail.com>\n"
 "Language-Team: Indonesian <kde-i18n-doc@kde.org>\n"
@@ -53,12 +53,12 @@ msgstr "Cari…"
 msgid "Search"
 msgstr "Cari"
 
-#: plasma/applet.cpp:302
+#: plasma/applet.cpp:300
 #, kde-format
 msgid "Unknown"
 msgstr "Tidak diketahui"
 
-#: plasma/applet.cpp:745
+#: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Aktifkan Widget %1"
@@ -115,63 +115,58 @@ msgstr ""
 "file ini adalah file yang jarang, jadi ukuran maksimal mungkin tidak "
 "digunakan. Dengan ukuran yang lebih besar maka biasanya cukup aman."
 
-#: plasma/private/applet_p.cpp:128
-#, kde-format
-msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr "Widget %1 tidak mendefinisikan ScriptEngine mana yang digunakan."
-
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "Tidak dapat membuka paket %1 yang diperlukan terhadap widget %2."
 
-#: plasma/private/applet_p.cpp:154
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "Tampilkan Alternatifnya..."
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "Widget Removed"
 msgstr "Widget Dihapus"
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "Widget \"%1\" telah dihapus."
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panel Dihapus"
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Sebuah panel telah dihapus."
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Desktop Dihapus"
 
-#: plasma/private/applet_p.cpp:272
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Sebuah desktop telah dihapus."
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Undo"
 msgstr "Urung"
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Widget Settings"
 msgstr "Pengaturan Widget"
 
-#: plasma/private/applet_p.cpp:374
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Hapus Widget ini"
@@ -313,6 +308,9 @@ msgstr "Set %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Isi yang ditaruh"
+
+#~ msgid "The %1 widget did not define which ScriptEngine to use."
+#~ msgstr "Widget %1 tidak mendefinisikan ScriptEngine mana yang digunakan."
 
 #~ msgctxt "misc category"
 #~ msgid "Miscellaneous"

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 01:38+0000\n"
+"POT-Creation-Date: 2023-10-09 01:44+0000\n"
 "PO-Revision-Date: 2014-08-13 22:05+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -51,12 +51,12 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: plasma/applet.cpp:302
+#: plasma/applet.cpp:300
 #, kde-format
 msgid "Unknown"
 msgstr "Nich begäng"
 
-#: plasma/applet.cpp:745
+#: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "Lüttprogramm „%1“ anmaken"
@@ -115,69 +115,61 @@ msgstr ""
 "Disse Dateien sünd verdeelt Dateien, ehr Hööchstgrott warrt villicht gor "
 "nich bruukt. En höger Grött is dorüm faken ok seker."
 
-#: plasma/private/applet_p.cpp:128
-#, fuzzy, kde-format
-#| msgid "The %2 widget did not define which ScriptEngine to use."
-msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr ""
-"Dat Lüttprogramm „%2“ hett den Skriptkarn, de bruukt warrn schall, nich "
-"angeven."
-
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr ""
 "Dat Paket „%1“, dat noot deit för't Lüttprogramm „%2“, lett sik nich opmaken."
 
-#: plasma/private/applet_p.cpp:154
+#: plasma/private/applet_p.cpp:146
 #, fuzzy, kde-format
 #| msgid "Alternatives..."
 msgid "Show Alternatives..."
 msgstr "Alternativen..."
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:254
 #, fuzzy, kde-format
 #| msgid "Widgets explorer UI"
 msgid "Widget Removed"
 msgstr "Lüttprogrammkieker-Böversiet"
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Panel Removed"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "A panel has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "Desktop Removed"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:272
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "A desktop has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Undo"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Widget Settings"
 msgstr "Lüttprogramm-Instellen"
 
-#: plasma/private/applet_p.cpp:374
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Dit Lüttprogramm wegmaken"
@@ -324,6 +316,13 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
+
+#, fuzzy
+#~| msgid "The %2 widget did not define which ScriptEngine to use."
+#~ msgid "The %1 widget did not define which ScriptEngine to use."
+#~ msgstr ""
+#~ "Dat Lüttprogramm „%2“ hett den Skriptkarn, de bruukt warrn schall, nich "
+#~ "angeven."
 
 #~ msgctxt "misc category"
 #~ msgid "Miscellaneous"

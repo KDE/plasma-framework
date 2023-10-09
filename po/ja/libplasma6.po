@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-04 01:38+0000\n"
+"POT-Creation-Date: 2023-10-09 01:44+0000\n"
 "PO-Revision-Date: 2023-02-22 21:27+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -51,12 +51,12 @@ msgstr "検索..."
 msgid "Search"
 msgstr "検索"
 
-#: plasma/applet.cpp:302
+#: plasma/applet.cpp:300
 #, kde-format
 msgid "Unknown"
 msgstr "不明"
 
-#: plasma/applet.cpp:745
+#: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
 msgstr "%1 ウィジェットを有効化"
@@ -113,63 +113,58 @@ msgstr ""
 "に注意してください。したがって、より大きなサイズを設定することが、多くの場合"
 "安全です。"
 
-#: plasma/private/applet_p.cpp:128
-#, kde-format
-msgid "The %1 widget did not define which ScriptEngine to use."
-msgstr "%1 ウィジェットで使用するスクリプトエンジンが定義されていません"
-
-#: plasma/private/applet_p.cpp:146
+#: plasma/private/applet_p.cpp:138
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
 msgstr "%2 ウィジェットに必要なパッケージ %1 を開けませんでした。"
 
-#: plasma/private/applet_p.cpp:154
+#: plasma/private/applet_p.cpp:146
 #, kde-format
 msgid "Show Alternatives..."
 msgstr "代替を表示..."
 
-#: plasma/private/applet_p.cpp:262
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "Widget Removed"
 msgstr "ウィジェットの削除"
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:255
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "\"%1\" ウィジェットが削除されました。"
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "Panel Removed"
 msgstr "パネルの削除"
 
-#: plasma/private/applet_p.cpp:268
+#: plasma/private/applet_p.cpp:260
 #, kde-format
 msgid "A panel has been removed."
 msgstr "パネルが削除されました。"
 
-#: plasma/private/applet_p.cpp:271
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "Desktop Removed"
 msgstr "デスクトップの削除"
 
-#: plasma/private/applet_p.cpp:272
+#: plasma/private/applet_p.cpp:264
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "デスクトップが削除されました。"
 
-#: plasma/private/applet_p.cpp:275
+#: plasma/private/applet_p.cpp:267
 #, kde-format
 msgid "Undo"
 msgstr "元に戻す"
 
-#: plasma/private/applet_p.cpp:367
+#: plasma/private/applet_p.cpp:359
 #, kde-format
 msgid "Widget Settings"
 msgstr "ウィジェットの設定"
 
-#: plasma/private/applet_p.cpp:374
+#: plasma/private/applet_p.cpp:366
 #, kde-format
 msgid "Remove this Widget"
 msgstr "このウィジェットを削除"
@@ -313,174 +308,5 @@ msgstr "%1 を設定"
 msgid "Content dropped"
 msgstr "コンテンツがドロップされました"
 
-#~ msgctxt "misc category"
-#~ msgid "Miscellaneous"
-#~ msgstr "その他"
-
-#~ msgid "Main Script File"
-#~ msgstr "メインスクリプトファイル"
-
-#~ msgid "Tests"
-#~ msgstr "テスト"
-
-#~ msgid "Images"
-#~ msgstr "画像"
-
-#~ msgid "Themed Images"
-#~ msgstr "テーマ画像"
-
-#~ msgid "Configuration Definitions"
-#~ msgstr "設定の定義"
-
-#~ msgid "User Interface"
-#~ msgstr "ユーザインターフェース"
-
-#~ msgid "Data Files"
-#~ msgstr "データファイル"
-
-#~ msgid "Executable Scripts"
-#~ msgstr "実行可能スクリプト"
-
-#~ msgid "Screenshot"
-#~ msgstr "スクリーンショット"
-
-#~ msgid "Translations"
-#~ msgstr "翻訳"
-
-#~ msgid "Configuration UI pages model"
-#~ msgstr "UI ページモデルの設定"
-
-#~ msgid "Configuration XML file"
-#~ msgstr "設定 XML ファイル"
-
-#~ msgid "Custom expander for compact applets"
-#~ msgstr "コンパクトなアプレットのためのカスタムエクスパンダー"
-
-#~ msgid "Images for dialogs"
-#~ msgstr "ダイアログの画像"
-
-#~ msgid "Generic dialog background"
-#~ msgstr "一般ダイアログの背景"
-
-#~ msgid "Theme for the logout dialog"
-#~ msgstr "ログアウトダイアログのテーマ"
-
-#~ msgid "Wallpaper packages"
-#~ msgstr "壁紙パッケージ"
-
-#~ msgid "Images for widgets"
-#~ msgstr "ウィジェットの画像"
-
-#~ msgid "Background image for widgets"
-#~ msgstr "ウィジェットの背景画像"
-
-#~ msgid "Analog clock face"
-#~ msgstr "アナログ時計の文字盤"
-
-#~ msgid "Background image for panels"
-#~ msgstr "パネルの背景画像"
-
-#~ msgid "Background for graphing widgets"
-#~ msgstr "グラフウィジェットの背景"
-
-#~ msgid "Background image for tooltips"
-#~ msgstr "ツールチップの背景画像"
-
-#~ msgid "Opaque images for dialogs"
-#~ msgstr "ダイアログの不透明な画像"
-
-#~ msgid "Opaque generic dialog background"
-#~ msgstr "一般ダイアログの不透明な背景"
-
-#~ msgid "Opaque theme for the logout dialog"
-#~ msgstr "ログアウトダイアログの不透明なテーマ"
-
-#~ msgid "Opaque images for widgets"
-#~ msgstr "ウィジェットの不透明な画像"
-
-#~ msgid "Opaque background image for panels"
-#~ msgstr "パネルの不透明な背景画像"
-
-#~ msgid "Opaque background image for tooltips"
-#~ msgstr "ツールチップの不透明な背景画像"
-
-#~ msgid "KColorScheme configuration file"
-#~ msgstr "KColorScheme 設定ファイル"
-
-#~ msgid "Service Descriptions"
-#~ msgstr "サービスの説明"
-
-#~ msgctxt ""
-#~ "API or programming language the widget was written in, name of the widget"
-#~ msgid "Could not create a %1 ScriptEngine for the %2 widget."
-#~ msgstr ""
-#~ "%2 ウィジェットのための %1 スクリプトエンジンを作成できませんでした。"
-
-#~ msgid "Script initialization failed"
-#~ msgstr "スクリプトの初期化に失敗しました"
-
-#~ msgctxt "Agenda listview section title"
-#~ msgid "Holidays"
-#~ msgstr "休日"
-
-#~ msgctxt "Agenda listview section title"
-#~ msgid "Events"
-#~ msgstr "イベント"
-
-#~ msgctxt "Agenda listview section title"
-#~ msgid "Todo"
-#~ msgstr "To-Do"
-
-#~ msgctxt "Means 'Other calendar items'"
-#~ msgid "Other"
-#~ msgstr "その他"
-
-#~ msgctxt "Format: month year"
-#~ msgid "%1 %2"
-#~ msgstr "%2 %1"
-
-#~ msgid "Previous Month"
-#~ msgstr "前の月"
-
-#~ msgid "Previous Year"
-#~ msgstr "前の年"
-
-#~ msgid "Previous Decade"
-#~ msgstr "前の10年"
-
-#~ msgctxt "Reset calendar to today"
-#~ msgid "Today"
-#~ msgstr "今日"
-
-#~ msgid "Reset calendar to today"
-#~ msgstr "カレンダーを今日に戻す"
-
-#~ msgid "Next Month"
-#~ msgstr "次の月"
-
-#~ msgid "Next Year"
-#~ msgstr "次の年"
-
-#~ msgid "Next Decade"
-#~ msgstr "次の10年"
-
-#~ msgid "Days"
-#~ msgstr "日"
-
-#~ msgid "Months"
-#~ msgstr "月"
-
-#~ msgid "Years"
-#~ msgstr "年"
-
-#~ msgid "OK"
-#~ msgstr "OK"
-
-#~ msgid "Cancel"
-#~ msgstr "キャンセル"
-
-#~ msgid "Run the Associated Application"
-#~ msgstr "関連するアプリケーションを実行"
-
-#~ msgid "Open with %1"
-#~ msgstr "%1 で開く"
+#~ msgid "The %1 widget did not define which ScriptEngine to use."
+#~ msgstr "%1 ウィジェットで使用するスクリプトエンジンが定義されていません"
