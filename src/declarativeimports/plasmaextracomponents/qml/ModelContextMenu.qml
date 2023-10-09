@@ -65,7 +65,7 @@ PlasmaExtras.Menu {
             }
         }
 
-        onObjectAdded: (index, object) => menu.addMenuItem(object)
+        onObjectAdded: (index, object) => menu.addMenuItem(object, null)
         onObjectRemoved: (index, object) => menu.removeMenuItem(object)
     }
 }
