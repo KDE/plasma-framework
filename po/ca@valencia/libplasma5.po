@@ -273,7 +273,7 @@ msgstr "Model de pàgines IU de configuració"
 #: plasma/packagestructure/plasma_applet_packagestructure.cpp:31
 #, kde-format
 msgid "Configuration XML file"
-msgstr "Fitxer XML de configuració"
+msgstr "Fitxer en XML de configuració"
 
 #: plasma/packagestructure/plasma_applet_packagestructure.cpp:47
 #, kde-format
