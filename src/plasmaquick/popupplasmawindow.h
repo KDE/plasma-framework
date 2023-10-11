@@ -60,7 +60,8 @@ public:
     Q_DECLARE_FLAGS(RemoveBorders, RemoveBorder)
     Q_ENUM(RemoveBorder);
 
-    PopupPlasmaWindow();
+    PopupPlasmaWindow(QWindow *parent = nullptr);
+    ~PopupPlasmaWindow() override;
     QQuickItem *visualParent() const;
     void setVisualParent(QQuickItem *parent);
 
@@ -89,21 +90,11 @@ Q_SIGNALS:
     void removeBorderStrategyChanged();
     void marginChanged();
 
-private:
+protected:
     void queuePositionUpdate();
-    void updateSlideEffect();
-    void updatePosition();
-    void updatePositionX11(const QPoint &position);
-    void updatePositionWayland(const QPoint &position);
-    void updateBorders(const QRect &globalPosition);
 
-    QPointer<QQuickItem> m_visualParent;
-    RemoveBorders m_removeBorderStrategy = Never;
-    bool m_needsReposition = false;
-    bool m_floating = false;
-    bool m_animated = false;
-    int m_margin = 0;
-    Qt::Edge m_popupDirection = Qt::TopEdge;
+private:
+    const std::unique_ptr<PopupPlasmaWindowPrivate> d;
 };
 
 Q_DECLARE_OPERATORS_FOR_FLAGS(PopupPlasmaWindow::RemoveBorders)

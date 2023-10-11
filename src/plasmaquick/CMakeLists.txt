@@ -137,6 +137,7 @@ ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
         ConfigModel
         Dialog
         PlasmaWindow
+        PopupPlasmaWindow
         SharedQmlEngine
         QuickViewSharedEngine
     REQUIRED_HEADERS plasmaquick_LIB_INCLUDES

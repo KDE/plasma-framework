@@ -17,149 +17,37 @@
 #include "transientplacementhint_p.h"
 #include "waylandintegration_p.h"
 
-using namespace PlasmaQuick;
-
-static Qt::Edge oppositeEdge(Qt::Edge edge)
+namespace PlasmaQuick
 {
-    switch (edge) {
-    case Qt::TopEdge:
-        return Qt::BottomEdge;
-    case Qt::BottomEdge:
-        return Qt::TopEdge;
-    case Qt::LeftEdge:
-        return Qt::RightEdge;
-    case Qt::RightEdge:
-        return Qt::LeftEdge;
-    }
-    Q_UNREACHABLE();
+
+class PopupPlasmaWindowPrivate
+{
+public:
+    PopupPlasmaWindowPrivate(PopupPlasmaWindow *_q);
+
+    void updateSlideEffect();
+    void updatePosition();
+    void updatePositionX11(const QPoint &position);
+    void updatePositionWayland(const QPoint &position);
+    void updateBorders(const QRect &globalPosition);
+    static Qt::Edge oppositeEdge(Qt::Edge edge);
+
+    PopupPlasmaWindow *q;
+    QPointer<QQuickItem> m_visualParent;
+    PopupPlasmaWindow::RemoveBorders m_removeBorderStrategy = PopupPlasmaWindow::Never;
+    bool m_needsReposition = false;
+    bool m_floating = false;
+    bool m_animated = false;
+    int m_margin = 0;
+    Qt::Edge m_popupDirection = Qt::TopEdge;
+};
+
+PopupPlasmaWindowPrivate::PopupPlasmaWindowPrivate(PopupPlasmaWindow *_q)
+    : q(_q)
+{
 }
 
-PopupPlasmaWindow::PopupPlasmaWindow()
-{
-}
-
-void PopupPlasmaWindow::setVisualParent(QQuickItem *item)
-{
-    if (item == m_visualParent) {
-        return;
-    }
-
-    m_visualParent = item;
-    Q_EMIT visualParentChanged();
-    queuePositionUpdate();
-}
-
-QQuickItem *PopupPlasmaWindow::visualParent() const
-{
-    return m_visualParent;
-}
-
-Qt::Edge PopupPlasmaWindow::popupDirection() const
-{
-    return m_popupDirection;
-}
-
-void PopupPlasmaWindow::setPopupDirection(Qt::Edge popupDirection)
-{
-    if (popupDirection == m_popupDirection) {
-        return;
-    }
-    m_popupDirection = popupDirection;
-
-    if (isExposed()) {
-        qCWarning(LOG_PLASMAQUICK) << "location should be set before showing popup window";
-    }
-    queuePositionUpdate();
-    updateSlideEffect();
-
-    Q_EMIT popupDirectionChanged();
-}
-
-bool PopupPlasmaWindow::floating() const
-{
-    return m_floating;
-}
-
-void PopupPlasmaWindow::setFloating(bool floating)
-{
-    if (floating == m_floating) {
-        return;
-    }
-    m_floating = floating;
-    queuePositionUpdate();
-    Q_EMIT floatingChanged();
-}
-
-bool PopupPlasmaWindow::animated() const
-{
-    return m_animated;
-}
-
-void PopupPlasmaWindow::setAnimated(bool animated)
-{
-    m_animated = animated;
-    updateSlideEffect();
-    Q_EMIT animatedChanged();
-}
-
-PopupPlasmaWindow::RemoveBorders PopupPlasmaWindow::removeBorderStrategy() const
-{
-    return m_removeBorderStrategy;
-}
-
-void PopupPlasmaWindow::setRemoveBorderStrategy(PopupPlasmaWindow::RemoveBorders strategy)
-{
-    if (m_removeBorderStrategy == strategy) {
-        return;
-    }
-
-    m_removeBorderStrategy = strategy;
-    queuePositionUpdate(); // This will update borders as well
-    Q_EMIT removeBorderStrategyChanged();
-}
-
-int PopupPlasmaWindow::margin() const
-{
-    return m_margin;
-}
-
-void PopupPlasmaWindow::setMargin(int margin)
-{
-    if (m_margin == margin) {
-        return;
-    }
-
-    m_margin = margin;
-    queuePositionUpdate();
-    Q_EMIT marginChanged();
-}
-
-bool PopupPlasmaWindow::event(QEvent *event)
-{
-    switch (event->type()) {
-    case QEvent::UpdateRequest:
-        if (m_needsReposition) {
-            updatePosition();
-        }
-        break;
-    case QEvent::Show:
-        updatePosition();
-        break;
-    case QEvent::Resize:
-        updatePosition();
-        break;
-    default:
-        break;
-    }
-    return PlasmaQuick::PlasmaWindow::event(event);
-}
-
-void PlasmaQuick::PopupPlasmaWindow::queuePositionUpdate()
-{
-    m_needsReposition = true;
-}
-
-void PopupPlasmaWindow::updateSlideEffect()
+void PopupPlasmaWindowPrivate::updateSlideEffect()
 {
     KWindowEffects::SlideFromLocation slideLocation = KWindowEffects::NoEdge;
     if (m_animated) {
@@ -178,10 +66,10 @@ void PopupPlasmaWindow::updateSlideEffect()
             break;
         }
     }
-    KWindowEffects::slideWindow(this, slideLocation, -1);
+    KWindowEffects::slideWindow(q, slideLocation, -1);
 }
 
-void PlasmaQuick::PopupPlasmaWindow::updatePosition()
+void PopupPlasmaWindowPrivate::updatePosition()
 {
     m_needsReposition = false;
 
@@ -189,7 +77,7 @@ void PlasmaQuick::PopupPlasmaWindow::updatePosition()
         qCWarning(LOG_PLASMAQUICK) << "Exposed with no visual parent. Window positioning broken.";
         return;
     }
-    setTransientParent(m_visualParent->window());
+    q->setTransientParent(m_visualParent->window());
     TransientPlacementHint placementHint;
     QRectF parentAnchorRect = QRectF(m_visualParent->mapToScene(QPointF(0, 0)), m_visualParent->size());
 
@@ -212,7 +100,7 @@ void PlasmaQuick::PopupPlasmaWindow::updatePosition()
     placementHint.setFlipConstraintAdjustments(m_floating ? Qt::Vertical : Qt::Orientations());
     placementHint.setMargin(m_margin);
 
-    const QRect popupPosition = TransientPlacementHelper::popupRect(this, placementHint);
+    const QRect popupPosition = TransientPlacementHelper::popupRect(q, placementHint);
 
     if (KWindowSystem::isPlatformX11()) {
         updatePositionX11(popupPosition.topLeft());
@@ -222,21 +110,21 @@ void PlasmaQuick::PopupPlasmaWindow::updatePosition()
     updateBorders(popupPosition);
 }
 
-void PlasmaQuick::PopupPlasmaWindow::updatePositionX11(const QPoint &position)
+void PopupPlasmaWindowPrivate::updatePositionX11(const QPoint &position)
 {
-    setPosition(position);
+    q->setPosition(position);
 }
 
-void PopupPlasmaWindow::updatePositionWayland(const QPoint &position)
+void PopupPlasmaWindowPrivate::updatePositionWayland(const QPoint &position)
 {
     // still update's Qt internal reference as it's used by the next dialog
     // this can be dropped when we're using true semantic positioning in the backend
-    setPosition(position);
+    q->setPosition(position);
 
-    PlasmaShellWaylandIntegration::get(this)->setPosition(position);
+    PlasmaShellWaylandIntegration::get(q)->setPosition(position);
 }
 
-void PopupPlasmaWindow::updateBorders(const QRect &globalPosition)
+void PopupPlasmaWindowPrivate::updateBorders(const QRect &globalPosition)
 {
     // disables borders for the edges that are touching the screen edge
 
@@ -249,11 +137,11 @@ void PopupPlasmaWindow::updateBorders(const QRect &globalPosition)
     Qt::Edges enabledBorders = Qt::LeftEdge | Qt::RightEdge | Qt::TopEdge | Qt::BottomEdge;
 
     if (m_margin) {
-        setBorders(enabledBorders);
+        q->setBorders(enabledBorders);
         return;
     }
 
-    if (m_removeBorderStrategy & AtScreenEdges) {
+    if (m_removeBorderStrategy & PopupPlasmaWindow::AtScreenEdges) {
         if (globalPosition.top() <= screenGeometry.top()) {
             enabledBorders.setFlag(Qt::TopEdge, false);
         }
@@ -267,7 +155,7 @@ void PopupPlasmaWindow::updateBorders(const QRect &globalPosition)
             enabledBorders.setFlag(Qt::RightEdge, false);
         }
     }
-    if (m_removeBorderStrategy & AtPanelEdges) {
+    if (m_removeBorderStrategy & PopupPlasmaWindow::AtPanelEdges) {
         switch (m_popupDirection) {
         case Qt::LeftEdge:
             enabledBorders.setFlag(Qt::RightEdge, false);
@@ -284,5 +172,155 @@ void PopupPlasmaWindow::updateBorders(const QRect &globalPosition)
             break;
         }
     }
-    setBorders(enabledBorders);
+    q->setBorders(enabledBorders);
 }
+
+Qt::Edge PopupPlasmaWindowPrivate::oppositeEdge(Qt::Edge edge)
+{
+    switch (edge) {
+    case Qt::TopEdge:
+        return Qt::BottomEdge;
+    case Qt::BottomEdge:
+        return Qt::TopEdge;
+    case Qt::LeftEdge:
+        return Qt::RightEdge;
+    case Qt::RightEdge:
+        return Qt::LeftEdge;
+    }
+    Q_UNREACHABLE();
+}
+
+PopupPlasmaWindow::PopupPlasmaWindow(QWindow *parent)
+    : PlasmaWindow(parent)
+    , d(new PopupPlasmaWindowPrivate(this))
+{
+}
+
+PopupPlasmaWindow::~PopupPlasmaWindow()
+{
+}
+
+void PopupPlasmaWindow::setVisualParent(QQuickItem *item)
+{
+    if (item == d->m_visualParent) {
+        return;
+    }
+
+    d->m_visualParent = item;
+    Q_EMIT visualParentChanged();
+    queuePositionUpdate();
+}
+
+QQuickItem *PopupPlasmaWindow::visualParent() const
+{
+    return d->m_visualParent;
+}
+
+Qt::Edge PopupPlasmaWindow::popupDirection() const
+{
+    return d->m_popupDirection;
+}
+
+void PopupPlasmaWindow::setPopupDirection(Qt::Edge popupDirection)
+{
+    if (popupDirection == d->m_popupDirection) {
+        return;
+    }
+    d->m_popupDirection = popupDirection;
+
+    if (isExposed()) {
+        qCWarning(LOG_PLASMAQUICK) << "location should be set before showing popup window";
+    }
+    queuePositionUpdate();
+    d->updateSlideEffect();
+
+    Q_EMIT popupDirectionChanged();
+}
+
+bool PopupPlasmaWindow::floating() const
+{
+    return d->m_floating;
+}
+
+void PopupPlasmaWindow::setFloating(bool floating)
+{
+    if (floating == d->m_floating) {
+        return;
+    }
+    d->m_floating = floating;
+    queuePositionUpdate();
+    Q_EMIT floatingChanged();
+}
+
+bool PopupPlasmaWindow::animated() const
+{
+    return d->m_animated;
+}
+
+void PopupPlasmaWindow::setAnimated(bool animated)
+{
+    d->m_animated = animated;
+    d->updateSlideEffect();
+    Q_EMIT animatedChanged();
+}
+
+PopupPlasmaWindow::RemoveBorders PopupPlasmaWindow::removeBorderStrategy() const
+{
+    return d->m_removeBorderStrategy;
+}
+
+void PopupPlasmaWindow::setRemoveBorderStrategy(PopupPlasmaWindow::RemoveBorders strategy)
+{
+    if (d->m_removeBorderStrategy == strategy) {
+        return;
+    }
+
+    d->m_removeBorderStrategy = strategy;
+    queuePositionUpdate(); // This will update borders as well
+    Q_EMIT removeBorderStrategyChanged();
+}
+
+int PopupPlasmaWindow::margin() const
+{
+    return d->m_margin;
+}
+
+void PopupPlasmaWindow::setMargin(int margin)
+{
+    if (d->m_margin == margin) {
+        return;
+    }
+
+    d->m_margin = margin;
+    queuePositionUpdate();
+    Q_EMIT marginChanged();
+}
+
+bool PopupPlasmaWindow::event(QEvent *event)
+{
+    switch (event->type()) {
+    case QEvent::UpdateRequest:
+        if (d->m_needsReposition) {
+            d->updatePosition();
+        }
+        break;
+    case QEvent::Show:
+        d->updatePosition();
+        break;
+    case QEvent::Resize:
+        d->updatePosition();
+        break;
+    default:
+        break;
+    }
+    return PlasmaQuick::PlasmaWindow::event(event);
+}
+
+void PlasmaQuick::PopupPlasmaWindow::queuePositionUpdate()
+{
+    d->m_needsReposition = true;
+}
+
+}
+
+#include "moc_popupplasmawindow.cpp"
