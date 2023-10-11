@@ -42,10 +42,10 @@ class PLASMAQUICK_EXPORT PlasmaWindow : public QQuickWindow
     Q_PROPERTY(qreal rightPadding READ rightPadding NOTIFY paddingChanged)
 
     // Deprecated
-    //    Q_PROPERTY(qreal topMargin READ topMargin NOTIFY paddingChanged)
-    //    Q_PROPERTY(qreal bottomMargin READ bottomMargin NOTIFY paddingChanged)
-    //    Q_PROPERTY(qreal leftMargin READ leftMargin NOTIFY paddingChanged)
-    //    Q_PROPERTY(qreal rightMargin READ rightMargin NOTIFY paddingChanged)
+    Q_PROPERTY(qreal topMargin READ topMargin NOTIFY paddingChanged)
+    Q_PROPERTY(qreal bottomMargin READ bottomMargin NOTIFY paddingChanged)
+    Q_PROPERTY(qreal leftMargin READ leftMargin NOTIFY paddingChanged)
+    Q_PROPERTY(qreal rightMargin READ rightMargin NOTIFY paddingChanged)
 
 public:
     enum BackgroundHints {
