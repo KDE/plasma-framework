@@ -47,7 +47,7 @@ PlasmaWindow::PlasmaWindow(QWindow *parent)
     d->dialogBackground->setImagePath(QStringLiteral("dialogs/background"));
     connect(d->dialogBackground, &DialogBackground::fixedMarginsChanged, this, [this]() {
         d->updateMainItemGeometry();
-        Q_EMIT marginsChanged();
+        Q_EMIT paddingChanged();
     });
     connect(d->dialogBackground, &DialogBackground::maskChanged, this, [this]() {
         d->handleFrameChanged();
@@ -149,7 +149,7 @@ void PlasmaWindow::resizeEvent(QResizeEvent *e)
     const QSize windowSize = e->size();
     d->dialogBackground->setSize(windowSize);
     if (d->mainItem) {
-        const QSize contentSize = windowSize.shrunkBy(margins());
+        const QSize contentSize = windowSize.shrunkBy(padding());
         d->mainItem->setSize(contentSize);
     }
 }
@@ -178,7 +178,7 @@ void PlasmaWindowPrivate::updateMainItemGeometry()
     if (!mainItem) {
         return;
     }
-    const QMargins frameMargins = q->margins();
+    const QMargins frameMargins = q->padding();
     const QSize windowSize = q->size();
 
     mainItem->setX(frameMargins.left());
@@ -188,7 +188,7 @@ void PlasmaWindowPrivate::updateMainItemGeometry()
     mainItem->setSize(contentSize);
 }
 
-QMargins PlasmaWindow::margins() const
+QMargins PlasmaWindow::padding() const
 {
     return QMargins(d->dialogBackground->leftMargin(),
                     d->dialogBackground->topMargin(),
@@ -217,22 +217,22 @@ void PlasmaWindow::setBackgroundHints(BackgroundHints hints)
     Q_EMIT backgroundHintsChanged();
 }
 
-qreal PlasmaWindow::topMargin() const
+qreal PlasmaWindow::topPadding() const
 {
     return d->dialogBackground->topMargin();
 }
 
-qreal PlasmaWindow::bottomMargin() const
+qreal PlasmaWindow::bottomPadding() const
 {
     return d->dialogBackground->bottomMargin();
 }
 
-qreal PlasmaWindow::leftMargin() const
+qreal PlasmaWindow::leftPadding() const
 {
     return d->dialogBackground->leftMargin();
 }
 
-qreal PlasmaWindow::rightMargin() const
+qreal PlasmaWindow::rightPadding() const
 {
     return d->dialogBackground->rightMargin();
 }

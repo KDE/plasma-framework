@@ -36,10 +36,16 @@ class PLASMAQUICK_EXPORT PlasmaWindow : public QQuickWindow
      */
     Q_PROPERTY(BackgroundHints backgroundHints READ backgroundHints WRITE setBackgroundHints NOTIFY backgroundHintsChanged)
 
-    Q_PROPERTY(qreal topMargin READ topMargin NOTIFY marginsChanged)
-    Q_PROPERTY(qreal bottomMargin READ bottomMargin NOTIFY marginsChanged)
-    Q_PROPERTY(qreal leftMargin READ leftMargin NOTIFY marginsChanged)
-    Q_PROPERTY(qreal rightMargin READ rightMargin NOTIFY marginsChanged)
+    Q_PROPERTY(qreal topPadding READ topPadding NOTIFY paddingChanged)
+    Q_PROPERTY(qreal bottomPadding READ bottomPadding NOTIFY paddingChanged)
+    Q_PROPERTY(qreal leftPadding READ leftPadding NOTIFY paddingChanged)
+    Q_PROPERTY(qreal rightPadding READ rightPadding NOTIFY paddingChanged)
+
+    // Deprecated
+    //    Q_PROPERTY(qreal topMargin READ topMargin NOTIFY paddingChanged)
+    //    Q_PROPERTY(qreal bottomMargin READ bottomMargin NOTIFY paddingChanged)
+    //    Q_PROPERTY(qreal leftMargin READ leftMargin NOTIFY paddingChanged)
+    //    Q_PROPERTY(qreal rightMargin READ rightMargin NOTIFY paddingChanged)
 
 public:
     enum BackgroundHints {
@@ -68,24 +74,42 @@ public:
     Qt::Edges borders();
 
     /**
-     * Returns the margins that are placed around the mainItem
+     * Returns the padding that are placed around the mainItem
      * When setting size hints on the window this should be factored in.
      */
-    QMargins margins() const;
+    QMargins padding() const;
 
     BackgroundHints backgroundHints() const;
     void setBackgroundHints(BackgroundHints hints);
 
-    qreal topMargin() const;
-    qreal bottomMargin() const;
-    qreal leftMargin() const;
-    qreal rightMargin() const;
+    qreal topPadding() const;
+    qreal bottomPadding() const;
+    qreal leftPadding() const;
+    qreal rightPadding() const;
+
+    /**DEPRECATED TO BE REMOVED NEXT WEEK*/
+    qreal topMargin() const
+    {
+        return topPadding();
+    }
+    qreal bottomMargin() const
+    {
+        return bottomPadding();
+    }
+    qreal leftMargin() const
+    {
+        return leftPadding();
+    }
+    qreal rightMargin() const
+    {
+        return rightPadding();
+    }
 
 Q_SIGNALS:
     void mainItemChanged();
-    void marginsChanged();
     void bordersChanged();
     void backgroundHintsChanged();
+    void paddingChanged();
 
 protected:
     void showEvent(QShowEvent *e) override;

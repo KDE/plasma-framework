@@ -64,9 +64,9 @@ AppletPopup::AppletPopup()
     PlasmaShellWaylandIntegration::get(this)->setRole(QtWayland::org_kde_plasma_surface::role::role_appletpopup);
 
     auto edgeForwarder = new EdgeEventForwarder(this);
-    edgeForwarder->setMargins(margins());
-    connect(this, &PlasmaWindow::marginsChanged, this, [edgeForwarder, this]() {
-        edgeForwarder->setMargins(margins());
+    edgeForwarder->setMargins(padding());
+    connect(this, &PlasmaWindow::paddingChanged, this, [edgeForwarder, this]() {
+        edgeForwarder->setMargins(padding());
     });
     // edges that have a border are not on a screen edge
     // we want to forward on sides touching screen edges
@@ -76,9 +76,9 @@ AppletPopup::AppletPopup()
     });
 
     auto windowResizer = new WindowResizeHandler(this);
-    windowResizer->setMargins(margins());
-    connect(this, &PlasmaWindow::marginsChanged, this, [windowResizer, this]() {
-        windowResizer->setMargins(margins());
+    windowResizer->setMargins(padding());
+    connect(this, &PlasmaWindow::paddingChanged, this, [windowResizer, this]() {
+        windowResizer->setMargins(padding());
     });
     windowResizer->setActiveEdges(borders());
     connect(this, &PlasmaWindow::bordersChanged, this, [windowResizer, this]() {
@@ -86,9 +86,9 @@ AppletPopup::AppletPopup()
     });
 
     connect(this, &PlasmaWindow::mainItemChanged, this, &AppletPopup::onMainItemChanged);
-    connect(this, &PlasmaWindow::marginsChanged, this, &AppletPopup::updateMaxSize);
-    connect(this, &PlasmaWindow::marginsChanged, this, &AppletPopup::updateSize);
-    connect(this, &PlasmaWindow::marginsChanged, this, &AppletPopup::updateMinSize);
+    connect(this, &PlasmaWindow::paddingChanged, this, &AppletPopup::updateMaxSize);
+    connect(this, &PlasmaWindow::paddingChanged, this, &AppletPopup::updateSize);
+    connect(this, &PlasmaWindow::paddingChanged, this, &AppletPopup::updateMinSize);
 }
 
 AppletPopup::~AppletPopup()
@@ -116,7 +116,7 @@ void AppletPopup::setAppletInterface(QQuickItem *appletInterface)
         size.rheight() = config.readEntry("popupHeight", 0);
         if (!size.isEmpty()) {
             m_sizeExplicitlySetFromConfig = true;
-            resize(size.grownBy(margins()));
+            resize(size.grownBy(padding()));
             return;
         }
     }
@@ -144,7 +144,7 @@ void AppletPopup::hideEvent(QHideEvent *event)
     if (m_appletInterface) {
         KConfigGroup config = m_appletInterface->applet()->config();
         // save size without margins, so we're robust against theme changes
-        const QSize popupSize = size().shrunkBy(margins());
+        const QSize popupSize = size().shrunkBy(padding());
         config.writeEntry("popupWidth", popupSize.width());
         config.writeEntry("popupHeight", popupSize.height());
         config.sync();
@@ -206,7 +206,7 @@ void AppletPopup::updateMinSize()
     if (!m_layoutChangedProxy) {
         return;
     }
-    setMinimumSize(m_layoutChangedProxy->minimumSize().grownBy(margins()));
+    setMinimumSize(m_layoutChangedProxy->minimumSize().grownBy(padding()));
 }
 
 void AppletPopup::updateMaxSize()
@@ -214,7 +214,7 @@ void AppletPopup::updateMaxSize()
     if (!m_layoutChangedProxy) {
         return;
     }
-    setMaximumSize(m_layoutChangedProxy->maximumSize().grownBy(margins()));
+    setMaximumSize(m_layoutChangedProxy->maximumSize().grownBy(padding()));
 }
 
 void AppletPopup::updateSize()
@@ -225,7 +225,7 @@ void AppletPopup::updateSize()
     if (!m_layoutChangedProxy) {
         return;
     }
-    resize(m_layoutChangedProxy->implicitSize().grownBy(margins()));
+    resize(m_layoutChangedProxy->implicitSize().grownBy(padding()));
 }
 
 LayoutChangedProxy::LayoutChangedProxy(QQuickItem *item)
