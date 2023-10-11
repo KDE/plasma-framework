@@ -304,6 +304,3 @@ msgstr "Nastavit %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Obsah byl zahozen"
-
-#~ msgid "The %1 widget did not define which ScriptEngine to use."
-#~ msgstr "Widget %1 neurčil, který skriptovací stroj použít."
