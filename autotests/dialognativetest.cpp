@@ -10,6 +10,7 @@
 #include "utils.h"
 
 #include <KWindowSystem>
+#include <KX11Extras>
 
 namespace
 {
@@ -59,8 +60,8 @@ void DialogNativeTest::initTestCase()
     m_panel->show();
     m_panel2->show();
     m_panel3->show();
-    KWindowSystem::setType(m_panel->winId(), NET::Dock);
-    KWindowSystem::setType(m_panel3->winId(), NET::Dock);
+    KX11Extras::setType(m_panel->winId(), NET::Dock);
+    KX11Extras::setType(m_panel3->winId(), NET::Dock);
     m_dialog->setVisualParent(m_panel->contentItem());
     m_dialog->show();
 }

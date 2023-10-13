@@ -789,7 +789,7 @@ void DialogPrivate::applyType()
 #endif
 
     if (!wmType && type != Dialog::Normal && KWindowSystem::isPlatformX11()) {
-        KWindowSystem::setType(q->winId(), static_cast<NET::WindowType>(type));
+        KX11Extras::setType(q->winId(), static_cast<NET::WindowType>(type));
     }
     if (q->flags() & Qt::WindowStaysOnTopHint) {
         // If the AppletPopup type is not explicitly requested, then use the Dock type in this case
