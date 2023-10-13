@@ -1387,7 +1387,7 @@ void Dialog::showEvent(QShowEvent *event)
     }
 
     if (KWindowSystem::isPlatformX11()) {
-        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+        KX11Extras::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
     }
     QQuickWindow::showEvent(event);
 }

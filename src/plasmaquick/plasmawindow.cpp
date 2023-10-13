@@ -138,7 +138,7 @@ void PlasmaWindow::showEvent(QShowEvent *e)
     // EWMH states that the state is reset every hide
     // Qt supports external factors setting state before the next show
     if (KWindowSystem::isPlatformX11()) {
-        KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
+        KX11Extras::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
     }
     QQuickWindow::showEvent(e);
 }
