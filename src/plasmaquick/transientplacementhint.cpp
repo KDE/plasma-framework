@@ -198,7 +198,7 @@ QRect TransientPlacementHelper::popupRect(QWindow *w, const TransientPlacementHi
 
     // if that fits, we don't need to do anything
     if (inScreenArea(popupRect)) {
-        return popupRect;
+        return popupRect.marginsRemoved(margin);
     }
     // Otherwise,
     if (placement.flipConstraintAdjustments() & Qt::Horizontal) {
@@ -254,5 +254,4 @@ QRect TransientPlacementHelper::popupRect(QWindow *w, const TransientPlacementHi
         }
     }
     return popupRect.marginsRemoved(margin);
-    ;
 }
