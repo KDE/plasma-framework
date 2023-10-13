@@ -1386,7 +1386,7 @@ void Dialog::showEvent(QShowEvent *event)
         DialogShadows::self()->addWindow(this, d->dialogBackground->enabledBorders());
     }
 
-    if (KWindowSystem::isPlatformX11() || isRunningInKWin()) {
+    if (KWindowSystem::isPlatformX11()) {
         KWindowSystem::setState(winId(), NET::SkipTaskbar | NET::SkipPager | NET::SkipSwitcher);
     }
     QQuickWindow::showEvent(event);
