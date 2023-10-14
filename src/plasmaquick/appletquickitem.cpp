@@ -560,8 +560,8 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
             errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
         }
 
-        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("appletName")];
-        qCWarning(LOG_PLASMAQUICK) << errorData[QStringLiteral("errors")];
+        qCWarning(LOG_PLASMAQUICK) << "error when loading applet" << applet->pluginMetaData().pluginId()
+                                   << errorData[QStringLiteral("errors")].toVariant().toStringList();
 
         qmlObject->setSource(applet->containment()->corona()->kPackage().fileUrl("appleterror"));
 
