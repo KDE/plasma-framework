@@ -36,9 +36,12 @@ import org.kde.kirigami 2 as Kirigami
  * Example usage:
  *
  * @code
- * import org.kde.plasma.extras 2.0 as PlasmaExtras
- * import org.kde.plasma.components 3.0 as PlasmaComponents
- * [...]
+ * import QtQuick
+ * import QtQuick.Controls as QQC2
+ * import org.kde.kirigami as Kirigami
+ * import org.kde.plasma.extras as PlasmaExtras
+ * import org.kde.plasma.components as PlasmaComponents
+ *
  * PlasmaComponents.ScrollView {
  *     ListView {
  *         anchors.fill: parent
@@ -55,7 +58,7 @@ import org.kde.kirigami 2 as Kirigami
  *             title: model.name
  *             subtitle: model.subtitle
  *             isDefault: model.isDefault
- *             defaultActionButtonAction: Action {
+ *             defaultActionButtonAction: QQC2.Action {
  *                 icon.name: model.isPaused ? "media-playback-start" : "media-playback-pause"
  *                 text: model.isPaused ? "Resume" : "Pause"
  *                 onTriggered: {
@@ -67,7 +70,7 @@ import org.kde.kirigami 2 as Kirigami
  *                 }
  *             }
  *             contextualActionsModel: [
- *                 Action {
+ *                 QQC2.Action {
  *                     icon.name: "configure"
  *                     text: "Configure..."
  *                     onTriggered: model.configure(model.name);
@@ -76,7 +79,6 @@ import org.kde.kirigami 2 as Kirigami
  *         }
  *     }
  * }
- * [...]
  * @endcode
  */
 Item {
