@@ -289,7 +289,7 @@ Item {
     property bool isDefault: false
 
     // TODO KF6: Change type to bool, and make private. Meanwhile QML converts boolean result into int property alright.
-    readonly property int enabledActions: Array.from(contextualActionsModel).some(action => action.enabled)
+    readonly property int enabledActions: contextualActionsModel.some(action => action?.enabled)
 
     /**
      * expanded: bool
