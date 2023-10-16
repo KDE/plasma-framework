@@ -213,6 +213,8 @@ Item {
      */
     property list<QtObject> contextualActionsModel
 
+    readonly property list<QtObject> __enabledContextualActions: contextualActionsModel.filter(action => action?.enabled ?? false)
+
     /*
      * menu: PlasmaExtras.Menu
      * The context menu to show when the user right-clicks on this list item.
@@ -292,9 +294,6 @@ Item {
      */
     property bool isDefault: false
 
-    // TODO KF6: Change type to bool, and make private. Meanwhile QML converts boolean result into int property alright.
-    readonly property int enabledActions: contextualActionsModel.some(action => action?.enabled)
-
     /**
      * expanded: bool
      * Whether the expanded view is visible.
@@ -309,7 +308,7 @@ Item {
      * this item has either a custom view or else at least one enabled action.
      * Otherwise false.
      */
-    readonly property bool hasExpandableContent: customExpandedViewContent || enabledActions
+    readonly property bool hasExpandableContent: customExpandedViewContent || __enabledContextualActions.length > 0
 
     /*
      * expand()
@@ -616,7 +615,7 @@ Item {
                         id: actionsListLoader
 
                         visible: status === Loader.Ready
-                        active: expandedView.visible && listItem.enabledActions
+                        active: expandedView.visible && listItem.__enabledContextualActions.length > 0
 
                         Layout.fillWidth: true
 
@@ -636,15 +635,13 @@ Item {
                                 Repeater {
                                     id: actionRepeater
 
-                                    model: listItem.contextualActionsModel
+                                    model: listItem.__enabledContextualActions
 
                                     delegate: PlasmaComponents3.ToolButton {
                                         required property int index
                                         required property var modelData
 
                                         Layout.fillWidth: true
-
-                                        visible: modelData.enabled
 
                                         text: modelData.text
                                         icon.name: modelData.icon.name
