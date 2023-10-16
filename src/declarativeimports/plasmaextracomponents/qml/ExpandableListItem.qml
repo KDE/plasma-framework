@@ -669,14 +669,10 @@ Item {
 
                     // Separator between the two items when both are shown
                     KSvg.SvgItem {
-                        visible: actionsListLoader.active && customContentLoader.active
-
                         Layout.fillWidth: true
-
+                        imagePath: "widgets/line"
                         elementId: "horizontal-line"
-                        svg: KSvg.Svg {
-                            imagePath: "widgets/line"
-                        }
+                        visible: actionsListLoader.active && customContentLoader.active
                     }
 
                     // Custom content item, if any
