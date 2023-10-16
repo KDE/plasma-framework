@@ -23,7 +23,7 @@ import org.kde.kirigami 2 as Kirigami
  * item.
  *
  * When expanded, the list item shows a list of contextually-appropriate actions
- * if contextualActionsModel has been defined.
+ * if contextualActions has been defined.
  * If customExpandedViewContent has been defined, it will show a custom view.
  * If both have been defined, it shows both, with the actions above the custom
  * view.
@@ -71,7 +71,7 @@ import org.kde.kirigami 2 as Kirigami
  *                     }
  *                 }
  *             }
- *             contextualActionsModel: [
+ *             contextualActions: [
  *                 QQC2.Action {
  *                     icon.name: "configure"
  *                     text: "Configure..."
@@ -174,13 +174,13 @@ Item {
     property bool showDefaultActionButtonWhenBusy: false
 
     /*
-     * contextualActionsModel: list<QtObject>
+     * contextualActions: list<QtObject>
      * A list of Action objects that describes additional actions that can be
      * performed on this list item. The actions should define appropriate
      * "text:", icon.name:", and "onTriggered:" properties. For example:
      *
      * @code
-     * contextualActionsModel: [
+     * contextualActions: [
      *     Action {
      *         text: "Do something"
      *         icon.name: "document-edit"
@@ -203,9 +203,11 @@ Item {
      * you should instead assign a custom view to customExpandedViewContent,
      * which will be shown when the user expands the list item.
      */
-    property list<QtObject> contextualActionsModel
+    property list<QtObject> contextualActions
+    // TODO KF6: temporary alias for backward-compatibility
+    property alias contextualActionsModel: listItem.contextualActions
 
-    readonly property list<QtObject> __enabledContextualActions: contextualActionsModel.filter(action => action?.enabled ?? false)
+    readonly property list<QtObject> __enabledContextualActions: contextualActions.filter(action => action?.enabled ?? false)
 
     /*
      * A custom view to display when the user expands the list item.
@@ -215,7 +217,7 @@ Item {
      * on the component itself.
      *
      * Optional; if not defined, no custom view actions will be displayed and
-     * you should instead define contextualActionsModel, and then actions will
+     * you should instead define contextualActions, and then actions will
      * be shown when the user expands the list item.
      */
     property var customExpandedViewContent
