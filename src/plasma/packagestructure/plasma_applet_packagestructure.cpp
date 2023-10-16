@@ -30,8 +30,7 @@ public:
 
     void pathChanged(KPackage::Package *package) override
     {
-        ChangeableMainScriptPackage::pathChanged(package);
-
+        GenericPackage::pathChanged(package);
         const KPluginMetaData md = package->metadata();
         if (!md.isValid()) {
             return;

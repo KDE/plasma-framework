@@ -110,6 +110,5 @@
         "Website": ""
     },
     "Keywords": "",
-    "X-KDE-ParentApp": "",
-    "X-Plasma-MainScript": "ui/testcomponents.qml"
+    "X-KDE-ParentApp": ""
 }

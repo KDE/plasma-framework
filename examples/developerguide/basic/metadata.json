@@ -124,6 +124,5 @@
         "Name[zh_CN]": "程序缺陷",
         "Version": "1.0",
         "Website": "https://www.kde.org"
-    },
-    "X-Plasma-MainScript": "ui/main.qml"
+    }
 }

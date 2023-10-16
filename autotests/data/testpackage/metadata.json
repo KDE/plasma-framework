@@ -49,11 +49,6 @@
         "Name[uk]": "Тестовий пакунок",
         "Name[x-test]": "xxTest Packagexx",
         "Name[zh_CN]": "测试包",
-        "Name[zh_TW]": "測試套件",
-        "Version": "",
-        "Website": ""
-    },
-    "Keywords": "",
-    "X-KDE-ParentApp": "",
-    "X-Plasma-MainScript": "ui/main.qml"
+        "Name[zh_TW]": "測試套件"
+    }
 }

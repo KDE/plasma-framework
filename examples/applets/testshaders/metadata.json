@@ -120,6 +120,5 @@
         "Website": ""
     },
     "Keywords": "",
-    "X-KDE-ParentApp": "",
-    "X-Plasma-MainScript": "ui/testshaderapplet.qml"
+    "X-KDE-ParentApp": ""
 }

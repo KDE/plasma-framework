@@ -125,6 +125,5 @@
     "X-KDE-ParentApp": "",
     "X-Plasma-DropMimeTypes": [
         "text/plain"
-    ],
-    "X-Plasma-MainScript": "ui/main.qml"
+    ]
 }

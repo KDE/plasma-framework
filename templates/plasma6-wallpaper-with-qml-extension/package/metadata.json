@@ -89,6 +89,5 @@
         "Name[zh_CN]": "%{APPNAME}",
         "Version": "%{VERSION}",
         "Website": "https://plasma.kde.org/"
-    },
-    "X-Plasma-MainScript": "ui/main.qml"
+    }
 }

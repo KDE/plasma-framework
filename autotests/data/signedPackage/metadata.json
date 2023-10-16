@@ -91,7 +91,6 @@
         "Version": "0.1",
         "Website": ""
     },
-    "X-Plasma-MainScript": "code/main.js",
     "X-Plasma-OptionalExtensions": "http",
     "KPackageStructure": "Plasma/Applet"
 }

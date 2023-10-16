@@ -122,6 +122,5 @@
         "Name[zh_CN]": "挂件展厅",
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"
-    },
-    "X-Plasma-MainScript": "ui/main.qml"
+    }
 }

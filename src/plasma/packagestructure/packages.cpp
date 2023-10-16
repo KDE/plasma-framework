@@ -23,29 +23,11 @@
 
 namespace Plasma
 {
-void ChangeableMainScriptPackage::initPackage(KPackage::Package *package)
-{
-    package->addFileDefinition("mainscript", QStringLiteral("ui/main.qml"));
-    package->addFileDefinition("test", QStringLiteral("tests/test.qml"));
-    package->setRequired("mainscript", true);
-}
-
-void ChangeableMainScriptPackage::pathChanged(KPackage::Package *package)
-{
-    if (package->path().isEmpty()) {
-        return;
-    }
-
-    const QString mainScript = package->metadata().value(QLatin1String("X-Plasma-MainScript"));
-
-    if (!mainScript.isEmpty()) {
-        package->addFileDefinition("mainscript", mainScript);
-    }
-}
-
 void GenericPackage::initPackage(KPackage::Package *package)
 {
-    ChangeableMainScriptPackage::initPackage(package);
+    package->addFileDefinition("mainscript", QStringLiteral("ui/main.qml"));
+    package->setRequired("mainscript", true);
+    package->addFileDefinition("test", QStringLiteral("tests/test.qml"));
 
     if (QStringList platform = KRuntimePlatform::runtimePlatform(); !platform.isEmpty()) {
         for (QString &platformEntry : platform) {

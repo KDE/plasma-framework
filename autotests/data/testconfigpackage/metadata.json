@@ -12,8 +12,5 @@
         "Name": "Config Test Package",
         "Version": "",
         "Website": ""
-    },
-    "Keywords": "",
-    "X-KDE-ParentApp": "",
-    "X-Plasma-MainScript": "ui/main.qml"
+    }
 }

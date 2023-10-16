@@ -112,8 +112,5 @@
         "Name[zh_CN]": "hello world",
         "Version": "",
         "Website": ""
-    },
-    "Keywords": "",
-    "X-KDE-ParentApp": "",
-    "X-Plasma-MainScript": "ui/main.qml"
+    }
 }

@@ -11,15 +11,15 @@
 #include <kpackage/package.h>
 #include <kpackage/packagestructure.h>
 
-class ContainmentActionsPackage : public Plasma::ChangeableMainScriptPackage
+class ContainmentActionsPackage : public Plasma::GenericPackage
 {
     Q_OBJECT
 public:
-    using Plasma::ChangeableMainScriptPackage::ChangeableMainScriptPackage;
+    using Plasma::GenericPackage::GenericPackage;
 
     void initPackage(KPackage::Package *package) override
     {
-        ChangeableMainScriptPackage::initPackage(package);
+        GenericPackage::initPackage(package);
         package->setDefaultPackageRoot(QStringLiteral(PLASMA_RELATIVE_DATA_INSTALL_DIR "/containmentactions/"));
     }
 };
