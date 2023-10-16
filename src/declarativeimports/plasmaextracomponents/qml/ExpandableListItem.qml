@@ -4,6 +4,8 @@
     SPDX-License-Identifier: LGPL-2.0-or-later
 */
 
+pragma ComponentBehavior: Bound
+
 import QtQuick 2.14
 import QtQuick.Layouts 1.1
 import org.kde.plasma.core as PlasmaCore
@@ -637,12 +639,15 @@ Item {
                                     model: listItem.contextualActionsModel
 
                                     delegate: PlasmaComponents3.ToolButton {
+                                        required property int index
+                                        required property var modelData
+
                                         Layout.fillWidth: true
 
-                                        visible: model.enabled
+                                        visible: modelData.enabled
 
-                                        text: model.text
-                                        icon.name: model.icon.name
+                                        text: modelData.text
+                                        icon.name: modelData.icon.name
 
                                         KeyNavigation.up: index > 0 ? actionRepeater.itemAt(index - 1) : expandToggleButton
                                         Keys.onDownPressed: event => {
