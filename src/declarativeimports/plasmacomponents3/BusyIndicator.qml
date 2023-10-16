@@ -31,9 +31,14 @@ T.BusyIndicator {
     contentItem: Item {
         /* Binding on `visible` implicitly takes care of `control.visible`,
          * `control.running` and `opacity > 0` at once.
-         * Also, don't animate at all if the user has disabled animations.
+         * Also, don't animate at all if the user has disabled animations,
+         * and don't animate when window is hidden (which somehow does not
+         * affect items' visibility).
          */
-        property bool animationRunning: visible && Kirigami.Units.longDuration > 1
+        property bool animationRunning:
+            visible
+            && Window.visibility !== Window.Hidden
+            && Kirigami.Units.longDuration > 1
 
         /* implicitWidth and implicitHeight won't work unless they come
          * from a child of the contentItem. No idea why.
