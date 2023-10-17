@@ -6,6 +6,7 @@
 
 import QtQuick 2.12
 import QtQuick.Layouts 1.12
+import QtQuick.Window
 
 import org.kde.plasma.core as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
@@ -89,7 +90,23 @@ T.ToolBar {
         BackgroundMetrics {
             id: backgroundMetrics
             function getMargin(margin) {
-                if (!hasInset) {
+                if (Window.window &&
+                    (Window.window.hasOwnProperty("leftPadding") &&
+                     Window.window.hasOwnProperty("topPadding") &&
+                     Window.window.hasOwnProperty("rightPadding") &&
+                     Window.window.hasOwnProperty("bottomPadding"))) {
+                    switch(margin) {
+                    case "left":
+                        return -Window.window.leftPadding;
+                    case "top":
+                        return -Window.window.topPadding;
+                    case "right":
+                        return -Window.window.rightPadding;
+                    case "bottom":
+                    default:
+                        return -Window.window.bottomPadding;
+                    }
+                } else if (!hasInset) {
                     return -headingSvg.fixedMargins[margin];
                 } else {
                     return -backgroundMetrics.fixedMargins[margin] + backgroundMetrics.inset[margin]
