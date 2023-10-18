@@ -59,36 +59,28 @@ Item {
 	 */
     property alias marginHints: background.margins
 
+    /**
+     * This property holds whether the item is active. True by default. Set it to
+     * false to visually mark an item that's in the "current item" or "selected"
+     * state but is not currently being hovered.
+     */
+    property bool active: true
+
     width: ListView.view?.width ?? undefined
-
-    Connections {
-        target: highlight.ListView.view
-        function onCurrentIndexChanged() {
-            if (highlight.ListView.view.currentIndex >= 0) {
-                background.opacity = 1;
-            } else {
-                background.opacity = 0;
-            }
-        }
-    }
-
-    Behavior on opacity {
-        NumberAnimation {
-            duration: Kirigami.Units.veryShortDuration
-            easing.type: Easing.OutQuad
-        }
-    }
 
     KSvg.FrameSvgItem {
         id: background
 
         anchors.fill: parent
 
+        opacity: highlight.active ? 1 : 0.6
+
         imagePath: "widgets/viewitem"
         prefix: {
             if (highlight.pressed) {
                 return highlight.hovered ? 'selected+hover' : 'selected';
             }
+
             return highlight.hovered ? 'hover' : 'normal';
         }
 
