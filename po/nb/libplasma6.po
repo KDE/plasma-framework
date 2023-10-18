@@ -306,6 +306,3 @@ msgstr ""
 #, kde-format
 msgid "Content dropped"
 msgstr ""
-
-#~ msgid "The %1 widget did not define which ScriptEngine to use."
-#~ msgstr "Elementet %1 oppga ikke hvilken ScriptEngine som skal brukes."

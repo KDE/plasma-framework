@@ -320,6 +320,3 @@ msgstr "Set %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Innhald sleppt"
-
-#~ msgid "The %1 widget did not define which ScriptEngine to use."
-#~ msgstr "Skjermelementet %1 oppgav ikkje kva ScriptEngine som skal brukast."
