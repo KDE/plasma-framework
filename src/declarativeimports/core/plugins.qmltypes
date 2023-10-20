@@ -797,7 +797,7 @@ Module {
             name: "dataChanged"
             Parameter { name: "topLeft"; type: "QModelIndex" }
             Parameter { name: "bottomRight"; type: "QModelIndex" }
-            Parameter { name: "roles"; type: "QVector<int>" }
+            Parameter { name: "roles"; type: "QList<int>" }
         }
         Signal {
             name: "dataChanged"

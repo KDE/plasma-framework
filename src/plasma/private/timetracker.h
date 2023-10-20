@@ -8,9 +8,9 @@
 #define TIMETRACKER_H
 
 #include <QDateTime>
+#include <QList>
 #include <QObject>
 #include <QVariantMap>
-#include <QVector>
 
 #include "plasma/plasma_export.h"
 
@@ -26,7 +26,7 @@ struct TimeEvent {
 
 struct ObjectHistory {
     QVariantMap initial;
-    QVector<TimeEvent> events;
+    QList<TimeEvent> events;
 };
 
 /**

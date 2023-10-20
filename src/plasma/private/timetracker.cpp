@@ -56,7 +56,7 @@ public:
     QHash<QObject *, ObjectHistory> m_data;
 
 private:
-    QJsonArray serializeEvents(const QVector<TimeEvent> &events) const
+    QJsonArray serializeEvents(const QList<TimeEvent> &events) const
     {
         QJsonArray ret;
         Q_ASSERT(!events.isEmpty());

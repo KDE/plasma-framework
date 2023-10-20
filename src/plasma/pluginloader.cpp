@@ -257,13 +257,13 @@ QList<KPluginMetaData> PluginLoader::listContainmentsMetaDataOfType(const QStrin
     return listContainmentsMetaData(filter);
 }
 
-QVector<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QString &parentApp)
+QList<KPluginMetaData> PluginLoader::listContainmentActionsMetaData(const QString &parentApp)
 {
     auto filter = [&parentApp](const KPluginMetaData &md) -> bool {
         return md.value(QStringLiteral("X-KDE-ParentApp")) == parentApp;
     };
 
-    QVector<KPluginMetaData> plugins;
+    QList<KPluginMetaData> plugins;
     if (parentApp.isEmpty()) {
         plugins = KPluginMetaData::findPlugins(PluginLoaderPrivate::s_containmentActionsPluginDir);
     } else {
@@ -300,7 +300,7 @@ KPluginMetaData PluginLoaderPrivate::Cache::findPluginById(const QString &name, 
         qCDebug(LOG_PLASMA) << "loading applet by name" << name << useRuntimeCache << data.isValid();
         return data;
     } else {
-        const QVector<KPluginMetaData> offers = KPluginMetaData::findPlugins(
+        const QList<KPluginMetaData> offers = KPluginMetaData::findPlugins(
             pluginNamespace,
             [&pluginName](const KPluginMetaData &data) {
                 return data.pluginId() == pluginName;

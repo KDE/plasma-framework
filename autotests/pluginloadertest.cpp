@@ -24,7 +24,7 @@ PluginTest::PluginTest()
 
 void PluginTest::listContainmentActions()
 {
-    const QVector<KPluginMetaData> plugins = Plasma::PluginLoader::self()->listContainmentActionsMetaData(QStringLiteral("plasma-shell"));
+    const QList<KPluginMetaData> plugins = Plasma::PluginLoader::self()->listContainmentActionsMetaData(QStringLiteral("plasma-shell"));
     const bool pluginFound = std::any_of(plugins.begin(), plugins.end(), [](const KPluginMetaData &data) {
         return data.pluginId() == QLatin1String("dummycontainmentaction");
     });

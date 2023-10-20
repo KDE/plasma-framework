@@ -127,7 +127,7 @@ public:
      * @return list of ContainmentActions
      * @since 5.77
      **/
-    QVector<KPluginMetaData> listContainmentActionsMetaData(const QString &parentApp);
+    QList<KPluginMetaData> listContainmentActionsMetaData(const QString &parentApp);
 
     /**
      * Return the active plugin loader
