@@ -1459,6 +1459,7 @@ bool Dialog::event(QEvent *event)
                                 me->button(),
                                 me->buttons(),
                                 me->modifiers());
+                me2.setTimestamp(me->timestamp());
 
                 if (isVisible()) {
                     QCoreApplication::sendEvent(this, &me2);
@@ -1482,6 +1483,7 @@ bool Dialog::event(QEvent *event)
                                 we->modifiers(),
                                 we->phase(),
                                 false /*inverted*/);
+                we2.setTimestamp(we->timestamp());
 
                 if (isVisible()) {
                     QCoreApplication::sendEvent(this, &we2);

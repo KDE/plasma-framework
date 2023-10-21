@@ -78,6 +78,7 @@ bool EdgeEventForwarder::eventFilter(QObject *watched, QEvent *event)
                             me->button(),
                             me->buttons(),
                             me->modifiers());
+            me2.setTimestamp(me->timestamp());
 
             if (d->window->isVisible()) {
                 QCoreApplication::sendEvent(d->window, &me2);
@@ -101,6 +102,7 @@ bool EdgeEventForwarder::eventFilter(QObject *watched, QEvent *event)
                             we->modifiers(),
                             we->phase(),
                             false /*inverted*/);
+            we2.setTimestamp(we->timestamp());
 
             if (d->window->isVisible()) {
                 QCoreApplication::sendEvent(this, &we2);
