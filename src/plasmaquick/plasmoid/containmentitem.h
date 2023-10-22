@@ -25,11 +25,6 @@ class Job;
 class DropJob;
 }
 
-namespace KActivities
-{
-class Info;
-}
-
 /**
  * @brief This class is exposed to containments QML as the attached property Plasmoid
  *
@@ -127,8 +122,6 @@ protected:
 
 Q_SIGNALS:
     // Property notifiers
-    void activityChanged();
-    void activityNameChanged();
     void appletsChanged();
     void drawWallpaperChanged();
     void actionsChanged();
@@ -151,7 +144,6 @@ private:
 
     WallpaperItem *m_wallpaperItem = nullptr;
     QList<QObject *> m_plasmoidItems;
-    KActivities::Info *m_activityInfo;
     QPointer<Plasma::Containment> m_containment;
     QPointer<QMenu> m_contextMenu;
     QPointer<DropMenu> m_dropMenu;

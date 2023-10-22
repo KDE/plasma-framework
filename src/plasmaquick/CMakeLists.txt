@@ -93,7 +93,6 @@ target_link_libraries(KF6PlasmaQuick
         KF6::KIOCore
         KF6::KIOWidgets
         KF6::Notifications
-        KF6::Activities
         KF6::KCMUtilsQuick
         KF6::Svg
 )

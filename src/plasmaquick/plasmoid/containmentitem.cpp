@@ -41,14 +41,11 @@
 #include <KPackage/PackageJob>
 #include <KPackage/PackageLoader>
 
-#include <kactivities/info.h>
-
 #include <packageurlinterceptor.h>
 
 ContainmentItem::ContainmentItem(QQuickItem *parent)
     : PlasmoidItem(parent)
     , m_wallpaperItem(nullptr)
-    , m_activityInfo(nullptr)
     , m_wheelDelta(0)
 {
     setAcceptedMouseButtons(Qt::AllButtons);
@@ -79,10 +76,6 @@ void ContainmentItem::init()
     if (!m_plasmoidItems.isEmpty()) {
         Q_EMIT appletsChanged();
     }
-
-    m_activityInfo = new KActivities::Info(m_containment->activity(), this);
-    connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentItem::activityNameChanged);
-    Q_EMIT activityNameChanged();
 
     // Create the ToolBox
     if (m_containment) {
@@ -134,13 +127,6 @@ void ContainmentItem::init()
         }
     }
 
-    connect(m_containment.data(), &Plasma::Containment::activityChanged, this, &ContainmentItem::activityChanged);
-    connect(m_containment.data(), &Plasma::Containment::activityChanged, this, [=]() {
-        delete m_activityInfo;
-        m_activityInfo = new KActivities::Info(m_containment->activity(), this);
-        connect(m_activityInfo, &KActivities::Info::nameChanged, this, &ContainmentItem::activityNameChanged);
-        Q_EMIT activityNameChanged();
-    });
     connect(m_containment.data(), &Plasma::Containment::wallpaperPluginChanged, this, &ContainmentItem::loadWallpaper);
 
     connect(m_containment, &Plasma::Containment::internalActionsChanged, this, &ContainmentItem::actionsChanged);
