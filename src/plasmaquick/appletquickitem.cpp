@@ -526,7 +526,7 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     if (pc && pc->isContainment()) {
         item = qobject_cast<ContainmentItem *>(qmlObject->rootObject());
         if (!item && qmlObject->mainComponent() && !qmlObject->mainComponent()->isError()) {
-            applet->setLaunchErrorMessage(i18n("The root item of %1 must be of type ContaimentItem", applet->kPackage().fileUrl("mainscript").toString()));
+            applet->setLaunchErrorMessage(i18n("The root item of %1 must be of type ContainmentItem", applet->kPackage().fileUrl("mainscript").toString()));
         }
     } else {
         item = qobject_cast<PlasmoidItem *>(qmlObject->rootObject());
