@@ -8,14 +8,13 @@
 #include "configview.h"
 #include "plasmoid/containmentitem.h"
 
+#include <KPackage/Package>
 #include <QDebug>
 #include <QQmlContext>
 #include <QQmlEngine>
 #include <QQuickItem>
 #include <QScreen>
 #include <QTimer>
-
-#include <packageurlinterceptor.h>
 
 namespace PlasmaQuick
 {

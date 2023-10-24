@@ -23,7 +23,7 @@
 #include <KAuthorized>
 #include <KLocalizedContext>
 #include <KLocalizedString>
-#include <packageurlinterceptor.h>
+#include <KPackage/Package>
 
 #include <Plasma/Corona>
 #include <Plasma/PluginLoader>
@@ -118,9 +118,6 @@ void ConfigViewPrivate::init()
 
     const auto pkg = corona->kPackage();
     if (pkg.isValid()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(q->engine(), pkg);
-        interceptor->addAllowedPath(applet.data()->kPackage().path());
-        q->engine()->addUrlInterceptor(interceptor);
         new QQmlFileSelector(q->engine(), q->engine());
     }
 

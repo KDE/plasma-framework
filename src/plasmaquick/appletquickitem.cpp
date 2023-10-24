@@ -32,10 +32,6 @@
 #include <Plasma/Containment>
 #include <Plasma/Corona>
 
-#include <packageurlinterceptor.h>
-#include <qloggingcategory.h>
-#include <qstringliteral.h>
-
 namespace PlasmaQuick
 {
 
@@ -502,16 +498,9 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
     }
 
     Plasma::Containment *pc = qobject_cast<Plasma::Containment *>(applet);
-
-    // TODO: kill packageurlinterceptor
     auto *qmlObject = new PlasmaQuick::SharedQmlEngine(applet, applet);
     qmlObject->engine()->setProperty("_kirigamiTheme", QStringLiteral("KirigamiPlasmaStyle"));
     qmlObject->setInitializationDelayed(true);
-    if (qmlObject->engine()->urlInterceptors().isEmpty()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(qmlObject->engine().get(), KPackage::Package());
-        interceptor->setForcePlasmaStyle(true);
-        qmlObject->engine()->addUrlInterceptor(interceptor);
-    }
     if (applet->pluginMetaData().isValid()) {
         const QString rootPath = applet->pluginMetaData().value(QStringLiteral("X-Plasma-RootPath"));
         if (!rootPath.isEmpty()) {
@@ -623,15 +612,6 @@ void AppletQuickItem::init()
 
     // Initialize the main QML file
     QQmlEngine *engine = d->qmlObject->engine().get();
-
-    // if the engine of the qmlObject is different from the static one, then we
-    // are using an old version of the api in which every applet had one engine
-    // so initialize a private url interceptor
-    if (d->applet->kPackage().isValid()) {
-        PackageUrlInterceptor *interceptor = new PackageUrlInterceptor(engine, d->applet->kPackage());
-        interceptor->addAllowedPath(d->coronaPackage.path());
-        engine->addUrlInterceptor(interceptor);
-    }
 
     // If no fullRepresentation was defined, we won't create compact and expander either.
     // The only representation available are whatever items defined directly inside PlasmoidItem {}

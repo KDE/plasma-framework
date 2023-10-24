@@ -41,8 +41,6 @@
 #include <KPackage/PackageJob>
 #include <KPackage/PackageLoader>
 
-#include <packageurlinterceptor.h>
-
 ContainmentItem::ContainmentItem(QQuickItem *parent)
     : PlasmoidItem(parent)
     , m_wallpaperItem(nullptr)
@@ -94,15 +92,6 @@ void ContainmentItem::init()
                 pkg.setPath(defaults.readEntry("ToolBox", "org.kde.desktoptoolbox"));
             } else {
                 pkg.setPath(QStringLiteral("org.kde.desktoptoolbox"));
-            }
-
-            const auto interceptors = qmlObject()->engine()->urlInterceptors();
-            for (auto i : interceptors) {
-                PlasmaQuick::PackageUrlInterceptor *interceptor = dynamic_cast<PlasmaQuick::PackageUrlInterceptor *>(i);
-                if (interceptor) {
-                    interceptor->addAllowedPath(pkg.path());
-                    break;
-                }
             }
 
             if (pkg.metadata().isValid() && !pkg.metadata().isHidden()) {

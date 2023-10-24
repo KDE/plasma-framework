@@ -25,7 +25,6 @@ target_sources(KF6PlasmaQuick PRIVATE
     configmodel.cpp
     configview.cpp
     edgeeventforwarder.cpp
-    packageurlinterceptor.cpp
     sharedqmlengine.cpp
     quickviewsharedengine.cpp
     plasmawindow.cpp
@@ -125,7 +124,6 @@ ecm_generate_export_header(KF6PlasmaQuick
 
 set(plasmaquick_LIB_INCLUDES
     ${CMAKE_CURRENT_BINARY_DIR}/plasmaquick_export.h
-    packageurlinterceptor.h
 )
 
 ecm_generate_headers(PlasmaQuick_CamelCase_HEADERS
