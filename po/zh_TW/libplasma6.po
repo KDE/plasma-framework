@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 01:38+0000\n"
+"POT-Creation-Date: 2023-10-25 01:49+0000\n"
 "PO-Revision-Date: 2023-08-08 00:53+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -221,8 +221,9 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr "不合法的（空白的）服務，無法執行任何操作。"
 
 #: plasmaquick/appletquickitem.cpp:529
-#, kde-format
-msgid "The root item of %1 must be of type ContaimentItem"
+#, fuzzy, kde-format
+#| msgid "The root item of %1 must be of type ContaimentItem"
+msgid "The root item of %1 must be of type ContainmentItem"
 msgstr "%1 的根項目必須為型態 ContaimentItem"
 
 #: plasmaquick/appletquickitem.cpp:534

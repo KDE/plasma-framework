@@ -1,13 +1,13 @@
-# Copyright (C) YEAR This file is copyright:
+# Copyright (C) 2023 This file is copyright:
 # This file is distributed under the same license as the plasma-framework package.
 #
-# Enol P. <enolp@softastur.org>, 2023.
+# SPDX-FileCopyrightText: 2023 Enol P. <enolp@softastur.org>
 msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 01:38+0000\n"
-"PO-Revision-Date: 2023-05-23 01:50+0200\n"
+"POT-Creation-Date: 2023-10-25 01:49+0000\n"
+"PO-Revision-Date: 2023-10-24 23:40+0200\n"
 "Last-Translator: Enol P. <enolp@softastur.org>\n"
 "Language-Team: \n"
 "Language: ast\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
@@ -80,7 +80,7 @@ msgstr ""
 #: plasma/containment.cpp:111 plasma/corona.cpp:365
 #, kde-format
 msgid "Exit Edit Mode"
-msgstr "Cola del mou d'edición"
+msgstr "Colar del mou d'edición"
 
 #: plasma/corona.cpp:316 plasma/corona.cpp:470
 #, kde-format
@@ -111,7 +111,7 @@ msgstr ""
 #, kde-format
 msgctxt "Package file, name of the widget"
 msgid "Could not open the %1 package required for the %2 widget."
-msgstr ""
+msgstr "Nun se pudo abrir el paquete «%1» riquíu pol widget «%2»."
 
 #: plasma/private/applet_p.cpp:146
 #, kde-format
@@ -216,7 +216,7 @@ msgstr "El serviciu nun ye válidu, nun se pue facer nenguna operación."
 
 #: plasmaquick/appletquickitem.cpp:529
 #, kde-format
-msgid "The root item of %1 must be of type ContaimentItem"
+msgid "The root item of %1 must be of type ContainmentItem"
 msgstr ""
 
 #: plasmaquick/appletquickitem.cpp:534

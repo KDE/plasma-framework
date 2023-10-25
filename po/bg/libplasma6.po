@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 01:38+0000\n"
+"POT-Creation-Date: 2023-10-25 01:49+0000\n"
 "PO-Revision-Date: 2023-06-22 21:45+0200\n"
 "Last-Translator: Mincho Kondarev <mkondarev@yahoo.de>\n"
 "Language-Team: Bulgarian <kde-i18n-doc@kde.org>\n"
@@ -217,8 +217,9 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr "Невалидна (нулева) услуга, не може да извършва никакви операции."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, kde-format
-msgid "The root item of %1 must be of type ContaimentItem"
+#, fuzzy, kde-format
+#| msgid "The root item of %1 must be of type ContaimentItem"
+msgid "The root item of %1 must be of type ContainmentItem"
 msgstr "Основният елемент на  %1 трябва да бъде от тип ContaimentItem"
 
 #: plasmaquick/appletquickitem.cpp:534

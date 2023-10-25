@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 01:38+0000\n"
+"POT-Creation-Date: 2023-10-25 01:49+0000\n"
 "PO-Revision-Date: 2023-06-09 15:46+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
@@ -225,8 +225,9 @@ msgstr ""
 "Servizio non valido (assente), non è possibile eseguire alcuna operazione."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, kde-format
-msgid "The root item of %1 must be of type ContaimentItem"
+#, fuzzy, kde-format
+#| msgid "The root item of %1 must be of type ContaimentItem"
+msgid "The root item of %1 must be of type ContainmentItem"
 msgstr "L'elemento radice di %1 deve essere di tipo ContaimentItem"
 
 #: plasmaquick/appletquickitem.cpp:534

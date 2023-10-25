@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 01:38+0000\n"
+"POT-Creation-Date: 2023-10-25 01:49+0000\n"
 "PO-Revision-Date: 2021-09-05 15:52+0200\n"
 "Last-Translator: Mihkel Tõnnov <mihhkel@gmail.com>\n"
 "Language-Team: Estonian <>\n"
@@ -222,7 +222,7 @@ msgstr "Vigane (tühi) teenus, ühtegi toimingut ei saa teostada."
 
 #: plasmaquick/appletquickitem.cpp:529
 #, kde-format
-msgid "The root item of %1 must be of type ContaimentItem"
+msgid "The root item of %1 must be of type ContainmentItem"
 msgstr ""
 
 #: plasmaquick/appletquickitem.cpp:534

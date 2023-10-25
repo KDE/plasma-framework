@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-21 01:38+0000\n"
+"POT-Creation-Date: 2023-10-25 01:49+0000\n"
 "PO-Revision-Date: 2023-06-09 08:53+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
@@ -226,8 +226,9 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr "Servei no vàlid (nul), no pot executar cap operació."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, kde-format
-msgid "The root item of %1 must be of type ContaimentItem"
+#, fuzzy, kde-format
+#| msgid "The root item of %1 must be of type ContaimentItem"
+msgid "The root item of %1 must be of type ContainmentItem"
 msgstr "L'element arrel de %1 cal que siga del tipus ContaimentItem"
 
 #: plasmaquick/appletquickitem.cpp:534
@@ -243,7 +244,7 @@ msgstr "Miniaplicació desconeguda"
 #: plasmaquick/appletquickitem.cpp:557
 #, kde-format
 msgid "Error loading QML file: %1 %2"
-msgstr "S'ha produït un error en carregar el fitxer QML: %1 %2"
+msgstr "S'ha produït un error en carregar el fitxer en QML: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:559
 #, kde-format
@@ -310,10 +311,3 @@ msgstr "Establix %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contingut descartat"
-
-#~ msgid "The %1 widget did not define which ScriptEngine to use."
-#~ msgstr "El giny %1 no ha definit quin «ScriptEngine» s'ha d'utilitzar."
-
-#~ msgctxt "misc category"
-#~ msgid "Miscellaneous"
-#~ msgstr "Miscel·lània"
