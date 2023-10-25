@@ -26,6 +26,7 @@
                 "Name[ta]": "இச்சானி",
                 "Name[tr]": "Çani",
                 "Name[uk]": "Chani",
+                "Name[vi]": "Chani",
                 "Name[x-test]": "xxChanixx",
                 "Name[zh_CN]": "Chani"
             }
@@ -51,6 +52,7 @@
         "Description[sl]": "Slepi vtičnik za preizkus",
         "Description[tr]": "Sınama için bir boş eklenti",
         "Description[uk]": "Додаток для тестування",
+        "Description[vi]": "Một phần cài cắm nộm dùng cho kiểm thử",
         "Description[x-test]": "xxA dummy plugin for testingxx",
         "Description[zh_CN]": "测试用虚拟插件",
         "EnabledByDefault": true,
@@ -79,6 +81,7 @@
         "Name[ta]": "சோதனை",
         "Name[tr]": "Sınama",
         "Name[uk]": "Тест",
+        "Name[vi]": "Kiểm thử",
         "Name[x-test]": "xxTestxx",
         "Name[zh_CN]": "测试",
         "Version": "pre0.1",

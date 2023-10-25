@@ -67,6 +67,7 @@
         "Description[sl]": "Preizkus vsebnika",
         "Description[tr]": "Sınama Kapsayıcısı",
         "Description[uk]": "Тест контейнера",
+        "Description[vi]": "Phần bao chứa kiểm thử",
         "Description[x-test]": "xxTest Containmentxx",
         "Description[zh_CN]": "测试容器",
         "Id": "org.kde.example.testcontainment",

@@ -67,6 +67,7 @@
         "Description[sl]": "Primer apleta",
         "Description[tr]": "Yapılandırmalı örnek uygulamacık",
         "Description[uk]": "Приклад аплету із налаштуваннями",
+        "Description[vi]": "Tiểu ứng dụng ví dụ với cấu hình",
         "Description[x-test]": "xxExample applet with configxx",
         "Description[zh_CN]": "带有配置的示例小程序",
         "Id": "org.kde.example.configuration",
