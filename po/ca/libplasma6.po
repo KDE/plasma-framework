@@ -11,7 +11,7 @@ msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-25 01:49+0000\n"
-"PO-Revision-Date: 2023-06-09 08:53+0200\n"
+"PO-Revision-Date: 2023-10-25 09:12+0200\n"
 "Last-Translator: Josep M. Ferrer <txemaq@gmail.com>\n"
 "Language-Team: Catalan <kde-i18n-ca@kde.org>\n"
 "Language: ca\n"
@@ -20,7 +20,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Accelerator-Marker: &\n"
-"X-Generator: Lokalize 20.12.0\n"
+"X-Generator: Lokalize 22.12.3\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
@@ -225,10 +225,9 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr "Servei no vàlid (nul), no pot executar cap operació."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, fuzzy, kde-format
-#| msgid "The root item of %1 must be of type ContaimentItem"
+#, kde-format
 msgid "The root item of %1 must be of type ContainmentItem"
-msgstr "L'element arrel de %1 cal que sigui del tipus ContaimentItem"
+msgstr "L'element arrel de %1 cal que sigui del tipus ContainmentItem"
 
 #: plasmaquick/appletquickitem.cpp:534
 #, kde-format
@@ -309,10 +308,3 @@ msgstr "Estableix el %1"
 #, kde-format
 msgid "Content dropped"
 msgstr "Contingut descartat"
-
-#~ msgid "The %1 widget did not define which ScriptEngine to use."
-#~ msgstr "El giny %1 no ha definit quin «ScriptEngine» usar."
-
-#~ msgctxt "misc category"
-#~ msgid "Miscellaneous"
-#~ msgstr "Miscel·lània"

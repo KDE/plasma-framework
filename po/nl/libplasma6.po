@@ -1,13 +1,13 @@
 # Copyright (C) YEAR This_file_is_part_of_KDE
 # This file is distributed under the same license as the PACKAGE package.
 #
-# Freek de Kruijf <freekdekruijf@kde.nl>, 2014, 2015, 2016, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2014, 2015, 2016, 2018, 2019, 2020, 2021, 2022, 2023 Freek de Kruijf <freekdekruijf@kde.nl>
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-25 01:49+0000\n"
-"PO-Revision-Date: 2023-06-09 10:43+0200\n"
+"PO-Revision-Date: 2023-10-25 10:59+0200\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.04.1\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
@@ -222,10 +222,9 @@ msgstr ""
 "Ongeldige (null) dienst. Er kan geen enkele operatie worden uitgevoerd."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, fuzzy, kde-format
-#| msgid "The root item of %1 must be of type ContaimentItem"
+#, kde-format
 msgid "The root item of %1 must be of type ContainmentItem"
-msgstr "Het hoofditem van %1 moet van het type ContaimentItem zijn"
+msgstr "Het hoofditem van %1 moet van het type ContainmentItem zijn"
 
 #: plasmaquick/appletquickitem.cpp:534
 #, kde-format

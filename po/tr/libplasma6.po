@@ -10,7 +10,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-25 01:49+0000\n"
-"PO-Revision-Date: 2023-06-09 13:12+0300\n"
+"PO-Revision-Date: 2023-10-25 12:53+0300\n"
 "Last-Translator: Emir SARI <emir_sari@icloud.com>\n"
 "Language-Team: Turkish <kde-l10n-tr@kde.org>\n"
 "Language: tr\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Lokalize 23.07.70\n"
+"X-Generator: Lokalize 23.11.70\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
@@ -60,7 +60,7 @@ msgstr "Bilinmeyen"
 #: plasma/applet.cpp:743
 #, kde-format
 msgid "Activate %1 Widget"
-msgstr "Araç Takımını Etkinleştir: %1"
+msgstr "Araç takımını etkinleştir: %1"
 
 #: plasma/containment.cpp:96 plasma/private/applet_p.cpp:108
 #, kde-format
@@ -223,10 +223,9 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr "Geçersiz (boş) hizmet, hiçbir işlem yapamaz."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, fuzzy, kde-format
-#| msgid "The root item of %1 must be of type ContaimentItem"
+#, kde-format
 msgid "The root item of %1 must be of type ContainmentItem"
-msgstr "%1 kök ögesi, ContaimentItem türünde olmalıdır"
+msgstr "%1 kök ögesi, ContainmentItem türünde olmalıdır"
 
 #: plasmaquick/appletquickitem.cpp:534
 #, kde-format
@@ -277,7 +276,7 @@ msgstr "Az önce bıraktığınız paket geçersiz."
 #: plasmaquick/plasmoid/containmentitem.cpp:662
 #, kde-format
 msgid "Widgets"
-msgstr "Araç Takımlanı"
+msgstr "Araç Takımları"
 
 #: plasmaquick/plasmoid/containmentitem.cpp:598
 #, kde-format
