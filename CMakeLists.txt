@@ -59,7 +59,7 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
         WindowSystem
         Notifications
         Package
-        Kirigami2
+        KirigamiPlatform
         KCMUtils
         Svg
 )

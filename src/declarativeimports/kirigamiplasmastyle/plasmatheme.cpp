@@ -125,11 +125,11 @@ void PlasmaTheme::syncColors()
 
 bool PlasmaTheme::event(QEvent *event)
 {
-    if (event->type() == Kirigami::PlatformThemeEvents::ColorSetChangedEvent::type) {
+    if (event->type() == Kirigami::Platform::PlatformThemeEvents::ColorSetChangedEvent::type) {
         syncColors();
     }
 
-    if (event->type() == Kirigami::PlatformThemeEvents::ColorGroupChangedEvent::type) {
+    if (event->type() == Kirigami::Platform::PlatformThemeEvents::ColorGroupChangedEvent::type) {
         syncColors();
     }
 

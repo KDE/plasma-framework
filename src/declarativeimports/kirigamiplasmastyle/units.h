@@ -9,11 +9,11 @@
 
 #include <QObject>
 
-#include <Kirigami/Units>
+#include <Kirigami/Platform/Units>
 
 #include <KConfigWatcher>
 
-class Units : public Kirigami::Units
+class Units : public Kirigami::Platform::Units
 {
     Q_OBJECT
 

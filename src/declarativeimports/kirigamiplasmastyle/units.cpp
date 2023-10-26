@@ -16,7 +16,7 @@
 constexpr int defaultLongDuration = 200;
 
 Units::Units(QObject *parent)
-    : Kirigami::Units(parent)
+    : Kirigami::Platform::Units(parent)
     , m_animationSpeedWatcher(KConfigWatcher::create(KSharedConfig::openConfig()))
 {
     connect(m_animationSpeedWatcher.data(), &KConfigWatcher::configChanged, this, [this](const KConfigGroup &group, const QByteArrayList &names) {

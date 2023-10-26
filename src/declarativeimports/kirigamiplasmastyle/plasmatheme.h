@@ -7,7 +7,7 @@
 #ifndef PLASMATHEME_H
 #define PLASMATHEME_H
 
-#include <Kirigami/PlatformTheme>
+#include <Kirigami/Platform/PlatformTheme>
 
 #include <Plasma/Theme>
 #include <QColor>
@@ -18,7 +18,7 @@
 
 class KIconLoader;
 
-class PlasmaTheme : public Kirigami::PlatformTheme
+class PlasmaTheme : public Kirigami::Platform::PlatformTheme
 {
     Q_OBJECT
 

@@ -8,23 +8,23 @@
 #ifndef PLUGIN_H
 #define PLUGIN_H
 
-#include <Kirigami/KirigamiPluginFactory>
+#include <Kirigami/Platform/PlatformPluginFactory>
 #include <QObject>
 
-class Plugin : public Kirigami::KirigamiPluginFactory
+class Plugin : public Kirigami::Platform::PlatformPluginFactory
 {
     Q_OBJECT
 
-    Q_PLUGIN_METADATA(IID "org.kde.kirigami.KirigamiPluginFactory" FILE "plugin.json")
+    Q_PLUGIN_METADATA(IID PlatformPluginFactory_iid FILE "plugin.json")
 
-    Q_INTERFACES(Kirigami::KirigamiPluginFactory)
+    Q_INTERFACES(Kirigami::Platform::PlatformPluginFactory)
 
 public:
     explicit Plugin(QObject *parent = nullptr);
     ~Plugin() override;
 
-    Kirigami::PlatformTheme *createPlatformTheme(QObject *parent) override;
-    Kirigami::Units *createUnits(QObject *parent) override;
+    Kirigami::Platform::PlatformTheme *createPlatformTheme(QObject *parent) override;
+    Kirigami::Platform::Units *createUnits(QObject *parent) override;
 };
 
 #endif // PLUGIN_H

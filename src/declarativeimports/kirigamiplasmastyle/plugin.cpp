@@ -10,13 +10,13 @@
 #include "units.h"
 
 Plugin::Plugin(QObject *parent)
-    : Kirigami::KirigamiPluginFactory(parent)
+    : Kirigami::Platform::PlatformPluginFactory(parent)
 {
 }
 
 Plugin::~Plugin() = default;
 
-Kirigami::PlatformTheme *Plugin::createPlatformTheme(QObject *parent)
+Kirigami::Platform::PlatformTheme *Plugin::createPlatformTheme(QObject *parent)
 {
     Q_UNUSED(parent);
     // TODO: Implement a proper C++ version of PlatformTheme. This relies on fallback
@@ -24,7 +24,7 @@ Kirigami::PlatformTheme *Plugin::createPlatformTheme(QObject *parent)
     return new PlasmaTheme(parent);
 }
 
-Kirigami::Units *Plugin::createUnits(QObject *parent)
+Kirigami::Platform::Units *Plugin::createUnits(QObject *parent)
 {
     Q_ASSERT(parent);
     return new Units(parent);

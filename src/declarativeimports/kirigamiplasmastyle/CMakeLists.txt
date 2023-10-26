@@ -10,7 +10,7 @@ target_sources(KirigamiPlasmaStyle PRIVATE
 target_link_libraries(KirigamiPlasmaStyle
     PUBLIC
         Qt6::Core
-        KF6::Kirigami2
+        KF6::KirigamiPlatform
     PRIVATE
         Qt6::Qml
         Qt6::Quick
@@ -19,7 +19,7 @@ target_link_libraries(KirigamiPlasmaStyle
         KF6::Plasma
 )
 
-install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/kirigami)
+install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/kirigami/platform)
 
 install(FILES
     AbstractApplicationHeader.qml
