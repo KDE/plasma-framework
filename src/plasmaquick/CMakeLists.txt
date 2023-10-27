@@ -6,6 +6,8 @@ set(PLASMAQUICK_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF}/PlasmaQuick")
 add_library(KF6PlasmaQuick SHARED)
 add_library(KF6::PlasmaQuick ALIAS KF6PlasmaQuick)
 
+qt_extract_metatypes(KF6PlasmaQuick)
+
 set_target_properties(KF6PlasmaQuick PROPERTIES
     VERSION     ${PLASMA_VERSION}
     SOVERSION   ${PLASMA_SOVERSION}
