@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 01:49+0000\n"
-"PO-Revision-Date: 2023-07-04 10:50-0300\n"
+"POT-Creation-Date: 2023-10-27 01:39+0000\n"
+"PO-Revision-Date: 2023-10-26 15:16-0300\n"
 "Last-Translator: Luiz Fernando Ranghetti <elchevive@opensuse.org>\n"
 "Language-Team: Brazilian Portuguese <kde-i18n-pt_BR@kde.org>\n"
 "Language: pt_BR\n"
@@ -222,10 +222,9 @@ msgid "Invalid (null) service, can not perform any operations."
 msgstr "Serviço inválido (null), não pode executar quaisquer operações."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, fuzzy, kde-format
-#| msgid "The root item of %1 must be of type ContaimentItem"
+#, kde-format
 msgid "The root item of %1 must be of type ContainmentItem"
-msgstr "O item raiz de %1 deve ser do tipo ContaimentItem"
+msgstr "O item raiz de %1 deve ser do tipo ContainmentItem"
 
 #: plasmaquick/appletquickitem.cpp:534
 #, kde-format
@@ -252,51 +251,51 @@ msgstr "Erro ao carregar o miniaplicativo: O pacote não existe. %1"
 msgid "%1 Settings"
 msgstr "Configurações de %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:553
+#: plasmaquick/plasmoid/containmentitem.cpp:539
 #, kde-format
 msgid "Plasma Package"
 msgstr "Pacotes do Plasma"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:557
+#: plasmaquick/plasmoid/containmentitem.cpp:543
 #, kde-format
 msgid "Install"
 msgstr "Instalar"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:568
+#: plasmaquick/plasmoid/containmentitem.cpp:554
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Ocorreu um erro na instalação do pacote"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:584
+#: plasmaquick/plasmoid/containmentitem.cpp:570
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "O pacote que acabou de soltar é inválido."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:593
-#: plasmaquick/plasmoid/containmentitem.cpp:662
+#: plasmaquick/plasmoid/containmentitem.cpp:579
+#: plasmaquick/plasmoid/containmentitem.cpp:648
 #, kde-format
 msgid "Widgets"
 msgstr "Widgets"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:598
+#: plasmaquick/plasmoid/containmentitem.cpp:584
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Adicionar %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:612
-#: plasmaquick/plasmoid/containmentitem.cpp:666
+#: plasmaquick/plasmoid/containmentitem.cpp:598
+#: plasmaquick/plasmoid/containmentitem.cpp:652
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Adicionar ícone"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:624
+#: plasmaquick/plasmoid/containmentitem.cpp:610
 #, kde-format
 msgid "Wallpaper"
 msgstr "Papel de parede"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:634
+#: plasmaquick/plasmoid/containmentitem.cpp:620
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"

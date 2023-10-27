@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-25 01:49+0000\n"
+"POT-Creation-Date: 2023-10-27 01:39+0000\n"
 "PO-Revision-Date: 2023-06-14 14:57+0200\n"
 "Last-Translator: Vit Pelcak <vit@pelcak.org>\n"
 "Language-Team: Czech <kde-i18n-doc@kde.org>\n"
@@ -250,51 +250,51 @@ msgstr "Chyba při načítání appletu, balíček neexistuje: %1"
 msgid "%1 Settings"
 msgstr "Nastavení %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:553
+#: plasmaquick/plasmoid/containmentitem.cpp:539
 #, kde-format
 msgid "Plasma Package"
 msgstr "Balíček Plasma"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:557
+#: plasmaquick/plasmoid/containmentitem.cpp:543
 #, kde-format
 msgid "Install"
 msgstr "Instalovat"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:568
+#: plasmaquick/plasmoid/containmentitem.cpp:554
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Instalace balíčku selhala"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:584
+#: plasmaquick/plasmoid/containmentitem.cpp:570
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr ""
 
-#: plasmaquick/plasmoid/containmentitem.cpp:593
-#: plasmaquick/plasmoid/containmentitem.cpp:662
+#: plasmaquick/plasmoid/containmentitem.cpp:579
+#: plasmaquick/plasmoid/containmentitem.cpp:648
 #, kde-format
 msgid "Widgets"
 msgstr "Widgety"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:598
+#: plasmaquick/plasmoid/containmentitem.cpp:584
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Přidat %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:612
-#: plasmaquick/plasmoid/containmentitem.cpp:666
+#: plasmaquick/plasmoid/containmentitem.cpp:598
+#: plasmaquick/plasmoid/containmentitem.cpp:652
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Přidat ikonu"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:624
+#: plasmaquick/plasmoid/containmentitem.cpp:610
 #, kde-format
 msgid "Wallpaper"
 msgstr "Tapeta"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:634
+#: plasmaquick/plasmoid/containmentitem.cpp:620
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
