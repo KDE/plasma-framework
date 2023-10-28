@@ -3,14 +3,14 @@
 # This file is distributed under the same license as the PACKAGE package.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2008.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2008, 2009, 2010, 2011, 2012.
-# Vincenzo Reale <smart2128vr@gmail.com>, 2014, 2015, 2018, 2019, 2020, 2021, 2022, 2023.
+# SPDX-FileCopyrightText: 2014, 2015, 2018, 2019, 2020, 2021, 2022, 2023 Vincenzo Reale <smart2128vr@gmail.com>
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-10-27 01:39+0000\n"
-"PO-Revision-Date: 2023-06-09 15:46+0200\n"
+"PO-Revision-Date: 2023-10-25 20:18+0200\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.04.2\n"
+"X-Generator: Lokalize 23.08.2\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
@@ -225,10 +225,9 @@ msgstr ""
 "Servizio non valido (assente), non è possibile eseguire alcuna operazione."
 
 #: plasmaquick/appletquickitem.cpp:529
-#, fuzzy, kde-format
-#| msgid "The root item of %1 must be of type ContaimentItem"
+#, kde-format
 msgid "The root item of %1 must be of type ContainmentItem"
-msgstr "L'elemento radice di %1 deve essere di tipo ContaimentItem"
+msgstr "L'elemento radice di %1 deve essere di tipo ContainmentItem"
 
 #: plasmaquick/appletquickitem.cpp:534
 #, kde-format
