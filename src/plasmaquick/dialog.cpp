@@ -259,7 +259,7 @@ void DialogPrivate::updateTheme()
                                                  theme.backgroundSaturation(),
                                                  mask);
 
-        if (KX11Extras::compositingActive()) {
+        if (!KWindowSystem::isPlatformX11() || KX11Extras::compositingActive()) {
             if (hasMask) {
                 hasMask = false;
                 q->setMask(QRegion());

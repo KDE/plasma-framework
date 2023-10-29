@@ -166,7 +166,7 @@ void PlasmaWindowPrivate::handleFrameChanged()
                                              theme.backgroundSaturation(),
                                              mask);
 
-    if (KX11Extras::compositingActive()) {
+    if (!KWindowSystem::isPlatformX11() || KX11Extras::compositingActive()) {
         q->setMask(QRegion());
     } else {
         q->setMask(mask);

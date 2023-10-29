@@ -19,6 +19,7 @@
 #include <KIconTheme>
 #include <KSharedConfig>
 #include <KWindowEffects>
+#include <KWindowSystem>
 #include <KX11Extras>
 #include <kpluginmetadata.h>
 
@@ -90,7 +91,7 @@ ThemePrivate::ThemePrivate(QObject *parent)
     , defaultWallpaperHeight(DEFAULT_WALLPAPER_HEIGHT)
     , cacheSize(0)
     , cachesToDiscard(NoCache)
-    , compositingActive(KX11Extras::self()->compositingActive())
+    , compositingActive(true)
     , backgroundContrastActive(KWindowEffects::isEffectAvailable(KWindowEffects::BackgroundContrast))
     , isDefault(true)
     , useGlobal(true)
@@ -106,6 +107,10 @@ ThemePrivate::ThemePrivate(QObject *parent)
     , apiMinor(0)
     , apiRevision(0)
 {
+    if (KWindowSystem::isPlatformX11()) {
+        compositingActive = KX11Extras::self()->compositingActive();
+    }
+
     ThemeConfig config;
     cacheTheme = config.cacheTheme();
     kSvgImageSet = std::unique_ptr<KSvg::ImageSet>(new KSvg::ImageSet);
@@ -151,8 +156,10 @@ ThemePrivate::ThemePrivate(QObject *parent)
         scheduleThemeChangeNotification(PixmapCache | SvgElementsCache);
     });
 
-    connect(KX11Extras::self(), &KX11Extras::compositingChanged, this, &ThemePrivate::compositingChanged);
-    compositingChanged(KX11Extras::compositingActive());
+    if (KWindowSystem::isPlatformX11()) {
+        connect(KX11Extras::self(), &KX11Extras::compositingChanged, this, &ThemePrivate::compositingChanged);
+        compositingChanged(KX11Extras::compositingActive());
+    }
 }
 
 ThemePrivate::~ThemePrivate()
