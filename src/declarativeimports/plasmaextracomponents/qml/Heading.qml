@@ -83,15 +83,15 @@ Label {
         const n = Kirigami.Theme.defaultFont.pointSize;
         switch (level) {
         case 1:
-            return n * 1.35 + step;
+            return n * 1.35;
         case 2:
-            return n * 1.20 + step;
+            return n * 1.20;
         case 3:
-            return n * 1.15 + step;
+            return n * 1.15;
         case 4:
-            return n * 1.10 + step;
+            return n * 1.10;
         default:
-            return n + step;
+            return n;
         }
     }
 }
