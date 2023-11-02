@@ -24,7 +24,7 @@ Item {
 
     RowLayout {
         id: mainLayout
-        anchors.fill: parent
+        anchors.centerIn: parent
         anchors.margins: Kirigami.Units.largeSpacing
 
         spacing: Kirigami.Units.gridUnit
