@@ -44,9 +44,11 @@ public:
     void setPanelBehavior(QtWayland::org_kde_plasma_surface::panel_behavior panelBehavior);
     void setRole(QtWayland::org_kde_plasma_surface::role role);
     void setTakesFocus(bool takesFocus);
+    bool eventFilter(QObject *watched, QEvent *event) override;
 
 private:
     PlasmaShellWaylandIntegration(QWindow *window);
+    void platformSurfaceChanged(QWindow *window);
     void surfaceCreated();
     void surfaceDestroyed();
 

@@ -71,18 +71,20 @@ PlasmaShellWaylandIntegration::PlasmaShellWaylandIntegration(QWindow *window)
     : QObject(window)
     , m_window(window)
 {
-    m_window->create();
-    if (auto waylandWindow = window->nativeInterface<QNativeInterface::Private::QWaylandWindow>()) {
-        connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceCreated, this, [this] {
-            surfaceCreated();
-        });
-        connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceDestroyed, this, [this] {
-            surfaceDestroyed();
-        });
-        if (waylandWindow->surface()) {
-            surfaceCreated();
-        }
+    m_window->installEventFilter(this);
+    platformSurfaceChanged(window);
+}
+
+bool PlasmaShellWaylandIntegration::eventFilter(QObject *watched, QEvent *event)
+{
+    auto window = qobject_cast<QWindow *>(watched);
+    if (!window) {
+        return false;
     }
+    if (event->type() == QEvent::PlatformSurface) {
+        platformSurfaceChanged(window);
+    }
+    return false;
 }
 
 void PlasmaShellWaylandIntegration::setPosition(const QPoint &position)
@@ -130,11 +132,26 @@ void PlasmaShellWaylandIntegration::setTakesFocus(bool takesFocus)
     }
 }
 
+void PlasmaShellWaylandIntegration::platformSurfaceChanged(QWindow *window)
+{
+    auto waylandWindow = window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
+    if (!waylandWindow) {
+        return;
+    }
+    connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceCreated, this, [this] {
+        surfaceCreated();
+    });
+    connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceDestroyed, this, [this] {
+        surfaceDestroyed();
+    });
+    if (waylandWindow->surface()) {
+        surfaceCreated();
+    }
+}
+
 void PlasmaShellWaylandIntegration::surfaceCreated()
 {
     struct wl_surface *surface = nullptr;
-
-    ;
     if (!s_waylandIntegration->shellManager || !s_waylandIntegration->shellManager->isActive()) {
         return;
     }
