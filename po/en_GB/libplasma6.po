@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-10-27 01:39+0000\n"
+"POT-Creation-Date: 2023-11-03 01:38+0000\n"
 "PO-Revision-Date: 2023-06-17 12:03+0100\n"
 "Last-Translator: Steve Allewell <steve.allewell@gmail.com>\n"
 "Language-Team: British English\n"
@@ -222,28 +222,28 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "Invalid (null) service, can not perform any operations."
 
-#: plasmaquick/appletquickitem.cpp:529
+#: plasmaquick/appletquickitem.cpp:518
 #, fuzzy, kde-format
 #| msgid "The root item of %1 must be of type ContaimentItem"
 msgid "The root item of %1 must be of type ContainmentItem"
 msgstr "The root item of %1 must be of type ContaimentItem"
 
-#: plasmaquick/appletquickitem.cpp:534
+#: plasmaquick/appletquickitem.cpp:523
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr "The root item of %1 must be of type PlasmoidItem"
 
-#: plasmaquick/appletquickitem.cpp:541
+#: plasmaquick/appletquickitem.cpp:530
 #, kde-format
 msgid "Unknown Applet"
 msgstr "Unknown Applet"
 
-#: plasmaquick/appletquickitem.cpp:557
+#: plasmaquick/appletquickitem.cpp:546
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "Error loading QML file: %1 %2"
 
-#: plasmaquick/appletquickitem.cpp:559
+#: plasmaquick/appletquickitem.cpp:548
 #, kde-format
 msgid "Error loading Applet: package inexistent. %1"
 msgstr "Error loading Applet: package inexistent. %1"
@@ -253,51 +253,51 @@ msgstr "Error loading Applet: package inexistent. %1"
 msgid "%1 Settings"
 msgstr "%1 Settings"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:539
+#: plasmaquick/plasmoid/containmentitem.cpp:528
 #, kde-format
 msgid "Plasma Package"
 msgstr "Plasma Package"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:543
+#: plasmaquick/plasmoid/containmentitem.cpp:532
 #, kde-format
 msgid "Install"
 msgstr "Install"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:554
+#: plasmaquick/plasmoid/containmentitem.cpp:543
 #, kde-format
 msgid "Package Installation Failed"
 msgstr "Package Installation Failed"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:570
+#: plasmaquick/plasmoid/containmentitem.cpp:559
 #, kde-format
 msgid "The package you just dropped is invalid."
 msgstr "The package you just dropped is invalid."
 
-#: plasmaquick/plasmoid/containmentitem.cpp:579
-#: plasmaquick/plasmoid/containmentitem.cpp:648
+#: plasmaquick/plasmoid/containmentitem.cpp:568
+#: plasmaquick/plasmoid/containmentitem.cpp:637
 #, kde-format
 msgid "Widgets"
 msgstr "Widgets"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:584
+#: plasmaquick/plasmoid/containmentitem.cpp:573
 #, kde-format
 msgctxt "Add widget"
 msgid "Add %1"
 msgstr "Add %1"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:598
-#: plasmaquick/plasmoid/containmentitem.cpp:652
+#: plasmaquick/plasmoid/containmentitem.cpp:587
+#: plasmaquick/plasmoid/containmentitem.cpp:641
 #, kde-format
 msgctxt "Add icon widget"
 msgid "Add Icon"
 msgstr "Add Icon"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:610
+#: plasmaquick/plasmoid/containmentitem.cpp:599
 #, kde-format
 msgid "Wallpaper"
 msgstr "Wallpaper"
 
-#: plasmaquick/plasmoid/containmentitem.cpp:620
+#: plasmaquick/plasmoid/containmentitem.cpp:609
 #, kde-format
 msgctxt "Set wallpaper"
 msgid "Set %1"
