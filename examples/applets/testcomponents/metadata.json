@@ -35,7 +35,6 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
-                "Name[x-test]": "xxSebastian Küglerxx",
                 "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
@@ -72,7 +71,6 @@
         "Name[tr]": "Bileşenler Sınaması",
         "Name[uk]": "Тестування компонентів",
         "Name[vi]": "Kiểm thử các thành phần",
-        "Name[x-test]": "xxComponents Testxx",
         "Name[zh_CN]": "组件测试",
         "ServiceTypes": [
             "Plasma/Applet"

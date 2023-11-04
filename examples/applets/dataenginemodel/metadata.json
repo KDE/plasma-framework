@@ -35,7 +35,6 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -69,7 +68,6 @@
         "Description[tr]": "DataEngines içinde gömülü modellerin nice kullanılacağını gösteren örnek uygulama",
         "Description[uk]": "Приклад аплету, який демонструє використання моделей, вбудованих до рушіїв даних",
         "Description[vi]": "Tiểu ứng dụng ví dụ cho thấy cách dùng các Model trong DataEngine",
-        "Description[x-test]": "xxExample applet that shows how to use Models embedded in DataEnginesxx",
         "Description[zh_CN]": "展示如何使用数据引擎内嵌的模型的示例小程序",
         "Icon": "",
         "Id": "org.kde.example.dataenginemodel",
@@ -104,7 +102,6 @@
         "Name[tr]": "Veri motoru modeli",
         "Name[uk]": "Модель рушія даних",
         "Name[vi]": "Model Dataengine",
-        "Name[x-test]": "xxDataengine modelxx",
         "Name[zh_CN]": "数据引擎模型",
         "ServiceTypes": [
             "Plasma/Applet"

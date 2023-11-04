@@ -47,7 +47,6 @@
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
                 "Name[vi]": "Aaron Seigo",
-                "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
             }
@@ -82,7 +81,6 @@
         "Description[tr]": "DataContainer'dan nice sınıf alınacağının gösterimi",
         "Description[uk]": "Демонстрація створення підкласу DataContainer",
         "Description[vi]": "Ví dụ minh hoạ việc kế thừa lớp DataContainer",
-        "Description[x-test]": "xxA demonstration of how to subclass DataContainerxx",
         "Description[zh_CN]": "继承数据容器类的示例",
         "EnabledByDefault": true,
         "Icon": "plasma",
@@ -117,7 +115,6 @@
         "Name[tr]": "Özel DataContainer'lar",
         "Name[uk]": "Нетипові контейнери даних",
         "Name[vi]": "DataContainer riêng",
-        "Name[x-test]": "xxCustom DataContainersxx",
         "Name[zh_CN]": "自定义数据容器",
         "ServiceTypes": [
             "Plasma/DataEngine"

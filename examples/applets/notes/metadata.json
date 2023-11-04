@@ -35,7 +35,6 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -69,7 +68,6 @@
         "Description[tr]": "Bırakma verisinin nice yönetileceği üzerine örnek",
         "Description[uk]": "Приклад керування скинутими даними",
         "Description[vi]": "Ví dụ về cách quản lí dữ liệu thả",
-        "Description[x-test]": "xxExample on how to manage Drop dataxx",
         "Description[zh_CN]": "展示如何管理拖放数据的示例程序",
         "Icon": "org.kde.plasma.notes",
         "Id": "org.kde.example.notes",
@@ -103,7 +101,6 @@
         "Name[tr]": "Örnek notlar",
         "Name[uk]": "Нотатки щодо прикладу",
         "Name[vi]": "Ghi chú ví dụ",
-        "Name[x-test]": "xxExample notesxx",
         "Name[zh_CN]": "示例便笺",
         "ServiceTypes": [
             "Plasma/Applet"

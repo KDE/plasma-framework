@@ -35,7 +35,6 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -69,7 +68,6 @@
         "Description[tr]": "Kendi görevler araç takımınızı nice yazabileceğiniz üzerine örnek",
         "Description[uk]": "Приклад, який демонструє створення власного віджета задач",
         "Description[vi]": "Ví dụ cho thấy cách viết Phụ kiện tác vụ của riêng bạn",
-        "Description[x-test]": "xxExample showing how to write your own tasks Widgetxx",
         "Description[zh_CN]": "展示如何编写自定义任务栏挂件的示例程序",
         "Icon": "preferences-system-windows",
         "Id": "org.kde.example.tasks",
@@ -103,7 +101,6 @@
         "Name[tr]": "Yoksul Adamın Görevleri",
         "Name[uk]": "Задачі для початківців",
         "Name[vi]": "Tác vụ của người đàn ông nghèo",
-        "Name[x-test]": "xxPoor Man's Tasksxx",
         "Name[zh_CN]": "简易版任务栏控件",
         "ServiceTypes": [
             "Plasma/Applet"

@@ -35,7 +35,6 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -69,7 +68,6 @@
         "Description[tr]": "Pencere küçük görsellerinin nice gösterileceğini anlatan örnek",
         "Description[uk]": "Приклад, який демонструє показ мініатюр вікон",
         "Description[vi]": "Ví dụ cho thấy cách hiển thị hình nhỏ của cửa sổ",
-        "Description[x-test]": "xxExample showing how to display window thumbnailsxx",
         "Description[zh_CN]": "窗口缩略图显示示例",
         "Icon": "preferences-system-windows",
         "Id": "org.kde.example.windowthumbnails",
@@ -103,7 +101,6 @@
         "Name[tr]": "Örnek pencere küçük görseller listesi",
         "Name[uk]": "Приклад списку мініатюр вікон",
         "Name[vi]": "Danh sách ví dụ các hình nhỏ của cửa sổ",
-        "Name[x-test]": "xxExample window thumbnails listxx",
         "Name[zh_CN]": "窗口缩略图列表示例",
         "ServiceTypes": [
             "Plasma/Applet"

@@ -35,7 +35,6 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -73,7 +72,6 @@
         "Name[tr]": "Uygulamacık Sınaması",
         "Name[uk]": "Тест аплету",
         "Name[vi]": "Kiểm thử tiểu ứng dụng",
-        "Name[x-test]": "xxApplet Testxx",
         "Name[zh_CN]": "小程序测试",
         "ServiceTypes": [
             "Plasma/Applet"

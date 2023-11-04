@@ -35,7 +35,6 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
-                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -69,7 +68,6 @@
         "Description[tr]": "Same oyunu QML Qt demosu, Plasmoid olarak",
         "Description[uk]": "Плазмоїд-демонстрація тієї самої гри на основі QML",
         "Description[vi]": "Chương trình minh hoạ cho Qt, Same game, viết bằng QML, chuyển dạng thành plasmoid",
-        "Description[x-test]": "xxThe Same game QML Qt demo converted as plasmoidxx",
         "Description[zh_CN]": "找重游戏 的 QML Qt 演示程序转换而来的小部件",
         "EnabledByDefault": true,
         "Icon": "applications-games",
@@ -104,7 +102,6 @@
         "Name[tr]": "Aynı oyun (QML)",
         "Name[uk]": "Та сама гра (QML)",
         "Name[vi]": "Trò chơi Same game (QML)",
-        "Name[x-test]": "xxSame game (QML)xx",
         "Name[zh_CN]": "找重游戏 (QML)",
         "ServiceTypes": [
             "Plasma/Applet"

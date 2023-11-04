@@ -50,7 +50,6 @@ Name[tg]=Намуди зоҳирии Plasma
 Name[tr]=Plasma Görünüm ve His
 Name[uk]=Вигляд і поведінка Плазми
 Name[vi]=Nhìn và Cảm Plasma
-Name[x-test]=xxPlasma Look and Feelxx
 Name[zh_CN]=Plasma 界面外观
 Name[zh_TW]=Plasma 外觀與感覺
 Comment=Defines the Visual Language for Plasma Shells
@@ -97,7 +96,6 @@ Comment[tg]=Забони намоёнро барои воситаҳои Plasma �
 Comment[tr]=Plasma Kabukları için Sanal Dili tanımlar
 Comment[uk]=Визначає візуальну мову для оболонок Плазми
 Comment[vi]=Định ra Ngôn ngữ Trực quan cho Hệ vỏ Plasma
-Comment[x-test]=xxDefines the Visual Language for Plasma Shellsxx
 Comment[zh_CN]=定义 Plasma 外壳程序的视觉语言
 Comment[zh_TW]=定義 Plasma Shells 的視覺語言
 

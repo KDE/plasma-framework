@@ -47,7 +47,6 @@
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
                 "Name[vi]": "Aaron Seigo",
-                "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
             }
@@ -82,7 +81,6 @@
         "Description[tr]": "Pek yalın bir DataEngine oluşturumu",
         "Description[uk]": "Базова реалізація рушія даних",
         "Description[vi]": "Một phần thi hành DataEngine rất cơ bản",
-        "Description[x-test]": "xxA very basic DataEngine implementationxx",
         "Description[zh_CN]": "非常基础的数据引擎实现示例程序",
         "EnabledByDefault": true,
         "Icon": "plasma",
@@ -118,7 +116,6 @@
         "Name[tr]": "Yalın DataEngine Örneği",
         "Name[uk]": "Простий приклад рушія даних",
         "Name[vi]": "Ví dụ DataEngine đơn giản",
-        "Name[x-test]": "xxSimple DataEngine Examplexx",
         "Name[zh_CN]": "简单数据引擎示例",
         "ServiceTypes": [
             "Plasma/DataEngine"
