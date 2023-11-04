@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-03 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:51+0000\n"
 "PO-Revision-Date: 2023-10-25 19:09+0100\n"
 "Last-Translator: Oliver Kellogg <okellogg@users.sourceforge.net>\n"
 "Language-Team: esperanto <kde-i18n-eo@kde.org>\n"
@@ -122,47 +122,47 @@ msgstr "Ne eblis malfermi la %1 pakaĵon necesan por la %2 fenestraĵo."
 msgid "Show Alternatives..."
 msgstr "Montri alternativojn..."
 
-#: plasma/private/applet_p.cpp:254
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "Widget Removed"
 msgstr "Fenestraĵo forigita"
 
-#: plasma/private/applet_p.cpp:255
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "La fenestraĵo \"%1\" estis forigita."
 
-#: plasma/private/applet_p.cpp:259
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "Panel Removed"
 msgstr "Panelo forigita"
 
-#: plasma/private/applet_p.cpp:260
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "A panel has been removed."
 msgstr "Panelo estis forigita."
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Desktop Removed"
 msgstr "Labortablo forigita"
 
-#: plasma/private/applet_p.cpp:264
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "Labortablo estis forigita."
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:266
 #, kde-format
 msgid "Undo"
 msgstr "Malfari"
 
-#: plasma/private/applet_p.cpp:359
+#: plasma/private/applet_p.cpp:357
 #, kde-format
 msgid "Widget Settings"
 msgstr "Agordoj de fenestraĵoj"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:364
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Forigi ĉi tiun fenestraĵon"

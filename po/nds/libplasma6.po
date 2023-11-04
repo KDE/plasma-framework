@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-03 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:51+0000\n"
 "PO-Revision-Date: 2014-08-13 22:05+0200\n"
 "Last-Translator: Sönke Dibbern <s_dibbern@web.de>\n"
 "Language-Team: Low Saxon <kde-i18n-nds@kde.org>\n"
@@ -128,48 +128,48 @@ msgstr ""
 msgid "Show Alternatives..."
 msgstr "Alternativen..."
 
-#: plasma/private/applet_p.cpp:254
+#: plasma/private/applet_p.cpp:253
 #, fuzzy, kde-format
 #| msgid "Widgets explorer UI"
 msgid "Widget Removed"
 msgstr "Lüttprogrammkieker-Böversiet"
 
-#: plasma/private/applet_p.cpp:255
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:259
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "Panel Removed"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:260
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "A panel has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Desktop Removed"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:264
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "A desktop has been removed."
 msgstr ""
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:266
 #, kde-format
 msgid "Undo"
 msgstr ""
 
-#: plasma/private/applet_p.cpp:359
+#: plasma/private/applet_p.cpp:357
 #, kde-format
 msgid "Widget Settings"
 msgstr "Lüttprogramm-Instellen"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:364
 #, kde-format
 msgid "Remove this Widget"
 msgstr "Dit Lüttprogramm wegmaken"

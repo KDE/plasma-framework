@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-03 01:38+0000\n"
+"POT-Creation-Date: 2023-11-04 16:51+0000\n"
 "PO-Revision-Date: 2023-09-22 09:52+0530\n"
 "Last-Translator: \n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -122,47 +122,47 @@ msgstr "%2 विजेट् कृते आवश्यकं %1 संकु
 msgid "Show Alternatives..."
 msgstr "विकल्पान् दर्शयतु..."
 
-#: plasma/private/applet_p.cpp:254
+#: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "Widget Removed"
 msgstr "विजेट् निष्कासितम्"
 
-#: plasma/private/applet_p.cpp:255
+#: plasma/private/applet_p.cpp:254
 #, kde-format
 msgid "The widget \"%1\" has been removed."
 msgstr "\"%1\" इति विजेट् निष्कासितम् ।."
 
-#: plasma/private/applet_p.cpp:259
+#: plasma/private/applet_p.cpp:258
 #, kde-format
 msgid "Panel Removed"
 msgstr "फलकं निष्कासितम्"
 
-#: plasma/private/applet_p.cpp:260
+#: plasma/private/applet_p.cpp:259
 #, kde-format
 msgid "A panel has been removed."
 msgstr "एकं फलकं निष्कासितम् अस्ति।."
 
-#: plasma/private/applet_p.cpp:263
+#: plasma/private/applet_p.cpp:262
 #, kde-format
 msgid "Desktop Removed"
 msgstr "कार्यमुखं निष्कासितम्"
 
-#: plasma/private/applet_p.cpp:264
+#: plasma/private/applet_p.cpp:263
 #, kde-format
 msgid "A desktop has been removed."
 msgstr "एकः कार्यमुखः निष्कासितः अस्ति।."
 
-#: plasma/private/applet_p.cpp:267
+#: plasma/private/applet_p.cpp:266
 #, kde-format
 msgid "Undo"
 msgstr "अपाकरोति"
 
-#: plasma/private/applet_p.cpp:359
+#: plasma/private/applet_p.cpp:357
 #, kde-format
 msgid "Widget Settings"
 msgstr "विजेट् समायोजननि"
 
-#: plasma/private/applet_p.cpp:366
+#: plasma/private/applet_p.cpp:364
 #, kde-format
 msgid "Remove this Widget"
 msgstr "एतत् विजेट् निष्कासयन्तु"
