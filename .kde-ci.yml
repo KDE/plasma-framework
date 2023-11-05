@@ -2,7 +2,6 @@ Dependencies:
 - 'on': ['Linux', 'FreeBSD', 'Windows', 'macOS']
   'require':
     'frameworks/extra-cmake-modules': '@same'
-    'frameworks/kactivities' : '@same'
     'frameworks/karchive' : '@same'
     'frameworks/kauth' : '@same'
     'frameworks/kbookmarks' : '@same'
@@ -40,6 +39,7 @@ Dependencies:
     'frameworks/ktexteditor' : '@same'
     'frameworks/oxygen-icons' : '@same'
     'frameworks/kirigami' : '@same'
+    'plasma/kactivities' : '@same'
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
