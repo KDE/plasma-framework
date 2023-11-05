@@ -2,7 +2,6 @@ Dependencies:
 - 'on': ['Linux', 'FreeBSD', 'Windows', 'macOS']
   'require':
     'frameworks/extra-cmake-modules': '@same'
-    'frameworks/kactivities' : '@same'
     'frameworks/karchive' : '@same'
     'frameworks/kconfig' : '@same'
     'frameworks/kconfigwidgets' : '@same'
@@ -22,6 +21,7 @@ Dependencies:
     'frameworks/kirigami' : '@same'
     'frameworks/kcmutils' : '@same'
     'frameworks/ksvg' : '@same'
+    'plasma/kactivities' : '@same'
 
 Options:
   test-before-installing: True
