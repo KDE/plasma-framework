@@ -38,7 +38,7 @@ Dependencies:
     'frameworks/kwindowsystem' : '@same'
     'frameworks/kxmlgui' : '@same'
     'frameworks/ktexteditor' : '@same'
-    'frameworks/oxygen-icons5' : '@same'
+    'frameworks/oxygen-icons' : '@same'
     'frameworks/kirigami' : '@same'
 
 - 'on': ['Linux', 'FreeBSD']
