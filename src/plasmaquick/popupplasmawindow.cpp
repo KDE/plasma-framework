@@ -73,7 +73,7 @@ void PopupPlasmaWindowPrivate::updatePosition()
 {
     m_needsReposition = false;
 
-    if (!m_visualParent) {
+    if (!m_visualParent || !m_visualParent->window()) {
         qCWarning(LOG_PLASMAQUICK) << "Exposed with no visual parent. Window positioning broken.";
         return;
     }
