@@ -162,8 +162,9 @@ configure_package_config_file(
     PATH_VARS  PLASMAQUICK_INSTALL_INCLUDEDIR CMAKE_INSTALL_PREFIX
 )
 
-ecm_setup_version(${KF6_MIN_VERSION}
+ecm_setup_version(${PLASMA_VERSION}
                   VARIABLE_PREFIX PLASMAQUICK
+                  SOVERSION 6
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaQuickConfigVersion.cmake" )
 
 install(FILES
