@@ -504,10 +504,10 @@ void ThemePrivate::processWallpaperSettings(const KSharedConfigPtr &metadata)
     }
 
     KConfigGroup cg;
-    if (metadata->hasGroup("Wallpaper")) {
+    if (metadata->hasGroup(QStringLiteral("Wallpaper"))) {
         // we have a theme color config, so let's also check to see if
         // there is a wallpaper defined in there.
-        cg = KConfigGroup(metadata, "Wallpaper");
+        cg = KConfigGroup(metadata, QStringLiteral("Wallpaper"));
     } else {
         // since we didn't find an entry in the theme, let's look in the main
         // theme config
@@ -523,8 +523,8 @@ void ThemePrivate::processWallpaperSettings(const KSharedConfigPtr &metadata)
 void ThemePrivate::processContrastSettings(const KSharedConfigPtr &metadata)
 {
     KConfigGroup cg;
-    if (metadata->hasGroup("ContrastEffect")) {
-        cg = KConfigGroup(metadata, "ContrastEffect");
+    if (metadata->hasGroup(QStringLiteral("ContrastEffect"))) {
+        cg = KConfigGroup(metadata, QStringLiteral("ContrastEffect"));
         backgroundContrastEnabled = cg.readEntry("enabled", false);
 
         backgroundContrast = cg.readEntry("contrast", qQNaN());
@@ -538,8 +538,8 @@ void ThemePrivate::processContrastSettings(const KSharedConfigPtr &metadata)
 void ThemePrivate::processAdaptiveTransparencySettings(const KSharedConfigPtr &metadata)
 {
     KConfigGroup cg;
-    if (metadata->hasGroup("AdaptiveTransparency")) {
-        cg = KConfigGroup(metadata, "AdaptiveTransparency");
+    if (metadata->hasGroup(QStringLiteral("AdaptiveTransparency"))) {
+        cg = KConfigGroup(metadata, QStringLiteral("AdaptiveTransparency"));
         adaptiveTransparencyEnabled = cg.readEntry("enabled", false);
     } else {
         adaptiveTransparencyEnabled = false;
@@ -549,8 +549,8 @@ void ThemePrivate::processAdaptiveTransparencySettings(const KSharedConfigPtr &m
 void ThemePrivate::processBlurBehindSettings(const KSharedConfigPtr &metadata)
 {
     KConfigGroup cg;
-    if (metadata->hasGroup("BlurBehindEffect")) {
-        cg = KConfigGroup(metadata, "BlurBehindEffect");
+    if (metadata->hasGroup(QStringLiteral("BlurBehindEffect"))) {
+        cg = KConfigGroup(metadata, QStringLiteral("BlurBehindEffect"));
         blurBehindEnabled = cg.readEntry("enabled", true);
     } else {
         blurBehindEnabled = true;
@@ -628,7 +628,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
 
         processWallpaperSettings(metadata);
 
-        KConfigGroup cg(metadata, "Settings");
+        KConfigGroup cg(metadata, QStringLiteral("Settings"));
         QString fallback = cg.readEntry("FallbackTheme", QString());
 
         fallbackThemes.clear();
@@ -636,7 +636,7 @@ void ThemePrivate::setThemeName(const QString &tempThemeName, bool writeSettings
             fallbackThemes.append(fallback);
 
             KSharedConfigPtr metadata = configForTheme(fallback);
-            KConfigGroup cg(metadata, "Settings");
+            KConfigGroup cg(metadata, QStringLiteral("Settings"));
             fallback = cg.readEntry("FallbackTheme", QString());
         }
 

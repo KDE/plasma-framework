@@ -225,7 +225,7 @@ KConfigGroup ContainmentView::config() const
     if (!containment()) {
         return KConfigGroup();
     }
-    KConfigGroup views(KSharedConfig::openConfig(), "PlasmaContainmentViews");
+    KConfigGroup views(KSharedConfig::openConfig(), QStringLiteral("PlasmaContainmentViews"));
     return KConfigGroup(&views, QString::number(containment()->screen()));
 }
 

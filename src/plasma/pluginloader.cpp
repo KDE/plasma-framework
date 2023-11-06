@@ -162,7 +162,7 @@ QList<KPluginMetaData> PluginLoader::listAppletMetaData(const QString &category)
     // FIXME: this assumes we are always use packages.. no pure c++
     std::function<bool(const KPluginMetaData &)> filter;
     if (category.isEmpty()) { // use all but the excluded categories
-        KConfigGroup group(KSharedConfig::openConfig(), "General");
+        KConfigGroup group(KSharedConfig::openConfig(), QStringLiteral("General"));
         QStringList excluded = group.readEntry("ExcludeCategories", QStringList());
 
         filter = [excluded, platforms](const KPluginMetaData &md) -> bool {

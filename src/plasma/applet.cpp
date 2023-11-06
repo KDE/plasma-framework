@@ -125,7 +125,7 @@ void Applet::save(KConfigGroup &g) const
         return;
     }
 
-    KConfigGroup appletConfigGroup(&group, "Configuration");
+    KConfigGroup appletConfigGroup(&group, QStringLiteral("Configuration"));
     saveState(appletConfigGroup);
 
     if (d->configLoader) {
@@ -141,7 +141,7 @@ void Applet::restore(KConfigGroup &group)
 {
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
-    KConfigGroup shortcutConfig(&group, "Shortcuts");
+    KConfigGroup shortcutConfig(&group, QStringLiteral("Shortcuts"));
     QString shortcutText = shortcutConfig.readEntryUntranslated("global", QString());
     if (!shortcutText.isEmpty()) {
         setGlobalShortcut(QKeySequence(shortcutText));
@@ -195,14 +195,14 @@ void Applet::saveState(KConfigGroup &group) const
 KConfigGroup Applet::config() const
 {
     if (d->transient) {
-        return KConfigGroup(KSharedConfig::openConfig(), "PlasmaTransientsConfig");
+        return KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("PlasmaTransientsConfig"));
     }
 
     if (isContainment()) {
         return *(d->mainConfigGroup());
     }
 
-    return KConfigGroup(d->mainConfigGroup(), "Configuration");
+    return KConfigGroup(d->mainConfigGroup(), QStringLiteral("Configuration"));
 }
 
 KConfigGroup Applet::globalConfig() const

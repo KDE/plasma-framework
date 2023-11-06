@@ -337,7 +337,7 @@ void AppletPrivate::globalShortcutChanged()
     if (!activationAction) {
         return;
     }
-    KConfigGroup shortcutConfig(mainConfigGroup(), "Shortcuts");
+    KConfigGroup shortcutConfig(mainConfigGroup(), QStringLiteral("Shortcuts"));
     QString newShortCut = activationAction->shortcut().toString();
     QString oldShortCut = shortcutConfig.readEntry("global", QString());
     if (newShortCut != oldShortCut) {
@@ -524,11 +524,11 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
 
         if (parentApplet) {
             containmentConfig = parentApplet->config();
-            containmentConfig = KConfigGroup(&containmentConfig, "Containments");
+            containmentConfig = KConfigGroup(&containmentConfig, QStringLiteral("Containments"));
         } else if (corona) {
-            containmentConfig = KConfigGroup(corona->config(), "Containments");
+            containmentConfig = KConfigGroup(corona->config(), QStringLiteral("Containments"));
         } else {
-            containmentConfig = KConfigGroup(KSharedConfig::openConfig(), "Containments");
+            containmentConfig = KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("Containments"));
         }
 
         mainConfig = new KConfigGroup(&containmentConfig, QString::number(appletId));
@@ -538,10 +538,10 @@ KConfigGroup *AppletPrivate::mainConfigGroup()
         if (c) {
             // applet directly in a Containment, as usual
             appletConfig = c->config();
-            appletConfig = KConfigGroup(&appletConfig, "Applets");
+            appletConfig = KConfigGroup(&appletConfig, QStringLiteral("Applets"));
         } else {
             qCDebug(LOG_PLASMA) << "requesting config for" << q->title() << "without a containment!";
-            appletConfig = KConfigGroup(KSharedConfig::openConfig(), "Applets");
+            appletConfig = KConfigGroup(KSharedConfig::openConfig(), QStringLiteral("Applets"));
         }
 
         mainConfig = new KConfigGroup(&appletConfig, QString::number(appletId));

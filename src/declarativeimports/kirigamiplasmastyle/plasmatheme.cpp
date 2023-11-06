@@ -30,7 +30,7 @@ PlasmaTheme::PlasmaTheme(QObject *parent)
     setDefaultFont(qGuiApp->font());
 
     KSharedConfigPtr ptr = KSharedConfig::openConfig();
-    KConfigGroup general(ptr->group("general"));
+    KConfigGroup general(ptr->group(QStringLiteral("general")));
 
     setSmallFont(general.readEntry("smallestReadableFont", []() {
         auto smallFont = qApp->font();

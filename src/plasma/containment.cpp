@@ -171,7 +171,7 @@ void Containment::restore(KConfigGroup &group)
     setImmutability((Types::ImmutabilityType)group.readEntry("immutability", (int)Types::Mutable));
 
     if (isContainment() && KAuthorized::authorize(QStringLiteral("plasma/containment_actions"))) {
-        KConfigGroup cfg = KConfigGroup(corona()->config(), "ActionPlugins");
+        KConfigGroup cfg = KConfigGroup(corona()->config(), QStringLiteral("ActionPlugins"));
         cfg = KConfigGroup(&cfg, QString::number((int)containmentType()));
 
         // qCDebug(LOG_PLASMA) << cfg.keyList();
@@ -188,17 +188,17 @@ void Containment::restore(KConfigGroup &group)
             case Plasma::Containment::Type::Panel:
             /* fall through*/
             case Plasma::Containment::Type::CustomPanel:
-                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Panel");
+                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), QStringLiteral("Panel"));
                 break;
             case Plasma::Containment::Type::Desktop:
-                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), "Desktop");
+                defaultActionsCfg = KConfigGroup(KSharedConfig::openConfig(corona()->kPackage().filePath("defaults")), QStringLiteral("Desktop"));
                 break;
             default:
                 // for any other type of containment, there are no defaults
                 break;
             }
             if (defaultActionsCfg.isValid()) {
-                defaultActionsCfg = KConfigGroup(&defaultActionsCfg, "ContainmentActions");
+                defaultActionsCfg = KConfigGroup(&defaultActionsCfg, QStringLiteral("ContainmentActions"));
                 const auto keyList = defaultActionsCfg.keyList();
                 for (const QString &key : keyList) {
                     setContainmentActions(key, defaultActionsCfg.readEntry(key, QString()));
@@ -236,7 +236,7 @@ void Containment::save(KConfigGroup &g) const
 
 void Containment::saveContents(KConfigGroup &group) const
 {
-    KConfigGroup applets(&group, "Applets");
+    KConfigGroup applets(&group, QStringLiteral("Applets"));
     for (const Applet *applet : std::as_const(d->applets)) {
         KConfigGroup appletConfig(&applets, QString::number(applet->id()));
         applet->save(appletConfig);
@@ -245,7 +245,7 @@ void Containment::saveContents(KConfigGroup &group) const
 
 void Containment::restoreContents(KConfigGroup &group)
 {
-    KConfigGroup applets(&group, "Applets");
+    KConfigGroup applets(&group, QStringLiteral("Applets"));
 
     // restore the applets ordered by id
     QStringList groups = applets.groupList();
@@ -400,7 +400,7 @@ void Containment::addApplet(Applet *applet, const QRectF &geometryHint)
 
         // now move the old config to the new location
         // FIXME: this doesn't seem to get the actual main config group containing plugin=, etc
-        KConfigGroup c = config().group("Applets").group(QString::number(applet->id()));
+        KConfigGroup c = config().group(QStringLiteral("Applets")).group(QString::number(applet->id()));
         oldConfig.reparent(&c);
         applet->d->resetConfigurationObject();
 

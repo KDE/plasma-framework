@@ -48,7 +48,7 @@ Corona::Corona(QObject *parent)
 
 Corona::~Corona()
 {
-    KConfigGroup trans(KSharedConfig::openConfig(), "PlasmaTransientsConfig");
+    KConfigGroup trans(KSharedConfig::openConfig(), QStringLiteral("PlasmaTransientsConfig"));
     trans.deleteGroup();
 
     delete d;
@@ -90,7 +90,7 @@ void Corona::exportLayout(KConfigGroup &config, QList<Containment *> containment
     Types::ImmutabilityType oldImm = immutability();
     d->immutability = Types::Mutable;
 
-    KConfigGroup dest(&config, "Containments");
+    KConfigGroup dest(&config, QStringLiteral("Containments"));
     KConfigGroup dummy;
     for (Plasma::Containment *c : std::as_const(containments)) {
         c->save(dummy);
@@ -152,7 +152,7 @@ void Corona::loadLayout(const QString &configName)
         d->notifyContainmentsReady();
     }
 
-    KConfigGroup cg(config(), "General");
+    KConfigGroup cg(config(), QStringLiteral("General"));
     setImmutability((Plasma::Types::ImmutabilityType)cg.readEntry("immutability", (int)Plasma::Types::Mutable));
 }
 
@@ -340,7 +340,7 @@ void Corona::setImmutability(const Types::ImmutabilityType immutable)
     }
 
     if (d->immutability != Types::SystemImmutable) {
-        KConfigGroup cg(config(), "General");
+        KConfigGroup cg(config(), QStringLiteral("General"));
 
         // we call the dptr member directly for locked since isImmutable()
         // also checks kiosk and parent containers
@@ -459,7 +459,7 @@ CoronaPrivate::~CoronaPrivate()
 
 void CoronaPrivate::init()
 {
-    desktopDefaultsConfig = KConfigGroup(KSharedConfig::openConfig(package.filePath("defaults")), "Desktop");
+    desktopDefaultsConfig = KConfigGroup(KSharedConfig::openConfig(package.filePath("defaults")), QStringLiteral("Desktop"));
 
     configSyncTimer->setSingleShot(true);
     QObject::connect(configSyncTimer, SIGNAL(timeout()), q, SLOT(syncConfig()));
@@ -500,7 +500,7 @@ void CoronaPrivate::toggleImmutability()
 
 void CoronaPrivate::saveLayout(KSharedConfigPtr cg) const
 {
-    KConfigGroup containmentsGroup(cg, "Containments");
+    KConfigGroup containmentsGroup(cg, QStringLiteral("Containments"));
     for (const Containment *containment : containments) {
         QString cid = QString::number(containment->id());
         KConfigGroup containmentConfig(&containmentsGroup, cid);
@@ -588,7 +588,7 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
     // if this is a new containment, we need to ensure that there are no stale
     // configuration data around
     if (id == 0) {
-        KConfigGroup conf(q->config(), "Containments");
+        KConfigGroup conf(q->config(), QStringLiteral("Containments"));
         conf = KConfigGroup(&conf, QString::number(containment->id()));
         conf.deleteGroup();
     }
@@ -634,7 +634,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
         containmentsIds.insert(containment->id());
     }
 
-    KConfigGroup containmentsGroup(&conf, "Containments");
+    KConfigGroup containmentsGroup(&conf, QStringLiteral("Containments"));
     QStringList groups = containmentsGroup.groupList();
     std::sort(groups.begin(), groups.end());
 
@@ -656,7 +656,7 @@ QList<Plasma::Containment *> CoronaPrivate::importLayout(const KConfigGroup &con
         }
 
         if (mergeConfig) {
-            KConfigGroup realConf(q->config(), "Containments");
+            KConfigGroup realConf(q->config(), QStringLiteral("Containments"));
             realConf = KConfigGroup(&realConf, QString::number(cid));
             // in case something was there before us
             realConf.deleteGroup();

@@ -86,7 +86,7 @@ void ContainmentPrivate::addDefaultActions(QMap<QString, QAction *> &actions, Co
 
 KConfigGroup ContainmentPrivate::containmentActionsConfig() const
 {
-    KConfigGroup cfg = KConfigGroup(q->corona()->config(), "ActionPlugins");
+    KConfigGroup cfg = KConfigGroup(q->corona()->config(), QStringLiteral("ActionPlugins"));
     return KConfigGroup(&cfg, QString::number((int)type));
 }
 

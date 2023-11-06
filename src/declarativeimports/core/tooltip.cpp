@@ -77,7 +77,7 @@ void ToolTip::settingsChanged(const QString &file)
 
 void ToolTip::loadSettings()
 {
-    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(QStringLiteral("plasmarc")), "PlasmaToolTips");
+    KConfigGroup cfg = KConfigGroup(KSharedConfig::openConfig(QStringLiteral("plasmarc")), QStringLiteral("PlasmaToolTips"));
     m_interval = cfg.readEntry("Delay", 700);
     m_tooltipsEnabledGlobally = (m_interval > 0);
 }

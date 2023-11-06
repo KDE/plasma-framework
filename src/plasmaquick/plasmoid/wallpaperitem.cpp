@@ -100,7 +100,7 @@ KConfigLoader *WallpaperItem::configScheme()
         const QString xmlPath = m_pkg.filePath("config", QStringLiteral("main.xml"));
 
         KConfigGroup cfg = m_containment->config();
-        cfg = KConfigGroup(&cfg, "Wallpaper");
+        cfg = KConfigGroup(&cfg, QStringLiteral("Wallpaper"));
         cfg = KConfigGroup(&cfg, m_wallpaperPlugin);
 
         if (xmlPath.isEmpty()) {

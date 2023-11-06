@@ -229,7 +229,7 @@ void ConfigViewPrivate::mainItemLoaded()
 {
     if (applet) {
         KConfigGroup cg = applet.data()->config();
-        cg = KConfigGroup(&cg, "ConfigDialog");
+        cg = KConfigGroup(&cg, QStringLiteral("ConfigDialog"));
         q->resize(cg.readEntry("DialogWidth", q->width()), cg.readEntry("DialogHeight", q->height()));
     }
 
@@ -381,7 +381,7 @@ void ConfigView::resizeEvent(QResizeEvent *re)
 
     if (d->applet) {
         KConfigGroup cg = d->applet.data()->config();
-        cg = KConfigGroup(&cg, "ConfigDialog");
+        cg = KConfigGroup(&cg, QStringLiteral("ConfigDialog"));
         cg.writeEntry("DialogWidth", re->size().width());
         cg.writeEntry("DialogHeight", re->size().height());
     }

@@ -79,9 +79,9 @@ void ContainmentItem::init()
     if (m_containment) {
         KConfigGroup defaults;
         if (m_containment->containmentType() == Plasma::Containment::Type::Desktop) {
-            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), "Desktop");
+            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), QStringLiteral("Desktop"));
         } else if (m_containment->containmentType() == Plasma::Containment::Type::Panel) {
-            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), "Panel");
+            defaults = KConfigGroup(KSharedConfig::openConfig(m_containment->corona()->kPackage().filePath("defaults")), QStringLiteral("Panel"));
         }
 
         if (defaults.isValid()) {
@@ -992,7 +992,7 @@ void ContainmentItem::addContainmentActions(QMenu *desktopMenu, QEvent *event)
         plugin->setContainment(m_containment);
 
         // now configure it
-        KConfigGroup cfg(m_containment->corona()->config(), "ActionPlugins");
+        KConfigGroup cfg(m_containment->corona()->config(), QStringLiteral("ActionPlugins"));
         cfg = KConfigGroup(&cfg, QString::number((int)m_containment->containmentType()));
         KConfigGroup pluginConfig = KConfigGroup(&cfg, trigger);
         plugin->restore(pluginConfig);
