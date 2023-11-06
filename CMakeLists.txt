@@ -46,7 +46,6 @@ find_package(Qt6 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Qml S
 
 find_package(KF6 ${KF6_MIN_VERSION} REQUIRED
     COMPONENTS
-        Activities
         Archive
         Config
         ConfigWidgets
@@ -62,6 +61,10 @@ find_package(KF6 ${KF6_MIN_VERSION} REQUIRED
         KirigamiPlatform
         KCMUtils
         Svg
+)
+find_package(KF6 ${PROJECT_VERSION} REQUIRED
+    COMPONENTS
+        Activities
 )
 
 # Wayland features
