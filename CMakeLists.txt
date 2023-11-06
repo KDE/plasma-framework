@@ -1,17 +1,19 @@
+project(plasma-framework)
+set(PROJECT_VERSION "5.27.80")
+
 cmake_minimum_required(VERSION 3.16)
 
-set(KF_VERSION "5.240.0") # handled by release scripts
-set(KF_DEP_VERSION "5.240.0") # handled by release scripts
-project(Plasma VERSION ${KF_VERSION})
+set(QT_MIN_VERSION "6.5.0")
+set(KF6_MIN_VERSION "5.240.0")
+set(KDE_COMPILERSETTINGS_LEVEL "5.82")
 
-# ECM setup
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(ECM ${KF6_MIN_VERSION} REQUIRED NO_MODULE)
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} )
+
 include(FeatureSummary)
-find_package(ECM 5.240.0  NO_MODULE)
-set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://commits.kde.org/extra-cmake-modules")
-feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
-
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
-
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEGitCommitHooks)
@@ -40,11 +42,9 @@ ecm_setup_version(PROJECT
 
 ################# now find all used packages #################
 
-set (REQUIRED_QT_VERSION 6.5.0)
+find_package(Qt6 ${QT_MIN_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Qml Svg QuickControls2 DBus)
 
-find_package(Qt6 ${REQUIRED_QT_VERSION} REQUIRED NO_MODULE COMPONENTS Quick Gui Qml Svg QuickControls2 DBus)
-
-find_package(KF6 ${KF_DEP_VERSION} REQUIRED
+find_package(KF6 ${KF6_MIN_VERSION} REQUIRED
     COMPONENTS
         Activities
         Archive
@@ -66,7 +66,7 @@ find_package(KF6 ${KF_DEP_VERSION} REQUIRED
 
 # Wayland features
 find_package(PlasmaWaylandProtocols 1.10.0 REQUIRED)
-find_package(Qt6WaylandClient ${REQUIRED_QT_VERSION} REQUIRED CONFIG)
+find_package(Qt6WaylandClient ${QT_MIN_VERSION} REQUIRED CONFIG)
 find_package(Wayland 1.9 REQUIRED Client)
 
 option(WITHOUT_X11 "Build without X11 support (skips finding X11)." OFF)

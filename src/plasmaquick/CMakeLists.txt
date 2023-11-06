@@ -114,7 +114,7 @@ install(TARGETS KF6PlasmaQuick EXPORT KF6PlasmaQuickTargets ${KF_INSTALL_TARGETS
 ecm_generate_export_header(KF6PlasmaQuick
     BASE_NAME PlasmaQuick
     GROUP_BASE_NAME KF
-    VERSION ${KF_VERSION}
+    VERSION ${KF6_MIN_VERSION}
     USE_VERSION_HEADER
     VERSION_BASE_NAME Plasma
     DEPRECATED_BASE_VERSION 0
@@ -162,7 +162,7 @@ configure_package_config_file(
     PATH_VARS  PLASMAQUICK_INSTALL_INCLUDEDIR CMAKE_INSTALL_PREFIX
 )
 
-ecm_setup_version(${KF_VERSION}
+ecm_setup_version(${KF6_MIN_VERSION}
                   VARIABLE_PREFIX PLASMAQUICK
                   PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaQuickConfigVersion.cmake" )
 
