@@ -123,7 +123,7 @@
         "Name[vi]": "Breeze Tối",
         "Name[x-test]": "xxBreeze Darkxx",
         "Name[zh_CN]": "Breeze 微风深色",
-        "Version": "@KF_VERSION@",
+        "Version": "@KF6_MIN_VERSION@",
         "Website": "https://plasma.kde.org"
     },
     "X-Plasma-API": "5.0"

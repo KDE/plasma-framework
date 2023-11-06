@@ -119,7 +119,7 @@
         "Name[vi]": "Oxygen",
         "Name[x-test]": "xxOxygenxx",
         "Name[zh_CN]": "Oxygen 轻氧",
-        "Version": "@KF_VERSION@",
+        "Version": "@KF6_MIN_VERSION@",
         "Website": "https://plasma.kde.org"
     },
     "X-Plasma-API": "5.0"

@@ -140,7 +140,7 @@ if(BUILD_QCH)
         KF6Plasma_QCH
         NAME Plasma
         BASE_NAME KF6Plasma
-        VERSION ${KF_VERSION}
+        VERSION ${KF6_MIN_VERSION}
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API
             ${Plasma_HEADERS}
