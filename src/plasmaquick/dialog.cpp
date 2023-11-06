@@ -847,10 +847,12 @@ void DialogPrivate::applyType()
         }
     }
 
-    if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay || type == Dialog::CriticalNotification) {
-        KX11Extras::setOnAllDesktops(q->winId(), true);
-    } else {
-        KX11Extras::setOnAllDesktops(q->winId(), false);
+    if (KWindowSystem::isPlatformX11()) {
+        if (type == Dialog::Dock || type == Dialog::Notification || type == Dialog::OnScreenDisplay || type == Dialog::CriticalNotification) {
+            KX11Extras::setOnAllDesktops(q->winId(), true);
+        } else {
+            KX11Extras::setOnAllDesktops(q->winId(), false);
+        }
     }
 
     PlasmaShellWaylandIntegration::get(q)->setTakesFocus(!q->flags().testFlag(Qt::WindowDoesNotAcceptFocus));
