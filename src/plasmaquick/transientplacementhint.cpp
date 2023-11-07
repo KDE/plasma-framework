@@ -161,7 +161,8 @@ static QPoint popupPosition(const QRect &anchorRect, const Qt::Edges parentAncho
 
 QRect TransientPlacementHelper::popupRect(QWindow *w, const TransientPlacementHint &placement)
 {
-    Q_ASSERT(placement.isValid());
+    // We are not checking the placement being valid, as visual parents with size 0 is an
+    // allowed thing, also, every PlasmoidItem will initially be 0x0 when created
     QScreen *screen = nullptr;
     QRect globalParentAnchorRect = placement.parentAnchorArea();
     if (w->transientParent()) {
