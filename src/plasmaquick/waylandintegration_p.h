@@ -48,7 +48,7 @@ public:
 
 private:
     PlasmaShellWaylandIntegration(QWindow *window);
-    void platformSurfaceChanged(QWindow *window);
+    void platformSurfaceCreated(QWindow *window);
     void surfaceCreated();
     void surfaceDestroyed();
 

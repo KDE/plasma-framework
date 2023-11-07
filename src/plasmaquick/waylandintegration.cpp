@@ -7,8 +7,10 @@
 #include "waylandintegration_p.h"
 
 #include <QGuiApplication>
+#include <QPlatformSurfaceEvent>
 #include <QWaylandClientExtensionTemplate>
 #include <QWindow>
+
 #include <qpa/qplatformwindow_p.h>
 
 #include <KWindowSystem>
@@ -72,7 +74,9 @@ PlasmaShellWaylandIntegration::PlasmaShellWaylandIntegration(QWindow *window)
     , m_window(window)
 {
     m_window->installEventFilter(this);
-    platformSurfaceChanged(window);
+    if (m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>()) {
+        platformSurfaceCreated(window);
+    }
 }
 
 bool PlasmaShellWaylandIntegration::eventFilter(QObject *watched, QEvent *event)
@@ -82,7 +86,10 @@ bool PlasmaShellWaylandIntegration::eventFilter(QObject *watched, QEvent *event)
         return false;
     }
     if (event->type() == QEvent::PlatformSurface) {
-        platformSurfaceChanged(window);
+        auto surfaceEvent = static_cast<QPlatformSurfaceEvent *>(event);
+        if (surfaceEvent->surfaceEventType() == QPlatformSurfaceEvent::SurfaceCreated) {
+            platformSurfaceCreated(window);
+        }
     }
     return false;
 }
@@ -132,18 +139,12 @@ void PlasmaShellWaylandIntegration::setTakesFocus(bool takesFocus)
     }
 }
 
-void PlasmaShellWaylandIntegration::platformSurfaceChanged(QWindow *window)
+void PlasmaShellWaylandIntegration::platformSurfaceCreated(QWindow *window)
 {
     auto waylandWindow = window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
-    if (!waylandWindow) {
-        return;
-    }
-    connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceCreated, this, [this] {
-        surfaceCreated();
-    });
-    connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceDestroyed, this, [this] {
-        surfaceDestroyed();
-    });
+    Q_ASSERT(waylandWindow);
+    connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceCreated, this, &PlasmaShellWaylandIntegration::surfaceCreated);
+    connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceDestroyed, this, &PlasmaShellWaylandIntegration::surfaceDestroyed);
     if (waylandWindow->surface()) {
         surfaceCreated();
     }
