@@ -77,6 +77,12 @@ void PopupPlasmaWindowPrivate::updatePosition()
         qCWarning(LOG_PLASMAQUICK) << "Exposed with no visual parent. Window positioning broken.";
         return;
     }
+
+    if (m_visualParent->size().isEmpty()) {
+        qCWarning(LOG_PLASMAQUICK) << "Exposed with a visual parent that has no size. Window positioning broken.";
+        return;
+    }
+
     q->setTransientParent(m_visualParent->window());
     TransientPlacementHint placementHint;
     QRectF parentAnchorRect = QRectF(m_visualParent->mapToScene(QPointF(0, 0)), m_visualParent->size());
