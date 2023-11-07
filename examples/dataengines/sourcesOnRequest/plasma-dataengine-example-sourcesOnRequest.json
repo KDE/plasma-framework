@@ -47,6 +47,7 @@
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
                 "Name[vi]": "Aaron Seigo",
+                "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
             }
@@ -81,6 +82,7 @@
         "Description[tr]": "Kaynak oluşturumu ve güncellemeler için isteklere nice yanıt verileceğini gösteren bir DataEngine örneği",
         "Description[uk]": "Приклад рушія даних, який демонструє способи відповіді на запити щодо створення джерела і оновлень",
         "Description[vi]": "Một ví dụ về DataEngine cho thấy cách hồi đáp các yêu cầu tạo và cập nhật nguồn",
+        "Description[x-test]": "xxA DataEngine example showing how to respond to requests for source creation and updatesxx",
         "Description[zh_CN]": "展示如何响应源的创建和更新请求的数据引擎示例程序",
         "EnabledByDefault": true,
         "Icon": "plasma",
@@ -115,6 +117,7 @@
         "Name[tr]": "İsteğe Bağlı Kaynaklar",
         "Name[uk]": "Джерела за запитом",
         "Name[vi]": "Nguồn khi có yêu cầu",
+        "Name[x-test]": "xxSources On Requestxx",
         "Name[zh_CN]": "按需请求来源",
         "ServiceTypes": [
             "Plasma/DataEngine"

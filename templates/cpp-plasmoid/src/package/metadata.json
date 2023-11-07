@@ -36,6 +36,7 @@
                 "Name[tr]": "%{AUTHOR}",
                 "Name[uk]": "%{AUTHOR}",
                 "Name[vi]": "%{AUTHOR}",
+                "Name[x-test]": "xx%{AUTHOR}xx",
                 "Name[zh_CN]": "%{AUTHOR}"
             }
         ],
@@ -70,6 +71,7 @@
         "Description[tr]": "uygulamanızı birkaç sözcükle anlatın",
         "Description[uk]": "призначення вашої програми у декількох словах",
         "Description[vi]": "dùng vài từ để mô tả ứng dụng của bạn làm việc gì",
+        "Description[x-test]": "xxwhat your app does in a few wordsxx",
         "Description[zh_CN]": "用一个短句概括您的小程序的功能",
         "Icon": "applications-system",
         "Id": "org.kde.plasma.%{APPNAMELC}",
@@ -106,6 +108,7 @@
         "Name[tr]": "%{APPNAME}",
         "Name[uk]": "%{APPNAME}",
         "Name[vi]": "%{APPNAME}",
+        "Name[x-test]": "xx%{APPNAME}xx",
         "Name[zh_CN]": "%{APPNAME}",
         "Version": "1.0",
         "Website": "https://plasma.kde.org/"

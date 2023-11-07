@@ -35,6 +35,7 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -71,6 +72,7 @@
         "Name[tr]": "Yapılandırma Sınaması",
         "Name[uk]": "Перевірка налаштувань",
         "Name[vi]": "Kiểm thử cấu hình",
+        "Name[x-test]": "xxConfiguration testxx",
         "Name[zh_CN]": "配置测试",
         "ServiceTypes": [
             "Plasma/Applet"

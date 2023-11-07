@@ -35,6 +35,7 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx",
                 "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
@@ -74,6 +75,7 @@
         "Name[tr]": "Güz",
         "Name[uk]": "Осінь",
         "Name[vi]": "Mùa thu",
+        "Name[x-test]": "xxAutumnxx",
         "Name[zh_CN]": "Autumn 秋色",
         "ServiceTypes": [
             "Plasma/Wallpaper"

@@ -35,6 +35,7 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx",
                 "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
@@ -71,6 +72,7 @@
         "Description[tr]": "Plasma'daki bir hatayı bildirin",
         "Description[uk]": "Повідомити про ваду у Плазмі",
         "Description[vi]": "Báo một lỗi trong Plasma",
+        "Description[x-test]": "xxReport a bug in Plasmaxx",
         "Description[zh_CN]": "报告 Plasma 程序缺陷",
         "Icon": "kbugbuster",
         "Id": "org.kde.example.bugreport",
@@ -108,6 +110,7 @@
         "Name[tr]": "Hata",
         "Name[uk]": "Вада",
         "Name[vi]": "Lỗi",
+        "Name[x-test]": "xxBugxx",
         "Name[zh_CN]": "程序缺陷",
         "ServiceTypes": [
             "Plasma/Applet"

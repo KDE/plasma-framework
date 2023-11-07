@@ -33,6 +33,7 @@
                 "Name[tr]": "Oksijen Projesi",
                 "Name[uk]": "Проєкт Oxygen",
                 "Name[vi]": "Dự án Oxygen",
+                "Name[x-test]": "xxThe Oxygen Projectxx",
                 "Name[zh_CN]": "Oxygen 项目"
             }
         ],
@@ -68,6 +69,7 @@
         "Description[tr]": "Temiz hava",
         "Description[uk]": "Ковток свіжого повітря",
         "Description[vi]": "Một luồng không khí trong lành",
+        "Description[x-test]": "xxA breath of fresh airxx",
         "Description[zh_CN]": "如清新空气般淡雅的主题",
         "EnabledByDefault": true,
         "Id": "air",
@@ -104,6 +106,7 @@
         "Name[tr]": "Hava",
         "Name[uk]": "Повітря",
         "Name[vi]": "Air",
+        "Name[x-test]": "xxAirxx",
         "Name[zh_CN]": "Air 净空",
         "Version": "@KF_VERSION@",
         "Website": "https://plasma.kde.org"

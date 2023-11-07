@@ -35,6 +35,7 @@
                 "Name[tr]": "Sebastian Kügler",
                 "Name[uk]": "Sebastian Kügler",
                 "Name[vi]": "Sebastian Kügler",
+                "Name[x-test]": "xxSebastian Küglerxx",
                 "Name[zh_CN]": "Sebastian Kügler"
             }
         ],
@@ -72,6 +73,7 @@
         "Name[tr]": "Tema Sınaması",
         "Name[uk]": "Тестування теми",
         "Name[vi]": "Kiểm thử chủ đề",
+        "Name[x-test]": "xxTheme Testxx",
         "Name[zh_CN]": "主题测试",
         "ServiceTypes": [
             "Plasma/Applet"

@@ -35,6 +35,7 @@
                 "Name[tr]": "Marco Martin",
                 "Name[uk]": "Marco Martin",
                 "Name[vi]": "Marco Martin",
+                "Name[x-test]": "xxMarco Martinxx",
                 "Name[zh_CN]": "Marco Martin"
             }
         ],
@@ -68,6 +69,7 @@
         "Description[tr]": "Temel bir QML ortam oynatıcısı konsepti",
         "Description[uk]": "Тестова програма для спостереження за відтворенням мультимедійних даних, написана мовою qml",
         "Description[vi]": "Một trình điều khiển và phát phương tiện thử nghiệm viết bằng QML",
+        "Description[x-test]": "xxA proof of concept media player controller qmlxx",
         "Description[zh_CN]": "媒体播放器控制器 QML 版本的概念验证程序",
         "EnabledByDefault": true,
         "Icon": "applications-multimedia",
@@ -103,6 +105,7 @@
         "Name[tr]": "Şimdi oynatılıyor (QML)",
         "Name[uk]": "Зараз відтворюємо (QML)",
         "Name[vi]": "Đang phát (QML)",
+        "Name[x-test]": "xxNow playing (QML)xx",
         "Name[zh_CN]": "正在播放 (QML)",
         "ServiceTypes": [
             "Plasma/Applet"

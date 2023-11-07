@@ -48,6 +48,7 @@
                 "Name[tr]": "Aaron Seigo",
                 "Name[uk]": "Aaron Seigo",
                 "Name[vi]": "Aaron Seigo",
+                "Name[x-test]": "xxAaron Seigoxx",
                 "Name[zh_CN]": "Aaron Seigo",
                 "Name[zh_TW]": "Aaron Seigo"
             }
@@ -96,6 +97,7 @@
         "Name[tr]": "Sınırlama Eylemleri",
         "Name[uk]": "Дії з контейнерами",
         "Name[vi]": "Các hành động bao chứa",
+        "Name[x-test]": "xxContainment Actionsxx",
         "Name[zh_CN]": "容器操作",
         "Name[zh_TW]": "遏止動作",
         "Version": "1"

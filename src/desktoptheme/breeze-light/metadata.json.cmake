@@ -35,6 +35,7 @@
                 "Name[tr]": "KDE Görsel Tasarım Grubu",
                 "Name[uk]": "Група з візуального дизайну KDE",
                 "Name[vi]": "Đội Thiết kế Trực quan KDE",
+                "Name[x-test]": "xxKDE Visual Design Groupxx",
                 "Name[zh_CN]": "KDE 视觉设计团队"
             }
         ],
@@ -71,6 +72,7 @@
         "Description[tr]": "KDE VDG tarafından Esinti Açık",
         "Description[uk]": "Світла Breeze, автори — KDE VDG",
         "Description[vi]": "Breeze Sáng, do KDE VDG",
+        "Description[x-test]": "xxBreeze Light by the KDE VDGxx",
         "Description[zh_CN]": "Breeze 微风浅色主题，由 KDE VDG (视觉设计团队) 设计制作",
         "EnabledByDefault": true,
         "Id": "default",
@@ -107,6 +109,7 @@
         "Name[tr]": "Esinti Açık",
         "Name[uk]": "Світла Breeze",
         "Name[vi]": "Breeze Sáng",
+        "Name[x-test]": "xxBreeze Lightxx",
         "Name[zh_CN]": "Breeze 微风浅色",
         "Version": "@KF_VERSION@",
         "Website": "https://plasma.kde.org"

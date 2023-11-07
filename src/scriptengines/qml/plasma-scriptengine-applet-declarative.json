@@ -34,6 +34,7 @@
                 "Name[tr]": "Alexis Menard",
                 "Name[uk]": "Alexis Menard",
                 "Name[vi]": "Alexis Menard",
+                "Name[x-test]": "xxAlexis Menardxx",
                 "Name[zh_CN]": "Alexis Menard"
             }
         ],
@@ -68,6 +69,7 @@
         "Description[tr]": "QML ve JavaScript ile yazılmış yerel Plasma araç takımı",
         "Description[uk]": "Віджет Плазми, написаний на QML та JavaScript",
         "Description[vi]": "Phụ kiện nội Plasma viết bằng QML và JavaScript",
+        "Description[x-test]": "xxNative Plasma widget written in QML and JavaScriptxx",
         "Description[zh_CN]": "使用 QML 和 JavaScript 编写的原生 Plasma 挂件",
         "EnabledByDefault": true,
         "Icon": "text-x-script",
@@ -103,6 +105,7 @@
         "Name[tr]": "Bildirimsel araç takımları",
         "Name[uk]": "Декларативний віджет",
         "Name[vi]": "Phụ kiện khai báo",
+        "Name[x-test]": "xxDeclarative widgetxx",
         "Name[zh_CN]": "程序声明挂件",
         "ServiceTypes": [
             "Plasma/ScriptEngine"
