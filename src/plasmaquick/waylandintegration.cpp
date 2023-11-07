@@ -73,6 +73,9 @@ PlasmaShellWaylandIntegration::PlasmaShellWaylandIntegration(QWindow *window)
     : QObject(window)
     , m_window(window)
 {
+    if (!KWindowSystem::isPlatformWayland()) {
+        return;
+    }
     m_window->installEventFilter(this);
     if (m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>()) {
         platformSurfaceCreated(window);
