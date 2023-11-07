@@ -77,9 +77,7 @@ PlasmaShellWaylandIntegration::PlasmaShellWaylandIntegration(QWindow *window)
         return;
     }
     m_window->installEventFilter(this);
-    if (m_window->nativeInterface<QNativeInterface::Private::QWaylandWindow>()) {
-        platformSurfaceCreated(window);
-    }
+    platformSurfaceCreated(window);
 }
 
 bool PlasmaShellWaylandIntegration::eventFilter(QObject *watched, QEvent *event)
@@ -145,7 +143,9 @@ void PlasmaShellWaylandIntegration::setTakesFocus(bool takesFocus)
 void PlasmaShellWaylandIntegration::platformSurfaceCreated(QWindow *window)
 {
     auto waylandWindow = window->nativeInterface<QNativeInterface::Private::QWaylandWindow>();
-    Q_ASSERT(waylandWindow);
+    if (!waylandWindow) { // It may be null, e.g. when called within KWin
+        return;
+    }
     connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceCreated, this, &PlasmaShellWaylandIntegration::surfaceCreated);
     connect(waylandWindow, &QNativeInterface::Private::QWaylandWindow::surfaceDestroyed, this, &PlasmaShellWaylandIntegration::surfaceDestroyed);
     if (waylandWindow->surface()) {
