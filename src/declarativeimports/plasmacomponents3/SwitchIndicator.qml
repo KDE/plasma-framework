@@ -61,14 +61,19 @@ Item {
     }
     KSvg.SvgItem {
         id: button
-        x: root.control.mirrored ? (root.control.checked ? 0 : parent.width - width) : (root.control.checked ? parent.width - width : 0)
+
+        // It's necessary to use x position instead of anchors so that the handle position can be dragged
+        x: Math.min(parent.width - width, root.control.visualPosition * parent.width)
         anchors.verticalCenter: parent.verticalCenter
+
         svg: switchSvg
         elementId: control.pressed ? "handle-pressed" : (control.hovered || control.focus ? "handle-hover" : "handle")
+
         implicitWidth: naturalSize.width
         implicitHeight: naturalSize.height
 
         Behavior on x {
+            enabled: !root.control.pressed
             XAnimator {
                 duration: Kirigami.Units.shortDuration
                 easing.type: Easing.InOutQuad
