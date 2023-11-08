@@ -19,6 +19,7 @@ ecm_target_qml_sources(plasmaextracomponentsplugin SOURCES
     qml/PlasmoidHeading.qml
     qml/Representation.qml
     qml/SearchField.qml
+    qml/ShadowedLabel.qml
 )
 
 ecm_target_qml_sources(plasmaextracomponentsplugin PATH animations SOURCES
