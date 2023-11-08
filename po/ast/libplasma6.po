@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-04 16:51+0000\n"
-"PO-Revision-Date: 2023-11-02 15:02+0100\n"
+"PO-Revision-Date: 2023-11-07 21:30+0100\n"
 "Last-Translator: Enol P. <enolp@softastur.org>\n"
 "Language-Team: \n"
 "Language: ast\n"
@@ -63,7 +63,7 @@ msgstr ""
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
-msgstr ""
+msgstr "Quitar «%1»"
 
 #: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
 #: plasma/corona.cpp:485
@@ -75,7 +75,7 @@ msgstr "Entrar nel mou d'edición"
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
-msgstr ""
+msgstr "Configurar «%1»…"
 
 #: plasma/containment.cpp:111 plasma/corona.cpp:365
 #, kde-format
@@ -121,7 +121,7 @@ msgstr "Amosar les alternatives…"
 #: plasma/private/applet_p.cpp:253
 #, kde-format
 msgid "Widget Removed"
-msgstr ""
+msgstr "Widget quitáu"
 
 #: plasma/private/applet_p.cpp:254
 #, kde-format
