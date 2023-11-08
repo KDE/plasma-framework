@@ -95,14 +95,6 @@ Item {
     property alias icon: listItemIcon.source
 
     /*
-     * iconUsesPlasmaSVG: bool
-     * Whether to load the icon from the Plasma theme instead of the icon theme.
-     *
-     * Optional, defaults to false.
-     */
-    property bool iconUsesPlasmaSVG: false
-
-    /*
      * iconEmblem: string
      * The name of the emblem to badge the icon with.
      *
