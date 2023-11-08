@@ -5,10 +5,11 @@
 */
 
 import QtQuick 2.12
+import org.kde.plasma.components as PC3
 import org.kde.kirigami 2 as Kirigami
 import org.kde.ksvg 1.0 as KSvg
 
-Kirigami.AbstractListItem {
+PC3.ItemDelegate {
     id: __listItem
 
     /**
