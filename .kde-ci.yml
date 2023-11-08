@@ -43,7 +43,7 @@ Dependencies:
 
 - 'on': ['Linux', 'FreeBSD']
   'require':
-    'frameworks/kwayland' : '@same'
+    'plasma/kwayland' : '@same'
 
 Options:
   test-before-installing: True
