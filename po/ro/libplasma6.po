@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 16:51+0000\n"
+"POT-Creation-Date: 2023-11-09 01:39+0000\n"
 "PO-Revision-Date: 2022-04-04 11:55+0100\n"
 "Last-Translator: Sergiu Bivol <sergiu@cip.md>\n"
 "Language-Team: Romanian <kde-i18n-ro@kde.org>\n"
@@ -23,13 +23,13 @@ msgstr ""
 msgid "More actions"
 msgstr "Acțiuni suplimentare"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:531
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:523
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr ""
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:531
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:523
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"

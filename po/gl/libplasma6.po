@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 16:51+0000\n"
+"POT-Creation-Date: 2023-11-09 01:39+0000\n"
 "PO-Revision-Date: 2023-10-28 10:38+0200\n"
 "Last-Translator: Adrián Chaves (Gallaecio) <adrian@chaves.io>\n"
 "Language-Team: Galician <proxecto@trasno.gal>\n"
@@ -24,13 +24,13 @@ msgstr ""
 msgid "More actions"
 msgstr "Máis accións"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:531
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:523
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Pregar"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:531
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:523
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"

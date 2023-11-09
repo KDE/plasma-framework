@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-04 16:51+0000\n"
+"POT-Creation-Date: 2023-11-09 01:39+0000\n"
 "PO-Revision-Date: 2023-09-22 09:52+0530\n"
 "Last-Translator: \n"
 "Language-Team: Sanskrit <kde-i18n-doc@kde.org>\n"
@@ -23,13 +23,13 @@ msgstr ""
 msgid "More actions"
 msgstr "अधिकानि क्रियाः"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:531
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:523
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "संव्लीयते"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:531
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:523
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
