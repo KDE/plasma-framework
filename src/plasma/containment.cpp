@@ -105,7 +105,7 @@ void Containment::init()
             configAction->setText(i18nc("%1 is the name of the applet", "Configure %1...", title()));
         }
     }
-    connect(corona(), &Plasma::Corona::editModeChanged, this, [=](bool isEditModeNow) {
+    connect(corona(), &Plasma::Corona::editModeChanged, this, [=, this](bool isEditModeNow) {
         if (d->type == Containment::Type::Panel || d->type == Containment::Type::CustomPanel) {
             if (isEditModeNow) {
                 configAction->setText(i18n("Exit Edit Mode"));
@@ -131,7 +131,7 @@ void Containment::init()
     }
 
     // HACK: this is valid only in the systray case
-    connect(this, &Containment::configureRequested, this, [=](Plasma::Applet *a) {
+    connect(this, &Containment::configureRequested, this, [this](Plasma::Applet *a) {
         if (Plasma::Applet *p = qobject_cast<Plasma::Applet *>(parent())) {
             Q_EMIT p->containment()->configureRequested(a);
         }

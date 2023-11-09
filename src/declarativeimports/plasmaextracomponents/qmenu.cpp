@@ -35,7 +35,7 @@ QMenuProxy::QMenuProxy(QObject *parent)
 
         KAcceleratorManager::manage(m_menu);
         connect(m_menu, &QMenu::triggered, this, &QMenuProxy::itemTriggered);
-        connect(m_menu, &QMenu::aboutToHide, this, [=]() {
+        connect(m_menu, &QMenu::aboutToHide, this, [this]() {
             m_status = Closed;
             Q_EMIT statusChanged();
         });

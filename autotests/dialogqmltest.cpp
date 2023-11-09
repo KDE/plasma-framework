@@ -53,7 +53,7 @@ void DialogQmlTest::loadAndShow()
     m_dialogShown = false;
 
     // this will be called during component.completeCreate
-    auto c = connect(dialog, &QWindow::visibleChanged, [=]() {
+    auto c = connect(dialog, &QWindow::visibleChanged, [=, this]() {
         m_dialogShown = true;
         QCOMPARE(dialog->type(), PlasmaQuick::Dialog::Notification);
         QCOMPARE(dialog->location(), Plasma::Types::TopEdge);

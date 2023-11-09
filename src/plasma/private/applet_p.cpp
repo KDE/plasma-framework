@@ -152,7 +152,7 @@ void AppletPrivate::init(const QVariantList &args)
             }
         });
 
-        QObject::connect(q, &Applet::contextualActionsAboutToShow, a, [=]() {
+        QObject::connect(q, &Applet::contextualActionsAboutToShow, a, [=, this]() {
             bool hasAlternatives = false;
 
             const QStringList provides = q->pluginMetaData().value(QStringLiteral("X-Plasma-Provides"), QStringList());
@@ -264,7 +264,7 @@ void AppletPrivate::askDestroy()
         }
 
         KNotificationAction *undoAction = deleteNotification->addAction(i18n("Undo"));
-        QObject::connect(undoAction, &KNotificationAction::activated, q, [=]() {
+        QObject::connect(undoAction, &KNotificationAction::activated, q, [=, this]() {
             setDestroyed(false);
             if (!q->isContainment() && q->containment()) {
                 Plasma::Applet *containmentApplet = static_cast<Plasma::Applet *>(q->containment());
@@ -294,7 +294,7 @@ void AppletPrivate::askDestroy()
                 deleteNotificationTimer = nullptr;
             }
         });
-        QObject::connect(deleteNotification.data(), &KNotification::closed, q, [=]() {
+        QObject::connect(deleteNotification.data(), &KNotification::closed, q, [this]() {
             // If the timer still exists, it means the undo action was NOT triggered
             if (transient) {
                 cleanUpAndDelete();
@@ -312,7 +312,7 @@ void AppletPrivate::askDestroy()
             // really delete after a minute
             deleteNotificationTimer->setInterval(60 * 1000);
             deleteNotificationTimer->setSingleShot(true);
-            QObject::connect(deleteNotificationTimer, &QTimer::timeout, q, [=]() {
+            QObject::connect(deleteNotificationTimer, &QTimer::timeout, q, [=, this]() {
                 transient = true;
                 if (deleteNotification) {
                     deleteNotification->close();

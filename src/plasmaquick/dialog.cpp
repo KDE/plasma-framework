@@ -949,10 +949,10 @@ Dialog::Dialog(QQuickItem *parent)
     setColor(QColor(Qt::transparent));
     setFlags(Qt::FramelessWindowHint | Qt::Dialog);
 
-    connect(this, &QWindow::xChanged, [=]() {
+    connect(this, &QWindow::xChanged, [this]() {
         d->slotWindowPositionChanged();
     });
-    connect(this, &QWindow::yChanged, [=]() {
+    connect(this, &QWindow::yChanged, [this]() {
         d->slotWindowPositionChanged();
     });
     connect(this, &Dialog::locationChanged, this, [&] {

@@ -75,7 +75,7 @@ void PlasmoidItem::init()
         connect(applet->containment()->corona(), &Plasma::Corona::availableScreenRectChanged, this, &ContainmentItem::availableScreenRectChanged);
     }
 
-    connect(this, &PlasmoidItem::expandedChanged, [=](bool expanded) {
+    connect(this, &PlasmoidItem::expandedChanged, [=, this](bool expanded) {
         // if both compactRepresentationItem and fullRepresentationItem exist,
         // the applet is in a popup
         if (expanded) {
@@ -96,7 +96,7 @@ void PlasmoidItem::init()
 
     geometryChange(QRectF(), QRectF(x(), y(), width(), height()));
 
-    connect(applet, &Plasma::Applet::activated, this, [=]() {
+    connect(applet, &Plasma::Applet::activated, this, [=, this]() {
         // in case the applet doesn't want to get shrunk on reactivation,
         // we always expand it again (only in order to conform with legacy behaviour)
         bool activate = !(isExpanded() && isActivationTogglesExpanded());
