@@ -22,8 +22,8 @@ T.TabBar {
     spacing: 0
 
     contentItem: ListView {
-        implicitWidth: control.contentModel.count === 0 ? 0 : control.contentModel.get(0).implicitWidth * count + spacing * (count - 1)
-        implicitHeight: control.contentModel.count === 0 ? 0 : control.contentModel.get(0).implicitHeight
+        implicitWidth: contentWidth
+        implicitHeight: contentHeight
 
         model: control.contentModel
         currentIndex: control.currentIndex
