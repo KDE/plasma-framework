@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 01:39+0000\n"
+"POT-Creation-Date: 2023-11-10 01:48+0000\n"
 "PO-Revision-Date: 2023-10-25 09:43+0300\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
@@ -51,6 +51,11 @@ msgstr "חיפוש…"
 #, kde-format
 msgid "Search"
 msgstr "חיפוש"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
+#, kde-format
+msgid "Clear search"
+msgstr ""
 
 #: plasma/applet.cpp:300
 #, kde-format

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 01:39+0000\n"
+"POT-Creation-Date: 2023-11-10 01:48+0000\n"
 "PO-Revision-Date: 2023-02-22 21:27+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -50,6 +50,11 @@ msgstr "検索..."
 #, kde-format
 msgid "Search"
 msgstr "検索"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
+#, kde-format
+msgid "Clear search"
+msgstr ""
 
 #: plasma/applet.cpp:300
 #, kde-format

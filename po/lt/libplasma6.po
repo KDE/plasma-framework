@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: l 10n\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-09 01:39+0000\n"
+"POT-Creation-Date: 2023-11-10 01:48+0000\n"
 "PO-Revision-Date: 2022-09-19 12:33+0300\n"
 "Last-Translator: Moo <<>>\n"
 "Language-Team: lt <kde-i18n-lt@kde.org>\n"
@@ -52,6 +52,11 @@ msgstr "Ieškoti…"
 #, kde-format
 msgid "Search"
 msgstr "Paieška"
+
+#: declarativeimports/plasmaextracomponents/qml/SearchField.qml:73
+#, kde-format
+msgid "Clear search"
+msgstr ""
 
 #: plasma/applet.cpp:300
 #, kde-format
