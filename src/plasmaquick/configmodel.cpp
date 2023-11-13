@@ -9,6 +9,7 @@
 #include "Plasma/Applet"
 #include "Plasma/Containment"
 #include "configview.h"
+#include "debug_p.h"
 #include "private/configcategory_p.h"
 #include "sharedqmlengine.h"
 
@@ -259,7 +260,7 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
             d->kcms[pluginName] = cm;
             return QVariant::fromValue(cm);
         } else {
-            qWarning() << "Error loading KCM:" << cmResult.errorText;
+            qCDebug(LOG_PLASMAQUICK) << "Error loading KCM:" << cmResult.errorText;
             return QVariant();
         }
     }
