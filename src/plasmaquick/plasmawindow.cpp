@@ -149,8 +149,10 @@ void PlasmaWindow::resizeEvent(QResizeEvent *e)
     const QSize windowSize = e->size();
     d->dialogBackground->setSize(windowSize);
     if (d->mainItem) {
-        const QSize contentSize = windowSize.shrunkBy(padding());
+        const QMargins frameMargins = padding();
+        const QSize contentSize = windowSize.shrunkBy(frameMargins);
         d->mainItem->setSize(contentSize);
+        d->mainItem->setPosition(QPointF(frameMargins.left(), frameMargins.top()));
     }
 }
 
