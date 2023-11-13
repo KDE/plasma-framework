@@ -657,7 +657,6 @@ void ContainmentItem::appletAddedForward(Plasma::Applet *applet, const QRectF &g
     if (!applet) {
         return;
     }
-    qWarning() << "ContainmentItem::appletAddedForward" << applet << geometryHint;
     PlasmoidItem *appletGraphicObject = qobject_cast<PlasmoidItem *>(AppletQuickItem::itemForApplet(applet));
     m_plasmoidItems.append(appletGraphicObject);
     connect(appletGraphicObject, &QObject::destroyed, this, [this, appletGraphicObject]() {
