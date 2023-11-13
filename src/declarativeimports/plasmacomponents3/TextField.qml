@@ -29,7 +29,9 @@ T.TextField {
 
     // store information that echoMode was set to Password, regardless of its current value
     property bool __isPassword: false
-    onEchoModeChanged: __isPassword |= (echoMode === TextInput.Password);
+    onEchoModeChanged: echoMode => {
+        __isPassword |= (echoMode === TextInput.Password);
+    }
 
     // TextField doesn't have this property by default for whatever reason
     property bool visualFocus: activeFocus && [
@@ -88,7 +90,7 @@ T.TextField {
     onTextChanged: MobileTextSelection.MobileTextActionsToolBar.shouldBeVisible = false;
     onPressed: MobileTextSelection.MobileTextActionsToolBar.shouldBeVisible = true;
 
-    onPressAndHold: {
+    onPressAndHold: event => {
         if (!Kirigami.Settings.tabletMode) {
             return;
         }
