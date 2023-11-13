@@ -273,7 +273,7 @@ Item {
             return;
         }
         expandedView.expanded = true
-        listItem.itemExpanded(listItem)
+        listItem.itemExpanded()
     }
 
     /*
@@ -285,7 +285,7 @@ Item {
             return;
         }
         expandedView.expanded = false
-        listItem.itemCollapsed(listItem)
+        listItem.itemCollapsed()
     }
 
     /*
@@ -299,8 +299,8 @@ Item {
         expandedView.expanded ? listItem.collapse() : listItem.expand()
     }
 
-    signal itemExpanded(Item item)
-    signal itemCollapsed(Item item)
+    signal itemExpanded()
+    signal itemCollapsed()
 
     width: parent ? parent.width : undefined // Assume that we will be used as a delegate, not placed in a layout
     height: mainLayout.height
