@@ -560,8 +560,16 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
         }
 
         item = qobject_cast<PlasmoidItem *>(qmlObject->rootObject());
-        item->setProperty("errorInformation", errorData);
+
         applet->setLaunchErrorMessage(reason);
+        if (item) {
+            item->setProperty("errorInformation", errorData);
+        } else {
+            // In this case the error message loaded correctly, but was not a PlasmoidItem, bail out
+            qCWarning(LOG_PLASMAQUICK) << "Applet Error message is not of type PlasmoidItem"
+                                       << applet->containment()->corona()->kPackage().fileUrl("appleterror");
+            return nullptr;
+        }
     }
 
     AppletQuickItemPrivate::s_itemsForApplet[applet] = item;
