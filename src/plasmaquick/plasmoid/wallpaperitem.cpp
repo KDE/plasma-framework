@@ -155,6 +155,7 @@ WallpaperItem *WallpaperItem::loadWallpaper(ContainmentItem *containmentItem)
             qWarning() << "Root item of wallpaper" << containmentItem->containment()->wallpaperPlugin() << "not a WallpaperItem instance, instead is"
                        << qmlObject->rootObject();
         }
+        qmlObject->completeInitialization();
         delete qmlObject->rootObject();
         return nullptr;
     }
