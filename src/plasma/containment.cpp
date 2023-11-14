@@ -60,6 +60,7 @@ Containment::Containment(QObject *parentObject, const KPluginMetaData &data, con
 
 Containment::~Containment()
 {
+    disconnect(corona(), nullptr, this, nullptr);
     qDeleteAll(d->localActionPlugins);
     delete d;
 }
