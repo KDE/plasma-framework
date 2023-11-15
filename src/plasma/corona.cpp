@@ -169,7 +169,7 @@ Containment *Corona::containmentForScreen(int screen, const QString &activity, c
         if (cont->lastScreen() == screen //
             && ((cont->activity().isEmpty() || activity.isEmpty()) || cont->activity() == activity)
             && (cont->containmentType() == Plasma::Containment::Type::Desktop //
-                || cont->containmentType() == Plasma::Containment::Type::Custom)) {
+                || cont->containmentType() == Plasma::Containment::Type::Custom || cont->containmentType() == Plasma::Containment::Type::NoContainment)) {
             containment = cont;
         }
     }
@@ -565,7 +565,6 @@ Containment *CoronaPrivate::addContainment(const QString &name, const QVariantLi
             // qCDebug(LOG_PLASMA) << "loading of containment" << name << "failed.";
 #endif
         }
-
         // in case we got a non-Containment from Applet::loadApplet or
         // a null containment was requested
         if (applet) {
