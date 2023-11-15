@@ -96,6 +96,10 @@ Applet *PluginLoader::loadApplet(const QString &name, uint appletId, const QVari
     auto plugin = d->plasmoidCache.findPluginById(name, PluginLoaderPrivate::s_plasmoidsPluginDir);
     const KPackage::Package p = KPackage::PackageLoader::self()->loadPackage(QStringLiteral("Plasma/Applet"), name);
 
+    if (!p.isValid()) {
+        qWarning(LOG_PLASMA) << "Applet invalid: Cannot find a package for" << name;
+    }
+
     // If the applet is using another applet package, search for the plugin of the other applet
     if (!plugin.isValid()) {
         const QString parentPlugin = p.metadata().value(QStringLiteral("X-Plasma-RootPath"));
