@@ -40,21 +40,7 @@ public:
         });
     }
 
-    ~SharedQmlEnginePrivate()
-    {
-        // Reset the static engine when we and the static ptr are the last objects holding references to it
-        if (s_engine.use_count() == 2) {
-            s_engine.reset();
-
-            // QQmlEngine does not take ownership of the QNAM factory so we need to
-            // make sure to clean it, but only if we are the last user of the engine
-            // otherwise we risk resetting the factory on an engine that is still in
-            // use.
-            auto factory = engine()->networkAccessManagerFactory();
-            engine()->setNetworkAccessManagerFactory(nullptr);
-            delete factory;
-        }
-    }
+    ~SharedQmlEnginePrivate() = default;
 
     void errorPrint(QQmlComponent *component);
     void execute(const QUrl &source);
@@ -78,19 +64,21 @@ public:
     bool delay;
     std::shared_ptr<QQmlEngine> m_engine;
 
+private:
     static std::shared_ptr<QQmlEngine> engine()
     {
-        if (!s_engine) {
-            s_engine = std::make_shared<QQmlEngine>();
+        if (auto locked = s_engine.lock()) {
+            return locked;
         }
-        return s_engine;
+        auto createdEngine = std::make_shared<QQmlEngine>();
+        s_engine = createdEngine;
+        return createdEngine;
     }
 
-private:
-    static std::shared_ptr<QQmlEngine> s_engine;
+    static std::weak_ptr<QQmlEngine> s_engine;
 };
 
-std::shared_ptr<QQmlEngine> SharedQmlEnginePrivate::s_engine = std::shared_ptr<QQmlEngine>{};
+std::weak_ptr<QQmlEngine> SharedQmlEnginePrivate::s_engine = {};
 
 void SharedQmlEnginePrivate::errorPrint(QQmlComponent *component)
 {
@@ -113,7 +101,7 @@ void SharedQmlEnginePrivate::execute(const QUrl &source)
     }
 
     delete component;
-    component = new QQmlComponent(engine().get(), q);
+    component = new QQmlComponent(m_engine.get(), q);
     QObject::connect(component, &QQmlComponent::statusChanged, q, &SharedQmlEngine::statusChanged, Qt::QueuedConnection);
 
     component->loadUrl(source);
@@ -199,7 +187,7 @@ bool SharedQmlEngine::isInitializationDelayed() const
 
 std::shared_ptr<QQmlEngine> SharedQmlEngine::engine()
 {
-    return d->engine();
+    return d->m_engine;
 }
 
 QObject *SharedQmlEngine::rootObject() const
@@ -219,7 +207,7 @@ QQmlContext *SharedQmlEngine::rootContext() const
 
 QQmlComponent::Status SharedQmlEngine::status() const
 {
-    if (!d->engine()) {
+    if (!d->m_engine) {
         return QQmlComponent::Error;
     }
 
@@ -254,7 +242,7 @@ void SharedQmlEngine::completeInitialization(const QVariantHash &initialProperti
 
 QObject *SharedQmlEngine::createObjectFromSource(const QUrl &source, QQmlContext *context, const QVariantHash &initialProperties)
 {
-    QQmlComponent *component = new QQmlComponent(d->engine().get(), this);
+    QQmlComponent *component = new QQmlComponent(d->m_engine.get(), this);
     component->loadUrl(source);
 
     return createObjectFromComponent(component, context, initialProperties);

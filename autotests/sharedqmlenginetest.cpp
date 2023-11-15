@@ -38,17 +38,17 @@ private Q_SLOTS:
         std::weak_ptr<QQmlEngine> weakPtr(obj1->engine());
         QVERIFY(weakPtr.lock());
 
-        // The static shared_ptr and the one in obj1
-        QCOMPARE(weakPtr.use_count(), 2);
+        // The one in obj1
+        QCOMPARE(weakPtr.use_count(), 1);
 
         {
             std::unique_ptr<SharedQmlEngine> obj2(new SharedQmlEngine());
-            // The static shared_ptr, the one in obj1 and in obj2
-            QCOMPARE(weakPtr.use_count(), 3);
+            // The one in obj1 and in obj2
+            QCOMPARE(weakPtr.use_count(), 2);
         }
 
         obj1.reset(nullptr);
-        // Our object is deleted, the static pointer should be reset
+        // Our object is deleted and as the last strong ref it should ensure everything is deleted.
         QVERIFY(!weakPtr.lock());
         QCOMPARE(weakPtr.use_count(), 0);
     }
