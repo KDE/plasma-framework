@@ -204,8 +204,6 @@ Item {
      * which will be shown when the user expands the list item.
      */
     property list<T.Action> contextualActions
-    // TODO KF6: temporary alias for backward-compatibility
-    property alias contextualActionsModel: listItem.contextualActions
 
     readonly property list<T.Action> __enabledContextualActions: contextualActions.filter(action => action?.enabled ?? false)
 
