@@ -212,7 +212,7 @@ Item {
     /*
      * A custom view to display when the user expands the list item.
      *
-     * This component must define width: and height: values. Width: should be
+     * This component must define width and height properties. Width should be
      * equal to the width of the list item itself, while height: will depend
      * on the component itself.
      *
@@ -220,10 +220,10 @@ Item {
      * you should instead define contextualActions, and then actions will
      * be shown when the user expands the list item.
      */
-    property var customExpandedViewContent
+    property Component customExpandedViewContent
 
     /*
-     * The actual instance of the custom view content, if loaded
+     * The actual instance of the custom view content, if loaded.
      * @since 5.72
      */
     property alias customExpandedViewContentItem: customContentLoader.item
@@ -262,7 +262,7 @@ Item {
      * this item has either a custom view or else at least one enabled action.
      * Otherwise false.
      */
-    readonly property bool hasExpandableContent: customExpandedViewContent || __enabledContextualActions.length > 0
+    readonly property bool hasExpandableContent: customExpandedViewContent !== null || __enabledContextualActions.length > 0
 
     /*
      * expand()
@@ -627,7 +627,7 @@ Item {
 
                         Layout.fillWidth: true
 
-                        active: expandedView.visible && customExpandedViewContent != undefined
+                        active: expandedView.visible
                         asynchronous: true
                         sourceComponent: customExpandedViewContent
                     }
