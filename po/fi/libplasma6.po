@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-14 01:39+0000\n"
+"POT-Creation-Date: 2023-11-16 01:46+0000\n"
 "PO-Revision-Date: 2023-06-27 15:53+0300\n"
 "Last-Translator: Tommi Nieminen <translator@legisign.org>\n"
 "Language-Team: Finnish <kde-i18n-doc@kde.org>\n"
@@ -72,25 +72,25 @@ msgstr "Tuntematon"
 msgid "Activate %1 Widget"
 msgstr "Aktivoi sovelma %1"
 
-#: plasma/containment.cpp:96 plasma/private/applet_p.cpp:108
+#: plasma/containment.cpp:97 plasma/private/applet_p.cpp:108
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Remove %1"
 msgstr "Poista %1|/|Poista $[yleisnimi_pienellä %1]"
 
-#: plasma/containment.cpp:102 plasma/containment.cpp:113 plasma/corona.cpp:367
+#: plasma/containment.cpp:103 plasma/containment.cpp:114 plasma/corona.cpp:367
 #: plasma/corona.cpp:485
 #, kde-format
 msgid "Enter Edit Mode"
 msgstr "Siirry muokkaustilaan"
 
-#: plasma/containment.cpp:105 plasma/private/applet_p.cpp:113
+#: plasma/containment.cpp:106 plasma/private/applet_p.cpp:113
 #, kde-format
 msgctxt "%1 is the name of the applet"
 msgid "Configure %1..."
 msgstr "Asetukset: %1…|/|$[gen %1] asetukset…"
 
-#: plasma/containment.cpp:111 plasma/corona.cpp:365
+#: plasma/containment.cpp:112 plasma/corona.cpp:365
 #, kde-format
 msgid "Exit Edit Mode"
 msgstr "Poistu muokkaustilasta"
