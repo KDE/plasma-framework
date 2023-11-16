@@ -334,14 +334,6 @@ Item {
         } else if (event.key === Qt.Key_Space) {
             toggleExpanded();
             event.accepted = true;
-        } else if (event.key === Qt.Key_Menu) {
-            if (contextMenu instanceof PlasmaExtras.Menu) {
-                contextMenu.visualParent = listItem;
-                contextMenu.prepare();
-                contextMenu.openRelative();
-                return
-            }
-            event.accepted = true;
         }
     }
 
@@ -383,11 +375,12 @@ Item {
         }
     }
 
-    // We still need a MouseArea to handle right-click
     MouseArea {
         anchors.fill: parent
 
-        acceptedButtons: Qt.RightButton
+        // This MouseArea used to intercept RightButton to open a context
+        // menu, but that has been removed, and now it's only used for hover
+        acceptedButtons: Qt.NoButton
         hoverEnabled: true
 
         // using onPositionChanged instead of onContainsMouseChanged so this doesn't trigger when the list reflows
@@ -402,16 +395,6 @@ Item {
         }
         onExited: if (listItem.ListView.view.currentIndex === index) {
             listItem.ListView.view.currentIndex = -1;
-        }
-
-        // Handle right-click, if so defined
-        onClicked: {
-            if (contextMenu instanceof PlasmaExtras.Menu) {
-                contextMenu.visualParent = parent
-                contextMenu.prepare();
-                contextMenu.open(mouse.x, mouse.y)
-                return
-            }
         }
 
         ColumnLayout {
