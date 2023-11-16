@@ -8,6 +8,7 @@ pragma ComponentBehavior: Bound
 
 import QtQuick 2.14
 import QtQuick.Layouts 1.1
+import QtQuick.Templates as T
 import org.kde.plasma.core as PlasmaCore
 import org.kde.ksvg 1.0 as KSvg
 import org.kde.plasma.components 3.0 as PlasmaComponents3
@@ -147,7 +148,7 @@ Item {
     property bool allowStyledText: false
 
     /*
-     * defaultActionButtonAction: Action
+     * defaultActionButtonAction: T.Action
      * The Action to execute when the default button is clicked.
      *
      * Optional; if not defined, no default action button will be displayed.
@@ -174,10 +175,9 @@ Item {
     property bool showDefaultActionButtonWhenBusy: false
 
     /*
-     * contextualActions: list<QtObject>
-     * A list of Action objects that describes additional actions that can be
-     * performed on this list item. The actions should define appropriate
-     * "text:", icon.name:", and "onTriggered:" properties. For example:
+     * contextualActions: list<T.Action>
+     * A list of standard QQC2.Action objects that describes additional actions
+     * that can be performed on this list item. For example:
      *
      * @code
      * contextualActions: [
@@ -185,12 +185,12 @@ Item {
      *         text: "Do something"
      *         icon.name: "document-edit"
      *         onTriggered: doSomething()
-     *     }
+     *     },
      *     Action {
      *         text: "Do something else"
      *         icon.name: "draw-polygon"
      *         onTriggered: doSomethingElse()
-     *     }
+     *     },
      *     Action {
      *         text: "Do something completely different"
      *         icon.name: "games-highscores"
@@ -203,11 +203,11 @@ Item {
      * you should instead assign a custom view to customExpandedViewContent,
      * which will be shown when the user expands the list item.
      */
-    property list<QtObject> contextualActions
+    property list<T.Action> contextualActions
     // TODO KF6: temporary alias for backward-compatibility
     property alias contextualActionsModel: listItem.contextualActions
 
-    readonly property list<QtObject> __enabledContextualActions: contextualActions.filter(action => action?.enabled ?? false)
+    readonly property list<T.Action> __enabledContextualActions: contextualActions.filter(action => action?.enabled ?? false)
 
     /*
      * A custom view to display when the user expands the list item.
@@ -601,7 +601,7 @@ Item {
 
                                     delegate: PlasmaComponents3.ToolButton {
                                         required property int index
-                                        required property var modelData
+                                        required property T.Action modelData
 
                                         Layout.fillWidth: true
 
