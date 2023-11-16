@@ -75,7 +75,7 @@ import org.kde.kirigami 2 as Kirigami
  *             contextualActions: [
  *                 QQC2.Action {
  *                     icon.name: "configure"
- *                     text: "Configure..."
+ *                     text: "Configure…"
  *                     onTriggered: model.configure(model.name);
  *                 }
  *             ]
@@ -87,17 +87,19 @@ import org.kde.kirigami 2 as Kirigami
 Item {
     id: listItem
 
-    /*
-     * icon: string
+    /**
+     * icon: var
      * The name of the icon used in the list item.
+     * @sa Kirigami.Icon::source
      *
      * Required.
      */
     property alias icon: listItemIcon.source
 
-    /*
-     * iconEmblem: string
+    /**
+     * iconEmblem: var
      * The name of the emblem to badge the icon with.
+     * @sa Kirigami.Icon::source
      *
      * Optional, defaults to nothing, in which case there is no emblem.
      */
@@ -422,7 +424,7 @@ Item {
                     Kirigami.Icon {
                         id: iconEmblem
 
-                        visible: source != undefined && source.length > 0
+                        visible: valid
 
                         anchors.right: parent.right
                         anchors.bottom: parent.bottom
