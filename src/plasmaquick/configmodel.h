@@ -109,6 +109,11 @@ public:
      **/
     QQmlListProperty<ConfigCategory> categories();
 
+    /**
+     * Whether or not try to load an associated kcm
+     */
+    void setLoadKcm(bool load);
+
 Q_SIGNALS:
     /**
      * emitted when the count is changed

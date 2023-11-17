@@ -43,6 +43,7 @@ public:
     QList<ConfigCategory *> categories;
     QPointer<Plasma::Applet> appletInterface;
     QHash<QString, KQuickConfigModule *> kcms;
+    bool loadkcm = true;
 
     void appendCategory(ConfigCategory *c);
     void removeCategory(ConfigCategory *c);
@@ -180,13 +181,17 @@ QVariant ConfigModelPrivate::get(int row) const
         return value;
     }
 
-    value[QStringLiteral("name")] = categories.at(row)->name();
-    value[QStringLiteral("icon")] = categories.at(row)->icon();
-    value[QStringLiteral("pluginName")] = categories.at(row)->pluginName();
+    const auto categoryRow = categories.at(row);
+
+    value[QStringLiteral("name")] = categoryRow->name();
+    value[QStringLiteral("icon")] = categoryRow->icon();
+    value[QStringLiteral("pluginName")] = categoryRow->pluginName();
     value[QStringLiteral("source")] = q->data(q->index(row, 0), ConfigModel::SourceRole);
-    value[QStringLiteral("includeMargins")] = categories.at(row)->includeMargins();
-    value[QStringLiteral("visible")] = categories.at(row)->visible();
-    value[QStringLiteral("kcm")] = q->data(q->index(row, 0), ConfigModel::KCMRole);
+    value[QStringLiteral("includeMargins")] = categoryRow->includeMargins();
+    value[QStringLiteral("visible")] = categoryRow->visible();
+    if (loadkcm) {
+        value[QStringLiteral("kcm")] = q->data(q->index(row, 0), ConfigModel::KCMRole);
+    }
 
     return value;
 }
@@ -271,15 +276,25 @@ QVariant ConfigModel::data(const QModelIndex &index, int role) const
 
 QHash<int, QByteArray> ConfigModel::roleNames() const
 {
-    return {
+    QHash<int, QByteArray> roleNames = {
         {NameRole, "name"},
         {IconRole, "icon"},
         {SourceRole, "source"},
         {PluginNameRole, "pluginName"},
         {IncludeMarginsRole, "includeMargins"},
         {VisibleRole, "visible"},
-        {KCMRole, "kcm"},
     };
+
+    if (d->loadkcm) {
+        roleNames.insert(KCMRole, "kcm");
+    }
+
+    return roleNames;
+}
+
+void ConfigModel::setLoadKcm(bool load)
+{
+    d->loadkcm = load;
 }
 
 QVariant ConfigModel::get(int row) const
