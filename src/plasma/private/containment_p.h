@@ -51,7 +51,7 @@ public:
     void appletDeleted(Applet *);
     void configChanged();
 
-    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0, const QRectF &geometryHint = QRectF());
+    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), uint id = 0, const QRectF &geometryHint = QRectF(-1, -1, 0, 0));
 
     /**
      * FIXME: this should completely go from here

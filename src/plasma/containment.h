@@ -159,11 +159,13 @@ public:
      * @param args argument list to pass to the plasmoid
      * @param geometryHint an hint to pass to the GUI on the location
      *           and size we prefer for the newly created applet;
-     *           the gui might choose whether to respect or not this hint
+     *           the gui might choose whether to respect or not this hint.
+     *           The default position is (-1, -1) and the default size
+     *           is (0, 0).
      *
      * @return a pointer to the applet on success, or 0 on failure
      */
-    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), const QRectF &geometryHint = QRectF());
+    Applet *createApplet(const QString &name, const QVariantList &args = QVariantList(), const QRectF &geometryHint = QRectF(-1, -1, 0, 0));
 
     /**
      * Add an existing applet to this Containment
