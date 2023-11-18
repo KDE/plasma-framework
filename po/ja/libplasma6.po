@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-17 01:38+0000\n"
+"POT-Creation-Date: 2023-11-18 01:37+0000\n"
 "PO-Revision-Date: 2023-02-22 21:27+0900\n"
 "Last-Translator: Ryuichi Yamada <ryuichi_ya220@outlook.jp>\n"
 "Language-Team: Japanese <kde-jp@kde.org>\n"
@@ -24,13 +24,13 @@ msgstr ""
 msgid "More actions"
 msgstr "その他のアクション"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:533
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:516
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "折りたたむ"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:533
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:516
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
