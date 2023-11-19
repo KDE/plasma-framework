@@ -62,8 +62,8 @@ Item {
     KSvg.SvgItem {
         id: button
 
-        // It's necessary to use x position instead of anchors so that the handle position can be dragged
-        x: Math.min(parent.width - width, root.control.visualPosition * parent.width)
+        x: Math.max(0, Math.min(parent.width - width, control.visualPosition * parent.width - (width / 2)))
+
         anchors.verticalCenter: parent.verticalCenter
 
         svg: switchSvg
