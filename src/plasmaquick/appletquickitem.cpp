@@ -10,6 +10,7 @@
 #include "configview.h"
 #include "containment.h"
 #include "debug_p.h"
+#include "plasma_version.h"
 #include "plasmoid/containmentitem.h"
 #include "plasmoid/plasmoiditem.h"
 #include "plasmoid/wallpaperitem.h"
@@ -538,17 +539,17 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
 
         bool versionMismatch = false;
         if (version.isNull()) {
-            reason = i18n("This Applet was written for an old unknown version of Plasma. Please contact the author for an updated version for Plasma %1.",
+            reason = i18n("This Widget was written for an old unknown version of Plasma. Please contact the author for an updated version for Plasma %1.",
                           PLASMA_VERSION_MAJOR);
             versionMismatch = true;
-        } else if (version.majorVersion() != PLASMA_VERSION_MAJOR) {
-            reason = i18n("This Applet was written for the incompatible Plasma version %1. Please contact the author for an updated version for Plasma %2.",
+        } else if (version.majorVersion() < PLASMA_VERSION_MAJOR) {
+            reason = i18n("This Widget was written for the incompatible Plasma version %1. Please contact the author for an updated version for Plasma %2.",
                           version.majorVersion(),
                           PLASMA_VERSION_MAJOR);
             versionMismatch = true;
-        } else if (version.minorVersion() > PLASMA_VERSION_MINOR) {
+        } else if (version.majorVersion() > PLASMA_VERSION_MAJOR || version.minorVersion() > PLASMA_VERSION_MINOR) {
             reason =
-                i18n("This Applet was written for the more recent Plasma version %1. Please update your Plasma release in order to use it.", versionString);
+                i18n("This Widget was written for the more recent Plasma version %1. Please update your Plasma release in order to use it.", versionString);
             versionMismatch = true;
         } else if (applet->failedToLaunch()) {
             reason = applet->launchErrorMessage();
