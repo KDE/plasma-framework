@@ -539,17 +539,21 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
 
         bool versionMismatch = false;
         if (version.isNull()) {
-            reason = i18n("This Widget was written for an old unknown version of Plasma. Please contact the author for an updated version for Plasma %1.",
-                          PLASMA_VERSION_MAJOR);
+            reason = i18n(
+                "This Widget was written for an unknown older version of Plasma and is not compatible with Plasma %1. Please contact the widget's author for "
+                "an updated version.",
+                PLASMA_VERSION_MAJOR);
             versionMismatch = true;
         } else if (version.majorVersion() < PLASMA_VERSION_MAJOR) {
-            reason = i18n("This Widget was written for the incompatible Plasma version %1. Please contact the author for an updated version for Plasma %2.",
-                          version.majorVersion(),
-                          PLASMA_VERSION_MAJOR);
+            reason =
+                i18n("This Widget was written for Plasma %1 and is not compatible with Plasma %2. Please contact the widget's author for an updated version.",
+                     version.majorVersion(),
+                     PLASMA_VERSION_MAJOR);
             versionMismatch = true;
         } else if (version.majorVersion() > PLASMA_VERSION_MAJOR || version.minorVersion() > PLASMA_VERSION_MINOR) {
-            reason =
-                i18n("This Widget was written for the more recent Plasma version %1. Please update your Plasma release in order to use it.", versionString);
+            reason = i18n("This Widget was written for Plasma %1 and is not compatible with Plasma %2. Please update Plasma in order to use the widget.",
+                          versionString,
+                          PLASMA_VERSION_MAJOR);
             versionMismatch = true;
         } else if (applet->failedToLaunch()) {
             reason = applet->launchErrorMessage();
@@ -569,7 +573,7 @@ AppletQuickItem *AppletQuickItem::itemForApplet(Plasma::Applet *applet)
             reason += i18n("Error loading QML file: %1 %2", qmlObject->mainComponent()->url().toString(), reason);
         } else {
             // TODO: here also try to detect if the package was a P5 one
-            reason += i18n("Error loading Applet: package inexistent. %1", applet->launchErrorMessage());
+            reason += i18n("Error loading Applet: package does not exist. %1", applet->launchErrorMessage());
             errorData[QStringLiteral("errors")] = QJsonArray::fromStringList({reason});
         }
 
