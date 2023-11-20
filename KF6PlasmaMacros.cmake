@@ -3,7 +3,6 @@ set(PLASMA_DATA_INSTALL_DIR "${KDE_INSTALL_DATADIR}/${PLASMA_RELATIVE_DATA_INSTA
 
 # plasma_install_package(path componentname [root] [type])
 #
-# Use plasma_install_bundled_package instead.
 # Installs a Plasma package to the system path
 # @arg path The source path to install from, location of metadata.desktop
 # @arg componentname The plugin name of the component, corresponding to the
