@@ -115,7 +115,6 @@ else()
     set(HAVE_GLX 0)
 endif()
 
-
 # OpenGL_EGL_FOUND is defined by FindOpenGL
 if(TARGET OpenGL::EGL)
     add_feature_info(EGL OpenGL_EGL_FOUND
