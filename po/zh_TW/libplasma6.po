@@ -10,7 +10,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-18 01:37+0000\n"
+"POT-Creation-Date: 2023-11-21 01:35+0000\n"
 "PO-Revision-Date: 2023-08-08 00:53+0900\n"
 "Last-Translator: Kisaragi Hiu <mail@kisaragi-hiu.com>\n"
 "Language-Team: Traditional Chinese <zh-l10n@lists.slat.org>\n"
@@ -225,30 +225,53 @@ msgctxt "Error message, tried to start an invalid service"
 msgid "Invalid (null) service, can not perform any operations."
 msgstr "不合法的（空白的）服務，無法執行任何操作。"
 
-#: plasmaquick/appletquickitem.cpp:518
+#: plasmaquick/appletquickitem.cpp:519
 #, fuzzy, kde-format
 #| msgid "The root item of %1 must be of type ContaimentItem"
 msgid "The root item of %1 must be of type ContainmentItem"
 msgstr "%1 的根項目必須為型態 ContaimentItem"
 
-#: plasmaquick/appletquickitem.cpp:523
+#: plasmaquick/appletquickitem.cpp:524
 #, kde-format
 msgid "The root item of %1 must be of type PlasmoidItem"
 msgstr "%1 的根項目必須為型態 PlasmoidItem"
 
-#: plasmaquick/appletquickitem.cpp:530
+#: plasmaquick/appletquickitem.cpp:531
 #, kde-format
 msgid "Unknown Applet"
 msgstr "不明小程式"
 
-#: plasmaquick/appletquickitem.cpp:546
+#: plasmaquick/appletquickitem.cpp:543
+#, kde-format
+msgid ""
+"This Widget was written for an unknown older version of Plasma and is not "
+"compatible with Plasma %1. Please contact the widget's author for an updated "
+"version."
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:549
+#, kde-format
+msgid ""
+"This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
+"Please contact the widget's author for an updated version."
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:554
+#, kde-format
+msgid ""
+"This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
+"Please update Plasma in order to use the widget."
+msgstr ""
+
+#: plasmaquick/appletquickitem.cpp:573
 #, kde-format
 msgid "Error loading QML file: %1 %2"
 msgstr "載入 QML 檔時發生錯誤：%1 %2"
 
-#: plasmaquick/appletquickitem.cpp:548
-#, kde-format
-msgid "Error loading Applet: package inexistent. %1"
+#: plasmaquick/appletquickitem.cpp:576
+#, fuzzy, kde-format
+#| msgid "Error loading Applet: package inexistent. %1"
+msgid "Error loading Applet: package does not exist. %1"
 msgstr "載入小程式發生錯誤：套件包不存在。%1"
 
 #: plasmaquick/configview.cpp:101
