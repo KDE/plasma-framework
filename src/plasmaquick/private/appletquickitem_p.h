@@ -118,7 +118,7 @@ public:
     bool expanded = false;
     bool hideOnWindowDeactivate = false;
     bool preloadFullRepresentation = false;
-    bool activationTogglesExpanded : 1;
+    bool activationTogglesExpanded = true;
     bool initComplete : 1;
     bool compactRepresentationCheckGuard : 1;
 };
