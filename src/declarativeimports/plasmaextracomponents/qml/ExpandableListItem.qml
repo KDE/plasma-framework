@@ -617,7 +617,7 @@ Item {
                         Layout.fillWidth: true
                         imagePath: "widgets/line"
                         elementId: "horizontal-line"
-                        visible: actionsListLoader.active && customContentLoader.active
+                        visible: actionsListLoader.visible && customContentLoader.visible
                     }
 
                     // Custom content item, if any
@@ -629,7 +629,7 @@ Item {
 
                         active: expandedView.visible
                         asynchronous: true
-                        sourceComponent: customExpandedViewContent
+                        sourceComponent: listItem.customExpandedViewContent
                     }
                 }
             }
