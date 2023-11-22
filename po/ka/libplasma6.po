@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: plasma-framework\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-21 01:35+0000\n"
-"PO-Revision-Date: 2023-11-11 03:17+0100\n"
+"PO-Revision-Date: 2023-11-21 16:32+0100\n"
 "Last-Translator: Temuri Doghonadze <temuri.doghonadze@gmail.com>\n"
 "Language-Team: Georgian <kde-i18n-doc@kde.org>\n"
 "Language: ka\n"
@@ -247,6 +247,8 @@ msgid ""
 "compatible with Plasma %1. Please contact the widget's author for an updated "
 "version."
 msgstr ""
+"ვიჯეტი დაწერილია Plasma-ის უცნობი, ძველი ვერსიისთვის და Plasma %1-სთან "
+"თავსებადი არაა. ვიჯეტის განახლებული ვერსიისთვის დაუკავშირდით ავტორს."
 
 #: plasmaquick/appletquickitem.cpp:549
 #, kde-format
@@ -254,6 +256,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please contact the widget's author for an updated version."
 msgstr ""
+"ვიჯეტი დაწერილია Plasma %1-სთვს და Plasma %2-სთან თავსებადი არაა. ვიჯეტის "
+"განახლებული ვერსიისთვის ავტორს დაუკავშირდით."
 
 #: plasmaquick/appletquickitem.cpp:554
 #, kde-format
@@ -261,6 +265,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please update Plasma in order to use the widget."
 msgstr ""
+"ვიჯეტი დაწერილია Plasma %1-სთვის და Plasma %2-თან თავსებადი არაა. ვიჯეტის "
+"გამოსაყენებლად განაახლეთ Plasma."
 
 #: plasmaquick/appletquickitem.cpp:573
 #, kde-format
@@ -268,10 +274,9 @@ msgid "Error loading QML file: %1 %2"
 msgstr "QML ფაილის ჩატვირთვის შეცდომა: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:576
-#, fuzzy, kde-format
-#| msgid "Error loading Applet: package inexistent. %1"
+#, kde-format
 msgid "Error loading Applet: package does not exist. %1"
-msgstr "აპლეტის ჩატვირთვის შეცდომა: პაკეტი არ არსებობს: %1"
+msgstr "აპლეტის ჩატვირთვის შეცდომა: პაკეტი არ არსებობს. %1"
 
 #: plasmaquick/configview.cpp:101
 #, kde-format

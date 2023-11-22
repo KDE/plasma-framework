@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-21 01:35+0000\n"
-"PO-Revision-Date: 2023-11-10 10:36+0100\n"
+"PO-Revision-Date: 2023-11-21 10:51+0100\n"
 "Last-Translator: Freek de Kruijf <freekdekruijf@kde.nl>\n"
 "Language-Team: \n"
 "Language: nl\n"
@@ -15,7 +15,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
@@ -248,6 +248,9 @@ msgid ""
 "compatible with Plasma %1. Please contact the widget's author for an updated "
 "version."
 msgstr ""
+"Dit widget is geschreven voor een onbekende oudere versie van Plasma en is "
+"niet compatibel met Plasma %1. Neem contact op met de auteur van het widget "
+"voor een bijgewerkte versie."
 
 #: plasmaquick/appletquickitem.cpp:549
 #, kde-format
@@ -255,6 +258,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please contact the widget's author for an updated version."
 msgstr ""
+"Dit widget is geschreven voor Plasma %1 en is niet compatibel met Plasma %2. "
+"Neem contact op met de auteur van het widget voor een bijgewerkte versie."
 
 #: plasmaquick/appletquickitem.cpp:554
 #, kde-format
@@ -262,6 +267,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please update Plasma in order to use the widget."
 msgstr ""
+"Dit widget is geschreven voor Plasma %1 en is niet compatibel met Plasma %2. "
+"Werk Plasma bij om het widget te kunnen gebruiken."
 
 #: plasmaquick/appletquickitem.cpp:573
 #, kde-format
@@ -269,8 +276,7 @@ msgid "Error loading QML file: %1 %2"
 msgstr "Fout bij het laden van QML-bestand: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:576
-#, fuzzy, kde-format
-#| msgid "Error loading Applet: package inexistent. %1"
+#, kde-format
 msgid "Error loading Applet: package does not exist. %1"
 msgstr "Fout bij laden van Applet: pakket bestaat niet. %1"
 
