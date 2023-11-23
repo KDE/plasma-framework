@@ -39,6 +39,6 @@ target_link_libraries(plasmaextracomponentsplugin PRIVATE
         Qt6::Qml
         Qt6::Widgets
         KF6::ConfigWidgets
-        KF6::Plasma)
+        Plasma::Plasma)
 
 ecm_finalize_qml_module(plasmaextracomponentsplugin DESTINATION ${KDE_INSTALL_QMLDIR})

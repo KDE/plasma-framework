@@ -16,7 +16,7 @@ target_link_libraries(KirigamiPlasmaStyle
         Qt6::Quick
         KF6::ConfigWidgets
         KF6::IconThemes
-        KF6::Plasma
+        Plasma::Plasma
 )
 
 install(TARGETS KirigamiPlasmaStyle DESTINATION ${KDE_INSTALL_PLUGINDIR}/kf6/kirigami/platform)

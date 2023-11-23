@@ -18,7 +18,7 @@ endif()
 
 MACRO(PLASMA_UNIT_TESTS)
        FOREACH(_testname ${ARGN})
-               set(libs Qt6::Qml Qt6::Test KF6::Plasma KF6::PlasmaQuick
+               set(libs Qt6::Qml Qt6::Test Plasma::Plasma Plasma::PlasmaQuick
                         KF6::Archive KF6::CoreAddons KF6::ConfigGui KF6::I18n KF6::IconThemes)
                if(QT_QTOPENGL_FOUND)
                    list(APPEND libs Qt6::OpenGL)
@@ -26,7 +26,7 @@ MACRO(PLASMA_UNIT_TESTS)
                ecm_add_test(${_testname}.cpp
                             LINK_LIBRARIES ${libs}
                             NAME_PREFIX "plasma-")
-               target_include_directories(${_testname} PRIVATE "$<BUILD_INTERFACE:$<TARGET_PROPERTY:KF6PlasmaQuick,INCLUDE_DIRECTORIES>>;")
+               target_include_directories(${_testname} PRIVATE "$<BUILD_INTERFACE:$<TARGET_PROPERTY:PlasmaQuick,INCLUDE_DIRECTORIES>>;")
        ENDFOREACH(_testname)
 ENDMACRO(PLASMA_UNIT_TESTS)
 
@@ -39,14 +39,14 @@ PLASMA_UNIT_TESTS(
 )
 
 kcoreaddons_add_plugin(dummycontainmentaction SOURCES dummycontainmentaction.cpp INSTALL_NAMESPACE "plasma/containmentactions" STATIC)
-target_link_libraries(dummycontainmentaction KF6::Plasma)
+target_link_libraries(dummycontainmentaction Plasma::Plasma)
 kcoreaddons_target_static_plugins(pluginloadertest NAMESPACE "plasma/containmentactions")
 
 if(HAVE_X11)
     ecm_add_test(
         dialognativetest.cpp
         TEST_NAME dialognativetest
-        LINK_LIBRARIES Qt6::Gui Qt6::Test Qt6::Qml Qt6::Quick KF6::WindowSystem KF6::Plasma KF6::PlasmaQuick
+        LINK_LIBRARIES Qt6::Gui Qt6::Test Qt6::Qml Qt6::Quick KF6::WindowSystem Plasma::Plasma Plasma::PlasmaQuick
     )
 endif()
 
@@ -54,12 +54,12 @@ ecm_add_test(
     coronatest.cpp
     coronatestresources.qrc
     TEST_NAME coronatest
-    LINK_LIBRARIES Qt6::Gui Qt6::Qml Qt6::Widgets Qt6::Test KF6::Plasma KF6::CoreAddons
+    LINK_LIBRARIES Qt6::Gui Qt6::Qml Qt6::Widgets Qt6::Test Plasma::Plasma KF6::CoreAddons
 )
 
 ecm_add_test(
     quickviewsharedenginetest.cpp
-    LINK_LIBRARIES Qt6::Test KF6::PlasmaQuick
+    LINK_LIBRARIES Qt6::Test Plasma::PlasmaQuick
 )
 
 

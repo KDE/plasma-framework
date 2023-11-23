@@ -36,7 +36,7 @@ add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt 
 ecm_setup_version(PROJECT
                   VARIABLE_PREFIX PLASMA
                   VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h"
-                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfigVersion.cmake"
+                  PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake"
                   SOVERSION 6)
 
 ################# now find all used packages #################
@@ -131,7 +131,7 @@ ecm_set_disabled_deprecation_versions(
 
 #add_definitions(-Wno-deprecated)
 
-include(KF6PlasmaMacros.cmake)
+include(PlasmaMacros.cmake)
 
 #########################################################################
 
@@ -170,41 +170,41 @@ add_subdirectory(templates)
 
 # create a Config.cmake and a ConfigVersion.cmake file and install them
 
-set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF6Plasma")
+set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/Plasma")
 
 if (BUILD_QCH)
     ecm_install_qch_export(
-        TARGETS KF6Plasma_QCH
-        FILE KF6PlasmaQchTargets.cmake
+        TARGETS Plasma_QCH
+        FILE PlasmaQchTargets.cmake
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
         COMPONENT Devel
     )
-    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KF6PlasmaQchTargets.cmake\")")
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/PlasmaQchTargets.cmake\")")
 endif()
 
 configure_package_config_file(
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF6PlasmaConfig.cmake.in"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfig.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaConfig.cmake.in"
+  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfig.cmake"
   INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
   PATH_VARS  CMAKE_INSTALL_PREFIX
 )
 
 install(FILES
-  "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfig.cmake"
-  "${CMAKE_CURRENT_BINARY_DIR}/KF6PlasmaConfigVersion.cmake"
-  "${CMAKE_CURRENT_SOURCE_DIR}/KF6PlasmaMacros.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfig.cmake"
+  "${CMAKE_CURRENT_BINARY_DIR}/PlasmaConfigVersion.cmake"
+  "${CMAKE_CURRENT_SOURCE_DIR}/PlasmaMacros.cmake"
   DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
   COMPONENT Devel
 )
 
-install(EXPORT KF6PlasmaTargets
+install(EXPORT PlasmaTargets
         DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
-        FILE KF6PlasmaTargets.cmake
-        NAMESPACE KF6::
+        FILE PlasmaTargets.cmake
+        NAMESPACE Plasma::
         COMPONENT Devel)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/plasma_version.h
-        DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF}/Plasma COMPONENT Devel )
+        DESTINATION ${KDE_INSTALL_INCLUDEDIR}/Plasma COMPONENT Devel )
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)
 

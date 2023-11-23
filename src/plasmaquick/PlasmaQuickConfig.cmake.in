@@ -8,9 +8,9 @@ set_and_check(PlasmaQuick_INCLUDE_DIR    "@PACKAGE_PLASMAQUICK_INSTALL_INCLUDEDI
 
 include(CMakeFindDependencyMacro)
 find_dependency(Qt6Quick "@REQUIRED_QT_VERSION@")
-find_dependency(KF6Plasma "@KF_DEP_VERSION@")
+find_dependency(Plasma "@KF_DEP_VERSION@")
 
-include("${CMAKE_CURRENT_LIST_DIR}/KF6PlasmaQuickTargets.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/PlasmaQuickTargets.cmake")
 
-set(PlasmaQuick_LIBRARIES KF6::PlasmaQuick)
+set(PlasmaQuick_LIBRARIES Plasma::PlasmaQuick)
 

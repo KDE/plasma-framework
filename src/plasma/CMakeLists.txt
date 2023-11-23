@@ -7,20 +7,20 @@ endif()
 # Consumer's include dir which has to be explicitly used to make headers of this lib visible to documented includes
 # Results in duplicate of prefix-dir & C++ namespace below, but part of different things, so by design:
 # <visibility-layer>/<C++ namespace>/class header files
-set(PLASMA_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR_KF}/Plasma")
+set(PLASMA_INSTALL_INCLUDEDIR "${KDE_INSTALL_INCLUDEDIR}/Plasma")
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/config-plasma.h.cmake ${CMAKE_CURRENT_BINARY_DIR}/config-plasma.h)
 
-add_library(KF6Plasma)
-add_library(KF6::Plasma ALIAS KF6Plasma)
+add_library(Plasma)
+add_library(Plasma::Plasma ALIAS Plasma)
 
-set_target_properties(KF6Plasma PROPERTIES
+set_target_properties(Plasma PROPERTIES
     VERSION     ${PLASMA_VERSION}
     SOVERSION   ${PLASMA_SOVERSION}
     EXPORT_NAME Plasma
 )
 
-target_sources(KF6Plasma PRIVATE
+target_sources(Plasma PRIVATE
 #global
     plasma.cpp
     pluginloader.cpp
@@ -40,12 +40,12 @@ target_sources(KF6Plasma PRIVATE
 )
 
 if(HAVE_X11)
-    target_sources(KF6Plasma PRIVATE private/effectwatcher.cpp)
+    target_sources(Plasma PRIVATE private/effectwatcher.cpp)
 endif()
 
-kconfig_add_kcfg_files(KF6Plasma data/kconfigxt/libplasma-theme-global.kcfgc)
+kconfig_add_kcfg_files(Plasma data/kconfigxt/libplasma-theme-global.kcfgc)
 
-ecm_qt_declare_logging_category(KF6Plasma
+ecm_qt_declare_logging_category(Plasma
     HEADER debug_p.h
     IDENTIFIER LOG_PLASMA
     CATEGORY_NAME kf.plasma.core
@@ -54,7 +54,7 @@ ecm_qt_declare_logging_category(KF6Plasma
     EXPORT PLASMA
 )
 
-ecm_generate_export_header(KF6Plasma
+ecm_generate_export_header(Plasma
     EXPORT_FILE_NAME plasma/plasma_export.h
     BASE_NAME Plasma
     GROUP_BASE_NAME KF
@@ -69,7 +69,7 @@ if(HAVE_X11)
     set(PLASMA_EXTRA_LIBS ${PLASMA_EXTRA_LIBS} XCB::XCB Qt6::GuiPrivate)
 endif()
 
-target_link_libraries(KF6Plasma
+target_link_libraries(Plasma
 PUBLIC
     Qt6::Gui
     KF6::ConfigCore
@@ -92,14 +92,14 @@ PRIVATE
     ${PLASMA_EXTRA_LIBS}
 )
 
-target_link_libraries(KF6Plasma PRIVATE KF6::Package)
+target_link_libraries(Plasma PRIVATE KF6::Package)
 
 set(Plasma_BUILD_INCLUDE_DIRS
     ${CMAKE_CURRENT_SOURCE_DIR}/..
     ${CMAKE_CURRENT_BINARY_DIR}
     ${CMAKE_CURRENT_BINARY_DIR}/Plasma
 )
-target_include_directories(KF6Plasma
+target_include_directories(Plasma
     PUBLIC
         "$<BUILD_INTERFACE:${Plasma_BUILD_INCLUDE_DIRS}>"
     INTERFACE
@@ -133,13 +133,13 @@ install(
     COMPONENT Devel
 )
 
-install(TARGETS KF6Plasma EXPORT KF6PlasmaTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS Plasma EXPORT PlasmaTargets ${KDE_INSTALL_TARGETS_DEFAULT_ARGS})
 
 if(BUILD_QCH)
     ecm_add_qch(
-        KF6Plasma_QCH
+        Plasma_QCH
         NAME Plasma
-        BASE_NAME KF6Plasma
+        BASE_NAME Plasma
         VERSION ${PLASMA_VERSION}
         ORG_DOMAIN org.kde
         SOURCES # using only public headers, to cover only public API

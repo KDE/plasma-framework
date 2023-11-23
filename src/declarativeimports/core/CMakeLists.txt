@@ -28,8 +28,8 @@ target_link_libraries(corebindingsplugin PRIVATE
         KF6::I18n
         Qt6::Svg
         KF6::WindowSystem
-        KF6::Plasma
-        KF6::PlasmaQuick
+        Plasma::Plasma
+        Plasma::PlasmaQuick
         Wayland::Client
 )
 

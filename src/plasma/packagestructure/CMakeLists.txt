@@ -9,7 +9,7 @@ function(install_package_structure_source name source)
 endfunction()
 
 add_library(plasma_packagestructure_static STATIC packages.cpp)
-target_link_libraries(plasma_packagestructure_static KF6::Package KF6::Plasma KF6::I18n)
+target_link_libraries(plasma_packagestructure_static KF6::Package Plasma::Plasma KF6::I18n)
 set_property(TARGET plasma_packagestructure_static PROPERTY POSITION_INDEPENDENT_CODE ON)
 
 install_package_structure(plasma_generic)

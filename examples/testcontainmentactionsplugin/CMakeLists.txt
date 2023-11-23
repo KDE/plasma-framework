@@ -18,6 +18,6 @@ set_target_properties(plasma_containmentactions_test PROPERTIES
 
 target_link_libraries(plasma_containmentactions_test
     Qt::Widgets
-    KF6::Plasma
+    Plasma::Plasma
     KF6::I18n
 )

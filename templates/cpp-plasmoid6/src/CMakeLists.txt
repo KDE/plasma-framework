@@ -5,7 +5,7 @@ add_library(org.kde.plasma.%{APPNAMELC} MODULE %{APPNAMELC}.cpp)
 
 target_link_libraries(org.kde.plasma.%{APPNAMELC}
                       Qt6::Gui
-                      KF6::Plasma
+                      Plasma::Plasma
                       KF6::I18n)
 
 
