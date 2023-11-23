@@ -27,7 +27,7 @@
 #include <KConfigSkeleton>
 #include <KLocalizedString>
 
-#include <kactivities/info.h>
+#include <plasmaactivities/info.h>
 
 #include "containmentactions.h"
 #include "corona.h"

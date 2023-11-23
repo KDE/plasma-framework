@@ -16,7 +16,7 @@
 
 #include "pluginloader.h"
 
-#include <kactivities/info.h>
+#include <plasmaactivities/info.h>
 
 #include "debug_p.h"
 #include "private/applet_p.h"

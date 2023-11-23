@@ -61,10 +61,7 @@ find_package(KF6 ${KF6_MIN_VERSION} REQUIRED
         KCMUtils
         Svg
 )
-find_package(KF6 ${PROJECT_VERSION} REQUIRED
-    COMPONENTS
-        Activities
-)
+find_package(PlasmaActivities REQUIRED ${PROJECT_VERSION})
 
 # Wayland features
 find_package(PlasmaWaylandProtocols 1.10.0 REQUIRED)
