@@ -16,7 +16,7 @@ include(FeatureSummary)
 include(KDEInstallDirs)
 include(KDECMakeSettings)
 include(KDEGitCommitHooks)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
+include(KDECompilerSettings NO_POLICY_SCOPE)
 
 include(ECMGenerateExportHeader)
 include(ECMGenerateHeaders)
