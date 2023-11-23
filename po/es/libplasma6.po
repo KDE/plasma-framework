@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2023-11-21 01:35+0000\n"
-"PO-Revision-Date: 2023-11-12 00:13+0100\n"
+"PO-Revision-Date: 2023-11-22 02:52+0100\n"
 "Last-Translator: Eloy Cuadra <ecuadra@eloihr.net>\n"
 "Language-Team: Spanish <kde-l10n-es@kde.org>\n"
 "Language: es\n"
@@ -248,6 +248,9 @@ msgid ""
 "compatible with Plasma %1. Please contact the widget's author for an updated "
 "version."
 msgstr ""
+"Este elemento gráfico fue escrito para una versión de Plasma más antigua y "
+"no es compatible con Plasma %1. Póngase en contacto con el autor del "
+"elemento gráfico para obtener una versión actualizada."
 
 #: plasmaquick/appletquickitem.cpp:549
 #, kde-format
@@ -255,6 +258,9 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please contact the widget's author for an updated version."
 msgstr ""
+"Este elemento gráfico fue escrito para Plasma %1 y no es compatible con "
+"Plasma %2. Póngase en contacto con el autor del elemento gráfico para "
+"obtener una versión actualizada."
 
 #: plasmaquick/appletquickitem.cpp:554
 #, kde-format
@@ -262,6 +268,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please update Plasma in order to use the widget."
 msgstr ""
+"Este elemento gráfico fue escrito para Plasma %1 y no es compatible con "
+"Plasma %2. Actualice Plasma para poder usar este elemento gráfico."
 
 #: plasmaquick/appletquickitem.cpp:573
 #, kde-format
@@ -269,10 +277,9 @@ msgid "Error loading QML file: %1 %2"
 msgstr "Error al cargar archivo QML: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:576
-#, fuzzy, kde-format
-#| msgid "Error loading Applet: package inexistent. %1"
+#, kde-format
 msgid "Error loading Applet: package does not exist. %1"
-msgstr "Error cargando miniaplicación: paquete no existente. %1"
+msgstr "Error cargando miniaplicación: el paquete no existe. %1"
 
 #: plasmaquick/configview.cpp:101
 #, kde-format
