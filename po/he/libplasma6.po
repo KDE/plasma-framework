@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: libplasma5\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-21 01:35+0000\n"
-"PO-Revision-Date: 2023-11-10 14:30+0200\n"
+"POT-Creation-Date: 2023-11-24 01:35+0000\n"
+"PO-Revision-Date: 2023-11-23 11:40+0200\n"
 "Last-Translator: Yaron Shahrabani <sh.yaron@gmail.com>\n"
 "Language-Team: צוות התרגום של KDE ישראל\n"
 "Language: he\n"
@@ -18,20 +18,20 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=4; plural=(n == 1) ? 0 : ((n == 2) ? 1 : ((n > 10 && "
 "n % 10 == 0) ? 2 : 3));\n"
-"X-Generator: Lokalize 23.08.1\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
 msgid "More actions"
 msgstr "פעולות נוספות"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:516
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "צמצום"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:516
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -248,6 +248,8 @@ msgid ""
 "compatible with Plasma %1. Please contact the widget's author for an updated "
 "version."
 msgstr ""
+"היישומון הזה נכתב לגרסה ישנה יותר ולא ידועה של פלזמה ואין נתמך בפלזמה %1. נא "
+"ליצור קשר עם יוצרי היישומון לאספקת גרסה עדכנית."
 
 #: plasmaquick/appletquickitem.cpp:549
 #, kde-format
@@ -255,6 +257,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please contact the widget's author for an updated version."
 msgstr ""
+"היישומון נכתב לפלזמה %1 ואינו נתמך בפלזמה %2. נא ליצור קשר עם יוצרי היישומון "
+"לאספקת גרסה עדכנית"
 
 #: plasmaquick/appletquickitem.cpp:554
 #, kde-format
@@ -262,6 +266,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please update Plasma in order to use the widget."
 msgstr ""
+"היישומון הזה נכתב לפלזמה %1 ואינו נתמך בפלזמה %2. נא לעדכן את פלזמה כדי "
+"להשתמש ביישומון."
 
 #: plasmaquick/appletquickitem.cpp:573
 #, kde-format
@@ -269,10 +275,9 @@ msgid "Error loading QML file: %1 %2"
 msgstr "שגיאה בטעינת קובץ QML‏: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:576
-#, fuzzy, kde-format
-#| msgid "Error loading Applet: package inexistent. %1"
+#, kde-format
 msgid "Error loading Applet: package does not exist. %1"
-msgstr "שגיאה בטעינת יישומית: החבילה לא קיימת. %1"
+msgstr "שגיאה בטעינת יישומונית: החבילה לא קיימת. %1"
 
 #: plasmaquick/configview.cpp:101
 #, kde-format

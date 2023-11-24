@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: plasmapkg\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
-"POT-Creation-Date: 2023-11-21 01:35+0000\n"
-"PO-Revision-Date: 2023-11-12 10:43+0100\n"
+"POT-Creation-Date: 2023-11-24 01:35+0000\n"
+"PO-Revision-Date: 2023-11-21 14:11+0100\n"
 "Last-Translator: Vincenzo Reale <smart2128vr@gmail.com>\n"
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Language: it\n"
@@ -18,20 +18,20 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Lokalize 23.08.2\n"
+"X-Generator: Lokalize 23.08.3\n"
 
 #: declarativeimports/plasmaextracomponents/qml/BasicPlasmoidHeading.qml:81
 #, kde-format
 msgid "More actions"
 msgstr "Altre azioni"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:516
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Collapse"
 msgstr "Contrai"
 
-#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:516
+#: declarativeimports/plasmaextracomponents/qml/ExpandableListItem.qml:514
 #, kde-format
 msgctxt "@action:button"
 msgid "Expand"
@@ -251,6 +251,9 @@ msgid ""
 "compatible with Plasma %1. Please contact the widget's author for an updated "
 "version."
 msgstr ""
+"Questo oggetto è stato scritto per una versione precedente sconosciuta di "
+"Plasma e non è compatibile con Plasma %1. Contatta l'autore dell'oggetto per "
+"una versione aggiornata."
 
 #: plasmaquick/appletquickitem.cpp:549
 #, kde-format
@@ -258,6 +261,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please contact the widget's author for an updated version."
 msgstr ""
+"Questo oggetto è stato scritto per Plasma %1 e non è compatibile con Plasma "
+"%2.Contatta l'autore dell'oggetto per una versione aggiornata."
 
 #: plasmaquick/appletquickitem.cpp:554
 #, kde-format
@@ -265,6 +270,8 @@ msgid ""
 "This Widget was written for Plasma %1 and is not compatible with Plasma %2. "
 "Please update Plasma in order to use the widget."
 msgstr ""
+"Questo oggetto è stato scritto per Plasma %1 e non è compatibile con Plasma "
+"%2. Aggiorna Plasma per poter utilizzare l'oggetto."
 
 #: plasmaquick/appletquickitem.cpp:573
 #, kde-format
@@ -272,10 +279,9 @@ msgid "Error loading QML file: %1 %2"
 msgstr "Errore durante il caricamento del file QML: %1 %2"
 
 #: plasmaquick/appletquickitem.cpp:576
-#, fuzzy, kde-format
-#| msgid "Error loading Applet: package inexistent. %1"
+#, kde-format
 msgid "Error loading Applet: package does not exist. %1"
-msgstr "Errore durante il caricamento dell'applet: pacchetto inesistente. %1"
+msgstr "Errore durante il caricamento dell'applet: il pacchetto non esiste. %1"
 
 #: plasmaquick/configview.cpp:101
 #, kde-format
